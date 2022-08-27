@@ -1,6 +1,6 @@
 {
     "ignore": [".git", "node_modules", "dist"],
-    "watch": ["./backend"],
-    "exec": "ts-node ./backend/app.ts",
+    "watch": ["./backend/src", "./package.json"],
+    "exec": "tsc && node backend/dist/app.js",
     "ext": "ts"
   }
