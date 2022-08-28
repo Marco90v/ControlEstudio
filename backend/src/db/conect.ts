@@ -1,5 +1,6 @@
 import mysql, { Connection, ConnectionConfig, QueryOptions } from 'mysql';
 import { createTables } from './createTablas';
+import { createDataDemo } from './insertDataDemo';
 
 const config:ConnectionConfig = {
     host: 'localhost',
@@ -32,7 +33,8 @@ export const desconectar = () => {
 
 
 export const InitialDB = () => {
-    createTables(conn);
+    // createTables(conn); // <--crea tablas si no existen
+    // createDataDemo(conn); // <--agrega datos a las tablas para usar como base de prueba
 }
 
 // export {conectar,desconectar}

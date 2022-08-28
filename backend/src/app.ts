@@ -19,6 +19,6 @@ app.listen(port, () => {
   /***
    * function to create tables and fill with test data, only execute when the database does not exist.
    */
-  InitialDB();
+  // InitialDB();
   console.log(`server is listening on ${port}`);
 });
