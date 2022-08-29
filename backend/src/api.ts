@@ -1,5 +1,5 @@
 import express from 'express';
-import { getClasses, getSemesters } from './db';
+import { getAll } from './db';
 
 const router = express.Router();
 
@@ -23,17 +23,14 @@ const router = express.Router();
 // });
 
 router.get('/classes', (req,res)=>{
-    getClasses().then(resolve=>res.status(200).json(resolve))
-    .catch(err=>{
-        console.log(err);
-    });
+    getAll('classes').then(resolve=>res.status(200).json(resolve))
+    .catch(err=>console.log(err));
 });
 
 router.get('/semesters', async(req,res)=>{
-    getSemesters().then(resolve=>res.status(200).json(resolve))
-    .catch(err=>{
-        console.log(err);
-    });
+    getAll('semesters').then(resolve=>res.status(200).json(resolve))
+    .catch(err=>console.log(err));
+
 });
 
 
