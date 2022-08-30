@@ -48,3 +48,23 @@ export const insertMultiple = (table:string,datas:[]) => {
         });
     });
 }
+
+export const getPensum = (id:number) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MysqlErr:MysqlError, connection:PoolConnection)=>{
+            const query = 'SELECT semesters.id AS "IdSemesters", \
+                semesters.names AS "Name_Semesters", \
+                classes.id AS "IdClasses", \
+                classes.names AS "Name_Classes" \
+                FROM classes \
+                INNER JOIN pensum ON classes.id = pensum.IdClasses \
+                INNER JOIN semesters ON pensum.IdSemesters = semesters.id \
+                WHERE pensum.IdProfession = ?';
+            connection.query(query, id, (queryErr,result)=>{
+                if(queryErr) reject( `Error en consulta Pensum: ${queryErr}`);
+                if(result) resolve(result);
+            });
+        });
+    })
+}
+

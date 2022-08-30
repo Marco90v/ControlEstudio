@@ -71,3 +71,21 @@ export type dbTeachers = {
     IdShifts: number,
     IdSections: number
 }
+
+export type pensumNotFormat = {
+    IdSemesters : number,
+    Name_Semesters: string,
+    IdClasses: number,
+    Name_Classes: string
+}
+
+export type classesFormat ={
+    IdClasses: number,
+    Name_Classes: string
+}
+
+export type pesumFormat = {
+    IdSemesters: number,
+    Name_Semesters: string,
+    Classes: classesFormat[]
+}

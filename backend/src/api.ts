@@ -1,6 +1,6 @@
 import express from 'express';
-import { getAll, insertSingle, insertMultiple } from './db';
-import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum } from './types';
+import { getAll, insertSingle, insertMultiple, getPensum } from './db';
+import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat } from './types';
 
 const router = express.Router();
 
@@ -158,6 +158,7 @@ router.post('/teachers', (req,res)=>{
 });
 
 //RUTAS PARA LOS ESTUDIANTES
+
 router.post('/students', (req,res)=>{
     const valida = ((object: any):object is dbStudensts => {
         return 'IdPersons' in object &&
@@ -186,13 +187,38 @@ router.post('/admin', (req,res)=>{
 });
 
 
+
 //RUTAS PARA PENSUM
 router.get('/pensum/:profession', (req,res)=>{
-    console.log(req.params);
-    res.status(200).send();
-    // getAll('pensum')
-    //     .then(resolve=>res.status(200).json(resolve))
-    //     .catch(err=>console.log(err));
+    getPensum(Number(req.params.profession))
+        .then( (result:pensumNotFormat[]) => {
+            const newFormat:pesumFormat[] = [];
+            const temp:number[]=[];
+            result.forEach( (value:pensumNotFormat) => {
+                // const index = newFormat.map((e:pesumFormat)=>e.IdSemesters).indexOf(value.IdSemesters);
+                const index = temp.indexOf(value.IdSemesters);
+                if(index<0){
+                    newFormat.push({
+                        IdSemesters: value.IdSemesters,
+                        Name_Semesters: value.Name_Semesters,
+                        Classes: [
+                            {
+                                IdClasses: value.IdClasses,
+                                Name_Classes: value.Name_Classes
+                            }
+                        ]
+                    });
+                    temp.push(value.IdSemesters);
+                }else{
+                    newFormat[index].Classes.push({
+                        IdClasses: value.IdClasses,
+                        Name_Classes: value.Name_Classes
+                    });
+                }
+            });
+            res.status(200).json(newFormat);
+        })
+        .catch(err=>console.log(err));
 });
 router.post('/pensum', (req, res)=>{
     const valida = ((objects: any[]):objects is dbPensum[] => {
