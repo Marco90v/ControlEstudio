@@ -68,3 +68,60 @@ export const getPensum = (id:number) => {
     })
 }
 
+type detailStudents = {
+    IdStudent: number,
+    names: string,
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    profession: string,
+    semester: string
+}
+
+type allStudents = {
+    totalStudents: number,
+    currentPage: number,
+    totalPages: number,
+    students: detailStudents[]
+}
+
+export const getAllStudents = (page:number=0) => {
+    return new Promise((resolve,reject)=>{
+        conn.getConnection((MysqlErr:MysqlError,connection:PoolConnection)=>{
+            const query = 'SELECT COUNT(*) as "totalStudents" FROM students;';
+            connection.query(query,(queryErr,result)=>{
+                if(queryErr) reject( `Error en consulta Pensum: ${queryErr}`);
+                const totalStudents = result[0].totalStudents;
+                let data:allStudents = {
+                    totalStudents,
+                    currentPage: page,
+                    totalPages: Math.ceil(totalStudents / 20),
+                    students:[]
+                }
+
+                const query = 'SELECT students.id AS "IdStudent", \
+                    persons.names, \
+                    persons.lastNames, \
+                    persons.sex, \
+                    persons.email, \
+                    persons.phone, \
+                    profession.names  AS "profession", \
+                    semesters.names AS "semester" \
+                    FROM students \
+                    INNER JOIN persons ON students.IdPersons = persons.id \
+                    INNER JOIN profession ON students.IdProfession = profession.id \
+                    INNER JOIN semesters ON students.IdSemesters = semesters.id \
+                    LIMIT ?,20;';
+                connection.query(query, page, (queryErr,result)=>{
+                    if(queryErr) reject( `Error en consulta Pensum: ${queryErr}`);
+                    data = {
+                        ...data,
+                        students: result
+                    }
+                    if(result) resolve(data);
+                });
+            })
+        });
+    });
+}

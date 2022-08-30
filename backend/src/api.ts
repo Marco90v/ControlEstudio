@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAll, insertSingle, insertMultiple, getPensum } from './db';
+import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents } from './db';
 import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat } from './types';
 
 const router = express.Router();
@@ -158,7 +158,12 @@ router.post('/teachers', (req,res)=>{
 });
 
 //RUTAS PARA LOS ESTUDIANTES
-
+router.get('/students',(req,res)=>{
+    const page = req.query.page ? Number(req.query.page) : 0
+    getAllStudents(page)
+        .then(result=>res.status(200).json(result))
+        .catch(err=>console.log(err));
+});
 router.post('/students', (req,res)=>{
     const valida = ((object: any):object is dbStudensts => {
         return 'IdPersons' in object &&
