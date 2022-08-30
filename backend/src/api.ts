@@ -139,6 +139,7 @@ router.get('/login', (req,res)=>{
 
 
 //RUTAS PARA LOS PROFESORES
+// router.get();
 router.post('/teachers', (req,res)=>{
     const valida = ((object: any):object is dbTeachers => {
         return 'IdPersons' in object &&

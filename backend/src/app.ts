@@ -1,5 +1,6 @@
 import express from 'express';
 import router from './api';
+import path from 'path';
 import bodyParser from 'body-parser';
 import { InitialDB } from "./db/conect";
 
@@ -9,9 +10,15 @@ const port = 3030;
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, '../../frontend/dist'))),
+
 app.get('/', (req, res) => {
-  res.send('Aqui va ir el frontend');
+  res.sendFile(path.join(__dirname, '../../frontend/dist/index'));
 });
+
+// app.get('/', (req, res) => {
+//   res.send('Aqui va ir el frontend');
+// });
 
 app.use(router);
 
