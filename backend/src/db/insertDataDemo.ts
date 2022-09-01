@@ -1,23 +1,13 @@
-import { Connection } from "mysql";
-import { dbAdmin, dbClasses, dbLogin, dbPersons, dbProfession, dbRoles, dbSemesters, dbShifts } from "../types";
+import { Connection, MysqlError, Pool, PoolConnection } from "mysql";
+import { dbAdmin, dbClasses, dbLogin, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts } from "../types";
 
-export const createDataDemo = (conn:Connection):void =>{
+export const createDataDemo = (conn:Pool):void =>{
 
-    conn.connect(err=>{
-        if (err) {
-            console.log('Error al conectar', err);
-            return;
-        }
-    });
-
-    conn.query('USE controlestudio',(err,row)=>{
-        const msg:string = err ? 'Error al seleccionar Base de Datos controlestudio' : 'Base de datos controlestudio seleccionada con Exito';
-        console.log(msg);
-    })
+    let connection:PoolConnection;
 
     const actionQuery = (datas:any[], table:string ) => {
         datas.forEach(data => {
-            conn.query(`INSERT INTO ${table} set ?`, data, (err,result)=>{
+            connection.query(`INSERT INTO ${table} set ?`, data, (err,result)=>{
                 const msg:string = err ? 
                     `Error al ingresar el valor: "${data.names}" en la Tabla: "${table}"` : 
                     `Registro: "${data.names}" agregado a la Tabla "${table}"`;
@@ -113,36 +103,60 @@ export const createDataDemo = (conn:Connection):void =>{
         actionQuery(data,'login');
     }
 
-    conn.query('SELECT * FROM semesters LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaSemesters();
+    const precargaSections = () => {
+        const data:dbSections[] = [
+            {names:"A"},
+            {names:"B"},
+            {names:"C"}
+        ]
+        actionQuery(data,'sections');
+    }
+
+    conn.getConnection((MySqlErr:MysqlError,c:PoolConnection)=>{
+        if(MySqlErr){
+            console.log("Error al recuperar PoolConnection");
+        }else{
+            connection = c;
+            connection.query('SELECT * FROM semesters LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaSemesters();
+            });
+        
+            connection.query('SELECT * FROM shifts LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaShifts();
+            });
+            
+            connection.query('SELECT * FROM roles LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaRoles();
+            });
+            
+            connection.query('SELECT * FROM classes LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaClasses();
+            });
+            
+            connection.query('SELECT * FROM persons LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaPersons();
+            });    
+            
+            connection.query('SELECT * FROM profession LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaProfession();
+            });
+            
+            connection.query('SELECT * FROM admin LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaAdmin();
+            });
+            
+            connection.query('SELECT * FROM login LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaLogin();
+            });
+        
+            connection.query('SELECT * FROM sections LIMIT 1', (err,result)=>{
+                if(result?.length === 0) precargaSections();
+            });
+        }
+        // connection.on('end', ()=> connection.release());
     });
 
-    conn.query('SELECT * FROM shifts LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaShifts();
-    });
+
     
-    conn.query('SELECT * FROM roles LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaRoles();
-    });
-    
-    conn.query('SELECT * FROM classes LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaClasses();
-    });
-    
-    conn.query('SELECT * FROM persons LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaPersons();
-    });    
-    
-    conn.query('SELECT * FROM profession LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaProfession();
-    });
-    
-    conn.query('SELECT * FROM admin LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaAdmin();
-    });
-    
-    conn.query('SELECT * FROM login LIMIT 1', (err,result)=>{
-        if(result?.length === 0) precargaLogin();
-    });
 
 }
