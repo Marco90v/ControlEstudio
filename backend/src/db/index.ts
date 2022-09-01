@@ -2,7 +2,9 @@ import { MysqlError, PoolConnection } from 'mysql';
 import { conn } from './conect';
 
 // La siguiente funcion, tranforma un arreglo de objesto en matriz.
-// Ejemplo [ { "valor1":1, "valor2":2 } , {"valor1":3, "valor2":4} ]  ->  [ [1,2] , [3,4] ]
+// Ejemplo:
+// ENTRADA:  ->  [ { "valor1":1, "valor2":2 } , {"valor1":3, "valor2":4} ]
+// SALIDA:  ->  [ [1,2] , [3,4] ]
 const transformData = (datas:[]):Array<number[]> => {
     return datas.map(data => {
         return Object.keys(data).map(key=>data[key]);
@@ -63,6 +65,7 @@ export const getPensum = (id:number) => {
             connection.query(query, id, (queryErr,result)=>{
                 if(queryErr) reject( `Error en consulta Pensum: ${queryErr}`);
                 if(result) resolve(result);
+                connection.release();
             });
         });
     })
@@ -91,7 +94,11 @@ export const getAllStudents = (page:number=0) => {
         conn.getConnection((MysqlErr:MysqlError,connection:PoolConnection)=>{
             const query = 'SELECT COUNT(*) as "totalStudents" FROM students;';
             connection.query(query,(queryErr,result)=>{
-                if(queryErr) reject( `Error en consulta Pensum: ${queryErr}`);
+                if(queryErr){
+                    reject( `Error en consulta Students: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
                 const totalStudents = result[0].totalStudents;
                 let data:allStudents = {
                     totalStudents,
@@ -114,12 +121,19 @@ export const getAllStudents = (page:number=0) => {
                     INNER JOIN semesters ON students.IdSemesters = semesters.id \
                     LIMIT ?,20;';
                 connection.query(query, page, (queryErr,result)=>{
-                    if(queryErr) reject( `Error en consulta Pensum: ${queryErr}`);
+                    if(queryErr){
+                        reject( `Error en consulta Pensum: ${queryErr}`);
+                        connection.release();
+                        return;
+                    }
                     data = {
                         ...data,
                         students: result
                     }
-                    if(result) resolve(data);
+                    if(result){
+                        resolve(data);
+                        connection.release();
+                    }
                 });
             })
         });
