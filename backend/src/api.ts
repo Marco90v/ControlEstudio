@@ -1,6 +1,7 @@
 import express from 'express';
-import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents } from './db';
-import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat } from './types';
+import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher } from './db';
+import { transformTeacher } from './transform';
+import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat, teacher, oldFormat } from './types';
 
 const router = express.Router();
 
@@ -138,8 +139,28 @@ router.get('/login', (req,res)=>{
 });
 
 
+
+
 //RUTAS PARA LOS PROFESORES
-// router.get();
+router.get('/teachers', (req,res)=>{
+    // const page = req.query.page ? Number(req.query.page) : 0
+    getAllTeachers()
+        .then((result:oldFormat[])=>{
+            // res.status(200).json(newFormat);
+            res.status(200).json(transformTeacher(result));
+        })
+        .catch(err=>console.log(err));
+});
+router.get('/teachers/:id', (req,res)=>{
+    // const page = req.query.page ? Number(req.query.page) : 0
+    const idTeacher:number = Number(req.params.id);
+    getTeacher(idTeacher)
+        .then((result:oldFormat[])=>{
+            // res.status(200).json(newFormat);
+            res.status(200).json(transformTeacher(result));
+        })
+        .catch(err=>console.log(err));
+});
 router.post('/teachers', (req,res)=>{
     const valida = ((object: any):object is dbTeachers => {
         return 'IdPersons' in object &&
@@ -228,14 +249,14 @@ router.get('/pensum/:profession', (req,res)=>{
 });
 router.post('/pensum', (req, res)=>{
     const valida = ((objects: any[]):objects is dbPensum[] => {
-    let r = true;
-    for (let index = 0; index < objects.length; index++) {
-        if(!('IdProfession' in objects[index]) || !('IdSemesters' in objects[index]) || !('IdClasses' in objects[index])){
-            r = false;
-            break;
+        let r = true;
+        for (let index = 0; index < objects.length; index++) {
+            if(!('IdProfession' in objects[index]) || !('IdSemesters' in objects[index]) || !('IdClasses' in objects[index])){
+                r = false;
+                break;
+            }
         }
-    }
-    return r;
+        return r;
     })(req.body);
     if(valida){
         insertMultiple('pensum',req.body)

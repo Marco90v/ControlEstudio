@@ -1,20 +1,25 @@
 import { MysqlError, PoolConnection } from 'mysql';
+import { transformData } from '../transform';
+import { allStudents } from '../types';
 import { conn } from './conect';
 
 // La siguiente funcion, tranforma un arreglo de objesto en matriz.
 // Ejemplo:
 // ENTRADA:  ->  [ { "valor1":1, "valor2":2 } , {"valor1":3, "valor2":4} ]
 // SALIDA:  ->  [ [1,2] , [3,4] ]
-const transformData = (datas:[]):Array<number[]> => {
-    return datas.map(data => {
-        return Object.keys(data).map(key=>data[key]);
-    });
-}
+// const transformData = (datas:[]):Array<number[]> => {
+//     return datas.map(data => {
+//         return Object.keys(data).map(key=>data[key]);
+//     });
+// }
 
 export const getAll = (table:string) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
-            if(MySqlErr) reject(`Error al conectar a MySQL: ${MySqlErr}`);
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
             connection.query(`SELECT * FROM ${table}`, (QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
                 if(result) resolve(result);
@@ -27,7 +32,10 @@ export const getAll = (table:string) => {
 export const insertSingle = (table,data) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
-            if(MySqlErr) reject(`Error al conectar a MySQL: ${MySqlErr}`);
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
             connection.query(`INSERT INTO ${table} set ?`, data, (QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
                 if(result) resolve(true);
@@ -40,7 +48,10 @@ export const insertSingle = (table,data) => {
 export const insertMultiple = (table:string,datas:[]) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
-            if(MySqlErr) reject(`Error al conectar a MySQL: ${MySqlErr}`);
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
             const newData = transformData(datas);
             connection.query(`INSERT INTO ${table} (IdProfession,IdSemesters,IdClasses) VALUES ?`, [newData],(QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
@@ -53,7 +64,11 @@ export const insertMultiple = (table:string,datas:[]) => {
 
 export const getPensum = (id:number) => {
     return new Promise((resolve, reject)=>{
-        conn.getConnection((MysqlErr:MysqlError, connection:PoolConnection)=>{
+        conn.getConnection((MySqlErr:MysqlError, connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
             const query = 'SELECT semesters.id AS "IdSemesters", \
                 semesters.names AS "Name_Semesters", \
                 classes.id AS "IdClasses", \
@@ -71,31 +86,17 @@ export const getPensum = (id:number) => {
     })
 }
 
-type detailStudents = {
-    IdStudent: number,
-    names: string,
-    lastNames: string,
-    sex: string,
-    email: string,
-    phone: number,
-    profession: string,
-    semester: string
-}
-
-type allStudents = {
-    totalStudents: number,
-    currentPage: number,
-    totalPages: number,
-    students: detailStudents[]
-}
-
 export const getAllStudents = (page:number=0) => {
     return new Promise((resolve,reject)=>{
-        conn.getConnection((MysqlErr:MysqlError,connection:PoolConnection)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
             const query = 'SELECT COUNT(*) as "totalStudents" FROM students;';
             connection.query(query,(queryErr,result)=>{
                 if(queryErr){
-                    reject( `Error en consulta Students: ${queryErr}`);
+                    reject( `Error en consulta paginacion Students: ${queryErr}`);
                     connection.release();
                     return;
                 }
@@ -122,7 +123,7 @@ export const getAllStudents = (page:number=0) => {
                     LIMIT ?,20;';
                 connection.query(query, page, (queryErr,result)=>{
                     if(queryErr){
-                        reject( `Error en consulta Pensum: ${queryErr}`);
+                        reject( `Error en consulta detallada Students: ${queryErr}`);
                         connection.release();
                         return;
                     }
@@ -136,6 +137,101 @@ export const getAllStudents = (page:number=0) => {
                     }
                 });
             })
+        });
+    });
+}
+
+export const getAllTeachers = (page:number=0) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT \
+                    teachers.IdPersons AS "idPerson", \
+                    persons.names, \
+                    persons.lastNames, \
+                    persons.sex, \
+                    persons.email, \
+                    persons.phone, \
+                    persons.photo, \
+                    profession.id AS "idProfession", \
+                    profession.names AS "profession", \
+                    semesters.id AS "idSemester", \
+                    semesters.names AS "semester", \
+                    classes.id AS "idClasse", \
+                    classes.names AS "classe", \
+                    shifts.id AS "idShift", \
+                    shifts.names AS "shift", \
+                    sections.id AS "idSection", \
+                    sections.names AS "section" \
+                    FROM teachers \
+                    INNER JOIN persons ON teachers.IdPersons = persons.id \
+                    INNER JOIN profession ON teachers.IdProfession = profession.id \
+                    INNER JOIN semesters ON teachers.IdSemesters = semesters.id \
+                    INNER JOIN classes ON teachers.IdClasses = classes.id \
+                    INNER JOIN shifts ON teachers.IdShifts = shifts.id \
+                    INNER JOIN sections on teachers.IdSections = sections.id';
+            connection.query(query, page, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error en consulta detallada teachers: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
+export const getTeacher = (id:number) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT \
+                    teachers.IdPersons AS "idPerson", \
+                    persons.names, \
+                    persons.lastNames, \
+                    persons.sex, \
+                    persons.email, \
+                    persons.phone, \
+                    persons.photo, \
+                    profession.id AS "idProfession", \
+                    profession.names AS "profession", \
+                    semesters.id AS "idSemester", \
+                    semesters.names AS "semester", \
+                    classes.id AS "idClasse", \
+                    classes.names AS "classe", \
+                    shifts.id AS "idShift", \
+                    shifts.names AS "shift", \
+                    sections.id AS "idSection", \
+                    sections.names AS "section" \
+                    FROM teachers \
+                    INNER JOIN persons ON teachers.IdPersons = persons.id \
+                    INNER JOIN profession ON teachers.IdProfession = profession.id \
+                    INNER JOIN semesters ON teachers.IdSemesters = semesters.id \
+                    INNER JOIN classes ON teachers.IdClasses = classes.id \
+                    INNER JOIN shifts ON teachers.IdShifts = shifts.id \
+                    INNER JOIN sections on teachers.IdSections = sections.id \
+                    WHERE teachers.IdPersons = ? ';
+            connection.query(query, id, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error en consulta detallada teachers: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
         });
     });
 }

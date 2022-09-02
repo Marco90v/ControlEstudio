@@ -89,3 +89,81 @@ export type pesumFormat = {
     Name_Semesters: string,
     Classes: classesFormat[]
 }
+
+export type detailStudents = {
+    IdStudent: number,
+    names: string,
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    profession: string,
+    semester: string
+}
+
+export type allStudents = {
+    totalStudents: number,
+    currentPage: number,
+    totalPages: number,
+    students: detailStudents[]
+}
+
+export type profession = {
+    id:number,
+    name:string,
+    semesters: semester[]
+}
+
+export type semester = {
+    id:number,
+    name:string,
+    classe: classe[]
+}
+
+export type classe = {
+    id:number,
+    name:string,
+    shift:shift[]
+}
+
+export type shift = {
+    id:number,
+    name:string,
+    section:section[]
+}
+
+export type section = {
+    id:number,
+    name:string
+}
+
+export type teacher = {
+    idPerson:number,
+    name:string,
+    lastNames:string,
+    sex:string,
+    email:string,
+    phone:string,
+    photo?:string,
+    profession:profession[]
+}
+
+export type oldFormat = {
+    idPerson:number,
+    names:string,
+    lastNames:string,
+    sex:string,
+    email:string,
+    phone:string,
+    photo?:string,
+    idProfession: number,
+    profession:string,
+    idSemester: number,
+    semester:string,
+    idClasse: number,
+    classe:string,
+    idShift: number,
+    shift:string,
+    idSection: number,
+    section:string,
+}
