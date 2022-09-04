@@ -141,6 +141,41 @@ export const getAllStudents = (page:number=0) => {
     });
 }
 
+export const getStudent = (id:number) => {
+    return new Promise ((resolve, reject) => {
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection) => {
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT students.id AS "IdStudent", \
+                    persons.names, \
+                    persons.lastNames, \
+                    persons.sex, \
+                    persons.email, \
+                    persons.phone, \
+                    profession.names  AS "profession", \
+                    semesters.names AS "semester" \
+                    FROM students \
+                    INNER JOIN persons ON students.IdPersons = persons.id \
+                    INNER JOIN profession ON students.IdProfession = profession.id \
+                    INNER JOIN semesters ON students.IdSemesters = semesters.id \
+                    WHERE students.id = ?;';
+                connection.query(query, id, (queryErr,result)=>{
+                    if(queryErr){
+                        reject( `Error en consulta detallada Students: ${queryErr}`);
+                        connection.release();
+                        return;
+                    }
+                    if(result){
+                        resolve(result);
+                        connection.release();
+                    }
+                });
+        });
+    });
+}
+
 export const getAllTeachers = (page:number=0) => {
     return new Promise ((resolve,reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{

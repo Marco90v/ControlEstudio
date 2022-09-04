@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher } from './db';
+import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher, getStudent } from './db';
 import { transformTeacher } from './transform';
 import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat, teacher, oldFormat } from './types';
 
@@ -139,24 +139,18 @@ router.get('/login', (req,res)=>{
 });
 
 
-
-
 //RUTAS PARA LOS PROFESORES
 router.get('/teachers', (req,res)=>{
-    // const page = req.query.page ? Number(req.query.page) : 0
     getAllTeachers()
         .then((result:oldFormat[])=>{
-            // res.status(200).json(newFormat);
             res.status(200).json(transformTeacher(result));
         })
         .catch(err=>console.log(err));
 });
 router.get('/teachers/:id', (req,res)=>{
-    // const page = req.query.page ? Number(req.query.page) : 0
     const idTeacher:number = Number(req.params.id);
     getTeacher(idTeacher)
         .then((result:oldFormat[])=>{
-            // res.status(200).json(newFormat);
             res.status(200).json(transformTeacher(result));
         })
         .catch(err=>console.log(err));
@@ -183,6 +177,11 @@ router.post('/teachers', (req,res)=>{
 router.get('/students',(req,res)=>{
     const page = req.query.page ? Number(req.query.page) : 0
     getAllStudents(page)
+        .then(result=>res.status(200).json(result))
+        .catch(err=>console.log(err));
+});
+router.get('/student/:id',(req,res)=>{
+    getStudent(Number(req.params.id))
         .then(result=>res.status(200).json(result))
         .catch(err=>console.log(err));
 });
