@@ -3,16 +3,6 @@ import { transformData } from '../transform';
 import { allStudents } from '../types';
 import { conn } from './conect';
 
-// La siguiente funcion, tranforma un arreglo de objesto en matriz.
-// Ejemplo:
-// ENTRADA:  ->  [ { "valor1":1, "valor2":2 } , {"valor1":3, "valor2":4} ]
-// SALIDA:  ->  [ [1,2] , [3,4] ]
-// const transformData = (datas:[]):Array<number[]> => {
-//     return datas.map(data => {
-//         return Object.keys(data).map(key=>data[key]);
-//     });
-// }
-
 export const getAll = (table:string) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
@@ -28,6 +18,23 @@ export const getAll = (table:string) => {
         });
     });
 }
+
+export const getPerson = (id:number) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            connection.query(`SELECT * FROM persons WHERE id = ?`, id, (QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla Persons: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
 
 export const insertSingle = (table,data) => {
     return new Promise((resolve, reject)=>{

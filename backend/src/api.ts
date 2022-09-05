@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher, getStudent } from './db';
+import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher, getStudent, getPerson } from './db';
 import { transformTeacher } from './transform';
 import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat, teacher, oldFormat } from './types';
 
@@ -110,6 +110,10 @@ router.post('/roles', (req,res)=>{
 // RUTAS PARA LAS PERSONAS
 router.get('/persons', (req,res)=>{
     getAll('persons').then(resolve=>res.status(200).json(resolve))
+    .catch(err=>console.log(err));
+});
+router.get('/person/:id', (req,res)=>{
+    getPerson(Number(req.params.id)).then(resolve=>res.status(200).json(resolve))
     .catch(err=>console.log(err));
 });
 router.post('/persons', (req,res)=>{
