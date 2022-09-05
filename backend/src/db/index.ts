@@ -3,6 +3,34 @@ import { transformData } from '../transform';
 import { allStudents } from '../types';
 import { conn } from './conect';
 
+
+export const getAllAdmin = () => {
+    return new Promise((resolve,reject) => {
+        conn.getConnection((MySqlErr:MysqlError, connection:PoolConnection) => {
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            connection.query('SELECT \
+                admin.id AS "IdAdmin", \
+                admin.IdPersons AS "IdPerson", \
+                persons.names, \
+                persons.lastNames, \
+                persons.sex, \
+                persons.email, \
+                persons.phone, \
+                persons.photo \
+                FROM admin \
+                INNER JOIN persons ON persons.id = admin.IdPersons;', (QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta Admin: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
+
 export const getAll = (table:string) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher, getStudent, getPerson } from './db';
+import { getAll, insertSingle, insertMultiple, getPensum, getAllStudents, getAllTeachers, getTeacher, getStudent, getPerson, getAllAdmin } from './db';
 import { transformTeacher } from './transform';
 import { dbAdmin, dbStudensts, dbTeachers, dbSections, dbClasses, dbSemesters, dbProfession, dbShifts, dbRoles, dbPersons, dbPensum, pensumNotFormat, pesumFormat, teacher, oldFormat } from './types';
 
@@ -8,6 +8,14 @@ const router = express.Router();
 // router.post('/logout', (req, res)=>{
 //     res.status(200).json({msg:'logout'});
 // });
+
+
+// RUTAS ADMIN
+router.get('/admin',(req, res)=>{
+    getAllAdmin()
+        .then(resolve=>res.status(200).json(resolve))
+        .catch(err=>console.log(err));
+});
 
 
 // RUTAS PARA LAS MATERIAS
