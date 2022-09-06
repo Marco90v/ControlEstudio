@@ -493,6 +493,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-is@npm:^16":
+  version: 16.7.2
+  resolution: "@types/react-is@npm:16.7.2"
+  dependencies:
+    "@types/react": ^16
+  checksum: 4f1ec2699693210a790daa69190b4ee338553b624633ddb196b8e0840e9dd1ae2ff842f9244a99e523c526d1229c88e1af6906fa9908e32bde9aae7ee5b505c2
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:*, @types/react@npm:^18.0.17":
   version: 18.0.18
   resolution: "@types/react@npm:18.0.18"
@@ -501,6 +510,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 6d72d35ab3eecf382a5e0f225923f5a2c753045fce02e4e29713f36c99a24f0f770666a49dde96167f37c86271f93339d1b7e2b8969d011b137a9ebd24ee6806
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^16":
+  version: 16.14.31
+  resolution: "@types/react@npm:16.14.31"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 79a2508b55b6dc0764b312f5159ea8020f5c867bf5ad625d8bebb793cbf5997aa13611170634ca29c03e46dcd0488192f634ca48dca4ea7e1216169f24ae9451
   languageName: node
   linkType: hard
 
@@ -1114,10 +1134,12 @@ __metadata:
     "@reduxjs/toolkit": ^1.8.5
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6
+    "@types/react-is": ^16
     "@types/styled-components": ^5
     "@vitejs/plugin-react": ^2.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-is: ^16.8
     react-redux: ^8.0.2
     react-router-dom: 6
     styled-components: ^5.3.5
@@ -1763,7 +1785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.7.0":
+"react-is@npm:^16.7.0, react-is@npm:^16.8":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -2101,7 +2123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^5.3.5":
+"styled-components@npm:^5":
   version: 5.3.5
   resolution: "styled-components@npm:5.3.5"
   dependencies:
