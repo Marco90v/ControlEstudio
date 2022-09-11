@@ -1,8 +1,9 @@
 import express from 'express';
-import router from './api';
+// import router from './api';
 import path from 'path';
-import bodyParser from 'body-parser';
-import { InitialDB } from "./db/conect";
+// import bodyParser from 'body-parser';
+// import { InitialDB } from "./db/conect";
+import v1router from './v1/routes';
 
 const app = express();
 const port = 3030;
@@ -20,7 +21,7 @@ app.get('/', (req, res) => {
 //   res.send('Aqui va ir el frontend');
 // });
 
-app.use(router);
+app.use("/api/v1",v1router);
 
 app.listen(port, () => {
   /***
