@@ -1,6 +1,7 @@
 import * as services from "../services";
 import { transformTeacher } from "../transform";
-import { dbClasses, oldFormat, pensumNotFormat, pesumFormat } from "../types";
+import { oldFormat, pensumNotFormat, pesumFormat } from "../types";
+import { validator } from "./validator";
 
 export const getAllAdminWorkOut = (_,res) => {
     services.getAllAdmin()
@@ -16,11 +17,11 @@ export const getAllWorkOut = (req,res) => {
 }
 
 export const setValuesSingleTableWorkOut = (req,res) => {
-    // const valida = ((object: any):object is dbClasses => 'names' in object)(req.body);
-    const valida = true;
-    if(valida){
-        const table:string = req.path.slice(1);
-        services.insertSingle(table,req.body)
+    const table:string = req.path.slice(1);
+    const dataValidated = validator[table](req.body);
+    // console.log(dataValidated);
+    if(dataValidated){
+        services.insertSingle(table,dataValidated)
             .then(()=>res.status(200).json({msg:'Valores agregados'}))
             .catch(err=>console.log(err));
     }else{
@@ -29,18 +30,10 @@ export const setValuesSingleTableWorkOut = (req,res) => {
 }
 
 export const setValuesMultipleTableWorkOut = (req,res) => {
-    //     const valida = ((objects: any[]):objects is dbPensum[] => {
-//         let r = true;
-//         for (let index = 0; index < objects.length; index++) {
-//             if(!('IdProfession' in objects[index]) || !('IdSemesters' in objects[index]) || !('IdClasses' in objects[index])){
-//                 r = false;
-//                 break;
-//             }
-//         }
-//         return r;
-//     })(req.body);
-    const valida = true;
-    if(valida){
+    const table:string = req.path.slice(1);
+    const dataValidated = validator[table](req.body);
+    // console.log(dataValidated);
+    if(dataValidated){
         const table:string = req.path.slice(1);
         services.insertMultiple(table,req.body)
             .then(()=>res.status(200).json({msg:'Pensum agregado'}))
@@ -67,25 +60,6 @@ export const getSingleTeachersWorkOut = (req,res) => {
         .catch(err=>console.log(err));
 }
 
-// export const setTeachersWorkOut = (req, res) => {
-// //     const valida = ((object: any):object is dbTeachers => {
-// //         return 'IdPersons' in object &&
-// //             "IdProfession" in object &&
-// //             "IdSemesters" in object &&
-// //             "IdClasses" in object &&
-// //             "IdShifts" in object &&
-// //             "IdSections" in object;
-// //     })(req.body);
-//     const valida = true;
-//     if(valida){
-//         services.insertSingle('teachers',req.body)
-//             .then(()=>res.status(200).json({msg:'Profesor agregado'}))
-//             .catch(err=>console.log(err));
-//     }else{
-//         res.status(400).json({msg:"Error en la estructura de datos"});
-//     }
-// }
-
 export const getAllStudentsWorkOut = (req,res) => {
     const page = req.query.page ? Number(req.query.page) : 0;
     services.getAllStudents(page)
@@ -99,7 +73,7 @@ export const getSingleStudentsWorkOut = (req,res) => {
         .catch(err=>console.log(err));
 }
 
-export const setProfessionWorkOut = (req,res) => {
+export const getProfessionWorkOut = (req,res) => {
     services.getPensum(Number(req.params.profession))
         .then( (result:pensumNotFormat[]) => {
             const newFormat:pesumFormat[] = [];
