@@ -5,8 +5,15 @@ import path from 'path';
 // import { InitialDB } from "./db/conect";
 import v1router from './v1/routes';
 
+import cors from 'cors';
+
 const app = express();
 const port = 3030;
+
+app.use(cors({
+  // origin:['http://127.0.0.1:5173/']
+  origin:'*'
+}))
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
