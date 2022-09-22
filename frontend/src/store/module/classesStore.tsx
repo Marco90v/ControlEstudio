@@ -25,15 +25,13 @@ export const classesStore = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      const {id,names}=action;
-      state.data.push({id,names});
+      // console.log(action.payload);
+      const names = action.payload;
+      state.data.push({id:state.data.length+1,names});
     },
     remove: (state,action:any) => {
-      const {id}=action;
-      state.data.filter((item:any)=>item.id !== id);
-    },
-    loadFetch:(state,action:any)=>{
-      state = action;
+      const id = action.payload;
+      state.data = state.data.filter((item:data) => item.id !== id);
     }
   },
   extraReducers(builder) {
@@ -52,6 +50,6 @@ export const classesStore = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { add, remove, loadFetch } = classesStore.actions
+export const { add, remove } = classesStore.actions
 
 export default classesStore.reducer

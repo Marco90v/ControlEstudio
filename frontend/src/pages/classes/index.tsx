@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Sidebar from "../../components/Sidebar";
-import { add, fetchClasses } from "../../store/module/classesStore";
+import DataClasses from "../../components/DataClasses";
+import { fetchClasses } from "../../store/module/classesStore";
 
 const Main = styled.main<any>`
     display: grid;
@@ -13,24 +14,22 @@ const Main = styled.main<any>`
 
 
 function Classes() {
-    const dispatch = useDispatch();
-    const classes = useSelector((state:any) => state.classes);
+    // const dispatch = useDispatch();
+    // const classes = useSelector((state:any) => state.classes);
 
     const visibleSide = useSelector((state:any) => state.side)
 
-    useEffect(() => {
-        if(classes.status === "") dispatch(fetchClasses())
-      return () => {}
-    }, [])
+    // useEffect(() => {
+    //     if(classes.status === "") dispatch(fetchClasses())
+    //   return () => {}
+    // }, [])
     
 
     return(
         <>
             <Main visibleSide={visibleSide.status}>
                 <Sidebar  />
-                <div>
-                    <button onClick={()=>dispatch(add({id:1,names:"prueba"}))}>+</button>
-                </div>
+                <DataClasses />
             </Main>
         </>
     );
