@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 type data = {
   id:number, names:string
@@ -14,6 +14,20 @@ const initialState: classesStore = {status:"",data:[]};
 export const fetchClasses = createAsyncThunk('classes/fetchClasses', async () => {
   const response = await fetch('/api/v1/classes').then(r=>r.json());
   return response
+});
+
+export const fetchPostClasses = createAsyncThunk('/classes/fetchPostClasses',async (name:any)=> {
+  const newData = await fetch('/api/v1/classes',{
+    method:'POST',
+    headers:{'Content-Type': 'application/json'},
+    body: JSON.stringify(name)
+  }).then(async (r)=>{
+    const res = await r.json();
+    // console.log(res);
+    // dispatch(add({id:res.insertId, names:name.names}));
+    return {id:res.insertId, names:name.names}
+  });
+  return newData;
 })
 
 export const classesStore = createSlice({
@@ -25,9 +39,8 @@ export const classesStore = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      // console.log(action.payload);
-      const names = action.payload;
-      state.data.push({id:state.data.length+1,names});
+      const newData = action.payload;
+      state.data.push(newData);
     },
     remove: (state,action:any) => {
       const id = action.payload;
@@ -45,6 +58,18 @@ export const classesStore = createSlice({
       })
       .addCase(fetchClasses.rejected, (state, action) => {
         state.status = 'failed'
+      })
+
+      .addCase(fetchPostClasses.pending,(state,action)=>{
+        state.status = 'adding'
+      })
+      .addCase(fetchPostClasses.fulfilled,(state,action)=>{
+        state.status = "added"
+        console.log(action.payload);
+        state.data.push(action.payload);
+      })
+      .addCase(fetchPostClasses.rejected,(state,action)=>{
+        state.status = 'errorAdd'
       })
   }
 })

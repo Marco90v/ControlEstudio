@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { add, fetchClasses, remove } from "../../store/module/classesStore";
+import { add, fetchClasses, fetchPostClasses, remove } from "../../store/module/classesStore";
 import { Button, Div, Form, Img, Table } from "../../styled/style";
 
 import imgEdit from "../../assets/edit-solid-24.png";
@@ -14,20 +14,38 @@ function DataClasses() {
     const dispatch = useDispatch();
     const classes = useSelector((state:any) => state.classes);
 
-    const [name,setName] = useState("");
+    const [name,setName] = useState({names:""});
 
     useEffect(() => {
         if(classes.status === "") dispatch(fetchClasses())
       return () => {}
     }, []);
 
+    useEffect(() => {
+        if(classes.status === "adding"){
+            console.log("agregando");
+        }
+        if(classes.status === "added"){
+            console.log("agregado");
+            setName({names:""});
+        }
+        if(classes.status === "errorAdd"){
+            console.log("error al agregar");
+        }
+      return () => {}
+    }, [classes.status]);
+
     const changeInputName = (e:any) => {
-        setName(e.target.value);
+        setName({names:e.target.value});
     }
 
     const addClasses = (e:any) => {
         e.preventDefault();
-        dispatch(add(name));
+        if(name.names !== ""){
+            dispatch(fetchPostClasses(name));
+        }else{
+            console.log("Ingrese nombre de la materia");
+        }
     }
 
     const edit = (id:number) => {
@@ -44,7 +62,7 @@ function DataClasses() {
             <div>
                 <Form onSubmit={addClasses}>
                     <label htmlFor="">Clase/Materia</label>
-                    <input type="text" name="classes" id="classes" onChange={changeInputName} />
+                    <input type="text" name="classes" id="classes" onChange={changeInputName} value={name.names} />
                     <Button type="submit">Agregar</Button>
                 </Form>
             </div>

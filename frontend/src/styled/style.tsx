@@ -77,6 +77,7 @@ export const Button = styled.button`
     border-radius: 5px;
     border: 1px solid green;
     font-weight: bold;
+    cursor: pointer;
 `;
 
 export const Div = styled.div`
