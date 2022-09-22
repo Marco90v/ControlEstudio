@@ -1,69 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+
 import { add, fetchClasses, remove } from "../../store/module/classesStore";
+import { Button, Div, Form, Img, Table } from "../../styled/style";
+
 import imgEdit from "../../assets/edit-solid-24.png";
 import imgTrash from "../../assets/trash-alt-solid-24.png";
-
-const Form = styled.form`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    column-gap: 10px;
-    input{
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid grey;
-    }
-`;
-
-const Button = styled.button`
-    background-color: green;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 1px solid green;
-    font-weight: bold;
-`;
-
-const Div = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
-const Table = styled.table`
-    width: 500px;
-    border-spacing: 0;
-    thead > tr{
-        color: white;
-        background-color: black;
-    }
-    th{
-        padding: 5px;
-    }
-    tbody > tr:nth-child(2n+1){
-        background-color: #e1e1e1;
-    }
-    td{
-        padding: 5px;
-    }
-    tbody > tr > td:nth-child(n+2){
-        text-align: center;
-    }
-    tbody > tr:hover{
-        background-color: #d1d1d1;
-    }
-`;
-
-const Img = styled.img`
-    background-color: green;
-    border-radius: 5px;
-    cursor: pointer;
-    &.red{
-        background-color: red;
-    }
-`;
 
 type classe = {id:number,names:string}
 

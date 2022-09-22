@@ -1,16 +1,9 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import styled from "styled-components";
+import { Main } from "../../styled/style";
+
 import Sidebar from "../../components/Sidebar";
-
-const Main = styled.main<any>`
-    display: grid;
-    height: 100vh;
-    grid-template-columns: min-content auto;
-    transition: grid-template-columns 0.5s ease-in-out;
-`;
-
 
 function Inicio(){
     const visibleSide = useSelector((state:any) => state.side);
