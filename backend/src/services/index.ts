@@ -73,7 +73,7 @@ export const insertSingle = (table,data) => {
             }
             connection.query(`INSERT INTO ${table} set ?`, data, (QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
-                if(result) resolve(true);
+                if(result) resolve(result);
                 connection.release();
             });
         });

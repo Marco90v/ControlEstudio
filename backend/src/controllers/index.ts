@@ -22,7 +22,10 @@ export const setValuesSingleTableWorkOut = (req,res) => {
     // console.log(dataValidated);
     if(dataValidated){
         services.insertSingle(table,dataValidated)
-            .then(()=>res.status(200).json({msg:'Valores agregados'}))
+            .then((result:any)=>{
+                const {insertId} = result;
+                res.status(200).json({insertId})
+            })
             .catch(err=>console.log(err));
     }else{
         res.status(400).json({msg:"Error en la estructura de datos"});
