@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { add, fetchClasses, fetchPostClasses, remove } from "../../store/module/classesStore";
+import { add, fetchClasses, fetchDeleteClasses, fetchPostClasses, remove } from "../../store/module/classesStore";
 import { Button, Div, Form, Img, Table } from "../../styled/style";
 
 import imgEdit from "../../assets/edit-solid-24.png";
@@ -54,7 +54,8 @@ function DataClasses() {
 
     const delite = (id:number) => {
         // console.log(id);
-        dispatch(remove(id));
+        // dispatch(remove(id));
+        dispatch(fetchDeleteClasses({id}));
     }
 
     return(

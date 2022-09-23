@@ -23,12 +23,22 @@ export const fetchPostClasses = createAsyncThunk('/classes/fetchPostClasses',asy
     body: JSON.stringify(name)
   }).then(async (r)=>{
     const res = await r.json();
-    // console.log(res);
-    // dispatch(add({id:res.insertId, names:name.names}));
     return {id:res.insertId, names:name.names}
   });
   return newData;
-})
+});
+
+export const fetchDeleteClasses = createAsyncThunk('/classes/fetchDeleteClasses', async (id:any)=>{
+  const deleteData = await fetch('/api/v1/classes',{
+    method:'DELETE',
+    headers:{'Content-Type': 'application/json'},
+    body: JSON.stringify(id)
+  }).then(async (r)=>{
+    const res = await r.json();
+    return res;
+  });
+  return deleteData;
+});
 
 export const classesStore = createSlice({
   name: 'classes',
@@ -49,6 +59,7 @@ export const classesStore = createSlice({
   },
   extraReducers(builder) {
     builder
+      // Recupera de clases o materias
       .addCase(fetchClasses.pending, (state, action) => {
         state.status = 'loading'
       })
@@ -59,17 +70,28 @@ export const classesStore = createSlice({
       .addCase(fetchClasses.rejected, (state, action) => {
         state.status = 'failed'
       })
-
+      // Agrega clases o materias
       .addCase(fetchPostClasses.pending,(state,action)=>{
         state.status = 'adding'
       })
       .addCase(fetchPostClasses.fulfilled,(state,action)=>{
         state.status = "added"
-        console.log(action.payload);
         state.data.push(action.payload);
       })
       .addCase(fetchPostClasses.rejected,(state,action)=>{
         state.status = 'errorAdd'
+      })
+      // Elimina clases o materias
+      .addCase(fetchDeleteClasses.pending,(state,action)=>{
+        state.status = 'deleting'
+      })
+      .addCase(fetchDeleteClasses.fulfilled,(state,action)=>{
+        state.status = "removed"
+        const {deleteId} = action.payload;
+        state.data = state.data.filter(item=>item.id !== deleteId);
+      })
+      .addCase(fetchDeleteClasses.rejected,(state,action)=>{
+        state.status = 'errorRemove'
       })
   }
 })
