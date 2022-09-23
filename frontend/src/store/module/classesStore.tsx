@@ -55,6 +55,9 @@ export const classesStore = createSlice({
     remove: (state,action:any) => {
       const id = action.payload;
       state.data = state.data.filter((item:data) => item.id !== id);
+    },
+    changeStatus:(state,action:any)=>{
+      state.status = action.payload;
     }
   },
   extraReducers(builder) {
@@ -97,6 +100,6 @@ export const classesStore = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { add, remove } = classesStore.actions
+export const { add, remove, changeStatus } = classesStore.actions
 
 export default classesStore.reducer

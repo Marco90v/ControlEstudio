@@ -6,6 +6,7 @@ import { Button, Div, Form, Img, Table } from "../../styled/style";
 
 import imgEdit from "../../assets/edit-solid-24.png";
 import imgTrash from "../../assets/trash-alt-solid-24.png";
+import Alert from "../Alert";
 
 type classe = {id:number,names:string}
 
@@ -17,7 +18,7 @@ function DataClasses() {
     const [name,setName] = useState({names:""});
 
     useEffect(() => {
-        if(classes.status === "") dispatch(fetchClasses())
+        if(classes.status === "" && classes.data.length === 0) dispatch(fetchClasses())
       return () => {}
     }, []);
 
@@ -53,8 +54,6 @@ function DataClasses() {
     }
 
     const delite = (id:number) => {
-        // console.log(id);
-        // dispatch(remove(id));
         dispatch(fetchDeleteClasses({id}));
     }
 
@@ -91,6 +90,7 @@ function DataClasses() {
                     </tbody>
                 </Table>
             </Div>
+            <Alert/>
         </div>
     );
 }

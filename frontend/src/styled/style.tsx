@@ -117,3 +117,36 @@ export const Img = styled.img`
         background-color: red;
     }
 `;
+
+export const FloatAlert = styled.div`
+    position: fixed;
+    z-index: 111;
+    right: 10px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    transition: opacity 0.25s ease-in-out, background-color 0.25s ease-in-out, top 0.25s ease-in-out;
+    &.blank{
+        opacity: 0;
+        top: -20px;
+    }
+    &.warning{
+        opacity: 1;
+        top: 10px;
+        background-color: yellow;
+        color:black;
+    }
+    &.success{
+        opacity: 1;
+        top: 10px;
+        background-color: green;
+        color:white;
+    }
+    &.error{
+        opacity: 1;
+        top: 10px;
+        background-color: red;
+        color:white;
+    }
+`;
