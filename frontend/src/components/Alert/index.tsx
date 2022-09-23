@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeStatus } from "../../store/module/classesStore";
 import { FloatAlert } from "../../styled/style";
 
-enum s {
+enum completed {
     Succeeded = "succeeded",
     Added = "added",
     Removed = "removed"
@@ -25,11 +25,11 @@ function Alert (){
     const statusClasses = useSelector((state:any) => state.classes.status);
     const dispatch = useDispatch();
     const [alert, setAlert] = useState({type:"blank",msg:''});
-    
+
     useEffect(() => {
         if(statusClasses !== ""){
             setAlert(status[statusClasses]);
-            if(Object.values(s).includes(statusClasses)){
+            if(Object.values(completed).includes(statusClasses)){
                 setTimeout(()=>setAlert({...alert,type:"blank"}),3000);
                 dispatch(changeStatus(""));
             }
