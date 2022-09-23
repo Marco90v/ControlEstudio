@@ -15,6 +15,7 @@ router.get('/admin', workOutControllers.getAllAdminWorkOut);
 // RUTAS PARA LAS MATERIAS
 router.get('/classes', workOutControllers.getAllWorkOut);
 router.post('/classes', workOutControllers.setValuesSingleTableWorkOut);
+router.delete('/classes', workOutControllers.deleteValueSingleTableWorkOut);
 
 // RUTA PARA LOS SEMESTRES
 router.get('/semesters', workOutControllers.getAllWorkOut);

@@ -80,6 +80,23 @@ export const insertSingle = (table,data) => {
     });
 }
 
+export const deleteSingle = (table,data) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            // DELETE FROM classes WHERE `classes`.`id` = 61"
+            connection.query(`DELETE FROM ${table} WHERE id = ?`, data.id, (QueryErr,result)=>{
+                if(QueryErr) reject( `Error al eliminar id=${data.id} en la tabla ${table}: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
 export const insertMultiple = (table:string,datas:[]) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{

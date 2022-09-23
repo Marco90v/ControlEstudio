@@ -1,3 +1,7 @@
+export type dbId = {
+    id: number
+}
+
 export type dbAdmin = {
     IdPersons : number
 }

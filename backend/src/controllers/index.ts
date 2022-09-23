@@ -32,6 +32,20 @@ export const setValuesSingleTableWorkOut = (req,res) => {
     }
 }
 
+export const deleteValueSingleTableWorkOut = (req,res) => {
+    const table:string = req.path.slice(1);
+    const dataValidated = validator.id(req.body);
+    if(dataValidated){
+        services.deleteSingle(table,dataValidated)
+            .then(()=>{
+                res.status(200).json({deleteId : req.body.id})
+            })
+            .catch(err=>console.log(err));
+    }else{
+        res.status(400).json({msg:"Error en la estructura de datos"});
+    }
+}
+
 export const setValuesMultipleTableWorkOut = (req,res) => {
     const table:string = req.path.slice(1);
     const dataValidated = validator[table](req.body);

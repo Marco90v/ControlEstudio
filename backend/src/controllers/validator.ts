@@ -1,4 +1,10 @@
-import { dbAdmin, dbClasses, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers } from "../types";
+import { dbAdmin, dbClasses, dbId, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers } from "../types";
+
+const id = (object:any):dbId | false => {
+    return 'id' in object && typeof(object.id) === 'number' ?
+        {id:object.id} :
+        false;
+}
 
 const classes = (object: any):dbClasses | false => {
     return 'names' in object && typeof(object.names) === 'string' ?
@@ -122,6 +128,7 @@ const pensum = (objects:any):dbPensum[] | false => {
 }
 
 export const validator = {
+    id,
     classes,
     semesters,
     profession,
