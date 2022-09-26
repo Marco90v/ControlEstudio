@@ -32,6 +32,7 @@ function Alert (){
             if(Object.values(completed).includes(statusClasses)){
                 setTimeout(()=>setAlert({...alert,type:"blank"}),3000);
                 dispatch(changeStatus(""));
+                // dispatch(add(""));
             }
         }
     }, [statusClasses])

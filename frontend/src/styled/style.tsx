@@ -78,11 +78,19 @@ export const Button = styled.button`
     border: 1px solid green;
     font-weight: bold;
     cursor: pointer;
+    &.red{
+        background-color: red;
+        border: 1px solid red;
+    }
+    /* &.green{
+        background-color: green;
+    } */
 `;
 
 export const Div = styled.div`
     display: flex;
     justify-content: center;
+    padding-bottom: 50px;
 `;
 
 export const Table = styled.table`

@@ -11,8 +11,10 @@ type classesStore = {
 
 const initialState: classesStore = {status:"",data:[]};
 
-export const fetchClasses = createAsyncThunk('classes/fetchClasses', async () => {
-  const response = await fetch('/api/v1/classes').then(r=>r.json());
+export const fetchClasses = createAsyncThunk('classes/fetchClasses', async (_,thunk) => {
+  const response = await fetch('/api/v1/classes', {
+    signal: thunk.signal,
+  }).then(r=>r.json());
   return response
 });
 
@@ -44,18 +46,6 @@ export const classesStore = createSlice({
   name: 'classes',
   initialState,
   reducers: {
-    add: (state,action:any) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      const newData = action.payload;
-      state.data.push(newData);
-    },
-    remove: (state,action:any) => {
-      const id = action.payload;
-      state.data = state.data.filter((item:data) => item.id !== id);
-    },
     changeStatus:(state,action:any)=>{
       state.status = action.payload;
     }
@@ -71,7 +61,7 @@ export const classesStore = createSlice({
         state.data = action.payload
       })
       .addCase(fetchClasses.rejected, (state, action) => {
-        state.status = 'failed'
+        state.status = action.meta.aborted ? '' : 'failed';
       })
       // Agrega clases o materias
       .addCase(fetchPostClasses.pending,(state,action)=>{
@@ -100,6 +90,6 @@ export const classesStore = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { add, remove, changeStatus } = classesStore.actions
+export const { changeStatus } = classesStore.actions
 
 export default classesStore.reducer

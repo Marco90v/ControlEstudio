@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { add, fetchClasses, fetchDeleteClasses, fetchPostClasses, remove } from "../../store/module/classesStore";
+import { fetchClasses, fetchDeleteClasses, fetchPostClasses } from "../../store/module/classesStore";
 import { Button, Div, Form, Img, Table } from "../../styled/style";
 
 import imgEdit from "../../assets/edit-solid-24.png";
 import imgTrash from "../../assets/trash-alt-solid-24.png";
 import Alert from "../Alert";
+import Popup from "../Popup/Popup";
 
 type classe = {id:number,names:string}
 
@@ -16,45 +17,66 @@ function DataClasses() {
     const classes = useSelector((state:any) => state.classes);
 
     const [name,setName] = useState({names:""});
+    const [alert,setAlert] = useState({type:"", value:false, data:{id:0,names:""}});
+    // const [typeAlert,setAlert] = useState(false);
 
     useEffect(() => {
-        if(classes.status === "" && classes.data.length === 0) dispatch(fetchClasses())
-      return () => {}
+        // if(classes.status === "" && classes.data.length === 0) dispatch(fetchClasses())
+        const promise = dispatch(fetchClasses());
+      return () => {
+        promise.abort();
+      }
     }, []);
-
-    useEffect(() => {
-        if(classes.status === "adding"){
-            console.log("agregando");
-        }
-        if(classes.status === "added"){
-            console.log("agregado");
-            setName({names:""});
-        }
-        if(classes.status === "errorAdd"){
-            console.log("error al agregar");
-        }
-      return () => {}
-    }, [classes.status]);
 
     const changeInputName = (e:any) => {
         setName({names:e.target.value});
     }
 
-    const addClasses = (e:any) => {
+    const addClasses = async (e:any) => {
         e.preventDefault();
         if(name.names !== ""){
-            dispatch(fetchPostClasses(name));
+            const res = await dispatch(fetchPostClasses(name));
+            if(res.meta.requestStatus === "fulfilled") setName({names:""});
         }else{
             console.log("Ingrese nombre de la materia");
         }
     }
 
-    const edit = (id:number) => {
-        console.log(id);
+
+    const edit = (data:classe) => {
+        // console.log(data);
+        // setAlert(!alert);
+        setAlert({type:"edit",value:true, data});
     }
 
-    const delite = (id:number) => {
-        dispatch(fetchDeleteClasses({id}));
+    const delite = (data:classe) => {
+        // dispatch(fetchDeleteClasses({id}));
+        // dispatch(fetchDeleteClasses({data.id}));
+        setAlert({type:"delete",value:true, data});
+    }
+
+    const aceptCallback = () => {
+        switch (alert.type) {
+            case "edit":
+                return console.log(alert.data)
+            case "delete":
+                return dispatch(fetchDeleteClasses({id:alert.data.id}));
+        }
+    }
+
+    const changeInputEdit = (e:any)=>{
+        setAlert({...alert,data:{...alert.data,names:e.target.value}})
+    }
+
+    const cuerpo = () => {
+        switch (alert.type) {
+            case "edit":
+                return <input type="text" value={alert.data.names} onChange={changeInputEdit} />
+            case "delete":
+                return <p>¿Desea eliminar la Clases/Materia {alert.data.names}?</p>
+            default:
+                <p></p>;
+        }
     }
 
     return(
@@ -81,8 +103,8 @@ function DataClasses() {
                                 return(
                                     <tr key={item.id}>
                                         <td>{item.names}</td>
-                                        <td onClick={()=>edit(item.id)} ><Img src={imgEdit} alt="edit" /></td>
-                                        <td onClick={()=>delite(item.id)} ><Img className="red" src={imgTrash} alt="delete" /></td>
+                                        <td onClick={()=>edit(item)} ><Img src={imgEdit} alt="edit" /></td>
+                                        <td onClick={()=>delite(item)} ><Img className="red" src={imgTrash} alt="delete" /></td>
                                     </tr>
                                 )
                             })
@@ -90,7 +112,10 @@ function DataClasses() {
                     </tbody>
                 </Table>
             </Div>
-            <Alert/>
+            <Alert />
+            {
+                alert.value && <Popup setAlert={setAlert} aceptCallback={aceptCallback} > {cuerpo()} </Popup>
+            }
         </div>
     );
 }
