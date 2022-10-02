@@ -42,6 +42,18 @@ export const fetchDeleteClasses = createAsyncThunk('/classes/fetchDeleteClasses'
   return deleteData;
 });
 
+export const fetchUpdateClasses = createAsyncThunk('/classes/fetchUpdateClasses', async (data:any)=>{
+  const updateData = await fetch('/api/v1/classes',{
+    method:'PUT',
+    headers:{'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  }).then(async (r)=>{
+    const res = await r.json();
+    return res;
+  });
+  return updateData;
+});
+
 export const classesStore = createSlice({
   name: 'classes',
   initialState,
@@ -63,17 +75,20 @@ export const classesStore = createSlice({
       .addCase(fetchClasses.rejected, (state, action) => {
         state.status = action.meta.aborted ? '' : 'failed';
       })
+
       // Agrega clases o materias
       .addCase(fetchPostClasses.pending,(state,action)=>{
         state.status = 'adding'
       })
       .addCase(fetchPostClasses.fulfilled,(state,action)=>{
         state.status = "added"
+        console.log(action.payload);
         state.data.push(action.payload);
       })
       .addCase(fetchPostClasses.rejected,(state,action)=>{
         state.status = 'errorAdd'
       })
+
       // Elimina clases o materias
       .addCase(fetchDeleteClasses.pending,(state,action)=>{
         state.status = 'deleting'
@@ -85,6 +100,19 @@ export const classesStore = createSlice({
       })
       .addCase(fetchDeleteClasses.rejected,(state,action)=>{
         state.status = 'errorRemove'
+      })
+
+      // Actualiza clases o materias
+      .addCase(fetchUpdateClasses.pending,(state,action)=>{
+        state.status = 'updating'
+      })
+      .addCase(fetchUpdateClasses.fulfilled,(state,action)=>{
+        state.status = "updated"
+        const newData = action.meta.arg;
+        state.data = state.data.map((oldData:data) => oldData.id === newData.id ? newData : oldData )
+      })
+      .addCase(fetchUpdateClasses.rejected,(state,action)=>{
+        state.status = 'errorUpdate'
       })
   }
 })

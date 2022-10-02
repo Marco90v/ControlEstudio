@@ -32,6 +32,7 @@ const Alert = styled.div`
         align-items: center;
         input{
             padding: 5px;
+            width: 90%;
         }
     }
     div:first-child{

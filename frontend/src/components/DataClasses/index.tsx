@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchClasses, fetchDeleteClasses, fetchPostClasses } from "../../store/module/classesStore";
+import { fetchClasses, fetchDeleteClasses, fetchPostClasses, fetchUpdateClasses } from "../../store/module/classesStore";
 import { Button, Div, Form, Img, Table } from "../../styled/style";
 
 import imgEdit from "../../assets/edit-solid-24.png";
@@ -58,7 +58,8 @@ function DataClasses() {
     const aceptCallback = () => {
         switch (alert.type) {
             case "edit":
-                return console.log(alert.data)
+                // return console.log(alert.data)
+                return dispatch(fetchUpdateClasses(alert.data));
             case "delete":
                 return dispatch(fetchDeleteClasses({id:alert.data.id}));
         }
@@ -73,7 +74,7 @@ function DataClasses() {
             case "edit":
                 return <input type="text" value={alert.data.names} onChange={changeInputEdit} />
             case "delete":
-                return <p>¿Desea eliminar la Clases/Materia {alert.data.names}?</p>
+                return <p>¿Desea eliminar la Clases/Materia <strong>"{alert.data.names}"</strong>?</p>
             default:
                 <p></p>;
         }

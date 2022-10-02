@@ -18,8 +18,11 @@ const status:any = {
     "added": {type:"success",msg:"Clase/Materia agregada"},
     "errorAdd": {type:"error",msg:"Error al agregar clase/materia"},
     "deleting": {type:"warning",msg:"Eliminando clase/materia"},
-    "removed": {type:"success",msg:"Clase/Materia Eliminada"},
+    "removed": {type:"success",msg:"Clase/Materia eliminada"},
     "errorRemove": {type:"error",msg:"Error al eliminar clase/materia"},
+    "updating": {type:"warning",msg:"Actualizando clase/materia"},
+    "updated": {type:"success",msg:"Clase/Materia actualizada"},
+    "errorUpdate": {type:"error",msg:"Error al actualizar clase/materia"},
 }
 function Alert (){
     const statusClasses = useSelector((state:any) => state.classes.status);
