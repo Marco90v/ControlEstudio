@@ -80,6 +80,23 @@ export const insertSingle = (table,data) => {
     });
 }
 
+export const updateSingle = (table,data) => {
+    return new Promise((resolve, reject)=>{
+        const {id,...d} = data;
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            connection.query(`UPDATE ${table} set ? where id = ?`, [d,id], (QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
 export const deleteSingle = (table,data) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{

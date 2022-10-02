@@ -14,6 +14,7 @@ export const getAllWorkOut = (req,res) => {
     services.getAll(table)
         .then(resolve=>res.status(200).json(resolve))
         .catch(err=>console.log(err));
+    // res.status(400).send();
 }
 
 export const setValuesSingleTableWorkOut = (req,res) => {
@@ -25,6 +26,23 @@ export const setValuesSingleTableWorkOut = (req,res) => {
             .then((result:any)=>{
                 const {insertId} = result;
                 res.status(200).json({insertId})
+            })
+            .catch(err=>console.log(err));
+    }else{
+        res.status(400).json({msg:"Error en la estructura de datos"});
+    }
+    // res.status(400).send();
+}
+
+export const updateValueSingleTableWorkOut = (req,res) => {
+    const table:string = req.path.slice(1);
+    const id = validator.id(req.body);
+    const data = validator[table](req.body);
+    const dataValidated = {...id, ...data}
+    if(id && data){
+        services.updateSingle(table,dataValidated)
+            .then(()=>{
+                res.status(200).json(true)
             })
             .catch(err=>console.log(err));
     }else{
