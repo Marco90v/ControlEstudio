@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { change } from "../../store/module/visibleSideStore";
 // import { NavLink } from "react-router-dom";
 
-import { Li, MyNavLink, Side, Ul } from "../../styled/style";
+import { MyNavLink, Side, Ul } from "../../styled/style";
 import classes from "../../assets/book-solid-24.png";
 
 
@@ -20,48 +20,48 @@ function Sidebar(){
             </div>
             <div id="admin">
                 <Ul>
-                    <Li>
-                        <MyNavLink to="/dashboard">
+                    <li>
+                        <MyNavLink to="/dashboard/inicio" exact activeClassName="active">
                             <img src={classes} />
                             <span>Inicio</span>
                         </MyNavLink>
-                    </Li>
-                    <Li>
-                        <MyNavLink to="/dashboard/classes">
+                    </li>
+                    <li>
+                        <MyNavLink to="/dashboard/classes" exact activeClassName="active">
                             <img src={classes} />
                             <span>Materias</span>
                         </MyNavLink>
-                    </Li>
-                    <Li>
-                        <MyNavLink to="/dashboard/profession">
+                    </li>
+                    <li>
+                        <MyNavLink to="/dashboard/profession" activeClassName="active">
                             <img src={classes} />
                             <span>Profesiones</span>
                         </MyNavLink>
-                    </Li>
-                    <Li>
-                        <MyNavLink to="/dashboard/pensums">
+                    </li>
+                    <li>
+                        <MyNavLink to="/dashboard/pensums" activeClassName="active">
                             <img src={classes} />
                             <span>Pensum/Programa</span>
                         </MyNavLink>
-                    </Li>
-                    <Li>
-                        <MyNavLink to="/dashboard/teachers">
+                    </li>
+                    <li>
+                        <MyNavLink to="/dashboard/teachers" activeClassName="active">
                             <img src={classes} />
                             <span>Profesores</span>
                         </MyNavLink>
-                    </Li>
-                    <Li>
-                        <MyNavLink to="/dashboard/students">
+                    </li>
+                    <li>
+                        <MyNavLink to="/dashboard/students" activeClassName="active">
                             <img src={classes} />
                             <span>Alumnos</span>
                         </MyNavLink>
-                    </Li>
-                    <Li>
-                        <MyNavLink to="/dashboard/scores">
+                    </li>
+                    <li>
+                        <MyNavLink to="/dashboard/scores" activeClassName="active">
                             <img src={classes} />
                             <span>Record</span>
                         </MyNavLink>
-                    </Li>
+                    </li>
                 </Ul>
             </div>
         </Side>

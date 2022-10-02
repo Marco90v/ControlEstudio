@@ -29,32 +29,38 @@ export const Ul = styled.ul`
     margin-top: 1rem;
 `;
 
-export const Li = styled.li<any>`
+export const MyNavLink = styled(NavLink)<any>`
+    font-weight: bold;
+    color: black;
+    /* transition: color 0.25s ease-in-out; */
+    display: flex;
+    column-gap: 0.5rem;
+    align-items: center;
+    text-decoration: none;
+
     border: 1px solid transparent;
     padding: 0.5rem;
     background-color: white;
     border-radius: 5px;
     margin-bottom: 0.5rem;
-    transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
     cursor: pointer;
+
     :hover{
         background-color: #5faaff;
         box-shadow: 0 0 10px 1px #c1c1c1;
         border: 1px solid #c1c1c1;
-        a > span{
+        span{
             color: white;
         }
     }
-`;
 
-export const MyNavLink = styled(NavLink)`
-    font-weight: bold;
-    color: black;
-    transition: color 0.25s ease-in-out;
-    display: flex;
-    column-gap: 0.5rem;
-    align-items: center;
-    text-decoration: none;
+    &.${props=>props.activeClassName}{
+        background-color: #5faaff;
+        span{
+            color: white;
+        }
+    }
 `;
 
 export const Form = styled.form`
