@@ -76,7 +76,7 @@ export const classesStore = createSlice({
           state.status = action.payload.error
         }else{
           state.status = "succeeded"
-          state.data = action.payload
+          state.data = action.payload.reverse();
         }
       })
       .addCase(fetchClasses.rejected, (state, action) => {
@@ -93,7 +93,8 @@ export const classesStore = createSlice({
           state.status = action.payload.error
         }else{
           state.status = "added"
-          state.data.push(action.payload);
+          // state.data.push(action.payload);
+          state.data.unshift(action.payload);
         }
       })
       .addCase(fetchPostClasses.rejected,(state,action)=>{
