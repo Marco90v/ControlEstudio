@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 type data = {
   id:number, names:string
@@ -14,7 +14,8 @@ const initialState: classesStore = {status:"",data:[]};
 export const fetchClasses = createAsyncThunk('classes/fetchClasses', async (_,thunk) => {
   const response = await fetch('/api/v1/classes', {
     signal: thunk.signal,
-  }).then(r=>r.json());
+  })
+  .then(r => r.json());
   return response
 });
 
@@ -25,7 +26,8 @@ export const fetchPostClasses = createAsyncThunk('/classes/fetchPostClasses',asy
     body: JSON.stringify(name)
   }).then(async (r)=>{
     const res = await r.json();
-    return {id:res.insertId, names:name.names}
+    return res.error ? res : {id:res.insertId, names:name.names}
+    // return {id:res.insertId, names:name.names}
   });
   return newData;
 });
@@ -69,8 +71,13 @@ export const classesStore = createSlice({
         state.status = 'loading'
       })
       .addCase(fetchClasses.fulfilled, (state, action) => {
-        state.status = "succeeded"
-        state.data = action.payload
+        if(action.payload.error){
+          console.log(action.payload.error);
+          state.status = action.payload.error
+        }else{
+          state.status = "succeeded"
+          state.data = action.payload
+        }
       })
       .addCase(fetchClasses.rejected, (state, action) => {
         state.status = action.meta.aborted ? '' : 'failed';
@@ -81,9 +88,13 @@ export const classesStore = createSlice({
         state.status = 'adding'
       })
       .addCase(fetchPostClasses.fulfilled,(state,action)=>{
-        state.status = "added"
-        console.log(action.payload);
-        state.data.push(action.payload);
+        if(action.payload.error){
+          console.log(action.payload.error);
+          state.status = action.payload.error
+        }else{
+          state.status = "added"
+          state.data.push(action.payload);
+        }
       })
       .addCase(fetchPostClasses.rejected,(state,action)=>{
         state.status = 'errorAdd'
@@ -94,9 +105,14 @@ export const classesStore = createSlice({
         state.status = 'deleting'
       })
       .addCase(fetchDeleteClasses.fulfilled,(state,action)=>{
-        state.status = "removed"
-        const {deleteId} = action.payload;
-        state.data = state.data.filter(item=>item.id !== deleteId);
+        if(action.payload.error){
+          console.log(action.payload.error);
+          state.status = action.payload.error
+        }else{
+          state.status = "removed"
+          const {deleteId} = action.payload;
+          state.data = state.data.filter(item=>item.id !== deleteId);
+        }
       })
       .addCase(fetchDeleteClasses.rejected,(state,action)=>{
         state.status = 'errorRemove'
@@ -107,9 +123,14 @@ export const classesStore = createSlice({
         state.status = 'updating'
       })
       .addCase(fetchUpdateClasses.fulfilled,(state,action)=>{
-        state.status = "updated"
-        const newData = action.meta.arg;
-        state.data = state.data.map((oldData:data) => oldData.id === newData.id ? newData : oldData )
+        if(action.payload.error){
+          console.log(action.payload.error);
+          state.status = action.payload.error
+        }else{
+          state.status = "updated"
+          const newData = action.meta.arg;
+          state.data = state.data.map((oldData:data) => oldData.id === newData.id ? newData : oldData )
+        }
       })
       .addCase(fetchUpdateClasses.rejected,(state,action)=>{
         state.status = 'errorUpdate'

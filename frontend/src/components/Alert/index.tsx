@@ -31,11 +31,14 @@ function Alert (){
 
     useEffect(() => {
         if(statusClasses !== ""){
-            setAlert(status[statusClasses]);
+            if(status[statusClasses]){
+                setAlert(status[statusClasses]);
+            }else{
+                setAlert({type:"error",msg:"Error del Servidor"});
+            }
             if(Object.values(completed).includes(statusClasses)){
                 setTimeout(()=>setAlert({...alert,type:"blank"}),3000);
                 dispatch(changeStatus(""));
-                // dispatch(add(""));
             }
         }
     }, [statusClasses])
