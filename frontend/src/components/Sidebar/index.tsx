@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { change } from "../../store/module/visibleSideStore";
-// import { NavLink } from "react-router-dom";
 
 import { MyNavLink, Side, Ul } from "../../styled/style";
 import classes from "../../assets/book-solid-24.png";
@@ -21,43 +19,43 @@ function Sidebar(){
             <div id="admin">
                 <Ul>
                     <li>
-                        <MyNavLink to="/dashboard/inicio" exact activeClassName="active">
+                        <MyNavLink to="/dashboard/inicio" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Inicio</span>
                         </MyNavLink>
                     </li>
                     <li>
-                        <MyNavLink to="/dashboard/classes" exact activeClassName="active">
+                        <MyNavLink to="/dashboard/classes" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Materias</span>
                         </MyNavLink>
                     </li>
                     <li>
-                        <MyNavLink to="/dashboard/profession" activeClassName="active">
+                        <MyNavLink to="/dashboard/profession" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Profesiones</span>
                         </MyNavLink>
                     </li>
                     <li>
-                        <MyNavLink to="/dashboard/pensums" activeClassName="active">
+                        <MyNavLink to="/dashboard/pensums" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Pensum/Programa</span>
                         </MyNavLink>
                     </li>
                     <li>
-                        <MyNavLink to="/dashboard/teachers" activeClassName="active">
+                        <MyNavLink to="/dashboard/teachers" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Profesores</span>
                         </MyNavLink>
                     </li>
                     <li>
-                        <MyNavLink to="/dashboard/students" activeClassName="active">
+                        <MyNavLink to="/dashboard/students" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Alumnos</span>
                         </MyNavLink>
                     </li>
                     <li>
-                        <MyNavLink to="/dashboard/scores" activeClassName="active">
+                        <MyNavLink to="/dashboard/scores" style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                             <img src={classes} />
                             <span>Record</span>
                         </MyNavLink>

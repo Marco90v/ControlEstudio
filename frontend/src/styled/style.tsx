@@ -32,12 +32,10 @@ export const Ul = styled.ul`
 export const MyNavLink = styled(NavLink)<any>`
     font-weight: bold;
     color: black;
-    /* transition: color 0.25s ease-in-out; */
     display: flex;
     column-gap: 0.5rem;
     align-items: center;
     text-decoration: none;
-
     border: 1px solid transparent;
     padding: 0.5rem;
     background-color: white;
@@ -54,8 +52,7 @@ export const MyNavLink = styled(NavLink)<any>`
             color: white;
         }
     }
-
-    &.${props=>props.activeClassName}{
+    &.active{
         background-color: #5faaff;
         span{
             color: white;

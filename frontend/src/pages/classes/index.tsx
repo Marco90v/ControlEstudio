@@ -7,16 +7,8 @@ import DataClasses from "../../components/DataClasses";
 import { Main } from "../../styled/style";
 
 function Classes() {
-    // const dispatch = useDispatch();
-    // const classes = useSelector((state:any) => state.classes);
 
     const visibleSide = useSelector((state:any) => state.side)
-
-    // useEffect(() => {
-    //     if(classes.status === "") dispatch(fetchClasses())
-    //   return () => {}
-    // }, [])
-    
 
     return(
         <>
