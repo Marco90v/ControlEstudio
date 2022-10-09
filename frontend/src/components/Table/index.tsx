@@ -9,7 +9,7 @@ function TableComponent({edit,remove,columnsHeaders,data}:any){
         <Table>
             <thead>
                 <tr>
-                    {columnsHeaders.map((item:string)=><th>{item}</th>)}
+                    {columnsHeaders.map((item:string,index:number)=><th key={index}>{item}</th>)}
                     <th>Editar</th>
                     <th>Eliminar</th>
                 </tr>

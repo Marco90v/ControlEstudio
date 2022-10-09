@@ -61,7 +61,6 @@ function DataClasses() {
         <div>
             <InputForm addCallBack={addClasses} />
             <Div>
-                
                 <TableComponent edit={edit} remove={remove} columnsHeaders={columnsHeaders} data={classes.data} />
             </Div>
             <Alert />
