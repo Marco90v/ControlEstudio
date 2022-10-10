@@ -6,7 +6,7 @@ import { Main } from "../../styled/style";
 import Sidebar from "../../components/Sidebar";
 
 function Inicio(){
-    const visibleSide = useSelector((state:any) => state.side);
+    const visibleSide = useSelector((state:store) => state.sidebar);
     
     return(
         <Main visibleSide={visibleSide.status}>
