@@ -4,7 +4,7 @@ import imgTrash from "../../assets/trash-alt-solid-24.png";
 
 type classe = {id:number,names:string}
 
-function TableComponent({edit,remove,columnsHeaders,data}:any){
+function TableComponent({edit,remove,columnsHeaders=["Nombre"],data}:any){
     return(
         <Table>
             <thead>

@@ -4,10 +4,11 @@ import { fetchPostClasses } from "../../store/module/classesStore";
 import { Button, Form } from "../../styled/style"
 
 type props = {
-    addCallBack: Function
+    addCallBack: Function,
+    title:string
 }
 
-function InputForm({addCallBack}:props) {
+function InputForm({addCallBack,title}:props) {
 
     const [name,setName] = useState({names:""});
 
@@ -28,7 +29,7 @@ function InputForm({addCallBack}:props) {
     return(
         <div>
             <Form onSubmit={add}>
-                <label htmlFor="">Clase/Materia</label>
+                <label htmlFor="">{title}</label>
                 <input type="text" name="inputName" id="inputName" onChange={changeInputName} value={name.names} />
                 <Button type="submit">Agregar</Button>
             </Form>

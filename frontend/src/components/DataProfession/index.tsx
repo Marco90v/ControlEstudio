@@ -1,32 +1,29 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { fetchClasses, fetchDeleteClasses, fetchPostClasses, fetchUpdateClasses } from "../../store/module/classesStore";
+import { fetchDeleteProfession, fetchGetProfession, fetchPostProfession, fetchUpdateProfession } from "../../store/module/professionStore";
 import { Div } from "../../styled/style";
-
 import Alert from "../Alert";
-import Popup from "../Popup/Popup";
 import InputForm from "../InputForm";
+import Popup from "../Popup/Popup";
 import TableComponent from "../Table";
 
 type classe = {id:number,names:string}
 
-function DataClasses() {
-
+function DataProfession(){
     const dispatch = useDispatch();
-    const classes = useSelector((state:any) => state.classes);
+    const profession = useSelector((state:any) => state.profession);
 
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
     useEffect(() => {
-        const promise = dispatch(fetchClasses());
+        const promise = dispatch(fetchGetProfession());
       return () => {
         promise.abort();
       }
     }, []);
 
     const addClasses = async (name:string) => {
-        return await dispatch(fetchPostClasses(name));
+        return await dispatch(fetchPostProfession(name));
     }
 
     const edit = (data:classe) => {
@@ -40,9 +37,9 @@ function DataClasses() {
     const aceptCallback = () => {
         switch (modal.type) {
             case "edit":
-                return dispatch(fetchUpdateClasses(modal.data));
+                return dispatch(fetchUpdateProfession(modal.data));
             case "delete":
-                return dispatch(fetchDeleteClasses({id:modal.data.id}));
+                return dispatch(fetchDeleteProfession({id:modal.data.id}));
         }
     }
 
@@ -57,9 +54,9 @@ function DataClasses() {
 
     return(
         <div>
-            <InputForm addCallBack={addClasses} title={"Clase/Materia"} />
+            <InputForm addCallBack={addClasses} title={"Profesiones"} />
             <Div>
-                <TableComponent edit={edit} remove={remove} data={classes.data} />
+                <TableComponent edit={edit} remove={remove}  data={profession.data} />
             </Div>
             <Alert />
             {
@@ -68,5 +65,4 @@ function DataClasses() {
         </div>
     );
 }
-
-export default DataClasses;
+export default DataProfession;
