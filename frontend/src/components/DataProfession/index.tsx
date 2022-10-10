@@ -7,7 +7,7 @@ import InputForm from "../InputForm";
 import Popup from "../Popup/Popup";
 import TableComponent from "../Table";
 
-type classe = {id:number,names:string}
+// type classe = {id:number,names:string}
 
 function DataProfession(){
     const dispatch = useDispatch();

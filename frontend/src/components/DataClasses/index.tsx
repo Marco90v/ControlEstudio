@@ -9,8 +9,6 @@ import Popup from "../Popup/Popup";
 import InputForm from "../InputForm";
 import TableComponent from "../Table";
 
-type classe = {id:number,names:string}
-
 function DataClasses() {
 
     const dispatch = useDispatch();
