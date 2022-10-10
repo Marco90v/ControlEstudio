@@ -14,7 +14,7 @@ import record from "../../assets/folder-solid-24.png";
 function Sidebar(){
 
     const dispatch = useDispatch();
-    const visibleSide = useSelector((state:any) => state.side)
+    const visibleSide = useSelector((state:store) => state.sidebar)
 
     return(
         <Side id="sidebar" visibleSide={visibleSide.status} >

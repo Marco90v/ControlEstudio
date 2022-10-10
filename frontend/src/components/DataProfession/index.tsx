@@ -11,7 +11,7 @@ import TableComponent from "../Table";
 
 function DataProfession(){
     const dispatch = useDispatch();
-    const profession = useSelector((state:any) => state.profession);
+    const profession = useSelector((state:store) => state.profession);
 
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
@@ -26,11 +26,11 @@ function DataProfession(){
         return await dispatch(fetchPostProfession(name));
     }
 
-    const edit = (data:classe) => {
+    const edit = (data:profession) => {
         setModal({type:"edit",value:true, data});
     }
 
-    const remove = (data:classe) => {
+    const remove = (data:profession) => {
         setModal({type:"delete",value:true, data});
     }
 

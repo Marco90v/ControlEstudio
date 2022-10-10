@@ -6,8 +6,7 @@ import { Main } from "../../styled/style";
 
 function Classes() {
 
-    const visibleSide = useSelector((state:any) => state.side)
-
+    const visibleSide = useSelector((state:store) => state.sidebar); 
     return(
         <>
             <Main visibleSide={visibleSide.status}>

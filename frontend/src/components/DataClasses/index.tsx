@@ -12,7 +12,7 @@ import TableComponent from "../Table";
 function DataClasses() {
 
     const dispatch = useDispatch();
-    const classes = useSelector((state:any) => state.classes);
+    const classes = useSelector((state:store) => state.classes);
 
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 

@@ -4,7 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import { Main } from "../../styled/style";
 
 function Profession(){
-    const visibleSide = useSelector((state:any) => state.side)
+    const visibleSide = useSelector((state:store) => state.sidebar)
 
     return(
         <>

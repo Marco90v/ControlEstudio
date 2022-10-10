@@ -3,13 +3,13 @@ import classesStore from './module/classesStore';
 import professionStore from './module/professionStore';
 import visibleSide from './module/visibleSideStore';
 
-const side:any = visibleSide;
-const classes:any = classesStore;
-const profession:any = professionStore;
+const sidebar = visibleSide;
+const classes = classesStore;
+const profession = professionStore;
 
 export default configureStore({
   reducer: {
-    side,
+    sidebar,
     classes,
     profession
   },

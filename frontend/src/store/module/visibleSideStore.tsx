@@ -1,9 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-type visibleSide = {
-  status:boolean
-}
-
 const initialState: visibleSide = {status:true};
 
 export const visibleSide = createSlice({

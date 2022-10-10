@@ -1,15 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-type data = {
-  id:number, names:string
-}
-
-type classesStore = {
-  status:string,
-  data:data[]
-}
-
-const initialState: classesStore = {status:"",data:[]};
+const initialState: classeStore = {status:"",data:[]};
 
 export const fetchClasses = createAsyncThunk('classes/fetchClasses', async (_,thunk) => {
   const response = await fetch('/api/v1/classes', {
@@ -27,7 +18,6 @@ export const fetchPostClasses = createAsyncThunk('/classes/fetchPostClasses',asy
   }).then(async (r)=>{
     const res = await r.json();
     return res.error ? res : {id:res.insertId, names:name.names}
-    // return {id:res.insertId, names:name.names}
   });
   return newData;
 });
@@ -93,7 +83,6 @@ export const classesStore = createSlice({
           state.status = action.payload.error
         }else{
           state.status = "added"
-          // state.data.push(action.payload);
           state.data.unshift(action.payload);
         }
       })
@@ -130,7 +119,7 @@ export const classesStore = createSlice({
         }else{
           state.status = "updated"
           const newData = action.meta.arg;
-          state.data = state.data.map((oldData:data) => oldData.id === newData.id ? newData : oldData )
+          state.data = state.data.map((oldData:classe) => oldData.id === newData.id ? newData : oldData )
         }
       })
       .addCase(fetchUpdateClasses.rejected,(state,action)=>{
