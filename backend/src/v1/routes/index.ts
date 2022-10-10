@@ -25,6 +25,8 @@ router.post('/semesters', workOutControllers.setValuesSingleTableWorkOut);
 // RUTAS PARA LAS PROFESIONES
 router.get('/profession', workOutControllers.getAllWorkOut);
 router.post('/profession', workOutControllers.setValuesSingleTableWorkOut);
+router.put('/profession', workOutControllers.updateValueSingleTableWorkOut);
+router.delete('/profession', workOutControllers.deleteValueSingleTableWorkOut);
 
 //RUTAS PARA LOS TURNOS
 router.get('/shifts', workOutControllers.getAllWorkOut);
