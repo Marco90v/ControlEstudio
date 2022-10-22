@@ -77,6 +77,7 @@ export type dbTeachers = {
 }
 
 export type pensumNotFormat = {
+    id: number,
     IdSemesters : number,
     Name_Semesters: string,
     IdClasses: number,
@@ -84,6 +85,7 @@ export type pensumNotFormat = {
 }
 
 export type classesFormat ={
+    id: number,
     IdClasses: number,
     Name_Classes: string
 }

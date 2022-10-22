@@ -49,7 +49,12 @@ function Popup({setModal, children, aceptCallback}:any){
 
     const acept = () => {
         aceptCallback()
-        setModal({type:"", value:false,  data:{id:0,names:""}});
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
     }
 
     const cancel = () => {

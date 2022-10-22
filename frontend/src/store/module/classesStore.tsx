@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-const initialState: classeStore = {status:"",data:[]};
+const initialState: classeStore = {status:"", selctClasses:0, data:[]};
 
 export const fetchClasses = createAsyncThunk('classes/fetchClasses', async (_,thunk) => {
   const response = await fetch('/api/v1/classes', {

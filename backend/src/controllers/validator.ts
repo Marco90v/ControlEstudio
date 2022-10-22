@@ -108,7 +108,6 @@ const students = (object:any):dbStudensts | false => {
 
 const pensum = (objects:any):dbPensum[] | false => {
     let newData:dbPensum[] = [];
-
     for (const key in objects) {
         if('IdProfession' && 'IdSemesters' && 'IdClasses' in objects[key]
         && typeof(objects[key].IdProfession) === 'number'
@@ -123,7 +122,7 @@ const pensum = (objects:any):dbPensum[] | false => {
             return false;
         }
     }
-
+    // console.log(newData)
     return newData;
 }
 

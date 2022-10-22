@@ -124,7 +124,7 @@ export const insertMultiple = (table:string,datas:[]) => {
             const newData = transformData(datas);
             connection.query(`INSERT INTO ${table} (IdProfession,IdSemesters,IdClasses) VALUES ?`, [newData],(QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
-                if(result) resolve(true);
+                if(result) resolve(result);
                 connection.release();
             });
         });
@@ -138,7 +138,8 @@ export const getPensum = (id:number) => {
                 reject(`Error al conectar a MySQL: ${MySqlErr}`);
                 return;
             }
-            const query = 'SELECT semesters.id AS "IdSemesters", \
+            const query = 'SELECT pensum.id, \
+                semesters.id AS "IdSemesters", \
                 semesters.names AS "Name_Semesters", \
                 classes.id AS "IdClasses", \
                 classes.names AS "Name_Classes" \

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, N
 import Classes from "./pages/classes";
 import Inicio from './pages/inicio';
 import Profession from './pages/profession';
+import Pensum from './pages/pensum';
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -11,7 +12,8 @@ const router = createBrowserRouter(
     <Route path="dashboard"  element={<Navigate to="/dashboard/inicio" />} />,
     <Route path="dashboard/inicio" element={<Inicio />} />,
     <Route path="dashboard/classes" element={<Classes />} />,
-    <Route path="dashboard/profession" element={<Profession />} />
+    <Route path="dashboard/profession" element={<Profession />} />,
+    <Route path="dashboard/pensums" element={<Pensum />} />
   ])
 );
 

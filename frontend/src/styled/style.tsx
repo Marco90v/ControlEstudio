@@ -9,7 +9,7 @@ export const Main = styled.main<any>`
 `;
 
 export const Side = styled.div<any>`
-    background-color: #e5e5e5;
+    background-color: var(--gris);
     border-right: 1px soLid #cfcfcf;
     padding: 1rem;
     overflow: hidden;
@@ -45,7 +45,7 @@ export const MyNavLink = styled(NavLink)<any>`
     cursor: pointer;
 
     :hover{
-        background-color: #5faaff;
+        background-color: var(--azul);
         box-shadow: 0 0 10px 1px #c1c1c1;
         border: 1px solid #c1c1c1;
         span{
@@ -53,7 +53,7 @@ export const MyNavLink = styled(NavLink)<any>`
         }
     }
     &.active{
-        background-color: #5faaff;
+        background-color: var(--azul);
         span{
             color: white;
         }
@@ -159,5 +159,114 @@ export const FloatAlert = styled.div`
         top: 10px;
         background-color: red;
         color:white;
+    }
+`;
+
+export const Semestres = styled.div`
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 30px;
+    border: solid 1px #b9b9b9;
+    > h2{
+        padding: 5px;
+        background-color: var(--azul);
+        color: white;
+        border-radius: 5px 5px 0 0;
+        > img {
+            float: right;
+            margin-right: 10px;
+            background-color: white;
+            border-radius: 50%;
+            transition: background-color 0.25s ease-in-out;
+            cursor: pointer;
+            :hover{
+                background-color: black;
+            }
+        }
+    }
+`;
+
+export const ClassesBySemesters = styled.ul`
+    list-style: none;
+    background-color: #e5e5e5;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px;
+    > li {
+        display: grid;
+        grid-template-columns: auto 20px;
+        align-items: center;
+        grid-column-gap: 10px;
+        background-color: #3eb53e;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin: 0 5px;
+        > img {
+            background-color: white;
+            border-radius: 50%;
+            transition: background-color 0.25s ease-in-out;
+            cursor: pointer;
+            :hover{
+                background-color: black;
+            }
+        }
+    }
+`;
+
+export const ContentDataPensum = styled.div`
+    padding: 20px;
+    margin: 20px;
+`;
+
+export const SelectPensum = styled.div`
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    margin-bottom: 20px;
+    /* > select{
+        border: solid 1px var(--gris);
+        background-color: var(--gris);
+        border-radius: 5px;
+        :focus-visible{
+            outline: solid 1px grey;
+        }
+    } */
+`;
+
+export const SelectSemester = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-column-gap: 20px;
+    margin-top: 20px;
+    > button {
+        background-color: #28ad28;
+        color: white;
+        font-weight: bold;
+        border: solid 1px green;
+        border-radius: 5px;
+        transition: background-color 0.25s ease-in-out;
+        cursor: pointer;
+        :hover{
+            background-color: green;
+        }
+        :disabled{
+            background-color: grey;
+            border-color: grey;
+            cursor: default;
+        }
+    }
+`;
+
+export const SelectStyle = styled.select`
+    height: 30px;
+    border: solid 1px var(--gris);
+    background-color: var(--gris);
+    border-radius: 5px;
+    :focus-visible{
+        outline: solid 1px grey;
     }
 `;

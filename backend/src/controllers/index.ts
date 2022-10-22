@@ -82,11 +82,13 @@ export const deleteValueSingleTableWorkOut = (req,res) => {
 export const setValuesMultipleTableWorkOut = (req,res) => {
     const table:string = req.path.slice(1);
     const dataValidated = validator[table](req.body);
-    // console.log(dataValidated);
     if(dataValidated){
         const table:string = req.path.slice(1);
-        services.insertMultiple(table,req.body)
-            .then(()=>res.status(200).json({msg:'Pensum agregado'}))
+        services.insertMultiple(table,dataValidated)
+            .then((result:any)=>{
+                const {insertId} = result;
+                res.status(200).json({insertId})
+            })
             .catch(err => {
                 console.log(err);
                 res.status(400).json({error:err});
@@ -153,6 +155,7 @@ export const getProfessionWorkOut = (req,res) => {
                         Name_Semesters: value.Name_Semesters,
                         Classes: [
                             {
+                                id: value.id,
                                 IdClasses: value.IdClasses,
                                 Name_Classes: value.Name_Classes
                             }
@@ -161,6 +164,7 @@ export const getProfessionWorkOut = (req,res) => {
                     temp.push(value.IdSemesters);
                 }else{
                     newFormat[index].Classes.push({
+                        id: value.id,
                         IdClasses: value.IdClasses,
                         Name_Classes: value.Name_Classes
                     });

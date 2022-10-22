@@ -65,6 +65,8 @@ router.post('/admin', workOutControllers.setValuesSingleTableWorkOut);
 // router.get('/students', workOutControllers.getAllStudentsWorkOut);
 router.get('/pensum/:profession', workOutControllers.getProfessionWorkOut);
 router.post('/pensum', workOutControllers.setValuesMultipleTableWorkOut);
+router.delete('/pensum', workOutControllers.deleteValueSingleTableWorkOut);
+
 
 
 export default router;
