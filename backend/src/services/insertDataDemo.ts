@@ -9,8 +9,8 @@ export const createDataDemo = (conn:Pool):void =>{
         datas.forEach(data => {
             connection.query(`INSERT INTO ${table} set ?`, data, (err,result)=>{
                 const msg:string = err ? 
-                    `Error al ingresar el valor: "${data.names}" en la Tabla: "${table}"` : 
-                    `Registro: "${data.names}" agregado a la Tabla "${table}"`;
+                    `Error al ingresar el valor: "${data.names || data.IdPersons}" en la Tabla: "${table}"` : 
+                    `Registro: "${data.names || data.IdPersons}" agregado a la Tabla "${table}"`;
                 console.log(msg);
             });
         });

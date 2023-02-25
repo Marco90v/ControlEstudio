@@ -36,9 +36,10 @@ const conn:Pool = mysql.createPool(config);
 // }
 
 
-const InitialDB = () => {
-    // createTables(conn); // <--crea tablas si no existen
-    // createDataDemo(conn); // <--agrega datos a las tablas para usar como base de prueba
+const InitialDB = (ini) => {
+    createTables(conn,ini); // <--crea tablas si no existen
+    createDataDemo(conn); // <--agrega datos a las tablas para usar como base de prueba
+    // ini(); // <-- si desea ejecutar el sistema sin verificar la existencia de las tablas ni crear registros, comente las 2 lineas anteriores y descomente esta.
 }
 
 // export {conectar,desconectar}

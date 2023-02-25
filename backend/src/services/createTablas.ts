@@ -1,19 +1,14 @@
-import { Connection } from "mysql";
+import { Connection, Pool } from "mysql";
 
-export const createTables = (conn:Connection):void => {
-    conn.connect(err=>{
-        if (err) {
-            console.log('Error al conectar', err);
-            return;
-        }
-    });
-
+export const createTables = (conn:Pool,ini):void => {
+    
     const actionQuery = (query:string,table:string) => {
         conn.query(query,(err)=>{
-            const msg:string = err ? 
-                `Error con crear Table "${table}"` :
-                `Tabla "${table}" creada con exito`;
-            console.log(msg);
+            // const msg:string = err ? 
+            //     `Error al crear Table "${table}"` :
+            //     `Tabla "${table}" creada con exito`;
+            // console.log(err,res);
+            if(err) console.log(`Error al crear Table "${table}"`);
         });
     }
 
@@ -130,17 +125,7 @@ export const createTables = (conn:Connection):void => {
         actionQuery(query,'login');
     }
 
-    conn.query('CREATE database IF NOT exists controlestudio',(err)=>{
-        if (err) {
-            console.log('Error al crear Base de datos "controlestudio"');
-            return;
-        }
-
-        conn.query('USE controlestudio',(err,row)=>{
-            const msg:string = err ? 'Error al seleccionar Base de Datos controlestudio' : 'Base de datos controlestudio seleccionada con Exito';
-            console.log(msg);
-        })
-
+    const verifyTables = () => {
         createPersons();
         createClasses();        
         createProfession();        
@@ -154,7 +139,19 @@ export const createTables = (conn:Connection):void => {
         createStudents();
         createScores();       
         createLogin();
+    }
 
+    conn.getConnection(err=>{
+        if (err) {
+            if(err.sqlMessage==="Unknown database 'controlestudio'"){
+                console.log('Error al conectar a la DB --> ', err.sqlMessage);
+            }else{
+                console.log('Error al conectar al servidor DB --> ', err);
+            }
+        }else{
+            verifyTables();
+            ini();
+        }
     });
 
 }
