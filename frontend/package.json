@@ -26,7 +26,7 @@
     "@types/react-is": "^16",
     "@types/styled-components": "^5",
     "@vitejs/plugin-react": "^2.0.1",
-    "typescript": "^4.6.4",
+    "typescript": "^4.9.5",
     "vite": "^3.0.7"
   },
   "resolutions": {
