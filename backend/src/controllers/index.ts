@@ -1,6 +1,6 @@
 import * as services from "../services";
 import { transformTeacher } from "../transform";
-import { oldFormat, pensumNotFormat, pesumFormat } from "../types";
+import { dbPersons, oldFormat, pensumNotFormat, pesumFormat } from "../types";
 import { validator } from "./validator";
 
 export const getAllAdminWorkOut = (_,res) => {
@@ -115,6 +115,18 @@ export const getSingleTeachersWorkOut = (req,res) => {
     services.getTeacher(idTeacher)
         .then((result:oldFormat[])=>{
             res.status(200).json(transformTeacher(result));
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json({error:err});
+        });
+}
+
+export const getPersonByRoleWorkOut = (req,res) => {
+    const personRole:number = Number(req.params.role);
+    services.getPersonByRole(personRole)
+        .then((result:dbPersons[])=>{
+            res.status(200).json(result);
         })
         .catch(err => {
             console.log(err);

@@ -340,3 +340,26 @@ export const getTeacher = (id:number) => {
         });
     });
 }
+
+export const getPersonByRole = (role:number) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM persons WHERE role=?;';
+            connection.query(query, role, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error en consulta detallada personByRole: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}

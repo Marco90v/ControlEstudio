@@ -42,6 +42,7 @@ router.post('/roles', workOutControllers.setValuesSingleTableWorkOut);
 
 // RUTAS PARA LAS PERSONAS
 router.get('/persons', workOutControllers.getAllWorkOut);
+router.get('/persons/:role', workOutControllers.getPersonByRoleWorkOut);
 router.post('/persons', workOutControllers.setValuesSingleTableWorkOut);
 
 // RUTA PARA LOGIN
@@ -51,6 +52,7 @@ router.get('/login', workOutControllers.getAllWorkOut);
 //RUTAS PARA LOS PROFESORES
 router.get('/teachers', workOutControllers.getAllTeachersWorkOut);
 router.get('/teachers/:id', workOutControllers.getSingleTeachersWorkOut);
+// router.post('/teachers', workOutControllers.setValuesSingleTableWorkOut);
 router.post('/teachers', workOutControllers.setValuesSingleTableWorkOut);
 
 //RUTAS PARA LOS ESTUDIANTES

@@ -29,7 +29,8 @@ export type dbPersons = {
     email: string,
     phone: number,
     photo: string | null,
-    role: number
+    role: number,
+    id?:number
 }
 
 export type dbProfession = {
@@ -173,3 +174,4 @@ export type oldFormat = {
     idSection: number,
     section:string,
 }
+
