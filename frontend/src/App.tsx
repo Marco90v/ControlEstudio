@@ -5,6 +5,7 @@ import Classes from "./pages/classes";
 import Inicio from './pages/inicio';
 import Profession from './pages/profession';
 import Pensum from './pages/pensum';
+import Teacher from './pages/teacher';
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -13,7 +14,8 @@ const router = createBrowserRouter(
     <Route path="dashboard/inicio" element={<Inicio />} />,
     <Route path="dashboard/classes" element={<Classes />} />,
     <Route path="dashboard/profession" element={<Profession />} />,
-    <Route path="dashboard/pensums" element={<Pensum />} />
+    <Route path="dashboard/pensums" element={<Pensum />} />,
+    <Route path="dashboard/teachers" element={<Teacher />} />
   ])
 );
 

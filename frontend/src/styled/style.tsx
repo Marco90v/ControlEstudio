@@ -263,10 +263,147 @@ export const SelectSemester = styled.div`
 
 export const SelectStyle = styled.select`
     height: 30px;
-    border: solid 1px var(--gris);
+    // border: solid 1px var(--gris);
+    border: solid 1px grey;
     background-color: var(--gris);
     border-radius: 5px;
     :focus-visible{
         outline: solid 1px grey;
+    }
+`;
+
+export const ContentTeacher = styled.div<any>`
+    &.content{
+        margin: 2rem;
+    }
+    >table{
+        width: 900px;
+        margin: auto;
+        margin-top: 3rem;
+        >tbody > tr > td:nth-child(n+2) {
+            text-align: left;
+        }
+        >tbody > tr > td:nth-child(n+5) {
+            text-align: center;
+        }
+    }
+    >.newTeacher{
+        display: grid;
+        row-gap: 1rem;
+        grid-template-rows: 14rem auto auto;
+        >.dataUser{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1.8rem auto;
+            column-gap: 1rem;
+            row-gap: 1rem;
+            >div{
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto;
+                min-height: 1.8rem;
+                column-gap: 0.5rem;
+            }
+            >div.data{
+                grid-column: 1/4;
+                row-gap: 1rem;
+                >input{
+                    max-height: 1.8rem;
+                }
+            }
+            >div>input[type=text],
+            >div>input[type=number] {
+                border-radius: 5px;
+                border: grey solid 1px;
+                padding: 0 0.3rem;
+            }
+        }
+        >.dataTeacher>.dataClasses{
+            :hover{
+                background-color: #f7f7f7;
+            }
+            display: grid;
+            row-gap: 0.5rem;
+            grid-template-columns: auto auto auto;
+            grid-template-rows: auto auto;
+            column-gap: 1rem;
+            margin-bottom: 1rem;
+            background-color: #fbfbfb;
+            padding: 0.5rem 0.5rem;
+            border-radius: 0.5rem;
+            border: #e5e5e5 solid 1px;
+            >div{
+                display: grid;
+                grid-template-columns: auto 1fr;
+                column-gap: 0.5rem;
+            }
+            >div.delete{
+                grid-template-columns: auto;
+                grid-row: 1/3;
+                grid-column: 4/5;
+                padding: 1.3rem 0;
+                >button{
+                    border: grey solid 0.1rem;
+                    border-radius: 0.3rem;
+                    color: white;
+                    font-weight: bold;
+                    background-color: red;
+                    border: red solid 0.1rem;
+                    cursor: pointer;
+                    ${props => props.wait === true && css`
+                        background-color: grey;
+                        border: grey solid 0.1rem;
+                    `}
+                }
+            }
+        }
+        >.dataTeacher>.addClass>button,
+        >.save>button{
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.3rem;
+            // border: grey solid 0.1rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        >.dataTeacher>.addClass>button{
+            background-color: blue;
+            border: blue solid 0.1rem;
+            ${props => props.wait === true && css`
+                background-color: grey;
+                border: grey solid 0.1rem;
+            `}
+        }
+        >.save{
+            display: grid;
+            justify-content: end;
+            grid-template-columns: auto auto;
+            column-gap: 0.5rem;
+            >button{
+                background-color: green;
+                border: green solid 0.1rem;
+                ${props => props.wait === true && css`
+                    background-color: grey;
+                    border: grey solid 0.1rem;
+                `}
+            }
+            >.edit{
+                color: black;
+                background-color: #ffc107;
+                border: #ffc107 solid 0.1rem;
+                ${props => props.wait === true && css`
+                    background-color: grey;
+                    border: grey solid 0.1rem;
+                `}
+            }
+            >.cancel{
+                background-color: red;
+                border: red solid 0.1rem;
+                ${props => props.wait === true && css`
+                    background-color: grey;
+                    border: grey solid 0.1rem;
+                `}
+            }
+        }
     }
 `;

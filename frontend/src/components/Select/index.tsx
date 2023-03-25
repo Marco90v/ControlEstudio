@@ -3,12 +3,13 @@ import { SelectStyle } from "../../styled/style";
 type select = {
     identify:string,
     changeSelect:React.ChangeEventHandler<HTMLSelectElement>,
-    value:number,
-    data:profession[] | semesters[]
+    value:number | string,
+    data:profession[] | semesters[],
+    disabled?:boolean
 }
-function Select({identify,changeSelect,value,data}:select){
+function Select({identify,changeSelect,value,data,disabled=false}:select){
     return(
-        <SelectStyle name={identify} id={identify} onChange={changeSelect} value={value}>
+        <SelectStyle name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}>
             <option value="0"></option>
             {
                 data.map((item:profession | semesters)=>{

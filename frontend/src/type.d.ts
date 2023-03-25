@@ -38,11 +38,107 @@ type semestersStore = {
     selectSemester:number
     data:semesters[]
 }
+type role = {
+    id:number,
+    names:string
+}
+type rolesStore = {
+    status:string,
+    selectRole:number,
+    data:role[]
+}
+// type teacher = {
+//     IdPersons:number | undefined,
+//     IdProfession:number,
+//     IdSemesters:number,
+//     IdClasses:number,
+//     IdShifts:number,
+//     IdSections:number
+// }
+type shifts = {
+    id:number,
+    names:string
+}
+type shiftsStore = {
+    status:string,
+    selectShift:number,
+    data:shifts[]
+}
+type sections = {
+    id:number,
+    names:string
+}
+type sectionsStore = {
+    status:string,
+    selectSection:number,
+    data:sections[]
+}
+type person = {
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    photo: string | null,
+    role: number,
+    idPerson: number,
+    name?: string,
+    id?: number,
+    names?: string
+}
+type personStore = {
+    status:string,
+    selectPerson:number,
+    data:person[]
+}
+type getTeacher = {
+    idPerson: number,
+    name: string,
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    photo: string,
+    profession: profession[] & {
+        semesters: semesters[] & {
+            classe: classe[] & {
+                shift: shift[] & {
+                    section: section[]
+                }
+            }
+        }
+    }
+}
+
+type teacher = {
+    id: number,
+    IdPersons: number,
+    IdProfession: number,
+    IdSemesters: number,
+    IdClasses: number,
+    IdShifts: number,
+    IdSections: number
+}
+// type teachersStore = {
+//     status:string,
+//     selectTeachers:number,
+//     data:getTeacher[]
+// }
+
+type teachersStore = {
+    status:string,
+    selectTeachers:number,
+    data:teacher[]
+}
 
 type store = {
     sidebar: visibleSide,
     classes: classeStore,
     profession: professionStore,
     pensum: pensumStore,
-    semesters: semestersStore
+    semesters: semestersStore,
+    roles: rolesStore,
+    shifts: shiftsStore,
+    sections: sectionsStore,
+    persons: personStore,
+    teachers: teachersStore,
 }
