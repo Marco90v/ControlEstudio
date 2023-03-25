@@ -1,6 +1,6 @@
 import * as services from "../services";
 import { transformTeacher } from "../transform";
-import { dbPersons, oldFormat, pensumNotFormat, pesumFormat } from "../types";
+import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat } from "../types";
 import { validator } from "./validator";
 
 export const getAllAdminWorkOut = (_,res) => {
@@ -79,6 +79,25 @@ export const deleteValueSingleTableWorkOut = (req,res) => {
     }
 }
 
+export const deleteValueTeachersWorkOut = (req,res) => {
+    const table:string = req.path.slice(1);
+    const dataValidated = validator.idPersons(req.body);
+    if(dataValidated){
+        services.deleteTeacher(table,dataValidated)
+            .then(()=>{
+                res.status(200).json({deleteId : req.body.idPersons})
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("deleteValueSingleTableWorkOut", "Error en la estructura de datos");
+        res.status(400).json({error:"Error en la estructura de datos"});
+    }
+}
+
+
 export const setValuesMultipleTableWorkOut = (req,res) => {
     const table:string = req.path.slice(1);
     const dataValidated = validator[table](req.body);
@@ -94,7 +113,27 @@ export const setValuesMultipleTableWorkOut = (req,res) => {
                 res.status(400).json({error:err});
             });
     }else{
-        console.log("deleteValueSingleTableWorkOut", "Error en la estructura de datos");
+        console.log("setValuesMultipleTableWorkOut", "Error en la estructura de datos");
+        res.status(400).json({error:"Error en la estructura de datos"});
+    }
+}
+
+export const setValuesTeachersWorkOut = (req,res) => {
+    const table:string = req.path.slice(1);
+    const dataValidated = validator[table](req.body);
+    if(dataValidated){
+        const table:string = req.path.slice(1);
+        services.insertMultipleTeacher(table,dataValidated)
+            .then((result:any)=>{
+                const {insertId} = result;
+                res.status(200).json({insertId})
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("setValuesTeachersWorkOut", "Error en la estructura de datos");
         res.status(400).json({error:"Error en la estructura de datos"});
     }
 }
@@ -103,6 +142,17 @@ export const getAllTeachersWorkOut = (_,res) => {
     services.getAllTeachers()
         .then((result:oldFormat[])=>{
             res.status(200).json(transformTeacher(result));
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json({error:err});
+        });
+}
+
+export const getAllTeachersWorkOut2 = (_,res) => {
+    services.getAllTeachers2()
+        .then((result:dbTeachers2[])=>{
+            res.status(200).json(result);
         })
         .catch(err => {
             console.log(err);
@@ -122,9 +172,34 @@ export const getSingleTeachersWorkOut = (req,res) => {
         });
 }
 
+export const getSingleTeachersWorkOut2 = (req,res) => {
+    const idTeacher:number = Number(req.params.id);
+    services.getTeacher2(idTeacher)
+        .then((result:dbTeachers2[])=>{
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json({error:err});
+        });
+}
+
 export const getPersonByRoleWorkOut = (req,res) => {
     const personRole:number = Number(req.params.role);
     services.getPersonByRole(personRole)
+        .then((result:dbPersons[])=>{
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json({error:err});
+        });
+}
+
+export const updatePersonById = (req,res) => {
+    const table:string = req.path.slice(1);
+    const dataValidated = {...validator[table](req.body),id:req.body.id};
+    services.updateSingle(table,dataValidated)
         .then((result:dbPersons[])=>{
             res.status(200).json(result);
         })
@@ -188,4 +263,34 @@ export const getProfessionWorkOut = (req,res) => {
             console.log(err);
             res.status(400).json({error:err});
         });
+}
+
+export const deleteTeachersWorkOut = (req, res) => {
+    // console.log(req.body);
+    services.deleteMultipleTeacher(req.body)
+        .then(result=>res.status(200).json(result))
+        .catch(err=>{
+            console.log(err);
+            res.status(400).json({error:err});
+        });
+}
+
+export const updateValueSingleTableWorkOut2 = (req,res) => {
+    const table:string = req.path.slice(1);
+    const id = validator.id(req.body);
+    const data = validator[table]([req.body])[0];
+    const dataValidated = {...id, ...data}
+    if(id && data){
+        services.updateSingle(table,dataValidated)
+            .then(()=>{
+                res.status(200).json(true)
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("updateValueSingleTableWorkOut", "Error en la estructura de datos");
+        res.status(400).json({erro:"Error en la estructura de datos"});
+    }
 }

@@ -4,6 +4,7 @@ import path from 'path';
 // import bodyParser from 'body-parser';
 import { conn, InitialDB } from "./services/conect";
 import v1router from './v1/routes';
+import v2router from './v2/routes';
 
 import cors from 'cors';
 
@@ -31,6 +32,7 @@ const ini = ()=>{
   // });
   
   app.use("/api/v1",v1router);
+  app.use("/api/v2",v2router);
   
   app.listen(port, () => {
     /***

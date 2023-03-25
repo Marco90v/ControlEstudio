@@ -2,6 +2,10 @@ export type dbId = {
     id: number
 }
 
+export type dbIdPersons = {
+    idPersons: number
+}
+
 export type dbAdmin = {
     IdPersons : number
 }
@@ -76,6 +80,10 @@ export type dbTeachers = {
     IdShifts: number,
     IdSections: number
 }
+
+export type dbTeachers2 = {
+    id:number
+} & dbTeachers
 
 export type pensumNotFormat = {
     id: number,

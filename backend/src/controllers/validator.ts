@@ -1,8 +1,14 @@
-import { dbAdmin, dbClasses, dbId, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers } from "../types";
+import { dbAdmin, dbClasses, dbId, dbIdPersons, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers } from "../types";
 
 const id = (object:any):dbId | false => {
     return 'id' in object && typeof(object.id) === 'number' ?
         {id:object.id} :
+        false;
+}
+
+const idPersons = (object:any):dbIdPersons | false => {
+    return 'idPersons' in object && typeof(object.idPersons) === 'number' ?
+        {idPersons:object.idPersons} :
         false;
 }
 
@@ -74,23 +80,46 @@ const persons = (object:any):dbPersons | false => {
         false;
 }
 
-const teachers = (object:any):dbTeachers | false => {
-    return 'IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in object 
-        && typeof(object.IdPersons) === 'number'
-        && typeof(object.IdProfession) === 'number'
-        && typeof(object.IdSemesters) === 'number'
-        && typeof(object.IdClasses) === 'number'
-        && typeof(object.IdShifts) === 'number'
-        && typeof(object.IdSections) === 'number' ?
-        {
-            IdPersons:object.IdPersons,
-            IdProfession:object.IdProfession,
-            IdSemesters:object.IdSemesters,
-            IdClasses:object.IdClasses,
-            IdShifts:object.IdShifts,
-            IdSections:object.IdSections
-        } : 
-        false;
+const teachers = (objects:any):dbTeachers[] | false => {
+    let newData:dbTeachers[] = [];
+    // console.log(objects);
+    for (let key in objects) {
+        if('IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in objects[key] 
+        && typeof(objects[key].IdPersons) === 'number'
+        && typeof(objects[key].IdProfession) === 'number'
+        && typeof(objects[key].IdSemesters) === 'number'
+        && typeof(objects[key].IdClasses) === 'number'
+        && typeof(objects[key].IdShifts) === 'number'
+        && typeof(objects[key].IdSections) === 'number'){
+            newData.push({
+                IdPersons:objects[key].IdPersons,
+                IdProfession:objects[key].IdProfession,
+                IdSemesters:objects[key].IdSemesters,
+                IdClasses:objects[key].IdClasses,
+                IdShifts:objects[key].IdShifts,
+                IdSections:objects[key].IdSections
+            });
+        }else{
+            return false;
+        }
+    }
+    return newData;
+    // return 'IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in object 
+    //     && typeof(object.IdPersons) === 'number'
+    //     && typeof(object.IdProfession) === 'number'
+    //     && typeof(object.IdSemesters) === 'number'
+    //     && typeof(object.IdClasses) === 'number'
+    //     && typeof(object.IdShifts) === 'number'
+    //     && typeof(object.IdSections) === 'number' ?
+    //     {
+    //         IdPersons:object.IdPersons,
+    //         IdProfession:object.IdProfession,
+    //         IdSemesters:object.IdSemesters,
+    //         IdClasses:object.IdClasses,
+    //         IdShifts:object.IdShifts,
+    //         IdSections:object.IdSections
+    //     } : 
+    //     false;
 }
 
 const students = (object:any):dbStudensts | false => {
@@ -128,6 +157,7 @@ const pensum = (objects:any):dbPensum[] | false => {
 
 export const validator = {
     id,
+    idPersons,
     classes,
     semesters,
     profession,

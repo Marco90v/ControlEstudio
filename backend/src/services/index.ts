@@ -1,6 +1,6 @@
 import { MysqlError, PoolConnection } from 'mysql';
 import { transformData } from '../transform';
-import { allStudents } from '../types';
+import { allStudents, dbPersons } from '../types';
 import { conn } from './conect';
 
 
@@ -114,6 +114,23 @@ export const deleteSingle = (table,data) => {
     });
 }
 
+export const deleteTeacher = (table,data) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            // DELETE FROM classes WHERE `classes`.`id` = 61"
+            connection.query(`DELETE FROM ${table} WHERE idPersons = ?`, data.idPersons, (QueryErr,result)=>{
+                if(QueryErr) reject( `Error al eliminar idPersons=${data.idPersons} en la tabla ${table}: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
 export const insertMultiple = (table:string,datas:[]) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
@@ -123,6 +140,23 @@ export const insertMultiple = (table:string,datas:[]) => {
             }
             const newData = transformData(datas);
             connection.query(`INSERT INTO ${table} (IdProfession,IdSemesters,IdClasses) VALUES ?`, [newData],(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
+export const insertMultipleTeacher = (table:string,datas:[]) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const newData = transformData(datas);
+            connection.query(`INSERT INTO ${table} (IdPersons,IdProfession,IdSemesters,IdClasses,IdShifts,IdSections) VALUES ?`, [newData],(QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
                 if(result) resolve(result);
                 connection.release();
@@ -293,6 +327,29 @@ export const getAllTeachers = (page:number=0) => {
     });
 }
 
+export const getAllTeachers2 = () => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM teachers';
+            connection.query(query, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error en consulta detallada teachers: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
 export const getTeacher = (id:number) => {
     return new Promise ((resolve,reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
@@ -341,6 +398,29 @@ export const getTeacher = (id:number) => {
     });
 }
 
+export const getTeacher2 = (id:number) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM teachers WHERE IdPersons = ? ';
+            connection.query(query, id, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error en consulta detallada teachers: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
 export const getPersonByRole = (role:number) => {
     return new Promise ((resolve,reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
@@ -352,6 +432,79 @@ export const getPersonByRole = (role:number) => {
             connection.query(query, role, (queryErr,result)=>{
                 if(queryErr){
                     reject( `Error en consulta detallada personByRole: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
+export const updatePerson = (dataPerson:dbPersons) => {
+    const { names, lastNames, sex, email, phone, photo, role, id } = dataPerson
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = `UPDATE persons SET names='${names}',lastNames='${lastNames}', sex='${sex}', email='${email}', phone=${phone}, photo='${photo}' WHERE id=${id}`;
+            console.log(query);
+            connection.query(query, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error al actualizar datos, updatePerson: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
+export const deleteMultipleTeacher = (ids:number[]) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = `DELETE FROM teachers WHERE id IN (?)`;
+            // console.log(query);
+            connection.query(query, [ids], (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error eliminar datos, deleteMultipleTeacher: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
+export const updateDataTeacher = (data:any) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = `UPDATE teachers set ? where id = ?`;
+            // console.log(query);
+            connection.query(query, [data], (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error eliminar datos, updateDataTeacher: ${queryErr}`);
                     connection.release();
                     return;
                 }
