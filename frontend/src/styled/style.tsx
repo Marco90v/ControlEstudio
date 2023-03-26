@@ -407,3 +407,25 @@ export const ContentTeacher = styled.div<any>`
         }
     }
 `;
+
+export const ContentStudent = styled(ContentTeacher)`
+    >.newTeacher{
+        grid-template-rows: 19rem auto auto;
+        >.dataUser{
+            grid-template-rows: 1.8rem auto auto;
+            >.professionSemesters{
+                grid-column: 1/4;
+                display: grid;
+                grid-template-rows: 1fr;
+                grid-template-columns: auto auto;
+                grid-column-gap: 1rem;
+                >div{
+                    display: grid;
+                    grid-template-rows: 1fr;
+                    grid-template-columns: auto 1fr;
+                    grid-column-gap: 1rem;
+                }
+            }
+        }
+    }
+`;

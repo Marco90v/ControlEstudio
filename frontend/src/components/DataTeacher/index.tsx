@@ -264,7 +264,7 @@ function DataTeacher(){
                             return <div className="dataClasses" key={i}>
                                 <div className="listProfession">
                                     <label htmlFor="profession">Profesiones/Carreras</label>
-                                    <Select identify="profession" changeSelect={(e)=>changeSelect(e,i)} value={e.IdProfession} data={profession.data} disabled={wait} />
+                                    <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e,i)} value={e.IdProfession} data={profession.data} disabled={wait} />
                                 </div>
                                 <div className="listSemesters">
                                     <label htmlFor="semesters">Semestres</label>

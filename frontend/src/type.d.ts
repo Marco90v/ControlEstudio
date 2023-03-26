@@ -130,6 +130,19 @@ type teachersStore = {
     data:teacher[]
 }
 
+type students = {
+    id: number,
+    IdPersons: number,
+    IdProfession: number,
+    IdSemesters: number
+}
+
+type studentsStore = {
+    status:string,
+    selectStudents:number,
+    data:students[]
+}
+
 type store = {
     sidebar: visibleSide,
     classes: classeStore,
@@ -141,4 +154,5 @@ type store = {
     sections: sectionsStore,
     persons: personStore,
     teachers: teachersStore,
+    students: studentsStore,
 }
