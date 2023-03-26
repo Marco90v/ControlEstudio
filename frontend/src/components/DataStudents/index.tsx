@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeSelectPerson, fetchDeletePersonById, fetchGetPersonByRole, fetchPostPerson, fetchUpdatePersonById } from "../../store/module/personStore";
 import { changeSelectRole, fetchRoles } from "../../store/module/rolesStore";
-import { ContentStudent, ContentTeacher, Img, SelectStyle, Table } from "../../styled/style";
+import { ContentStudent } from "../../styled/style";
 import Select from "../Select";
 
-import imgEdit from "../../assets/edit-solid-24.png";
-import imgTrash from "../../assets/trash-alt-solid-24.png";
 import { fetchGetProfession } from "../../store/module/professionStore";
 import { fetchGetSemesters } from "../../store/module/semestersStore";
 import { changeSelectStudents, fetchDeleteDataStudentById, fetchGetStudents, fetchPostStudent, fetchUpdateDataStudent } from "../../store/module/studentsStore";
+import PersonsForms from "../PersonsForms";
+import TablePersons from "../TablePersons";
 
 const initialDataPerson:person = {
     id:0,
@@ -144,7 +144,6 @@ function DataStudents(){
         else{
             console.log("no se permiten campos vacios");
             setWait(false);
-
         }
 
         const {id,IdPersons,...rStudent} = student;
@@ -152,7 +151,6 @@ function DataStudents(){
 
         if(notEmptiedStudent){
             if(id !== 0 && updateStudent()){
-                // console.log(student);
                 dispatch(fetchUpdateDataStudent(student));
             }
             if(id === 0 && IdPersons === 0 && notEmptiedStudent){
@@ -202,86 +200,30 @@ function DataStudents(){
 
     return(
         <ContentStudent className="content" wait={wait}>
-            <form className="newTeacher" onSubmit={(e)=>e.preventDefault()} >
-                <div className="dataUser">
-                    <div className="names">
-                        <label htmlFor="name">Nombre Completo</label>
-                        <input type="text" name="name" id="name" value={person.name} onChange={e=>changeDataPerson(e)} disabled={wait} />
+            <PersonsForms
+                person={person}
+                changeRole={changeRole}
+                changeDataPerson={changeDataPerson}
+                roles={roles}
+                wait={wait}
+                persons={persons}
+                cancelEdit={cancelEdit}
+                save={save}
+                type={"students"}
+            >
+                <div className="professionSemesters">
+                    <div className="profession">
+                        <label htmlFor="selectProfession">Profesión</label>
+                        <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e)} value={student.IdProfession} data={professions.data} disabled={wait} />
                     </div>
-                    <div className="lastNames">
-                        <label htmlFor="lastNames">Apellido Completo</label>
-                        <input type="text" name="lastNames" id="lastNames" value={person.lastNames} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                    </div>
-                    <div className="sex">
-                        <label htmlFor="selectSex">Genero</label>
-                        <SelectStyle name="sex" id="sex" value={person.sex} onChange={e=>changeDataPerson(e)} disabled={wait} >
-                            <option value=""></option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </SelectStyle>
-                    </div>
-                    <div className="data">
-                        <label htmlFor="email">Email</label>
-                        <input type="text" name="email" id="email" value={person.email} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                        <label htmlFor="phone">Telefono</label>
-                        <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                        <label htmlFor="role">Rol</label>
-                        <Select identify="role" changeSelect={(e)=>changeRole(e)} value={roles.selectRole} data={roles.data} disabled={true} />
-                        <label htmlFor="photo">Foto</label>
-                        <input type="file" name="photo" id="photo" disabled={true} />
-                    </div>
-                    <div className="professionSemesters">
-                        <div className="profession">
-                            <label htmlFor="selectProfession">Profesión</label>
-                            <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e)} value={student.IdProfession} data={professions.data} disabled={wait} />
-                        </div>
-                        <div className="selectSemester">
-                            <label htmlFor="selectSemester">Semestres</label>
-                            <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e)} value={student.IdSemesters} data={semesters.data} disabled={wait} />
+                    <div className="selectSemester">
+                        <label htmlFor="selectSemester">Semestres</label>
+                        <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e)} value={student.IdSemesters} data={semesters.data} disabled={wait} />
 
-                        </div>
                     </div>
                 </div>
-                
-                <div className="save">
-                    {
-                        persons.selectPerson === 0 ?
-                        <button onClick={save} disabled={wait} >Guardar</button> :
-                        <>
-                            <button onClick={()=>cancelEdit()} className="cancel" disabled={wait} >Cancelar</button>
-                            <button className="edit" onClick={save} disabled={wait} >Guardar cambios</button>
-                        </>
-                    }
-                </div>
-            </form>
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Telefono</th>
-                        <th>Correo</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        persons.data.map((item:person,idx:number)=>{
-                            return(
-                                <tr key={idx}>
-                                    <td>{item.names}</td>
-                                    <td>{item.lastNames}</td>
-                                    <td>{item.phone}</td>
-                                    <td>{item.email}</td>
-                                    <td onClick={()=>edit(idx)} ><Img src={imgEdit} alt="edit" /></td>
-                                    <td onClick={()=>remove(item.id)} ><Img className="red" src={imgTrash} alt="delete" /></td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </Table>
+            </PersonsForms>
+            <TablePersons persons={persons} edit={edit} remove={remove} />
         </ContentStudent>
     );
 }

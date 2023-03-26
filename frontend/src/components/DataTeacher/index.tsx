@@ -7,12 +7,12 @@ import { fetchRoles, changeSelectRole } from "../../store/module/rolesStore";
 import { fetchGetSections } from "../../store/module/sectionsStore";
 import { fetchGetSemesters } from "../../store/module/semestersStore";
 import { fetchGetShifts } from "../../store/module/shiftsStore";
-import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherByIdPerson, fetchGetTeachers, fetchGetTeachersById, fetchPostTeachers, fetchUpdateDataTeachers } from "../../store/module/teachersStore";
-import { ContentTeacher, Img, SelectStyle, Table } from "../../styled/style";
+import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherByIdPerson, fetchGetTeachers, fetchPostTeachers, fetchUpdateDataTeachers } from "../../store/module/teachersStore";
+import { ContentTeacher } from "../../styled/style";
 import Select from "../Select";
 
-import imgEdit from "../../assets/edit-solid-24.png";
-import imgTrash from "../../assets/trash-alt-solid-24.png";
+import PersonsForms from "../PersonsForms";
+import TablePersons from "../TablePersons";
 
 const initialDataPerson:person = {
     idPerson:0,
@@ -229,36 +229,18 @@ function DataTeacher(){
 
     return(
         <ContentTeacher className="content" wait={wait}>
-            <form className="newTeacher" onSubmit={(e)=>e.preventDefault()} >
-                <div className="dataUser">
-                    <div className="names">
-                        <label htmlFor="name">Nombre Completo</label>
-                        <input type="text" name="name" id="name" value={person.name} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                    </div>
-                    <div className="lastNames">
-                        <label htmlFor="lastNames">Apellido Completo</label>
-                        <input type="text" name="lastNames" id="lastNames" value={person.lastNames} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                    </div>
-                    <div className="sex">
-                        <label htmlFor="selectSex">Genero</label>
-                        <SelectStyle name="sex" id="sex" value={person.sex} onChange={e=>changeDataPerson(e)} disabled={wait} >
-                            <option value=""></option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </SelectStyle>
-                    </div>
-                    <div className="data">
-                        <label htmlFor="email">Email</label>
-                        <input type="text" name="email" id="email" value={person.email} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                        <label htmlFor="phone">Telefono</label>
-                        <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={wait} />
-                        <label htmlFor="role">Rol</label>
-                        <Select identify="role" changeSelect={(e)=>changeRole(e)} value={roles.selectRole} data={roles.data} disabled={true} />
-                        <label htmlFor="photo">Foto</label>
-                        <input type="file" name="photo" id="photo" disabled={true} />
-                    </div>
-                </div>
-                <div className="dataTeacher">
+            <PersonsForms
+                person={person}
+                changeRole={changeRole}
+                changeDataPerson={changeDataPerson}
+                roles={roles}
+                wait={wait}
+                persons={persons}
+                cancelEdit={cancelEdit}
+                save={save}
+                type={"teacher"}
+            >
+               <div className="dataTeacher">
                     {
                         teacher?.map((e,i)=>{
                             return <div className="dataClasses" key={i}>
@@ -292,45 +274,8 @@ function DataTeacher(){
                         <button onClick={(e)=>addProfession(e)} disabled={wait} >Agregar Clase</button>
                     </div>
                 </div>
-                <div className="save">
-                    {
-                        persons.selectPerson === 0 ?
-                        <button onClick={save} disabled={wait} >Guardar</button> :
-                        <>
-                            <button onClick={()=>cancelEdit()} className="cancel" disabled={wait} >Cancelar</button>
-                            <button className="edit" onClick={save} disabled={wait} >Guardar cambios</button>
-                        </>
-                    }
-                </div>
-            </form>
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Telefono</th>
-                        <th>Correo</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        persons.data.map((item:person,idx:number)=>{
-                            return(
-                                <tr key={idx}>
-                                    <td>{item.names}</td>
-                                    <td>{item.lastNames}</td>
-                                    <td>{item.phone}</td>
-                                    <td>{item.email}</td>
-                                    <td onClick={()=>edit(idx)} ><Img src={imgEdit} alt="edit" /></td>
-                                    <td onClick={()=>remove(item.id)} ><Img className="red" src={imgTrash} alt="delete" /></td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </Table>
+            </PersonsForms>
+            <TablePersons persons={persons} edit={edit} remove={remove} />
         </ContentTeacher>
     )
 }

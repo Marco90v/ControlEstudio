@@ -287,7 +287,7 @@ export const ContentTeacher = styled.div<any>`
             text-align: center;
         }
     }
-    >.newTeacher{
+    >.newPerson{
         display: grid;
         row-gap: 1rem;
         grid-template-rows: 14rem auto auto;
@@ -409,7 +409,7 @@ export const ContentTeacher = styled.div<any>`
 `;
 
 export const ContentStudent = styled(ContentTeacher)`
-    >.newTeacher{
+    >.newPerson{
         grid-template-rows: 19rem auto auto;
         >.dataUser{
             grid-template-rows: 1.8rem auto auto;
