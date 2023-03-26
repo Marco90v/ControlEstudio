@@ -245,6 +245,27 @@ export const getAllStudents = (page:number=0) => {
     });
 }
 
+export const getAllStudents2 = (page:number=0) => {
+    return new Promise((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM students';
+            connection.query(query,(queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error en consulta paginacion Students: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result) resolve(result);
+                connection.release();
+            })
+        });
+    });
+}
+
 export const getStudent = (id:number) => {
     return new Promise ((resolve, reject) => {
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection) => {
