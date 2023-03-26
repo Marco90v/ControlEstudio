@@ -7,6 +7,7 @@ import Profession from './pages/profession';
 import Pensum from './pages/pensum';
 import Teacher from './pages/teacher';
 import Students from './pages/students';
+import Scores from './pages/Scores';
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -17,7 +18,8 @@ const router = createBrowserRouter(
     <Route path="dashboard/profession" element={<Profession />} />,
     <Route path="dashboard/pensums" element={<Pensum />} />,
     <Route path="dashboard/teachers" element={<Teacher />} />,
-    <Route path="dashboard/students" element={<Students />} />
+    <Route path="dashboard/students" element={<Students />} />,
+    <Route path="dashboard/scores" element={<Scores />} />
   ])
 );
 
