@@ -10,6 +10,7 @@ import shiftsStore from './module/shiftsStore';
 import teachersStore from './module/teachersStore';
 import visibleSide from './module/visibleSideStore';
 import studentsStore from './module/studentsStore';
+import scoresStore from './module/scoresStore';
 
 const sidebar = visibleSide;
 const classes = classesStore;
@@ -22,6 +23,7 @@ const sections = sectionsStore;
 const teachers = teachersStore;
 const persons = personStore;
 const students = studentsStore;
+const scores = scoresStore;
 
 export default configureStore({
   reducer: {
@@ -36,5 +38,6 @@ export default configureStore({
     teachers,
     persons,
     students,
+    scores
   },
 });

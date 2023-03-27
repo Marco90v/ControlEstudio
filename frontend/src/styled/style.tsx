@@ -429,3 +429,5 @@ export const ContentStudent = styled(ContentTeacher)`
         }
     }
 `;
+
+export const ContentScores = styled(ContentTeacher)``;

@@ -143,6 +143,52 @@ type studentsStore = {
     data:students[]
 }
 
+// type scores = {
+//     id:number,
+//     IdStudents:number,
+//     IdClasses:number,
+//     IdTeachers:number,
+//     IdShifts:number,
+//     IdSections:number,
+//     score:number
+// }
+
+type scores = {
+    // id: number,
+    // IdPersons: number,
+    // names: string,
+    // lastNames: string,
+    // IdClasses: number,
+    // IdShifts: number,
+    // IdSections: number
+
+    id:number,
+    IdStudents:number,
+    IdClasses:number,
+    IdTeachers:number,
+    IdShifts:number,
+    IdSections:number,
+    score:number
+}
+type teacherByPSC = {
+    id: number,
+    IdPersons: number,
+    names: string,
+    lastNames: string,
+    IdClasses: number,
+    IdShifts: number,
+    IdSections: number
+}
+
+type scoresStore = {
+    status:string,
+    selectStudent:number,
+    data:{
+        classes:classe[],
+        teacherByPS:teacherByPS[]
+    }
+}
+
 type store = {
     sidebar: visibleSide,
     classes: classeStore,
@@ -155,4 +201,5 @@ type store = {
     persons: personStore,
     teachers: teachersStore,
     students: studentsStore,
+    scores: scoresStore
 }
