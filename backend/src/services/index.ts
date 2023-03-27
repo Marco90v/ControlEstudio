@@ -546,6 +546,7 @@ export const getScoresByIdStudent = (data:number) => {
                 return;
             }
             const query = 'SELECT * FROM scores where IdStudents = ?';
+            
             // console.log(query);
             connection.query(query, data, (queryErr,result)=>{
                 if(queryErr){
@@ -572,6 +573,57 @@ export const insertMultipleScores = (table:string,scores:scores[]) => {
             const newData = transformData(scores);
             connection.query(`INSERT INTO ${table} (IdStudents,IdClasses,IdTeachers,IdShifts,IdSections,score) VALUES ?`, [newData],(QueryErr,result)=>{
                 if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
+export const getTeachersByProfessionAndSemesters = (IdProfession:number,IdSemesters:number) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT \
+                teachers.id, \
+                teachers.IdPersons, \
+                persons.names, \
+                persons.lastNames, \
+                teachers.IdClasses, \
+                teachers.IdShifts, \
+                teachers.IdSections \
+                FROM teachers \
+                INNER JOIN persons ON teachers.IdPersons = persons.id \
+                WHERE IdProfession = ? AND IdSemesters = ?\
+                ORDER BY IdPersons, IdClasses';
+            connection.query(query, [IdProfession,IdSemesters],(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla teachers(getTeachersByProfessionAndSemesters): ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
+            });
+        });
+    });
+}
+
+export const getClassesByProfessionAndSemesters = (IdProfession:number,IdSemesters:number) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT \
+            pensum.IdClasses as id, \
+            classes.names \
+            FROM pensum \
+            INNER JOIN classes ON classes.id = pensum.IdClasses \
+            WHERE IdProfession = ? AND IdSemesters = ? \
+            ORDER BY IdClasses';
+            connection.query(query, [IdProfession,IdSemesters],(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla pemsun(getTeachersByProfessionAndSemesters): ${QueryErr}`);
                 if(result) resolve(result);
                 connection.release();
             });

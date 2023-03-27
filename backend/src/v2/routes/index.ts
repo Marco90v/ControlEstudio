@@ -17,7 +17,9 @@ router.delete('/students', workOutControllers.deleteStudentWorkOut);
 
 //RUTAS PARA LOS SCORES
 router.get('/scores/:idStudents', workOutControllers.getScoresByIdStudent);
-router.post('/scores/', workOutControllers.postScores);
-router.put('/scores/', workOutControllers.updateScoresById);
+router.post('/scores', workOutControllers.postScores);
+router.put('/scores', workOutControllers.updateScoresById);
+router.post('/getClassesByProfessionAndSemesters', workOutControllers.getClassesByProfessionAndSemesters);
+router.post('/getTeachersByProfessionAndSemesters', workOutControllers.getTeachersByProfessionAndSemesters);
 
 export default router;

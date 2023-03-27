@@ -180,6 +180,30 @@ const scores = (objects:any):scores[] | false => {
     return newData;
 }
 
+const professionAndSemesters = (objects:any):any | false => {
+    return 'IdProfession' && 'IdSemesters' in objects 
+    && typeof(objects.IdProfession) === 'number'
+    && typeof(objects.IdSemesters) === 'number' ?
+    {
+        IdProfession:objects.IdProfession,
+        IdSemesters:objects.IdSemesters
+    } : 
+    false;
+}
+
+const professionAndSemesterAndClasses = (objects:any):any | false => {
+    return 'IdProfession' && 'IdSemesters' && 'IdClasses' in objects 
+    && typeof(objects.IdProfession) === 'number'
+    && typeof(objects.IdSemesters) === 'number'
+    && typeof(objects.IdClasses) === 'number' ?
+    {
+        IdProfession:objects.IdProfession,
+        IdSemesters:objects.IdSemesters,
+        IdClasses:objects.IdClasses
+    } : 
+    false;
+}
+
 export const validator = {
     id,
     idPersons,
@@ -194,5 +218,7 @@ export const validator = {
     students,
     admin,
     pensum,
-    scores
+    scores,
+    professionAndSemesters,
+    professionAndSemesterAndClasses
 }

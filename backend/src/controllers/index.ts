@@ -368,3 +368,41 @@ export const updateScoresById = (req,res) => {
         res.status(400).json({erro:"Error en la estructura de datos"});
     }
 }
+
+export const getTeachersByProfessionAndSemesters = (req, res) => {
+    // const id = validator.id(req.body);
+    const data = validator.professionAndSemesters(req.body);
+    if(data){
+        const {IdProfession, IdSemesters} = data;
+        services.getTeachersByProfessionAndSemesters(IdProfession, IdSemesters)
+            .then((result)=>{
+                res.status(200).json(result)
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("getTeachersByProfessionAndSemesters", "Error en la estructura de datos");
+        res.status(400).json({erro:"Error en la estructura de datos"});
+    }
+}
+
+export const getClassesByProfessionAndSemesters = (req, res) => {
+    // const id = validator.id(req.body);
+    const data = validator.professionAndSemesters(req.body);
+    if(data){
+        const {IdProfession, IdSemesters} = data;
+        services.getClassesByProfessionAndSemesters(IdProfession, IdSemesters)
+            .then((result)=>{
+                res.status(200).json(result)
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("getTeachersByProfessionAndSemesters", "Error en la estructura de datos");
+        res.status(400).json({erro:"Error en la estructura de datos"});
+    }
+}
