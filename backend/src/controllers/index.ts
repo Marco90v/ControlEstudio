@@ -1,6 +1,6 @@
 import * as services from "../services";
 import { transformTeacher } from "../transform";
-import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat } from "../types";
+import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat, scores } from "../types";
 import { validator } from "./validator";
 
 export const getAllAdminWorkOut = (_,res) => {
@@ -315,4 +315,56 @@ export const deleteStudentWorkOut = (req, res) => {
             console.log(err);
             res.status(400).json({error:err});
         });
+}
+
+export const getScoresByIdStudent = (req,res) => {
+    const id = validator.id({id:Number(req.params.idStudents)});
+    if(id){
+        services.getScoresByIdStudent(id.id)
+        .then(result=>res.status(200).json(result))
+        .catch(err=>{
+            console.log(err);
+            res.status(400).json({error:err});
+        });
+    }else{
+        console.log("getScoresByIdStudent", "Error en la estructura de datos");
+        res.status(400).json({erro:"Error en la estructura de datos"});
+    }
+}
+
+export const postScores = (req,res) => {
+    const dataValidated:scores[] | false = validator.scores(req.body);
+    if(dataValidated){
+        services.insertMultipleScores('scores',dataValidated)
+            .then((result:any)=>{
+                const {insertId} = result;
+                res.status(200).json({insertId})
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("postScores", "Error en la estructura de datos");
+        res.status(400).json({erro:"Error en la estructura de datos"});
+    }
+}
+
+export const updateScoresById = (req,res) => {
+    const id = validator.id(req.body);
+    const data = validator.scores([req.body])[0];
+    const dataValidated = {...id, ...data}
+    if(id && data){
+        services.updateSingle('scores',dataValidated)
+            .then(()=>{
+                res.status(200).json(true)
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json({error:err});
+            });
+    }else{
+        console.log("updateScoresById", "Error en la estructura de datos");
+        res.status(400).json({erro:"Error en la estructura de datos"});
+    }
 }

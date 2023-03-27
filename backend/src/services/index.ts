@@ -1,6 +1,6 @@
 import { MysqlError, PoolConnection } from 'mysql';
 import { transformData } from '../transform';
-import { allStudents, dbPersons } from '../types';
+import { allStudents, dbPersons, scores } from '../types';
 import { conn } from './conect';
 
 
@@ -533,6 +533,47 @@ export const updateDataTeacher = (data:any) => {
                     resolve(result);
                     connection.release();
                 }
+            });
+        });
+    });
+}
+
+export const getScoresByIdStudent = (data:number) => {
+    return new Promise ((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM scores where IdStudents = ?';
+            // console.log(query);
+            connection.query(query, data, (queryErr,result)=>{
+                if(queryErr){
+                    reject( `Error recuperar datos, getScoresByIdStudent: ${queryErr}`);
+                    connection.release();
+                    return;
+                }
+                if(result){
+                    resolve(result);
+                    connection.release();
+                }
+            });
+        });
+    });
+}
+
+export const insertMultipleScores = (table:string,scores:scores[]) => {
+    return new Promise((resolve, reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const newData = transformData(scores);
+            connection.query(`INSERT INTO ${table} (IdStudents,IdClasses,IdTeachers,IdShifts,IdSections,score) VALUES ?`, [newData],(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla ${table}: ${QueryErr}`);
+                if(result) resolve(result);
+                connection.release();
             });
         });
     });

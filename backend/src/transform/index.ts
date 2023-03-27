@@ -1,10 +1,10 @@
-import { oldFormat, teacher } from "../types";
+import { oldFormat, scores, teacher } from "../types";
 
 // La siguiente funcion, tranforma un arreglo de objesto en matriz.
 // Ejemplo:
 // ENTRADA:  ->  [ { "valor1":1, "valor2":2 } , {"valor1":3, "valor2":4} ]
 // SALIDA:  ->  [ [1,2] , [3,4] ]
-export const transformData = (datas:[]):Array<number[]> => {
+export const transformData = (datas:[]|scores[]):Array<number[]> => {
     return datas.map(data => {
         return Object.keys(data).map(key=>data[key]);
     });

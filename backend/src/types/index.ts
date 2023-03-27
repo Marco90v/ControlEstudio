@@ -163,6 +163,15 @@ export type teacher = {
     profession:profession[]
 }
 
+export type scores = {
+    IdStudents:number,
+    IdClasses:number,
+    IdTeachers:number,
+    IdShifts:number,
+    IdSections:number,
+    score:number
+}
+
 export type oldFormat = {
     idPerson:number,
     names:string,

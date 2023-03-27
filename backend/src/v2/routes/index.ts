@@ -15,6 +15,9 @@ router.get('/students', workOutControllers.getAllStudentsWorkOut2);
 router.put('/students', workOutControllers.updateValueSingleTableWorkOut2);
 router.delete('/students', workOutControllers.deleteStudentWorkOut);
 
-
+//RUTAS PARA LOS SCORES
+router.get('/scores/:idStudents', workOutControllers.getScoresByIdStudent);
+router.post('/scores/', workOutControllers.postScores);
+router.put('/scores/', workOutControllers.updateScoresById);
 
 export default router;

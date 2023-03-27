@@ -1,4 +1,4 @@
-import { dbAdmin, dbClasses, dbId, dbIdPersons, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers } from "../types";
+import { dbAdmin, dbClasses, dbId, dbIdPersons, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers, scores } from "../types";
 
 const id = (object:any):dbId | false => {
     return 'id' in object && typeof(object.id) === 'number' ?
@@ -155,6 +155,31 @@ const pensum = (objects:any):dbPensum[] | false => {
     return newData;
 }
 
+const scores = (objects:any):scores[] | false => {
+    let newData:scores[] = [];
+    for (const key in objects) {
+        if('IdStudents' && 'IdClasses' && 'IdTeachers' && 'IdShifts' && 'IdSections' && 'score' in objects[key]
+        && typeof(objects[key].IdStudents) === 'number'
+        && typeof(objects[key].IdClasses) === 'number'
+        && typeof(objects[key].IdTeachers) === 'number'
+        && typeof(objects[key].IdShifts) === 'number'
+        && typeof(objects[key].IdSections) === 'number'
+        && typeof(objects[key].score) === 'number') {
+            newData.push({
+                IdStudents:objects[key].IdStudents,
+                IdClasses:objects[key].IdClasses,
+                IdTeachers:objects[key].IdTeachers,
+                IdShifts:objects[key].IdShifts,
+                IdSections:objects[key].IdSections,
+                score:objects[key].score
+            })
+        }else{
+            return false;
+        }
+    }
+    return newData;
+}
+
 export const validator = {
     id,
     idPersons,
@@ -168,5 +193,6 @@ export const validator = {
     teachers,
     students,
     admin,
-    pensum
+    pensum,
+    scores
 }
