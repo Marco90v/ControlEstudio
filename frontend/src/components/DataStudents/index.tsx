@@ -195,7 +195,10 @@ function DataStudents(){
     const changeSelect = (e:any) => {
         const element = e.target.id;
         const value = e.target.value;
-        setStudent({...student,[element]:Number(value)});
+        // setStudent({...student,[element]:Number(value)});
+        setStudent((e:students)=>{
+            return {...e,[element]:Number(value)};
+        });
     }
 
     return(
@@ -219,7 +222,6 @@ function DataStudents(){
                     <div className="selectSemester">
                         <label htmlFor="selectSemester">Semestres</label>
                         <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e)} value={student.IdSemesters} data={semesters.data} disabled={wait} />
-
                     </div>
                 </div>
             </PersonsForms>

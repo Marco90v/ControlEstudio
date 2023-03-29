@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClasses } from "../../store/module/classesStore";
 import { changeSelectPerson, fetchDeletePersonById, fetchGetPersonByRole, fetchPostPerson, fetchUpdatePersonById } from "../../store/module/personStore";
@@ -108,9 +108,11 @@ function DataTeacher(){
     const changeSelect = (e:any,idx:number) => {
         const element = e.target.id;
         const value = e.target.value;
-        setTeacher(teacher.map((e,i)=>{
-            return i===idx ? {...e, [element]:Number(value)} : e
-        }));
+        setTeacher( (e:teacher[]) => {
+            return e.map((e,i)=>{
+                return i===idx ? {...e, [element]:Number(value)} : e
+            });
+        });
     }
 
     const resetInput = () => {
@@ -242,7 +244,7 @@ function DataTeacher(){
             >
                <div className="dataTeacher">
                     {
-                        teacher?.map((e,i)=>{
+                        teacher.map((e,i)=>{
                             return <div className="dataClasses" key={i}>
                                 <div className="listProfession">
                                     <label htmlFor="profession">Profesiones/Carreras</label>

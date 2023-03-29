@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { SelectStyle } from "../../styled/style";
 
 type select = {
@@ -7,7 +8,7 @@ type select = {
     data:profession[] | semesters[],
     disabled?:boolean
 }
-function Select({identify,changeSelect,value,data,disabled=false}:select){
+const Select = memo( ({identify,changeSelect,value,data,disabled=false}:select) => {
     return(
         <SelectStyle name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}>
             <option value="0"></option>
@@ -20,5 +21,7 @@ function Select({identify,changeSelect,value,data,disabled=false}:select){
             }
         </SelectStyle>
     )
-}
+},(n:any,p:any)=>{
+    return n.value===p.value && JSON.stringify(n.data)===JSON.stringify(p.data);
+});
 export default Select;

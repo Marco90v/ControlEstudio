@@ -133,19 +133,21 @@ function DataScores(){
         const element = e.target.id;
         const value = Number(e.target.value);
         const {IdClasses} = item;
-        const newData = score.map((x:scores)=>{
-            if(element==='IdTeachers'){
-                if(x.IdClasses===IdClasses){
-                    const {IdShifts,IdSections} = scores.data.teacherByPS.find((x:teacherByPSC)=>x.id===value);
-                    return {...x, IdShifts, IdSections, [element]:value};
-                }else{
+        setScores( (e:scores[])=>{
+            return e.map((x:scores)=>{
+                if(element==='IdTeachers'){
+                    if(x.IdClasses===IdClasses && value===0) return {...x, IdShifts:0, IdSections:0, [element]:value}
+                    if(x.IdClasses===IdClasses){
+                        const {IdShifts,IdSections} = scores.data.teacherByPS.find((x:teacherByPSC)=>x.id===value);
+                        return {...x, IdShifts, IdSections, [element]:value};
+                    }
                     return x;
+                }else{
+                    return x.IdClasses===IdClasses ? {...x, [element]:value} : x;
                 }
-            }else{
-                return x.IdClasses===IdClasses ? {...x, [element]:value} : x;
+            })
             }
-        });
-        setScores(newData);
+        );
     }
 
     const cancel = () => {

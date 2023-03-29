@@ -2,6 +2,7 @@ import { SelectStyle } from "../../styled/style";
 import Select from "../Select";
 
 function PersonsForms({children, person, changeRole, changeDataPerson, roles, wait, persons, cancelEdit, save, type}:any){
+    // console.log("PersonsForms");
     return(
         <form className="newPerson" onSubmit={(e)=>e.preventDefault()} >
             <div className="dataUser">
