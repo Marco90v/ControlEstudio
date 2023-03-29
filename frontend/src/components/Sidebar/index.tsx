@@ -21,7 +21,6 @@ function Sidebar(){
         <Side id="sidebar" visibleSide={visibleSide.status} >
             <div id="title">
                 <h1>{visibleSide.status ? "Universidad" : "U"}</h1>
-                {/* <button onClick={()=>dispatch(change())}>{visibleSide.status ? <img src={arrow} /> : "+"}</button> */}
                 <button onClick={()=>dispatch(change())}><img src={arrow} /> </button>
             </div>
             <div id="admin">

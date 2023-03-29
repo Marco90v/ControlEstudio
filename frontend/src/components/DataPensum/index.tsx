@@ -15,17 +15,12 @@ import iconAdd from "../../assets/plus-circle-solid-24.png";
 import { fetchClasses } from "../../store/module/classesStore";
 
 
-// type classe = {id:number,names:string}
-
 function DataPensum(){
     const dispatch = useDispatch();
     const profession = useSelector((state:store) => state.profession);
     const pensum = useSelector((state:store) => state.pensum);
     const semesters = useSelector((state:store) => state.semesters);
     const classes = useSelector((state:store) => state.classes);
-
-    // const [acordionActive,setAcordionActive] = useState<Boolean[]>([]);
-    // const [acordionActive,setAcordionActive] = useState<Boolean[]>([]);
 
     const [modal,setModal] = useState({type:"", IdSemesters:0, value:false, data:{id:0,names:""}, id:0, semesterName:"", ClasseName:""});
     const [activeInsertSemester, setActiveInsertSemester] = useState(true);
@@ -40,7 +35,6 @@ function DataPensum(){
     }, []);
 
     useEffect(() => {
-    //   console.log(pensum.selectPensum > 0);
       pensum.selectPensum > 0 ? setActiveInsertSemester(false) : setActiveInsertSemester(true);
     
       return () => {}
@@ -50,56 +44,14 @@ function DataPensum(){
         let promiseClasses:any;
         if(modal.value){
             promiseClasses = dispatch(fetchClasses());
-            // console.log(modal);
-            // setModal({...modal,data:classes.data})
         }
     
       return () => {
-        // promiseClasses.abort();
       }
-    }, [modal.value])
-
-    // useEffect(() => {
-    //   console.log(modal)
-    
-    //   return () => {}
-    // }, [modal.type])
+    }, [modal.value]);
     
     
-    
-
-    // useEffect(() => {
-    //   setAcordionActive(pensum.data.map(()=>true));
-    //   return () => {}
-    // }, [pensum]);
-
-    // useEffect(() => {
-    // //   console.log(semesters);
-    
-    //   return () => {}
-    // }, [semesters])
-    
-    
-
-    // const addClasses = async (name:string) => {
-    //     return await dispatch(fetchPostProfession(name));
-    // }
-
-    // const edit = (data:profession) => {
-    //     setModal({type:"edit",value:true, data});
-    // }
-
     const removeClasse = (id:number,semesterName:string,ClasseName:string) => {
-        // console.log(modal);
-    //     setModal({
-    //         type:"removeClasse",
-    //         value:true, 
-    //         IdSemesters,
-    //         data: {
-    //             id: data.IdClasses,
-    //             names:data.Name_Classes
-    //         }
-    //     });
         setModal({
             ...modal,
             type:"removeClasse",
@@ -121,18 +73,8 @@ function DataPensum(){
                 }]));
             case "removeClasse":
                 return dispatch(fetchDeleteClassePensum({id:modal.id}));
-                // break;
-            // case "delete":
-            //     return dispatch(fetchDeleteProfession({id:modal.data.id}));
         }
-        // dispatch(insertClasse(modal));
     }
-
-    // const changeInputEdit = (e:any)=>{
-    //     setModal({...modal,data:{...modal.data,names:e.target.value}})
-    // }
-
-    
 
     const changeSelectProfession = (e:any) => {
         const ID = e.target.value;
@@ -189,18 +131,7 @@ function DataPensum(){
         "removeClasse": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.ClasseName}"</strong> del <strong>"{modal.semesterName}</strong>?</p>
     };
 
-    return(
-        // <div>
-        //     <InputForm addCallBack={addClasses} title={"Profesiones"} />
-        //     <Div>
-        //         <TableComponent edit={edit} remove={remove}  data={profession.data} />
-        //     </Div>
-        //     <Alert />
-        //     {
-        //         modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
-        //     }
-        // </div>
-        
+    return(        
         <ContentDataPensum>
             <SelectPensum>
                 <h2>Profesiones</h2>
@@ -235,7 +166,6 @@ function DataPensum(){
             </SelectSemester>
             {
                 modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} >
-                    {/* <Select identify="classes" changeSelect={changeSelectClasses} value={modal.data.id} data={classes.data} /> */}
                     {cuerpoPopup[modal.type]}
                 </Popup>
             }

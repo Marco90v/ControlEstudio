@@ -195,7 +195,6 @@ function DataStudents(){
     const changeSelect = (e:any) => {
         const element = e.target.id;
         const value = e.target.value;
-        // setStudent({...student,[element]:Number(value)});
         setStudent((e:students)=>{
             return {...e,[element]:Number(value)};
         });

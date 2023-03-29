@@ -47,14 +47,6 @@ type rolesStore = {
     selectRole:number,
     data:role[]
 }
-// type teacher = {
-//     IdPersons:number | undefined,
-//     IdProfession:number,
-//     IdSemesters:number,
-//     IdClasses:number,
-//     IdShifts:number,
-//     IdSections:number
-// }
 type shifts = {
     id:number,
     names:string
@@ -118,50 +110,23 @@ type teacher = {
     IdShifts: number,
     IdSections: number
 }
-// type teachersStore = {
-//     status:string,
-//     selectTeachers:number,
-//     data:getTeacher[]
-// }
-
 type teachersStore = {
     status:string,
     selectTeachers:number,
     data:teacher[]
 }
-
 type students = {
     id: number,
     IdPersons: number,
     IdProfession: number,
     IdSemesters: number
 }
-
 type studentsStore = {
     status:string,
     selectStudents:number,
     data:students[]
 }
-
-// type scores = {
-//     id:number,
-//     IdStudents:number,
-//     IdClasses:number,
-//     IdTeachers:number,
-//     IdShifts:number,
-//     IdSections:number,
-//     score:number
-// }
-
 type scores = {
-    // id: number,
-    // IdPersons: number,
-    // names: string,
-    // lastNames: string,
-    // IdClasses: number,
-    // IdShifts: number,
-    // IdSections: number
-
     id:number,
     IdStudents:number,
     IdClasses:number,
@@ -179,7 +144,6 @@ type teacherByPSC = {
     IdShifts: number,
     IdSections: number
 }
-
 type scoresStore = {
     status:string,
     selectStudent:number,
@@ -189,7 +153,6 @@ type scoresStore = {
         scores:scores[]
     }
 }
-
 type store = {
     sidebar: visibleSide,
     classes: classeStore,
