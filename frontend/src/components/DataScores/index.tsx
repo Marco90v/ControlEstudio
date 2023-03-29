@@ -9,7 +9,7 @@ import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherById
 import { ContentScores, ContentStudent } from "../../styled/style";
 import Select from "../Select";
 import TablePersons from "../TablePersons";
-import { fetchClassesByProfessionAndSemesters, fetchTeachersByProfessionAndSemesters } from "../../store/module/scoresStore";
+import { changeSelectStudent, fetchClassesByProfessionAndSemesters, fetchGetScoresByIdStudent, fetchPostScores, fetchTeachersByProfessionAndSemesters, fetchUpdateScores } from "../../store/module/scoresStore";
 import { fetchGetShifts } from "../../store/module/shiftsStore";
 import { fetchGetSections } from "../../store/module/sectionsStore";
 
@@ -45,11 +45,7 @@ function DataScores(){
     const shifts = useSelector((state:store) => state.shifts);
     const sections = useSelector((state:store) => state.sections);
 
-    // const teachers = useSelector((state:store) => state.teachers);
-    // const pensum = useSelector((state:store) => state.pensum);
-    
     const [person, setPerson] = useState(initialDataPerson);
-    const [classes, setClasses] = useState<classe[]>([]);
     const [score, setScores] = useState<scores[]>([]);
     const [wait, setWait] = useState<boolean>(false);
     
@@ -71,83 +67,136 @@ function DataScores(){
             if (e.names === "Estudiante"){
                 const ID:any = e.id;
                 dispatch(changeSelectRole(ID));
-                setPerson({...person, role:ID});
                 dispatch(fetchGetPersonByRole(ID));
+                setPerson({...person, role:ID});
             }
         });
         return () => {}
-    }, [roles.data]);    
+    }, [roles.data]);
 
-    const changeSelect = (e:any,IdClasses:number) => {
-        const element = e.target.id;
-        const value = Number(e.target.value);
-        const newData = score.map((item:scores)=>{
-            return item.IdClasses===IdClasses ? {...item, [element]:value} : item
-        })
-        setScores(newData);
-    }
-
+    useEffect(() => {
+        scores.selectStudent > 0 && dispatch(fetchGetScoresByIdStudent(scores.selectStudent));
+      return () => {}
+    }, [scores.selectStudent]);
+    
     const edit = (idx:number) => {
         const IdPersons:number | undefined = persons.data[idx].id;
         const student:students | undefined = students.data.filter((item:students)=>item.IdPersons===IdPersons)[0];
         if(student){
             const {IdProfession,IdSemesters,id} = student;
+            const _id:any = id;
             dispatch(fetchClassesByProfessionAndSemesters({IdProfession,IdSemesters})).then((items:any)=>{
                 const newData:scores[] = items.payload.map((item:classe) => { return { ...initialDataScores, IdClasses:item.id, IdStudents:id } });
-                setScores(newData);        
-                setClasses(items.payload);
-                dispatch(fetchTeachersByProfessionAndSemesters({IdProfession,IdSemesters}));
+                dispatch(fetchTeachersByProfessionAndSemesters({IdProfession,IdSemesters})).then(()=>{
+                    dispatch(fetchGetScoresByIdStudent(id)).then((item:any)=>{
+                        const dataComplet = newData.map((nD:scores)=>{
+                            const res = item.payload.find((sC:scores)=>nD.IdClasses===sC.IdClasses);
+                            return res ? res : nD;
+                        });
+                        dispatch(changeSelectStudent(_id));
+                        setScores(dataComplet);
+                    });
+                });
             });
+        }else{
+            const zero:any = 0;
+            setScores([]);
+            dispatch(changeSelectStudent(zero));
         }
     }
 
-    const remove = (idx:number) => {
-        console.log(idx);
+    const remove = (idx:number) => {}
+    
+    const getNameClasse = (IdClasses:number):string =>{
+        return scores.data.classes.find((item:classe)=>item.id===IdClasses)?.names || "";
     }
 
-    const listTeachersByClasse = (IdClasses:number):any => {
-        return scores.data.teacherByPS.filter((item:teacherByPSC)=>item.IdClasses===IdClasses)
-            .map((item:teacherByPSC)=>{
-                const names = `${item.names} ${item.lastNames}`;
-                return {id:item.id,names}
+    const list = (scoreStudent:scores):[] => {
+        const {IdClasses} = scoreStudent;
+        const newData:any = [];
+        scores.data.teacherByPS.forEach((t:teacherByPSC)=>{
+            if(t.IdClasses===IdClasses){
+                const nameShift = shifts.data.find((s:shifts)=>s.id===t.IdShifts)?.names.toLocaleLowerCase();
+                const nameSection = sections.data.find((s:sections)=>s.id===t.IdSections)?.names;
+                newData.push(
+                    {
+                        id:t.id, 
+                        names:`Profesor: ${t.names} ${t.lastNames}  -  Turno: ${nameShift}  -  Seccion: ${nameSection}`
+                    }
+                );
             }
-        );
+        });
+        return newData;
     }
 
-    const listShiftsByTeacher = (IdClasses:number,idx:number):any => {
-        return scores.data.teacherByPS.filter((item:teacherByPSC)=>item.IdClasses===IdClasses && item.id === score[idx].IdTeachers)
-            .map((item:teacherByPSC)=>{
-                const names = shifts.data.filter((s:shifts)=>s.id===item.IdShifts)[0].names;
-                return {id:item.IdShifts,names};
+    const changeSelectN = (e:any,item:any) => {
+        const element = e.target.id;
+        const value = Number(e.target.value);
+        const {IdClasses} = item;
+        const newData = score.map((x:scores)=>{
+            if(element==='IdTeachers'){
+                if(x.IdClasses===IdClasses){
+                    const {IdShifts,IdSections} = scores.data.teacherByPS.find((x:teacherByPSC)=>x.id===value);
+                    return {...x, IdShifts, IdSections, [element]:value};
+                }else{
+                    return x;
+                }
+            }else{
+                return x.IdClasses===IdClasses ? {...x, [element]:value} : x;
             }
-        );
+        });
+        setScores(newData);
     }
 
-    const listSectionsByTeacher = (IdClasses:number,idx:number):any => {
-        return scores.data.teacherByPS.filter((item:teacherByPSC)=>item.IdClasses===IdClasses && item.id === score[idx].IdTeachers && item.IdShifts === score[idx].IdShifts)
-            .map((item:teacherByPSC)=>{
-                const names = sections.data.filter((s:shifts)=>s.id===item.IdSections)[0].names;
-                return {id:item.IdShifts,names};
+    const cancel = () => {
+        const zero:any = 0;
+        dispatch(changeSelectStudent(zero));
+        setScores([]);
+    }
+
+    const save = () => {
+        const newData:scores[] = []
+        score.forEach((item:scores)=>{
+            if(item.id===0){
+                if(item.IdTeachers && item.IdShifts && item.IdSections){
+                    newData.push(item);
+                }else{
+                    console.log("faltan campos para insertar");
+                }
+            }else{
+                const oldData = scores.data.scores.find((ele:scores)=>ele.id===item.id);
+                if(JSON.stringify(item)!==JSON.stringify(oldData)) dispatch(fetchUpdateScores(item));
             }
-        );
+        });
+        newData.length > 0 && dispatch(fetchPostScores(newData));
     }
 
     return(
         <ContentScores className="content" wait={wait}>
-            <form onSubmit={(e)=>e.preventDefault()} >
+            <form onSubmit={(e)=>e.preventDefault()} className='scores' >
+                <div>
+                    <label>Clases/Materia</label>
+                    <label>Profesor</label>
+                    <label>Nota</label>
+                </div>
                 {
-                    classes.map((item:classe, idx:number)=>{
+                    score.map((item:scores, idx:number)=>{
                         const id = item.id.toString();
                         return(
-                            <div key={id}>
-                                <input type="text" name="classes" id={id} value={item.names} disabled={true} />
-                                <Select identify="IdTeachers" changeSelect={(e)=>changeSelect(e, item.id)} value={score[idx].IdTeachers | 0} data={listTeachersByClasse(item.id)} disabled={wait} />
-                                <Select identify="IdShifts" changeSelect={(e)=>changeSelect(e, item.id)} value={score[idx].IdShifts | 0} data={listShiftsByTeacher(item.id,idx)} disabled={wait} />
-                                <Select identify="IdSections" changeSelect={(e)=>changeSelect(e, item.id)} value={score[idx].IdSections | 0} data={listSectionsByTeacher(item.id,idx)} disabled={wait} />
-                                <input type="text" name="score" id="score" />
+                            <div key={idx}>
+                                <input type="text" name="classes" id={id} value={getNameClasse(item.IdClasses)} disabled={true} />
+                                <Select identify="IdTeachers" changeSelect={(e)=>changeSelectN(e, item)} value={item.IdTeachers} data={list(item)} disabled={wait} />
+                                <input type="number" name="score" id="score" min="0" max="10" onChange={(e)=>changeSelectN(e, item)} value={item.score} />
                             </div>
                         )
                     })
+                }
+                {
+                    score.length > 0 &&
+                        <div className="save">
+                            <button className="cancel" onClick={cancel} disabled={wait} >Cancelar</button>
+                            <button onClick={save} disabled={wait} >Guardar</button>
+                        </div>
                 }
             </form>
             <TablePersons persons={persons} edit={edit} remove={remove} />

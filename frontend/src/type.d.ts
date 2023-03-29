@@ -185,7 +185,8 @@ type scoresStore = {
     selectStudent:number,
     data:{
         classes:classe[],
-        teacherByPS:teacherByPS[]
+        teacherByPS:teacherByPS[],
+        scores:scores[]
     }
 }
 

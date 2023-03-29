@@ -430,4 +430,40 @@ export const ContentStudent = styled(ContentTeacher)`
     }
 `;
 
-export const ContentScores = styled(ContentTeacher)``;
+export const ContentScores = styled(ContentTeacher)`
+    >.scores{
+        >div{
+            display: grid;
+            grid-template-columns: 1fr 1fr 5rem;
+            column-gap: 1rem;
+            margin-bottom: 1rem;
+            >input{
+                border: 0.1rem solid #d3d0d0;
+                padding: 0 0.2rem;
+                border-radius: 0.3rem;
+            }
+        }
+        >div:first-child{
+            background: black;
+            color: white;
+            border-radius: 0.3rem;
+            padding: 0.5rem 0 0.5rem 0.5rem;
+        }
+        >div.save{
+            grid-template-columns: 1fr 5rem;
+            justify-items: end;
+            >button{
+                padding: 0.25rem 0.9rem;
+                border-radius: 0.3rem;
+                background-color: green;
+                border: solid green 0.1rem;
+                color: white;
+                cursor:pointer;
+            }
+            >button.cancel{
+                background-color: red;
+                border: solid red 0.1rem;
+            }
+        }
+    }
+`;
