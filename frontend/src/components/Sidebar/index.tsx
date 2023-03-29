@@ -9,6 +9,7 @@ import pensum from "../../assets/data-solid-24.png";
 import teachers from "../../assets/male-female-regular-24.png";
 import students from "../../assets/child-regular-24.png";
 import record from "../../assets/folder-solid-24.png";
+import arrow from "../../assets/left-arrow-solid-24.png";
 
 
 function Sidebar(){
@@ -19,8 +20,9 @@ function Sidebar(){
     return(
         <Side id="sidebar" visibleSide={visibleSide.status} >
             <div id="title">
-                <h1>Universidad</h1>
-                <button onClick={()=>dispatch(change())}>{visibleSide.status ? "-" : "+"}</button>
+                <h1>{visibleSide.status ? "Universidad" : "U"}</h1>
+                {/* <button onClick={()=>dispatch(change())}>{visibleSide.status ? <img src={arrow} /> : "+"}</button> */}
+                <button onClick={()=>dispatch(change())}><img src={arrow} /> </button>
             </div>
             <div id="admin">
                 <Ul>

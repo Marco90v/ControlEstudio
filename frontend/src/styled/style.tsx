@@ -22,6 +22,35 @@ export const Side = styled.div<any>`
             }
         `
     }
+    >div#title{
+        display: grid;
+        grid-template-rows: 1fr auto;
+        grid-template-columns: 1fr;
+        >h1,>button{
+            margin: auto;
+            transition: all 0.25s ease-in-out;
+        }
+        >h1{
+            width:${props => props.visibleSide ? "11.2rem" : "1.4rem"};
+        }
+        >button{
+            background-color: white;
+            padding: 0.4rem;
+            border-radius: 0.3rem;
+            margin-top: 0.4rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            :hover{
+                background-color: var(--azul);
+                box-shadow: 0 0 10px 1px #c1c1c1;
+                border: 1px solid #c1c1c1;
+            }
+            >img{
+                transform: ${props => props.visibleSide ? "rotateZ(0deg)" : "rotateZ(180deg)"};
+                transition: all 0.25s ease-in-out;
+            }
+        }
+    }
 `;
 
 export const Ul = styled.ul`
