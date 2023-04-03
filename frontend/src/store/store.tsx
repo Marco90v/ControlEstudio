@@ -1,43 +1,57 @@
 import { configureStore } from '@reduxjs/toolkit'
 import classesStore from './module/classesStore';
-import pensumStore from './module/pensumStore';
-import personStore from './module/personStore';
-import professionStore from './module/professionStore';
-import rolesStore from './module/rolesStore';
-import sectionsStore from './module/sectionsStore';
-import semestersStore from './module/semestersStore';
-import shiftsStore from './module/shiftsStore';
-import teachersStore from './module/teachersStore';
 import visibleSide from './module/visibleSideStore';
-import studentsStore from './module/studentsStore';
-import scoresStore from './module/scoresStore';
+
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
+import { useDispatch } from 'react-redux';
+
+import { classesApi } from './apis/classesApi';
+import { professionApi } from './apis/professionApi';
+import { pensumApi } from './apis/pensumApi';
+import { semestersApi } from './apis/semestersApi';
+import { rolesApi } from './apis/rolesApi';
+import { shiftsApi } from './apis/shiftsApi';
+import { sectionsApi } from './apis/sectionsApi';
+import { personApi } from './apis/personApi';
+import { teacherApi } from './apis/teacherApi';
+import { studentsApi } from './apis/studentsApi';
+import { scoresApi } from './apis/scoresApi';
 
 const sidebar = visibleSide;
 const classes = classesStore;
-const profession = professionStore;
-const pensum = pensumStore;
-const semesters = semestersStore;
-const roles = rolesStore;
-const shifts = shiftsStore;
-const sections = sectionsStore;
-const teachers = teachersStore;
-const persons = personStore;
-const students = studentsStore;
-const scores = scoresStore;
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
     sidebar,
     classes,
-    profession,
-    pensum,
-    semesters,
-    roles,
-    shifts,
-    sections,
-    teachers,
-    persons,
-    students,
-    scores
+    [classesApi.reducerPath]: classesApi.reducer,
+    [professionApi.reducerPath]: professionApi.reducer,
+    [pensumApi.reducerPath]: pensumApi.reducer,
+    [semestersApi.reducerPath]: semestersApi.reducer,
+    [rolesApi.reducerPath]: rolesApi.reducer,
+    [shiftsApi.reducerPath]: shiftsApi.reducer,
+    [sectionsApi.reducerPath]: sectionsApi.reducer,
+    [personApi.reducerPath]: personApi.reducer,
+    [teacherApi.reducerPath]: teacherApi.reducer,
+    [studentsApi.reducerPath]: studentsApi.reducer,
+    [scoresApi.reducerPath]: scoresApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
+    classesApi.middleware, 
+    professionApi.middleware,
+    pensumApi.middleware,
+    semestersApi.middleware,
+    rolesApi.middleware,
+    shiftsApi.middleware,
+    sectionsApi.middleware,
+    personApi.middleware,
+    teacherApi.middleware,
+    studentsApi.middleware,
+    scoresApi.middleware,
+  ),
 });
+
+setupListeners(store.dispatch);
+
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;

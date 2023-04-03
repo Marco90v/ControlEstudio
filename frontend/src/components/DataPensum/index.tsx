@@ -1,55 +1,39 @@
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { changeSelectPensum, fetchDeleteClassePensum, fetchGetPensum, fetchPostClassePensum, insertSemester } from "../../store/module/pensumStore";
-import { fetchDeleteProfession, fetchGetProfession, fetchPostProfession, fetchUpdateProfession } from "../../store/module/professionStore";
-import { changeSelectSemesters, fetchGetSemesters } from "../../store/module/semestersStore";
+import { useEffect, useState } from "react";
 import { ClassesBySemesters, ContentDataPensum, Div, SelectPensum, SelectSemester, Semestres } from "../../styled/style";
-import Alert from "../Alert";
-import InputForm from "../InputForm";
 import Popup from "../Popup/Popup";
-import TableComponent from "../Table";
 import Select from "../Select";
 
 import iconRemove from "../../assets/x-circle-solid-24.png";
 import iconAdd from "../../assets/plus-circle-solid-24.png";
-import { fetchClasses } from "../../store/module/classesStore";
 
+import { addSemester, pensumApi, useDeletePensumMutation, usePostPensumMutation } from "../../store/apis/pensumApi";
+import { useAppDispatch } from "../../store/store";
+import { useGetProfessionQuery } from "../../store/apis/professionApi";
+import { useGetSemestersQuery } from "../../store/apis/semestersApi";
+import { useGetClassesQuery } from "../../store/apis/classesApi";
+import BadgeClasse from "../BadgeClasse";
+import BlockSemester from "../BlockSemester";
 
 function DataPensum(){
-    const dispatch = useDispatch();
-    const profession = useSelector((state:store) => state.profession);
-    const pensum = useSelector((state:store) => state.pensum);
-    const semesters = useSelector((state:store) => state.semesters);
-    const classes = useSelector((state:store) => state.classes);
+
+    const dispatch = useAppDispatch();
+    const [trigger, { data=[] }] = pensumApi.endpoints.getPensumById.useLazyQuery();
+    const { data: professions=[] } = useGetProfessionQuery();
+    const { data: semesters=[] } = useGetSemestersQuery();
+    const { data: classes=[] } = useGetClassesQuery();
+    const [ postPensum ] = usePostPensumMutation();
+    const [ deletePensum ] = useDeletePensumMutation();
+
+    const [selectSemesters, setSelectSemesters] = useState<number>(0);
+    const [selectPensum, setSelectPensum] = useState<number>(0);
 
     const [modal,setModal] = useState({type:"", IdSemesters:0, value:false, data:{id:0,names:""}, id:0, semesterName:"", ClasseName:""});
     const [activeInsertSemester, setActiveInsertSemester] = useState(true);
 
     useEffect(() => {
-        const promiseProfession = dispatch(fetchGetProfession());
-        const promiseSemesters = dispatch(fetchGetSemesters());
-        return () => {
-            promiseProfession.abort();
-            promiseSemesters.abort();
-        }
-    }, []);
-
-    useEffect(() => {
-      pensum.selectPensum > 0 ? setActiveInsertSemester(false) : setActiveInsertSemester(true);
-    
-      return () => {}
-    }, [pensum.selectPensum]);
-
-    useEffect(() => {
-        let promiseClasses:any;
-        if(modal.value){
-            promiseClasses = dispatch(fetchClasses());
-        }
-    
-      return () => {
-      }
-    }, [modal.value]);
-    
+        selectPensum > 0 ? setActiveInsertSemester(false) : setActiveInsertSemester(true);
+        return () => {}
+    }, [selectPensum]);
     
     const removeClasse = (id:number,semesterName:string,ClasseName:string) => {
         setModal({
@@ -65,26 +49,38 @@ function DataPensum(){
     const aceptCallback = () => {
         switch (modal.type) {
             case "insertClasse":
-                return dispatch(fetchPostClassePensum([{
-                    IdProfession:Number(pensum.selectPensum),
-                    IdSemesters:modal.IdSemesters,
-                    IdClasses:modal.data.id,
-                    Name_Classes:modal.data.names
-                }]));
+                const newData = {
+                    body:[{
+                        IdProfession:selectPensum,
+                        IdSemesters:modal.IdSemesters,
+                        IdClasses:modal.data.id,
+                        Name_Classes:modal.data.names
+                    }],
+                    p:selectPensum
+                }
+                postPensum(newData);
+                break;
             case "removeClasse":
-                return dispatch(fetchDeleteClassePensum({id:modal.id}));
+                const dataDelete = {
+                    body:{
+                        id: modal.id
+                    },
+                    p:selectPensum
+                }
+                deletePensum(dataDelete);
+                break;
         }
     }
 
     const changeSelectProfession = (e:any) => {
-        const ID = e.target.value;
-        ID > 0 && dispatch(fetchGetPensum(ID));
-        dispatch(changeSelectPensum(ID));
+        const ID = Number(e.target.value);
+        setSelectPensum(ID);
+        trigger(ID);
     }
 
     const changeSelectSemester = (e:any) => {
-        const ID = e.target.value;
-        dispatch(changeSelectSemesters(ID));
+        const ID = Number(e.target.value);
+        setSelectSemesters(ID);
     }
 
     const insertNewClasse = (IdSemesters:number) => {
@@ -97,22 +93,21 @@ function DataPensum(){
     }
 
     const insertNewSemester = () => {
-        const selectSemester = semesters.selectSemester;
-        const dataSemester = semesters.data[selectSemester - 1];
-        if( selectSemester > 0){
-            const newSemester = {
-                "IdSemesters": dataSemester.id,
-                "Name_Semesters": dataSemester.names,
-                "Classes": []
+        const dataSemester = semesters[selectSemesters - 1];
+        if( selectSemesters > 0){
+            const newSemester:pensum = {
+                IdSemesters: dataSemester.id,
+                Name_Semesters: dataSemester.names,
+                Classes: []
             }
-            if(pensum.data.length > 0){
+            if(data?.length > 0){
                 let exist = false
-                pensum.data.forEach((item)=>{
+                data?.forEach((item:pensum)=>{
                     if(item.IdSemesters === dataSemester.id) exist = true
                 });
-                !exist && dispatch(insertSemester(newSemester));
+                if(!exist) dispatch(addSemester(newSemester,selectPensum));
             }else{
-                dispatch(insertSemester(newSemester));
+                dispatch(addSemester(newSemester,selectPensum));
             }
         }
     }
@@ -121,13 +116,12 @@ function DataPensum(){
         const ID = Number(e.target.value);
         setModal({
             ...modal,
-            data: classes.data.find(item=> item.id===ID) || { id: 0, names: "string" }
+            data: classes.find(item=> item.id===ID) || { id: 0, names: "string" }
         })
     }
 
-
     const cuerpoPopup:any = {
-        "insertClasse": <Select identify="classes" changeSelect={changeSelectClasses} value={modal.data.id} data={classes.data} />,
+        "insertClasse": <Select identify="classes" changeSelect={changeSelectClasses} value={modal.data.id} data={classes} />,
         "removeClasse": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.ClasseName}"</strong> del <strong>"{modal.semesterName}</strong>?</p>
     };
 
@@ -135,33 +129,17 @@ function DataPensum(){
         <ContentDataPensum>
             <SelectPensum>
                 <h2>Profesiones</h2>
-                <Select identify="profesion" changeSelect={changeSelectProfession} value={pensum.selectPensum} data={profession.data} />
+                <Select identify="profesion" changeSelect={changeSelectProfession} value={selectPensum} data={professions} />
             </SelectPensum>
             <section>
                 {
-                    pensum?.data?.map((semestre:pensum)=>{
-                        return(
-                            <Semestres key={semestre.IdSemesters} >
-                                <h2>
-                                    {semestre.Name_Semesters}
-                                    <img src={iconAdd} alt="add" onClick={()=>insertNewClasse(semestre.IdSemesters)} />
-                                </h2>
-                                <ClassesBySemesters>
-                                    {
-                                        semestre?.Classes?.map((classe:any)=>{
-                                            return(
-                                                <li key={classe.id}>{classe.Name_Classes} <img src={iconRemove} alt="remove" onClick={()=>removeClasse(classe.id,semestre.Name_Semesters,classe.Name_Classes)}/></li>
-                                            )
-                                        })
-                                    }
-                                </ClassesBySemesters>
-                            </Semestres>
-                        )
+                    data.map((semester:pensum)=>{
+                        return <BlockSemester key={semester.IdSemesters} semester={semester} insertNewClasse={insertNewClasse} removeClasse={removeClasse} />
                     })
                 }
             </section>
             <SelectSemester>
-                <Select identify="semestres" changeSelect={changeSelectSemester} value={semesters.selectSemester} data={semesters.data} />
+                <Select identify="semestres" changeSelect={changeSelectSemester} value={selectSemesters} data={semesters} />
                 <button disabled={activeInsertSemester} onClick={insertNewSemester} >Agregar</button>
             </SelectSemester>
             {

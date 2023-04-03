@@ -66,6 +66,8 @@ type sectionsStore = {
     data:sections[]
 }
 type person = {
+    id: number,
+    names: string
     lastNames: string,
     sex: string,
     email: string,
@@ -74,8 +76,6 @@ type person = {
     role: number,
     idPerson: number,
     name?: string,
-    id?: number,
-    names?: string
 }
 type personStore = {
     status:string,

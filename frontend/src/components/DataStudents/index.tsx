@@ -10,11 +10,16 @@ import { fetchGetSemesters } from "../../store/module/semestersStore";
 import { changeSelectStudents, fetchDeleteDataStudentById, fetchGetStudents, fetchPostStudent, fetchUpdateDataStudent } from "../../store/module/studentsStore";
 import PersonsForms from "../PersonsForms";
 import TablePersons from "../TablePersons";
+import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
+import { useGetRolesQuery } from "../../store/apis/rolesApi";
+import { useGetProfessionQuery } from "../../store/apis/professionApi";
+import { useGetSemestersQuery } from "../../store/apis/semestersApi";
+import { studentsApi, useDeleteStudentByIdMutation, usePostStudentMutation, useUpdateStudentByIdMutation } from "../../store/apis/studentsApi";
 
 const initialDataPerson:person = {
     id:0,
     idPerson:0,
-    name: "",
+    names: "",
     lastNames: "",
     sex: "",
     email: "",
@@ -31,46 +36,49 @@ const initialDataStudents:students = {
 }
 
 function DataStudents(){
-    const dispatch = useDispatch();
-    const roles = useSelector((state:store) => state.roles);
-    const persons = useSelector((state:store) => state.persons);
-    const professions = useSelector((state:store) => state.profession);
-    const semesters = useSelector((state:store) => state.semesters);
-    const students = useSelector((state:store) => state.students);
 
+    const { data:roles=[] } = useGetRolesQuery();
+    const { data:professions=[] } = useGetProfessionQuery();
+    const { data:semesters=[] } = useGetSemestersQuery();
+
+    const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
+    const [ triggerStudents, { data:students=initialDataStudents, isSuccess:isSuccessStudents, isFetching:isFetchingStudents } ] = studentsApi.endpoints.getStudentsById.useLazyQuery();
+
+    const [ postPerson ] = usePostPersonMutation();
+    const [ updatePerson ] = useUpdatePersonByIdMutation();
+    const [ deletePersonById ] = useDeletePersonByIdMutation();
+    const [ updateStudentById ] = useUpdateStudentByIdMutation();
+    const [ deleteStudentById ] = useDeleteStudentByIdMutation();
+
+    const [ postStudent ] = usePostStudentMutation();
+
+    const [ selectRole, setSelectRole ] = useState<number>(0);
+    const [ selectPerson, setSelectPeron ] = useState<number>(0);
 
     const [person, setPerson] = useState(initialDataPerson);
     const [student, setStudent] = useState(initialDataStudents);
     const [wait, setWait] = useState<boolean>(false);
 
     useEffect(() => {
-        const promiseRoles = dispatch(fetchRoles());
-        const promiseProfession = dispatch(fetchGetProfession());
-        const promiseSemesters = dispatch(fetchGetSemesters());
-        const promiseStudents = dispatch(fetchGetStudents());
-        return () => {
-            promiseRoles.abort();
-            promiseProfession.abort();
-            promiseSemesters.abort();
-            promiseStudents.abort();
-        }
-    }, []);
-
-    useEffect(() => {
-        roles.data.forEach(e=>{
+        roles.forEach((e:role)=>{
             if (e.names === "Estudiante"){
-                const ID:any = e.id;
-                dispatch(changeSelectRole(ID));
+                const ID:number = Number(e.id);
                 setPerson({...person, role:ID});
-                dispatch(fetchGetPersonByRole(ID));
+                setSelectRole(ID);
+                triggerPersons(ID)
             }
         });
         return () => {}
-    }, [roles.data]);
+    }, [roles]);
+
+    useEffect(() => {
+        students !== null ? setStudent(students) : setStudent(initialDataStudents);
+      return () => {}
+    }, [isSuccessStudents, isFetchingStudents])
 
     const changeRole = (e:any) => {
-        const ID:any = e.target.value;
-        dispatch(changeSelectRole(ID));
+        const ID:number = Number(e.target.value);
+        setSelectRole(ID);
         changeDataPerson(e);
     }
 
@@ -82,7 +90,7 @@ function DataStudents(){
         const zero:any = 0;
         setPerson({...initialDataPerson,role:person.role});
         setStudent(initialDataStudents);
-        dispatch(changeSelectPerson(zero));
+        setSelectPeron(zero);
     }
 
     const fieldNotEmptied = (object:any):boolean => {
@@ -98,47 +106,48 @@ function DataStudents(){
 
     const updateStudent = ():boolean => {
         let r:boolean = false;
-        const oldStuden:students = students.data.filter((item:students)=>item.IdPersons === students.selectStudents)[0];
-        if(oldStuden.IdProfession !== student.IdProfession || oldStuden.IdSemesters !== student.IdSemesters){
+        if(students?.IdProfession !== student.IdProfession || students?.IdSemesters !== student.IdSemesters){
             r = true;
         }
         return r;
     }
 
-    const newData = () => {
-        const {name, lastNames, email, phone, sex} = person;
-        const notEmptied:boolean = fieldNotEmptied({name, lastNames, email, phone, sex});
-        const newData = {...person, names:name, phone:Number(phone)};
+    const newData = async () => {
+        const {names, lastNames, email, phone, sex} = person;
+        const notEmptied:boolean = fieldNotEmptied({names, lastNames, email, phone, sex});
+        const newData = {...person, phone:Number(phone), id:selectPerson};
         if(notEmptied){
-            dispatch(fetchPostPerson(newData)).then((res:any)=>{
-                const IdPersons = res.payload.id;
+            const insert = {
+                body: newData,
+                role: selectRole
+            }
+            try{
+                const { insertId:IdPersons } = await postPerson(insert).unwrap();
                 if(student.IdProfession !== 0 && student.IdSemesters !== 0){
                     const dataStudent = {...student,id:IdPersons, IdPersons};
-                    dispatch(fetchPostStudent(dataStudent)).then((res:any)=>{
-                        setWait(false);
-                        resetInput();
-                    });
-                }else{
-                    setWait(false);
-                    resetInput();
+                    postStudent(dataStudent)
                 }
-            });
+            }catch(error){
+                console.log(error);
+            }
         }
         setWait(false);
     }
 
     const editData = () => {
-        const {name, lastNames, email, phone, sex, photo, role} = person;
-        const newData = {...person,names:name, phone:Number(phone), id:persons.selectPerson};
+        const {names, lastNames, email, phone, sex, photo, role} = person;
+        const newData:person = {...person,names, phone:Number(phone), id:selectPerson};
 
-        const notEmptiedPerson:boolean = fieldNotEmptied({name, lastNames, email, phone, sex, role});
+        const notEmptiedPerson:boolean = fieldNotEmptied({names, lastNames, email, phone, sex, role});
         if(notEmptiedPerson){
-            const personOriginal = persons.data.filter((item:person)=>item.id===persons.selectPerson)[0];
-            if(name !== personOriginal.names || lastNames !== personOriginal.lastNames || email !== personOriginal.email || 
+            const personOriginal = persons.filter((item:person)=>item.id===selectPerson)[0];
+            if(names !== personOriginal.names || lastNames !== personOriginal.lastNames || email !== personOriginal.email || 
                 phone !== personOriginal.phone || sex !== personOriginal.sex || photo !== personOriginal.photo || role !== personOriginal.role){
-                    dispatch(fetchUpdatePersonById(newData)).then(()=>{
-                        setWait(false);
-                    });
+                    const updateP = {
+                        body:newData,
+                        role:selectRole
+                    }
+                    updatePerson(updateP);
             }
         }
         else{
@@ -151,11 +160,11 @@ function DataStudents(){
 
         if(notEmptiedStudent){
             if(id !== 0 && updateStudent()){
-                dispatch(fetchUpdateDataStudent(student));
+                updateStudentById(student)
             }
             if(id === 0 && IdPersons === 0 && notEmptiedStudent){
-                const newStudent = { ...student, IdPersons:students.selectStudents };
-                dispatch(fetchPostStudent(newStudent));
+                const newStudent = { ...student, IdPersons:selectPerson };
+                postStudent(newStudent)
             }
         }
 
@@ -165,31 +174,28 @@ function DataStudents(){
 
     const save = () => {
         setWait(true);
-        persons.selectPerson === 0 ? newData() : editData();
+        selectPerson === 0 ? newData() : editData();
     }
 
     const cancelEdit = () => {
         const zero:any = 0;
         setPerson({...initialDataPerson,role:person.role});
         setStudent(initialDataStudents)
-        dispatch(changeSelectPerson(zero));
-        dispatch(changeSelectStudents(zero));
+        setSelectPeron(zero);
     }
 
     const edit = (idx:number) => {
-        const {id, names} = persons.data[idx];
-        const idPerson:any = Number(id);
-        const newDataStudent:students = students.data.filter((item:students)=>item.IdPersons===idPerson)[0];
-        setPerson({ ...persons.data[idx], name:names });
-        newDataStudent ? setStudent(newDataStudent) : setStudent(initialDataStudents);
-        dispatch(changeSelectPerson(idPerson));
-        dispatch(changeSelectStudents(idPerson));
+        const p = persons[idx];
+        setPerson({...p});
+        triggerStudents(p.id);
+        setSelectPeron(p.id);
     }
 
-    const remove = (idx:number=0) => {
-        const id = students.data.filter((item:students)=>item.IdPersons===idx)[0].id;
-        dispatch(fetchDeletePersonById(idx));
-        dispatch(fetchDeleteDataStudentById(id));
+    const remove = async (idx:number=0) => {
+        const { id } = await triggerStudents(idx).unwrap();
+        const deleteData = {body:{id:idx},role:selectRole}
+        deletePersonById(deleteData);
+        deleteStudentById({id});
     }
 
     const changeSelect = (e:any) => {
@@ -207,8 +213,10 @@ function DataStudents(){
                 changeRole={changeRole}
                 changeDataPerson={changeDataPerson}
                 roles={roles}
+                selectRole={selectRole}
                 wait={wait}
                 persons={persons}
+                selectPerson={selectPerson}
                 cancelEdit={cancelEdit}
                 save={save}
                 type={"students"}
@@ -216,11 +224,11 @@ function DataStudents(){
                 <div className="professionSemesters">
                     <div className="profession">
                         <label htmlFor="selectProfession">Profesión</label>
-                        <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e)} value={student.IdProfession} data={professions.data} disabled={wait} />
+                        <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e)} value={student.IdProfession} data={professions} disabled={wait} />
                     </div>
                     <div className="selectSemester">
                         <label htmlFor="selectSemester">Semestres</label>
-                        <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e)} value={student.IdSemesters} data={semesters.data} disabled={wait} />
+                        <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e)} value={student.IdSemesters} data={semesters} disabled={wait} />
                     </div>
                 </div>
             </PersonsForms>

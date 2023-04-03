@@ -20,7 +20,7 @@ function InputForm({addCallBack,title}:props) {
         e.preventDefault();
         if(name.names !== ""){
             const res = addCallBack(name);
-            if(res.meta.requestStatus === "fulfilled") setName({names:""});
+            // if(res.meta.requestStatus === "fulfilled") setName({names:""});
         }else{
             console.log("Ingrese nombre de la materia");
         }

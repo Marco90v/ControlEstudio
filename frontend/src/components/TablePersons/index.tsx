@@ -18,7 +18,7 @@ function TablePersons({persons, edit, remove}:any){
                 </thead>
                 <tbody>
                     {
-                        persons.data.map((item:person,idx:number)=>{
+                        persons.map((item:person,idx:number)=>{
                             return(
                                 <tr key={idx}>
                                     <td>{item.names}</td>

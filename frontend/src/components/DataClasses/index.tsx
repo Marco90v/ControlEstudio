@@ -8,23 +8,18 @@ import Alert from "../Alert";
 import Popup from "../Popup/Popup";
 import InputForm from "../InputForm";
 import TableComponent from "../Table";
+import { useDeleteClassesMutation, useGetClassesQuery, usePostClassesMutation, useUpdateClassesMutation } from "../../store/apis/classesApi";
 
 function DataClasses() {
 
-    const dispatch = useDispatch();
-    const classes = useSelector((state:store) => state.classes);
-
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
+    const { data: classes=[] } = useGetClassesQuery();
+    const [postClasses] = usePostClassesMutation();
+    const [updateClasses] = useUpdateClassesMutation();
+    const [deleteClasses] = useDeleteClassesMutation();
 
-    useEffect(() => {
-        const promise = dispatch(fetchClasses());
-      return () => {
-        promise.abort();
-      }
-    }, []);
-
-    const addClasses = async (name:string) => {
-        return await dispatch(fetchPostClasses(name));
+    const addClasses = async (names:{names:string}) => {
+        postClasses(names);
     }
 
     const edit = (data:classe) => {
@@ -38,9 +33,11 @@ function DataClasses() {
     const aceptCallback = () => {
         switch (modal.type) {
             case "edit":
-                return dispatch(fetchUpdateClasses(modal.data));
+                updateClasses(modal.data);
+                break;
             case "delete":
-                return dispatch(fetchDeleteClasses({id:modal.data.id}));
+                deleteClasses({id:modal.data.id});
+                break;
         }
     }
 
@@ -57,7 +54,7 @@ function DataClasses() {
         <div>
             <InputForm addCallBack={addClasses} title={"Clase/Materia"} />
             <Div>
-                <TableComponent edit={edit} remove={remove} data={classes.data} />
+                <TableComponent edit={edit} remove={remove} data={classes} />
             </Div>
             <Alert />
             {

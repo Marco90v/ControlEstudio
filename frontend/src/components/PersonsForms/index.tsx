@@ -1,13 +1,14 @@
 import { SelectStyle } from "../../styled/style";
 import Select from "../Select";
 
-function PersonsForms({children, person, changeRole, changeDataPerson, roles, wait, persons, cancelEdit, save, type}:any){
+function PersonsForms({children, person, changeRole, changeDataPerson, roles, selectRole, wait, selectPerson, cancelEdit, save, type}:any){
+    // console.log(person)
     return(
         <form className="newPerson" onSubmit={(e)=>e.preventDefault()} >
             <div className="dataUser">
                 <div className="names">
-                    <label htmlFor="name">Nombre Completo</label>
-                    <input type="text" name="name" id="name" value={person.name} onChange={e=>changeDataPerson(e)} disabled={wait} />
+                    <label htmlFor="names">Nombre Completo</label>
+                    <input type="text" name="names" id="names" value={person.names} onChange={e=>changeDataPerson(e)} disabled={wait} />
                 </div>
                 <div className="lastNames">
                     <label htmlFor="lastNames">Apellido Completo</label>
@@ -27,7 +28,8 @@ function PersonsForms({children, person, changeRole, changeDataPerson, roles, wa
                     <label htmlFor="phone">Telefono</label>
                     <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={wait} />
                     <label htmlFor="role">Rol</label>
-                    <Select identify="role" changeSelect={(e)=>changeRole(e)} value={roles.selectRole} data={roles.data} disabled={true} />
+                    {/* <Select identify="role" changeSelect={(e)=>changeRole(e)} value={roles.selectRole} data={roles.data} disabled={true} /> */}
+                    <Select identify="role" changeSelect={(e)=>changeRole(e)} value={selectRole} data={roles} disabled={true} />
                     <label htmlFor="photo">Foto</label>
                     <input type="file" name="photo" id="photo" disabled={true} />
                 </div>
@@ -37,7 +39,7 @@ function PersonsForms({children, person, changeRole, changeDataPerson, roles, wa
                 
             <div className="save">
                 {
-                    persons.selectPerson === 0 ?
+                    selectPerson === 0 ?
                     <button onClick={save} disabled={wait} >Guardar</button> :
                     <>
                         <button onClick={()=>cancelEdit()} className="cancel" disabled={wait} >Cancelar</button>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { fetchDeleteProfession, fetchGetProfession, fetchPostProfession, fetchUpdateProfession } from "../../store/module/professionStore";
 import { Div } from "../../styled/style";
 import Alert from "../Alert";
@@ -7,23 +8,16 @@ import InputForm from "../InputForm";
 import Popup from "../Popup/Popup";
 import TableComponent from "../Table";
 
-// type classe = {id:number,names:string}
-
 function DataProfession(){
-    const dispatch = useDispatch();
-    const profession = useSelector((state:store) => state.profession);
-
+    
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
+    const { data: profession=[] } = useGetProfessionQuery();
+    const [postProfession] = usePostProfessionMutation();
+    const [updateProfession] = useUpdateProfessionMutation();
+    const [deleteProfession] = useDeleteProfessionMutation();
 
-    useEffect(() => {
-        const promise = dispatch(fetchGetProfession());
-      return () => {
-        promise.abort();
-      }
-    }, []);
-
-    const addClasses = async (name:string) => {
-        return await dispatch(fetchPostProfession(name));
+    const addClasses = async (names:{names:string}) => {
+        postProfession(names);
     }
 
     const edit = (data:profession) => {
@@ -37,9 +31,11 @@ function DataProfession(){
     const aceptCallback = () => {
         switch (modal.type) {
             case "edit":
-                return dispatch(fetchUpdateProfession(modal.data));
+                updateProfession(modal.data);
+                break;
             case "delete":
-                return dispatch(fetchDeleteProfession({id:modal.data.id}));
+                deleteProfession({id:modal.data.id});
+                break;
         }
     }
 
@@ -56,7 +52,7 @@ function DataProfession(){
         <div>
             <InputForm addCallBack={addClasses} title={"Profesiones"} />
             <Div>
-                <TableComponent edit={edit} remove={remove}  data={profession.data} />
+                <TableComponent edit={edit} remove={remove}  data={profession} />
             </Div>
             <Alert />
             {
