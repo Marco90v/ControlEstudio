@@ -83,7 +83,7 @@ export const deleteValueTeachersWorkOut = (req,res) => {
     const table:string = req.path.slice(1);
     const dataValidated = validator.idPersons(req.body);
     if(dataValidated){
-        services.deleteTeacher(table,dataValidated)
+        services.deleteTeacher('teachers',dataValidated)
             .then(()=>{
                 res.status(200).json({deleteId : req.body.idPersons})
             })
@@ -404,5 +404,17 @@ export const getClassesByProfessionAndSemesters = (req, res) => {
     }else{
         console.log("getTeachersByProfessionAndSemesters", "Error en la estructura de datos");
         res.status(400).json({erro:"Error en la estructura de datos"});
+    }
+}
+
+export const getStundentByIdPersonsWorkOut = (req,res) => {
+    const IdPersons:number = Number(req.params.IdPersons);
+    if(IdPersons){
+        services.getStudentsByIdPersons(IdPersons)
+        .then(result=>res.status(200).json(result))
+        .catch(err=>{
+            console.log(err);
+            res.status(400).json({error:err});
+        })
     }
 }

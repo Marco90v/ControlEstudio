@@ -630,3 +630,20 @@ export const getClassesByProfessionAndSemesters = (IdProfession:number,IdSemeste
         });
     });
 }
+
+export const getStudentsByIdPersons = (IdPersons:number) => {
+    return new Promise((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM students WHERE IdPersons = ?';
+            connection.query(query, IdPersons,(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla students(getStudentsById): ${QueryErr}`);
+                if(result) resolve(result[0]);
+                connection.release();
+            });
+        });
+    });
+}

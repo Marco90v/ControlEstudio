@@ -7,11 +7,15 @@ const router = express.Router();
 //RUTAS PARA LOS PROFESORES
 router.get('/teachers', workOutControllers.getAllTeachersWorkOut2);
 router.get('/teachers/:id', workOutControllers.getSingleTeachersWorkOut2);
-router.delete('/teachers', workOutControllers.deleteTeachersWorkOut);
+router.post('/teachers', workOutControllers.setValuesTeachersWorkOut);
 router.put('/teachers', workOutControllers.updateValueSingleTableWorkOut2);
+router.delete('/teachers', workOutControllers.deleteTeachersWorkOut);
+router.delete('/teachersDelete', workOutControllers.deleteValueTeachersWorkOut);
 
 //RUTAS PARA LOS ESTUDIANTES
 router.get('/students', workOutControllers.getAllStudentsWorkOut2);
+router.get('/students/:IdPersons', workOutControllers.getStundentByIdPersonsWorkOut);
+router.post('/students', workOutControllers.setValuesSingleTableWorkOut);
 router.put('/students', workOutControllers.updateValueSingleTableWorkOut2);
 router.delete('/students', workOutControllers.deleteStudentWorkOut);
 
