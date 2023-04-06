@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { change } from "../../store/module/visibleSideStore";
-
 import { MyNavLink, Side, Ul } from "../../styled/style";
 import home from "../../assets/home-solid-24.png";
 import classes from "../../assets/book-solid-24.png";
@@ -10,7 +9,6 @@ import teachers from "../../assets/male-female-regular-24.png";
 import students from "../../assets/child-regular-24.png";
 import record from "../../assets/folder-solid-24.png";
 import arrow from "../../assets/left-arrow-solid-24.png";
-
 
 function Sidebar(){
 
@@ -73,5 +71,4 @@ function Sidebar(){
     )
 }
 
-// export default Sidebar;
-export {Sidebar}
+export { Sidebar };

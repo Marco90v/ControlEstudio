@@ -1,6 +1,4 @@
 import { ClassesBySemesters, Semestres } from "../../styled/style";
-// import BadgeClasse from "../BadgeClasse";
-
 import iconAdd from "../../assets/plus-circle-solid-24.png";
 import { memo } from "react";
 import { BadgeClasse } from "../";
@@ -41,10 +39,6 @@ const BlockSemester = memo (({semester, insertNewClasse, removeClasse}:props) =>
     )
 }, (n:props,p:props)=>{
     return n.semester.IdSemesters === p.semester.IdSemesters && JSON.stringify(n.semester.Classes) === JSON.stringify(p.semester.Classes)
-} )
-
-// export default memo(BlockSemester,(n:props,p:props)=>{
-//     return n.semester.IdSemesters === p.semester.IdSemesters && JSON.stringify(n.semester.Classes) === JSON.stringify(p.semester.Classes)
-// });
+} );
 
 export {BlockSemester}

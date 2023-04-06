@@ -2,7 +2,7 @@ import { SelectStyle } from "../../styled/style";
 import { Select } from "../";
 
 function PersonsForms({children, person, changeRole, changeDataPerson, roles, selectRole, wait, selectPerson, cancelEdit, save, type}:any){
-    // console.log(person)
+
     return(
         <form className="newPerson" onSubmit={(e)=>e.preventDefault()} >
             <div className="dataUser">
@@ -28,7 +28,6 @@ function PersonsForms({children, person, changeRole, changeDataPerson, roles, se
                     <label htmlFor="phone">Telefono</label>
                     <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={wait} />
                     <label htmlFor="role">Rol</label>
-                    {/* <Select identify="role" changeSelect={(e)=>changeRole(e)} value={roles.selectRole} data={roles.data} disabled={true} /> */}
                     <Select identify="role" changeSelect={(e)=>changeRole(e)} value={selectRole} data={roles} disabled={true} />
                     <label htmlFor="photo">Foto</label>
                     <input type="file" name="photo" id="photo" disabled={true} />
@@ -51,5 +50,4 @@ function PersonsForms({children, person, changeRole, changeDataPerson, roles, se
     );
 }
 
-// export default PersonsForms;
-export {PersonsForms}
+export { PersonsForms };

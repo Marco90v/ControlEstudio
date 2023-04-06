@@ -1,15 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchClasses } from "../../store/module/classesStore";
-import { changeSelectPerson, fetchDeletePersonById, fetchGetPersonByRole, fetchPostPerson, fetchUpdatePersonById } from "../../store/module/personStore";
-import { fetchGetProfession } from "../../store/module/professionStore";
-import { fetchRoles, changeSelectRole } from "../../store/module/rolesStore";
-import { fetchGetSections } from "../../store/module/sectionsStore";
-import { fetchGetSemesters } from "../../store/module/semestersStore";
-import { fetchGetShifts } from "../../store/module/shiftsStore";
-import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherByIdPerson, fetchGetTeachers, fetchPostTeachers, fetchUpdateDataTeachers } from "../../store/module/teachersStore";
+import { useEffect, useState } from "react";
 import { ContentTeacher } from "../../styled/style";
-
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
@@ -18,7 +8,6 @@ import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
 import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMutation, usePostTeacherMutation, useUpdateTeacherByIdMutation } from "../../store/apis/teacherApi";
-
 import { Select, PersonsForms, TablePersons } from "../";
 
 const initialDataPerson:person = {
@@ -304,6 +293,4 @@ function DataTeacher(){
     )
 }
 
-// export default DataTeacher;
-
-export {DataTeacher}
+export { DataTeacher };

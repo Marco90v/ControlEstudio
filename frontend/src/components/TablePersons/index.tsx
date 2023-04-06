@@ -1,5 +1,4 @@
 import { Img, Table } from "../../styled/style";
-
 import imgEdit from "../../assets/edit-solid-24.png";
 import imgTrash from "../../assets/trash-alt-solid-24.png";
 
@@ -36,5 +35,4 @@ function TablePersons({persons, edit, remove}:any){
     );
 }
 
-// export default TablePersons;
-export {TablePersons}
+export { TablePersons };

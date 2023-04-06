@@ -22,6 +22,4 @@ const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse}:props) => {
     )
 }, (n:props,p:props)=>n.classe.id === p.classe.id );
 
-// export default memo(BadgeClasse,(n:props,p:props)=>n.classe.id === p.classe.id);
-
 export {BadgeClasse}

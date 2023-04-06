@@ -1,10 +1,5 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import { fetchClasses, fetchDeleteClasses, fetchPostClasses, fetchUpdateClasses } from "../../store/module/classesStore";
+import { useState } from "react";
 import { Div } from "../../styled/style";
-
-// import Alert from "../Alert";
 import {Alert} from "../index"
 import {Popup, InputForm, TableComponent} from "../";
 import { useDeleteClassesMutation, useGetClassesQuery, usePostClassesMutation, useUpdateClassesMutation } from "../../store/apis/classesApi";
@@ -63,6 +58,4 @@ function DataClasses() {
     );
 }
 
-// export default DataClasses;
-
-export {DataClasses}
+export { DataClasses };

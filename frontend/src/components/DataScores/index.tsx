@@ -1,23 +1,11 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchGetPersonByRole } from "../../store/module/personStore";
-import { changeSelectRole, fetchRoles } from "../../store/module/rolesStore";
-import { fetchGetStudents } from "../../store/module/studentsStore";
-import { changeSelectPensum, fetchDeleteClassePensum, fetchGetPensum, fetchPostClassePensum, insertSemester } from "../../store/module/pensumStore";
-import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherByIdPerson, fetchGetTeachers, fetchPostTeachers, fetchUpdateDataTeachers } from "../../store/module/teachersStore";
-
-import { ContentScores, ContentStudent } from "../../styled/style";
-import { changeSelectStudent, fetchClassesByProfessionAndSemesters, fetchGetScoresByIdStudent, fetchPostScores, fetchTeachersByProfessionAndSemesters, fetchUpdateScores } from "../../store/module/scoresStore";
-import { fetchGetShifts } from "../../store/module/shiftsStore";
-import { fetchGetSections } from "../../store/module/sectionsStore";
+import { ContentScores } from "../../styled/style";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { useGetProfessionQuery } from "../../store/apis/professionApi";
-import { studentsApi, useGetStudentsByIdQuery } from "../../store/apis/studentsApi";
+import { studentsApi } from "../../store/apis/studentsApi";
 import { personApi } from "../../store/apis/personApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
 import { scoresApi, usePostScoreMutation, useUpdateScoreByIdMutation } from "../../store/apis/scoresApi";
-
 import { Select, TablePersons } from "../";
 
 const initialDataPerson:person = {
@@ -225,5 +213,4 @@ function DataScores(){
     );
 }
 
-// export default DataScores
-export {DataScores}
+export { DataScores };
