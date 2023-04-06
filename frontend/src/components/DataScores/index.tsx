@@ -7,8 +7,6 @@ import { changeSelectPensum, fetchDeleteClassePensum, fetchGetPensum, fetchPostC
 import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherByIdPerson, fetchGetTeachers, fetchPostTeachers, fetchUpdateDataTeachers } from "../../store/module/teachersStore";
 
 import { ContentScores, ContentStudent } from "../../styled/style";
-import Select from "../Select";
-import TablePersons from "../TablePersons";
 import { changeSelectStudent, fetchClassesByProfessionAndSemesters, fetchGetScoresByIdStudent, fetchPostScores, fetchTeachersByProfessionAndSemesters, fetchUpdateScores } from "../../store/module/scoresStore";
 import { fetchGetShifts } from "../../store/module/shiftsStore";
 import { fetchGetSections } from "../../store/module/sectionsStore";
@@ -19,6 +17,8 @@ import { personApi } from "../../store/apis/personApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
 import { scoresApi, usePostScoreMutation, useUpdateScoreByIdMutation } from "../../store/apis/scoresApi";
+
+import { Select, TablePersons } from "../";
 
 const initialDataPerson:person = {
     id:0,
@@ -225,4 +225,5 @@ function DataScores(){
     );
 }
 
-export default DataScores
+// export default DataScores
+export {DataScores}

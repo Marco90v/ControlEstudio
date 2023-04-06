@@ -36,4 +36,5 @@ function TablePersons({persons, edit, remove}:any){
     );
 }
 
-export default TablePersons;
+// export default TablePersons;
+export {TablePersons}

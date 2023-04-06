@@ -9,10 +9,7 @@ import { fetchGetSemesters } from "../../store/module/semestersStore";
 import { fetchGetShifts } from "../../store/module/shiftsStore";
 import { changeSelectTeacher, fetchDeleteDataTeacherById, fetchDeleteTeacherByIdPerson, fetchGetTeachers, fetchPostTeachers, fetchUpdateDataTeachers } from "../../store/module/teachersStore";
 import { ContentTeacher } from "../../styled/style";
-import Select from "../Select";
 
-import PersonsForms from "../PersonsForms";
-import TablePersons from "../TablePersons";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
@@ -21,6 +18,8 @@ import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
 import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMutation, usePostTeacherMutation, useUpdateTeacherByIdMutation } from "../../store/apis/teacherApi";
+
+import { Select, PersonsForms, TablePersons } from "../";
 
 const initialDataPerson:person = {
     id:0,
@@ -305,4 +304,6 @@ function DataTeacher(){
     )
 }
 
-export default DataTeacher;
+// export default DataTeacher;
+
+export {DataTeacher}

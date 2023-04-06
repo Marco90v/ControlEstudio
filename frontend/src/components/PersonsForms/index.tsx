@@ -1,5 +1,5 @@
 import { SelectStyle } from "../../styled/style";
-import Select from "../Select";
+import { Select } from "../";
 
 function PersonsForms({children, person, changeRole, changeDataPerson, roles, selectRole, wait, selectPerson, cancelEdit, save, type}:any){
     // console.log(person)
@@ -51,4 +51,5 @@ function PersonsForms({children, person, changeRole, changeDataPerson, roles, se
     );
 }
 
-export default PersonsForms;
+// export default PersonsForms;
+export {PersonsForms}

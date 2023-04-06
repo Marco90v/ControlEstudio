@@ -29,4 +29,5 @@ function TableComponent({edit,remove,columnsHeaders=["Nombre"],data}:any){
     )
 }
 
-export default TableComponent
+// export default TableComponent
+export {TableComponent}

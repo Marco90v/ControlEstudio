@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { fetchDeleteProfession, fetchGetProfession, fetchPostProfession, fetchUpdateProfession } from "../../store/module/professionStore";
 import { Div } from "../../styled/style";
-import Alert from "../Alert";
-import InputForm from "../InputForm";
-import Popup from "../Popup/Popup";
-import TableComponent from "../Table";
+
+import { Alert, InputForm, Popup, TableComponent } from "../";
 
 function DataProfession(){
     
@@ -61,4 +59,5 @@ function DataProfession(){
         </div>
     );
 }
-export default DataProfession;
+// export default DataProfession;
+export {DataProfession}

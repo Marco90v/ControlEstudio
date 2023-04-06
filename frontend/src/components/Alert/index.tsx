@@ -50,4 +50,4 @@ function Alert (){
     );
 }
 
-export default Alert;
+export {Alert};

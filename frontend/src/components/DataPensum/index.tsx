@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { ClassesBySemesters, ContentDataPensum, Div, SelectPensum, SelectSemester, Semestres } from "../../styled/style";
-import Popup from "../Popup/Popup";
-import Select from "../Select";
 
 import iconRemove from "../../assets/x-circle-solid-24.png";
 import iconAdd from "../../assets/plus-circle-solid-24.png";
@@ -11,8 +9,9 @@ import { useAppDispatch } from "../../store/store";
 import { useGetProfessionQuery } from "../../store/apis/professionApi";
 import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
-import BadgeClasse from "../BadgeClasse";
-import BlockSemester from "../BlockSemester";
+
+import {Popup, Select, BlockSemester} from "../";
+
 
 function DataPensum(){
 
@@ -150,4 +149,5 @@ function DataPensum(){
         </ContentDataPensum>
     );
 }
-export default DataPensum;
+// export default DataPensum;
+export {DataPensum}

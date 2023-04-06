@@ -75,4 +75,5 @@ function Popup({setModal, children, aceptCallback}:any){
     );
 }
 
-export default Popup;
+// export default Popup;
+export {Popup}

@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchClasses, fetchDeleteClasses, fetchPostClasses, fetchUpdateClasses } from "../../store/module/classesStore";
 import { Div } from "../../styled/style";
 
-import Alert from "../Alert";
-import Popup from "../Popup/Popup";
-import InputForm from "../InputForm";
-import TableComponent from "../Table";
+// import Alert from "../Alert";
+import {Alert} from "../index"
+import {Popup, InputForm, TableComponent} from "../";
 import { useDeleteClassesMutation, useGetClassesQuery, usePostClassesMutation, useUpdateClassesMutation } from "../../store/apis/classesApi";
 
 function DataClasses() {
@@ -64,4 +63,6 @@ function DataClasses() {
     );
 }
 
-export default DataClasses;
+// export default DataClasses;
+
+export {DataClasses}

@@ -1,8 +1,9 @@
 import { ClassesBySemesters, Semestres } from "../../styled/style";
-import BadgeClasse from "../BadgeClasse";
+// import BadgeClasse from "../BadgeClasse";
 
 import iconAdd from "../../assets/plus-circle-solid-24.png";
 import { memo } from "react";
+import { BadgeClasse } from "../";
 
 type localClasse = {
     id:number,
@@ -20,7 +21,7 @@ type props = {
     removeClasse:Function
 }
 
-const BlockSemester = ({semester, insertNewClasse, removeClasse}:props) => {
+const BlockSemester = memo (({semester, insertNewClasse, removeClasse}:props) => {
     const {IdSemesters, Name_Semesters, Classes} = semester;
     return(
         <Semestres >
@@ -38,8 +39,12 @@ const BlockSemester = ({semester, insertNewClasse, removeClasse}:props) => {
             </ClassesBySemesters>
         </Semestres>
     )
-}
-
-export default memo(BlockSemester,(n:props,p:props)=>{
+}, (n:props,p:props)=>{
     return n.semester.IdSemesters === p.semester.IdSemesters && JSON.stringify(n.semester.Classes) === JSON.stringify(p.semester.Classes)
-});
+} )
+
+// export default memo(BlockSemester,(n:props,p:props)=>{
+//     return n.semester.IdSemesters === p.semester.IdSemesters && JSON.stringify(n.semester.Classes) === JSON.stringify(p.semester.Classes)
+// });
+
+export {BlockSemester}

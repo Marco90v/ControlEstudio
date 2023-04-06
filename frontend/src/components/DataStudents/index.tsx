@@ -3,18 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeSelectPerson, fetchDeletePersonById, fetchGetPersonByRole, fetchPostPerson, fetchUpdatePersonById } from "../../store/module/personStore";
 import { changeSelectRole, fetchRoles } from "../../store/module/rolesStore";
 import { ContentStudent } from "../../styled/style";
-import Select from "../Select";
 
 import { fetchGetProfession } from "../../store/module/professionStore";
 import { fetchGetSemesters } from "../../store/module/semestersStore";
 import { changeSelectStudents, fetchDeleteDataStudentById, fetchGetStudents, fetchPostStudent, fetchUpdateDataStudent } from "../../store/module/studentsStore";
-import PersonsForms from "../PersonsForms";
-import TablePersons from "../TablePersons";
 import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { useGetProfessionQuery } from "../../store/apis/professionApi";
 import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { studentsApi, useDeleteStudentByIdMutation, usePostStudentMutation, useUpdateStudentByIdMutation } from "../../store/apis/studentsApi";
+
+import { Select, PersonsForms, TablePersons } from "../";
 
 const initialDataPerson:person = {
     id:0,
@@ -236,4 +235,5 @@ function DataStudents(){
         </ContentStudent>
     );
 }
-export default DataStudents;
+// export default DataStudents;
+export {DataStudents}

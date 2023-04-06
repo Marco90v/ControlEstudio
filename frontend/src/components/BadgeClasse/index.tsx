@@ -12,7 +12,7 @@ type props = {
     removeClasse: Function
 }
 
-const BadgeClasse = ({classe, Name_Semesters, removeClasse}:props) => {
+const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse}:props) => {
     const {id,Name_Classes} = classe;
     return(
         <li key={id}>
@@ -20,6 +20,8 @@ const BadgeClasse = ({classe, Name_Semesters, removeClasse}:props) => {
             <img src={iconRemove} alt="remove" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}/>
         </li>
     )
-}
+}, (n:props,p:props)=>n.classe.id === p.classe.id );
 
-export default memo(BadgeClasse,(n:props,p:props)=>n.classe.id === p.classe.id);
+// export default memo(BadgeClasse,(n:props,p:props)=>n.classe.id === p.classe.id);
+
+export {BadgeClasse}
