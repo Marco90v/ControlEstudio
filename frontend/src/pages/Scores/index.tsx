@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import DataScores from "../../components/DataScores";
-import Sidebar from "../../components/Sidebar";
+import {DataScores} from "../../components";
+import {Sidebar} from "../../components";
 import { Main } from "../../styled/style";
 
 function Scores(){

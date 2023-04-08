@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import { Sidebar } from "../../components";
 import { Main } from "../../styled/style";
-
-import Sidebar from "../../components/Sidebar";
 
 function Inicio(){
     const visibleSide = useSelector((state:store) => state.sidebar);

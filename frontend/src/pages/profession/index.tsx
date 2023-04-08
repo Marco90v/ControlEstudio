@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import DataProfession from "../../components/DataProfession";
-import Sidebar from "../../components/Sidebar";
+import {DataProfession} from "../../components";
+import {Sidebar} from "../../components";
 import { Main } from "../../styled/style";
 
 function Profession(){

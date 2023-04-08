@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import DataPensum from "../../components/DataPensum";
-import Sidebar from "../../components/Sidebar";
+import {DataPensum} from "../../components";
+import {Sidebar} from "../../components";
 import { Main } from "../../styled/style";
 
 function Pensum(){

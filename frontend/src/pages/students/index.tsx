@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import DataStudents from "../../components/DataStudents";
-import Sidebar from "../../components/Sidebar";
+import {DataStudents} from "../../components";
+import {Sidebar} from "../../components";
 import { Main } from "../../styled/style";
 
 function Students(){

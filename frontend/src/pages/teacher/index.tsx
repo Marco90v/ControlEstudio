@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import DataTeacher from "../../components/DataTeacher";
-import Sidebar from "../../components/Sidebar";
+import {DataTeacher} from "../../components";
+import {Sidebar} from "../../components";
 import { Main } from "../../styled/style";
 
 function Teacher(){
