@@ -15,9 +15,12 @@ export const Side = styled.div<any>`
     overflow: hidden;
     width:${props => props.visibleSide ? "217px" : "72px"};
     transition: width 0.25s ease-in-out;
+    >#admin > ul > li > a > span{
+        text-transform: capitalize;
+    }
     ${
         props => !props.visibleSide && css`
-            #admin > ul > li span{
+            >#admin > ul > li > a > span{
                 color: transparent
             }
         `
