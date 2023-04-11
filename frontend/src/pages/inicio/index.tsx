@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Sidebar } from "../../components";
+import { Profile, Sidebar } from "../../components";
 import { Main } from "../../styled/style";
 
 function Inicio(){
@@ -9,7 +9,7 @@ function Inicio(){
     return(
         <Main visibleSide={visibleSide.status}>
             <Sidebar  />
-            <h1>Inicio</h1>
+            <Profile />
         </Main>
     )
 }

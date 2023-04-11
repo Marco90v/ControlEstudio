@@ -153,6 +153,16 @@ type scoresStore = {
         scores:scores[]
     }
 }
+type profile = {
+    id:number,
+    names: string,
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    role: number,
+    photo: string
+}
 type store = {
     sidebar: visibleSide,
     classes: classeStore,
@@ -165,5 +175,7 @@ type store = {
     persons: personStore,
     teachers: teachersStore,
     students: studentsStore,
-    scores: scoresStore
+    scores: scoresStore,
+    session: {token:string | null},
+    profile: profile
 }

@@ -1,4 +1,4 @@
-import { dbAdmin, dbClasses, dbId, dbIdPersons, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers, scores } from "../types";
+import { dbAdmin, dbClasses, dbId, dbIdPersons, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers, profile, scores, token } from "../types";
 
 const id = (object:any):dbId | false => {
     return 'id' in object && typeof(object.id) === 'number' ?
@@ -204,6 +204,39 @@ const professionAndSemesterAndClasses = (objects:any):any | false => {
     false;
 }
 
+const login = (objects:any):any =>{
+    return 'user' && 'pass' in objects 
+    && typeof(objects.user) === 'string'
+    && typeof(objects.pass) === 'string' ?
+    {
+        user:objects.user,
+        pass:objects.pass
+    } : 
+    false;
+}
+
+const profile = (object:token):profile | false => {
+    return 'id' && 'names' && 'lastNames' && 'sex' && 'email' && 'phone' && 'photo' && 'role' in object 
+    && typeof(object.id) === 'number'
+    && typeof(object.names) === 'string'
+    && typeof(object.lastNames) === 'string'
+    && typeof(object.sex) === 'string'
+    && typeof(object.email) === 'string'
+    && typeof(object.phone) === 'number'
+    && typeof(object.role) === 'number' ?
+    {
+        id: object.id,
+        names: object.names,
+        lastNames: object.lastNames,
+        sex: object.sex,
+        email: object.email,
+        phone: object.phone,
+        photo: object.photo,
+        role: object.role
+    } : 
+    false;
+}
+
 export const validator = {
     id,
     idPersons,
@@ -220,5 +253,7 @@ export const validator = {
     pensum,
     scores,
     professionAndSemesters,
-    professionAndSemesterAndClasses
+    professionAndSemesterAndClasses,
+    login,
+    profile
 }

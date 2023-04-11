@@ -2,6 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { change } from "../../store/module/visibleSideStore";
 import { MyNavLink, Side, Ul } from "../../styled/style";
 import arrow from "../../assets/left-arrow-solid-24.png";
+import close from "../../assets/log-out-regular-24.png";
+import { useAppDispatch } from "../../store/store";
+import { removeSession } from "../../store/module/sessionStore";
+import { removeProfile } from "../../store/module/profileStore";
+import { authApi } from "../../store/apis/authApi";
+import { profileApi } from "../../store/apis/profileApi";
 
 const obj = {
     home:'/src/assets/home-solid-24.png',
@@ -13,7 +19,35 @@ const obj = {
     record:'/src/assets/folder-solid-24.png',
 };
 
-const Li = ({ruta,img}:any) => {
+// type roleProtection = {
+//     home:number[],
+//     classes:number[],
+//     profession:number[],
+//     pensums:number[],
+//     teachers:number[],
+//     students:number[],
+//     record:number[],
+// }
+const roleProtection:any = {
+    home:[1,2,3],
+    classes:[1],
+    profession:[1],
+    pensums:[1],
+    teachers:[1],
+    students:[1],
+    record:[1,2,3],
+}
+
+type Li = {
+    ruta:string,
+    img:string,
+    role:number
+}
+
+const Li = ({ruta,img,role}:Li) => {
+    // console.log(role)
+    const permision = roleProtection[ruta].find((x:number)=>x===role);
+    if(!permision) return null;
     return(
         <li>
             <MyNavLink to={`/dashboard/${ruta}`} style={({ isActive }:any) => ( isActive ? "active" : "" )}>
@@ -26,8 +60,19 @@ const Li = ({ruta,img}:any) => {
 
 function Sidebar(){
 
-    const dispatch = useDispatch();
-    const visibleSide = useSelector((state:store) => state.sidebar)
+    const dispatch = useAppDispatch();
+    const { role } = useSelector((state:store) => state.profile);
+    // console.log(role);
+
+    // const dispatch = useDispatch();
+    const visibleSide = useSelector((state:store) => state.sidebar);
+
+    const logout = () => {
+        dispatch(removeProfile());
+        dispatch(authApi.util.resetApiState());
+        dispatch(profileApi.util.resetApiState());
+        dispatch(removeSession());
+    }
 
     return(
         <Side id="sidebar" visibleSide={visibleSide.status} >
@@ -39,11 +84,16 @@ function Sidebar(){
                 <Ul>
                     {
                         Object.entries(obj).map(([k,v],idx)=>{
-                            return <Li key={idx} ruta={k} img={v} />
+                            return <Li key={idx} ruta={k} img={v} role={role} />
+                            // return null
                         })
                     }
                 </Ul>
             </div>
+            <button onClick={logout}>
+                <img src={close} />
+                <span>Cerrar Sesion</span>
+            </button>
         </Side>
     )
 }

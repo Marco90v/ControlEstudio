@@ -2,6 +2,7 @@ import * as services from "../services";
 import { transformTeacher } from "../transform";
 import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat, scores } from "../types";
 import { validator } from "./validator";
+import jwt from 'jsonwebtoken';
 
 export const getAllAdminWorkOut = (_,res) => {
     services.getAllAdmin()
@@ -416,5 +417,54 @@ export const getStundentByIdPersonsWorkOut = (req,res) => {
             console.log(err);
             res.status(400).json({error:err});
         })
+    }
+}
+
+export const getPersonByIdWorkOut = (req,res) => {
+    const id = validator.id(req.body);
+    if(id){
+        services.getPersonById(id)
+        .then(result=>res.status(200).json(result))
+        .catch(err=>{
+            console.log(err);
+            res.status(400).json({error:err});
+        })
+    }
+}
+
+export const login = (req, res) => {
+    // console.log(req.headers)
+    const data = validator.login(req.body);
+    if(data){
+        services.login(data)
+        .then((result:any)=>{
+            const dotenv = require('dotenv');
+            dotenv.config();
+            const SECRET = process.env.SECRET;
+            const newData = {
+                id: result.id,
+                names: result.names,
+                lastNames: result.lastNames,
+                sex: result.sex,
+                email: result.email,
+                phone: result.phone,
+                photo: result.photo,
+                role: result.role
+            }
+            const token = jwt.sign(newData,SECRET);
+            // const serialized = serialize("Token", token, {
+            //     // httpOnly: true,
+            //     // secure: process.env.NODE_ENV === "production",
+            //     sameSite: "strict",
+            //     // maxAge: 1000 * 60 * 60 * 24 * 30,
+            //     // path: "/",
+            //   });
+            // res.setHeader('Set-Cookie',serialized);
+            res.status(200).json({token});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.status(401).json({error:err});
+        });
     }
 }

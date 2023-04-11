@@ -7,6 +7,7 @@ import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
 import { scoresApi, usePostScoreMutation, useUpdateScoreByIdMutation } from "../../store/apis/scoresApi";
 import { Select, TablePersons } from "../";
+import { useSelector } from "react-redux";
 
 const initialDataPerson:person = {
     id:0,
@@ -38,17 +39,9 @@ const initialDataStudents:students = {
     IdSemesters: 0
 }
 
-const teacherByPSC:teacherByPSC = {
-    id: 0,
-    IdPersons: 0,
-    names: "",
-    lastNames: "",
-    IdClasses: 0,
-    IdShifts: 0,
-    IdSections: 0
-}
-
 function DataScores(){
+
+    const profile = useSelector((state:store) => state.profile);
 
     const { data:roles=[] } = useGetRolesQuery();
     const { data:shifts=[] } = useGetShiftsQuery();
@@ -73,9 +66,19 @@ function DataScores(){
         roles.forEach(e=>{
             if (e.names === "Estudiante"){
                 const ID:number = Number(e.id);
-                setPerson({...person, role:ID});
                 setSelectRole(ID);
-                triggerPersons(ID)
+                if(e.id !== profile.role){
+                    triggerPersons(ID);
+                }else{
+                    edit();
+                }
+                setPerson(()=>{
+                    if(e.id === profile.role){
+                        return {...profile, idPerson: profile.id, photo:''};
+                    }else{
+                        return {...person, role:ID};
+                    }
+                });
             }
         });
         return () => {}
@@ -86,9 +89,14 @@ function DataScores(){
         selectPerson > 0 && triggerGetScoresByIdStudent({IdStudents:selectPerson});
       return () => {}
     }, [selectPerson]);
+
+    const verifyRole = () => {
+        const role = roles.find(e=>e.id === profile.role)?.names ?? false;
+        return role === "Estudiante" ? true : false;
+    }
     
-    const edit = async (idx:number) => {
-        const IdPersons:number | undefined = persons[idx].id;
+    const edit = async (idx:number=0) => {
+        const IdPersons:number | undefined = verifyRole() ? profile.id : persons[idx].id;
         const studentByIdPerson = await triggerStudents(IdPersons).unwrap();
         if(studentByIdPerson){
             const {IdProfession,IdSemesters,id} = studentByIdPerson;
@@ -164,7 +172,6 @@ function DataScores(){
 
     const save = () => {
         const newData:scores[] = []
-        console.log(score)
         score.forEach((item:scores)=>{
             if(item.id===0){
                 if(item.IdTeachers && item.IdShifts && item.IdSections){
@@ -178,6 +185,11 @@ function DataScores(){
             }
         });
         newData.length > 0 && postScore(newData);
+    }
+
+    const permisions = (...rls:number[]) => {
+        const temp = rls.find( e => e===profile.role );
+        return temp ? false : true;
     }
 
     return(
@@ -194,8 +206,23 @@ function DataScores(){
                         return(
                             <div key={idx}>
                                 <input type="text" name="classes" id={id} value={getNameClasse(item.IdClasses)} disabled={true} />
-                                <Select identify="IdTeachers" changeSelect={(e)=>changeSelectN(e, item)} value={item.IdTeachers} data={list(item)} disabled={wait} />
-                                <input type="number" name="score" id="score" min="0" max="10" onChange={(e)=>changeSelectN(e, item)} value={item.score} />
+                                <Select
+                                    identify = "IdTeachers"
+                                    changeSelect = {(e)=>changeSelectN(e, item)}
+                                    value = {item.IdTeachers}
+                                    data = {list(item)}
+                                    disabled = { wait || permisions(1) }
+                                />
+                                <input
+                                    type = "number"
+                                    name = "score"
+                                    id = "score"
+                                    min = "0"
+                                    max = "10"
+                                    onChange = {(e)=>changeSelectN(e, item)}
+                                    value = {item.score}
+                                    disabled = { wait || permisions(1,2) }
+                                />
                             </div>
                         )
                     })
@@ -204,11 +231,17 @@ function DataScores(){
                     score.length > 0 &&
                         <div className="save">
                             <button className="cancel" onClick={cancel} disabled={wait} >Cancelar</button>
-                            <button onClick={save} disabled={wait} >Guardar</button>
+                            <button onClick={save} disabled={ wait || permisions(1,2) } >Guardar</button>
                         </div>
                 }
             </form>
-            <TablePersons persons={persons} edit={edit} remove={remove} />
+            {
+                verifyRole() ?
+                    <TablePersons persons={[profile]} edit={edit} remove={remove} />
+                    :
+                    <TablePersons persons={persons} edit={edit} remove={remove} />
+
+            }
         </ContentScores>
     );
 }

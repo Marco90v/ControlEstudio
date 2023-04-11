@@ -12,7 +12,19 @@ type error = {
 
 export const personApi = createApi({
     reducerPath: 'personApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3030/api/v1' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:3030/api/v1',
+        prepareHeaders: (headers, {getState}:any) => {
+            // console.log(getState());
+            const token = getState().session.token;
+            if (token) {
+                // console.log(token);
+             // include token in req header
+              headers.set('authorization', `Bearer ${token}`)  
+              return headers
+            }
+        },
+    }),
     endpoints: (builder) => ({
         getPersonByRole: builder.query<person[],number>({
             query: (role:number) => `persons/${role}`,

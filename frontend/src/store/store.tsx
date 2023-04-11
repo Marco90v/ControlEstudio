@@ -1,6 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit'
-import classesStore from './module/classesStore';
-import visibleSide from './module/visibleSideStore';
 
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import { useDispatch } from 'react-redux';
@@ -16,14 +14,22 @@ import { personApi } from './apis/personApi';
 import { teacherApi } from './apis/teacherApi';
 import { studentsApi } from './apis/studentsApi';
 import { scoresApi } from './apis/scoresApi';
+import { authApi } from './apis/authApi';
+import { profileApi } from './apis/profileApi';
+
+import visibleSide from './module/visibleSideStore';
+import sessionStore from './module/sessionStore';
+import profileStore from './module/profileStore';
 
 const sidebar = visibleSide;
-const classes = classesStore;
+const session = sessionStore;
+const profile = profileStore;
 
 export const store = configureStore({
   reducer: {
     sidebar,
-    classes,
+    session,
+    profile,
     [classesApi.reducerPath]: classesApi.reducer,
     [professionApi.reducerPath]: professionApi.reducer,
     [pensumApi.reducerPath]: pensumApi.reducer,
@@ -35,6 +41,8 @@ export const store = configureStore({
     [teacherApi.reducerPath]: teacherApi.reducer,
     [studentsApi.reducerPath]: studentsApi.reducer,
     [scoresApi.reducerPath]: scoresApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
+    [profileApi.reducerPath]: profileApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
     classesApi.middleware, 
@@ -48,6 +56,8 @@ export const store = configureStore({
     teacherApi.middleware,
     studentsApi.middleware,
     scoresApi.middleware,
+    authApi.middleware,
+    profileApi.middleware,
   ),
 });
 

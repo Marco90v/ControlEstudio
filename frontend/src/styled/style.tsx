@@ -13,8 +13,32 @@ export const Side = styled.div<any>`
     border-right: 1px soLid #cfcfcf;
     padding: 1rem;
     overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr 2rem;
     width:${props => props.visibleSide ? "217px" : "72px"};
     transition: width 0.25s ease-in-out;
+    >button{
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+        font-weight: bold;
+        color: black;
+        background-color: white;
+        border-radius: 0.25rem;
+        height: 2.5rem;
+        padding: 0.5rem;
+        border: 1px solid white;
+        font-size: 0.9rem;
+        cursor:pointer;
+        transition: all 0.25s ease-in-out;
+        :hover{
+            background-color: var(--azul);
+            color:white;
+            box-shadow: 0 0 10px 1px #c1c1c1;
+            border: 1px solid var(--azul);
+        }
+    }
     >#admin > ul > li > a > span{
         text-transform: capitalize;
     }

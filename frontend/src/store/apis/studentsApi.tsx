@@ -12,7 +12,19 @@ type error = {
 
 export const studentsApi = createApi({
     reducerPath: 'studentsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3030/api/v2' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:3030/api/v2',
+        prepareHeaders: (headers, {getState}:any) => {
+            // console.log(getState());
+            const token = getState().session.token;
+            if (token) {
+                // console.log(token);
+             // include token in req header
+              headers.set('authorization', `Bearer ${token}`)  
+              return headers
+            }
+        },
+    }),
     tagTypes: ["Students"],
     endpoints: (builder) => ({
         getStudentsById: builder.query<students,number>({

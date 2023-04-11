@@ -172,6 +172,31 @@ export type scores = {
     score:number
 }
 
+export type token = {
+    id: number,
+    names: string,
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    photo: string | null,
+    role: number,
+    iat: number
+}
+
+// export type profile = {
+//     id: number,
+//     names: string,
+//     lastNames: string,
+//     sex: string,
+//     email: string,
+//     phone: number,
+//     photo: string | null,
+//     role: number,
+// }
+
+export type profile = Omit<token, 'iat'>
+
 export type oldFormat = {
     idPerson:number,
     names:string,

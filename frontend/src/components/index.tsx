@@ -14,3 +14,4 @@ export * from "./Select";
 export * from "./Sidebar";
 export * from "./Table";
 export * from "./TablePersons";
+export * from "./Profile";

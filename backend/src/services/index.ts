@@ -647,3 +647,47 @@ export const getStudentsByIdPersons = (IdPersons:number) => {
         });
     });
 }
+
+export const login = ({user, pass}:{user:string,pass:string}) => {
+    return new Promise((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT persons.names, \
+                            persons.id, \
+                            persons.lastNames, \
+                            persons.sex, \
+                            persons.email, \
+                            persons.phone, \
+                            persons.photo, \
+                            persons.role \
+                            FROM login \
+                            INNER JOIN persons on persons.id = login.IdPersons \
+                            WHERE user = ? and pass = ?';
+            connection.query(query, [user,pass],(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla login: ${QueryErr}`);
+                if(result) resolve(result[0]);
+                connection.release();
+            });
+        });
+    });
+}
+
+export const getPersonById = ({id}) => {
+    return new Promise((resolve,reject)=>{
+        conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
+            if(MySqlErr){
+                reject(`Error al conectar a MySQL: ${MySqlErr}`);
+                return;
+            }
+            const query = 'SELECT * FROM persons WHERE id = ?';
+            connection.query(query, id,(QueryErr,result)=>{
+                if(QueryErr) reject( `Error en consulta a tabla login: ${QueryErr}`);
+                if(result) resolve(result[0]);
+                connection.release();
+            });
+        });
+    });
+}

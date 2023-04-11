@@ -51,7 +51,7 @@ function DataProfession(){
             <Div>
                 <TableComponent edit={edit} remove={remove}  data={profession} />
             </Div>
-            <Alert />
+            {/* <Alert /> */}
             {
                 modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
