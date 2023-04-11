@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGetProfileQuery } from "../../store/apis/profileApi";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
+import { ContentProfile } from "../../styled/style";
 
 function Profile(){
     const [rol, setRol] = useState<string>("");
@@ -13,32 +14,23 @@ function Profile(){
     }, [roles,data])
     
     return(
-        <div className="profile">
-            <div className="names">
-                <label htmlFor="">Nombres</label>
-                <label htmlFor=""> { data?.names } </label>
+        <ContentProfile>
+            <label>Perfil</label>
+            <div className="profile">
+                <label>Nombres</label>
+                <label> { data?.names } </label>
+                <label>Apellido</label>
+                <label> { data?.lastNames } </label>
+                <label>Genero</label>
+                <label> { data?.sex === "M" ? "Masculino" : "Femenino" } </label>
+                <label>Correo</label>
+                <label> { data?.email } </label>
+                <label>N° Telefonico</label>
+                <label> { data?.phone } </label>
+                <label>Rol</label>
+                <label> { rol } </label>
             </div>
-            <div className="lastNames">
-                <label htmlFor="">Apellido</label>
-                <label htmlFor=""> { data?.lastNames } </label>
-            </div>
-            <div className="sex">
-                <label htmlFor="">Genero</label>
-                <label htmlFor=""> { data?.sex } </label>
-            </div>
-            <div className="email">
-                <label htmlFor="">Correo</label>
-                <label htmlFor=""> { data?.email } </label>
-            </div>
-            <div className="phone">
-                <label htmlFor="">N° Telefonico</label>
-                <label htmlFor=""> { data?.phone } </label>
-            </div>
-            <div className="role">
-                <label htmlFor="">Rol</label>
-                <label htmlFor=""> { rol } </label>
-            </div>
-        </div>
+        </ContentProfile>
     )
 }
 

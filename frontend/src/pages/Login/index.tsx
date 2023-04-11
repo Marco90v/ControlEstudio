@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../store/apis/authApi";
+import { ContentLogin } from "../../styled/style";
 
 const dataUser = {
     user:'RafaAbraham',
@@ -23,17 +24,16 @@ function Login(){
     }    
 
     return(
-        <form onSubmit={submit} >
-            <div>
+        <ContentLogin>
+            <label>Universidad</label>
+            <form onSubmit={submit} >
                 <label htmlFor="">Usuario</label>
                 <input type="text" name="user" id="user" value={data.user} onChange={(e)=>changeData(e)} />
-            </div>
-            <div>
                 <label htmlFor="">Contraseña</label>
                 <input type="password" name="pass" id="pass" value={data.pass} onChange={(e)=>changeData(e)} />
-            </div>
-            <button type="submit">Ingresar</button>
-        </form>
+                <button type="submit">Ingresar</button>
+            </form>
+        </ContentLogin>
     );
 }
 

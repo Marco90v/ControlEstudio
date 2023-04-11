@@ -1,6 +1,81 @@
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
+export const ContentLogin = styled.main`
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 5rem;
+    >label{
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    >form{
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto auto;
+        column-gap: 0.5rem;
+        row-gap: 1rem;
+        >label{
+            font-weight: bold;
+        }
+        >input{
+            margin-left: 1rem;
+            border: 0.1rem solid var(--gris);
+            padding: 0.5rem;
+            background-color: var(--gris);
+            border-radius: 0.15rem;
+            font-weight: 900;
+        }
+        >button{
+            grid-column: 1/3;
+            padding: 0.5rem;
+            background-color: green;
+            border: 0.1rem solid green;
+            border-radius: 0.25rem;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease-in-out;
+            :hover{
+                box-shadow: 0 0 10px 1px #c1c1c1;
+            }
+        }
+    }
+`;
+
+export const ContentProfile = styled.div`
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 5rem;
+    >label{
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    >.profile{
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto auto auto auto auto;
+        column-gap: 0.5rem;
+        row-gap: 1rem;
+        >label:nth-child(2n+1){
+            font-weight: bold;
+            padding: 0.25rem;
+        }
+        >label:nth-child(2n+2){
+            background-color: var(--gris);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+    }
+`;
+
 export const Main = styled.main<any>`
     display: grid;
     height: 100vh;
@@ -30,21 +105,27 @@ export const Side = styled.div<any>`
         padding: 0.5rem;
         border: 1px solid white;
         font-size: 0.9rem;
+        width:${props => props.visibleSide ? "11.5rem" : "2.7rem"};
         cursor:pointer;
         transition: all 0.25s ease-in-out;
         :hover{
-            background-color: var(--azul);
-            color:white;
+            background-color: red;
+            border: 1px solid red;
+            color:${props => props.visibleSide ? "white" : "transparent"};
             box-shadow: 0 0 10px 1px #c1c1c1;
-            border: 1px solid var(--azul);
         }
+    }
+    >#admin>ul>li{
+        transition: all 0.25s ease-in-out;
+        width:${props => props.visibleSide ? "11.5rem" : "2.7rem"};
     }
     >#admin > ul > li > a > span{
         text-transform: capitalize;
     }
     ${
         props => !props.visibleSide && css`
-            >#admin > ul > li > a > span{
+            >#admin > ul > li > a > span,
+            >button{
                 color: transparent
             }
         `
@@ -99,6 +180,9 @@ export const MyNavLink = styled(NavLink)<any>`
     margin-bottom: 0.5rem;
     transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
     cursor: pointer;
+    >span{
+        transition: all 0.25s ease-in-out;
+    }
 
     :hover{
         background-color: var(--azul);
@@ -141,9 +225,6 @@ export const Button = styled.button`
         background-color: red;
         border: 1px solid red;
     }
-    /* &.green{
-        background-color: green;
-    } */
 `;
 
 export const Div = styled.div`
@@ -283,14 +364,6 @@ export const SelectPensum = styled.div`
     display: grid;
     grid-template-columns: 200px 1fr;
     margin-bottom: 20px;
-    /* > select{
-        border: solid 1px var(--gris);
-        background-color: var(--gris);
-        border-radius: 5px;
-        :focus-visible{
-            outline: solid 1px grey;
-        }
-    } */
 `;
 
 export const SelectSemester = styled.div`
@@ -319,7 +392,6 @@ export const SelectSemester = styled.div`
 
 export const SelectStyle = styled.select`
     height: 30px;
-    // border: solid 1px var(--gris);
     border: solid 1px grey;
     background-color: var(--gris);
     border-radius: 5px;
@@ -417,7 +489,6 @@ export const ContentTeacher = styled.div<any>`
         >.save>button{
             padding: 0.25rem 0.5rem;
             border-radius: 0.3rem;
-            // border: grey solid 0.1rem;
             color: white;
             font-weight: bold;
             cursor: pointer;
