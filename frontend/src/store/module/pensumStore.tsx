@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-// const initialState: pensumStore = {IdSemesters:0,Name_Semesters:"",classes:[]};
 const initialState: pensumStore = {
     status:"",
     selectPensum:0,
@@ -16,7 +15,6 @@ export const fetchGetPensum = createAsyncThunk('pensum/fetchGetPensum', async (I
 });
 
 export const fetchPostClassePensum = createAsyncThunk('pensum/fetchPostClassesPensum', async (classe:any) => {
-  // console.log(classe);
   const newData = await fetch('/api/v1/pensum',{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -63,12 +61,10 @@ export const pensumStore = createSlice({
       })
       .addCase(fetchGetPensum.fulfilled, (state, action) => {
         if(action.payload.error){
-        //   console.log(action.payload.error);
             state.status = action.payload.error
         }else{
             state.status = "succeeded"
             state.data = action.payload;
-            // console.log(action.payload)
         }
       })
       .addCase(fetchGetPensum.rejected, (state, action) => {

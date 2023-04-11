@@ -1,9 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-type session = {
-    token: string | null
-}
-
 const getLocalStorage = () => {
   return localStorage.getItem('token');
 }
@@ -23,7 +19,6 @@ export const sessionStore = createSlice({
   initialState,
   reducers: {
     setSession:(state,action:any)=>{
-      // console.log(action.payload);
       setLocalStorage(action.payload.token);
       state.token = action.payload.token;
     },

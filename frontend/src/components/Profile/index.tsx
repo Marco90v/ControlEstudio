@@ -5,7 +5,6 @@ import { useGetRolesQuery } from "../../store/apis/rolesApi";
 function Profile(){
     const [rol, setRol] = useState<string>("");
     const { data } = useGetProfileQuery();
-    // const {names, lastNames, sex, email, phone, role} = data;
     const { data:roles } = useGetRolesQuery();
     useEffect(() => {
         const nameRol= roles?.find(e=>e.id===data?.role);

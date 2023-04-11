@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
-// import { authApi } from "../../store/apis/authApi";
+import { useState } from "react";
 import { useLoginMutation } from "../../store/apis/authApi";
-// import { classesApi } from "../../store/apis/classesApi";
-// import { useAppDispatch } from "../../store/store";
 
 const dataUser = {
     user:'RafaAbraham',
@@ -12,7 +9,6 @@ const dataUser = {
 function Login(){
     const [data, setData] = useState(dataUser);
     const [ login ] = useLoginMutation();
-    // const dispatch = useAppDispatch();
 
     const changeData = (element:any) => {
         const id = element.target.id;
@@ -24,7 +20,6 @@ function Login(){
     const submit = (e:any) => {
         e.preventDefault();
         login(data);
-        // dispatch(classesApi.util.resetApiState());
     }    
 
     return(

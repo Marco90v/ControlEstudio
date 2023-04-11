@@ -5,11 +5,8 @@ export const pensumApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3030/api/v1',
         prepareHeaders: (headers, {getState}:any) => {
-            // console.log(getState());
             const token = getState().session.token;
             if (token) {
-                // console.log(token);
-             // include token in req header
               headers.set('authorization', `Bearer ${token}`)  
               return headers
             }
@@ -18,7 +15,6 @@ export const pensumApi = createApi({
     endpoints: (builder) => ({
         getPensumById: builder.query<pensum[],any>({
             query: (id:number) => `pensum/${id}`,
-            // transformResponse: (response:pensum[]) => response
         }),
         postPensum : builder.mutation({
             query: ({body}) => ({

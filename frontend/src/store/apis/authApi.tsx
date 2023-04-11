@@ -6,16 +6,6 @@ export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3030/api/v1',
-        // credentials:"include",
-        // prepareHeaders: (headers, query) => {
-        //     console.log(query.getState());
-        //     // const token = getState().auth.userToken
-        //     // if (token) {
-        //     //  // include token in req header
-        //     //   headers.set('authorization', `Bearer ${token}`)  
-        //     //   return headers
-        //     // }
-        // },
     }),
     endpoints: (builder) => ({
         login: builder.mutation<any,{user:string, pass:string}>({
@@ -34,13 +24,6 @@ export const authApi = createApi({
                 }
             },
         }),
-        // validateToken: builder.mutation<any,{token:string}>({
-        //     query:(body) => ({
-        //         url:'validateToken',
-        //         method:'POST',
-        //         body
-        //     })
-        // })
     }),
 });
 

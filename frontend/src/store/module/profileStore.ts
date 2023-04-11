@@ -1,15 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-type profile = {
-  id:number,
-  names: string,
-  lastNames: string,
-  sex: string,
-  email: string,
-  phone: number,
-  role: number,
-}
-
 const base: profile = {
   id:0,
   names: '',
@@ -17,6 +7,7 @@ const base: profile = {
   sex: '',
   email: '',
   phone: 0,
+  photo: '',
   role: 0,
 };
 
@@ -36,7 +27,6 @@ export const profileStore = createSlice({
   initialState,
   reducers: {
     setProfile:(state,action:any)=>{
-    //   console.log(action.payload);
       setLocalStorage(action.payload);
       const {id, names,lastNames,sex,email,phone,role} = action.payload;
       state.id = id;

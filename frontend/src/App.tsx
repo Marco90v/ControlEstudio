@@ -12,7 +12,6 @@ import { Login } from './pages/Login';
 
 const ProtecteRoutes = () => {
   const location = useLocation();
-  // console.log(location)
   const {token} = useSelector((state:store) => state.session);
 
   if(location!==null){
@@ -34,21 +33,6 @@ const VerifySession = () => {
   if(token) return <Navigate to={'/dashboard/home'} />
   return <Login />
 }
-
-// const router = createBrowserRouter(
-//   createRoutesFromElements([
-//     // <Route path="/" element={<Login />} />,
-//     // <Route path="dashboard"  element={<Navigate to="/dashboard/home" />} />,
-//     // <Route path="dashboard/home" element={<Inicio />} />,
-//     // <Route path="dashboard/classes" element={<Classes />} />,
-//     // <Route path="dashboard/profession" element={<Profession />} />,
-//     // <Route path="dashboard/pensums" element={<Pensum />} />,
-//     // <Route path="dashboard/teachers" element={<Teacher />} />,
-//     // <Route path="dashboard/students" element={<Students />} />,
-//     // <Route path="dashboard/record" element={<Scores />} />
-    
-//   ])
-// );
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -74,20 +58,6 @@ function App() {
           router={router}
           fallbackElement={<span>cargando....</span>}
         />
-        {/* <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route element={<ProtecteRoutes />} >
-              <Route path="dashboard/home" element={<Inicio />} />,
-              <Route path="dashboard/classes" element={<Classes />} />,
-              <Route path="dashboard/profession" element={<Profession />} />,
-              <Route path="dashboard/pensums" element={<Pensum />} />,
-              <Route path="dashboard/teachers" element={<Teacher />} />,
-              <Route path="dashboard/students" element={<Students />} />,
-              <Route path="dashboard/record" element={<Scores />} />
-            </Route>
-          </Routes>
-        </BrowserRouter> */}
       </Provider>
     </>
   )

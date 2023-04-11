@@ -163,6 +163,9 @@ type profile = {
     role: number,
     photo: string
 }
+type session = {
+    token: string | null
+}
 type store = {
     sidebar: visibleSide,
     classes: classeStore,

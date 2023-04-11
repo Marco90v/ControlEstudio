@@ -19,15 +19,6 @@ const obj = {
     record:'/src/assets/folder-solid-24.png',
 };
 
-// type roleProtection = {
-//     home:number[],
-//     classes:number[],
-//     profession:number[],
-//     pensums:number[],
-//     teachers:number[],
-//     students:number[],
-//     record:number[],
-// }
 const roleProtection:any = {
     home:[1,2,3],
     classes:[1],
@@ -45,7 +36,6 @@ type Li = {
 }
 
 const Li = ({ruta,img,role}:Li) => {
-    // console.log(role)
     const permision = roleProtection[ruta].find((x:number)=>x===role);
     if(!permision) return null;
     return(
@@ -62,9 +52,7 @@ function Sidebar(){
 
     const dispatch = useAppDispatch();
     const { role } = useSelector((state:store) => state.profile);
-    // console.log(role);
 
-    // const dispatch = useDispatch();
     const visibleSide = useSelector((state:store) => state.sidebar);
 
     const logout = () => {
@@ -85,7 +73,6 @@ function Sidebar(){
                     {
                         Object.entries(obj).map(([k,v],idx)=>{
                             return <Li key={idx} ruta={k} img={v} role={role} />
-                            // return null
                         })
                     }
                 </Ul>
