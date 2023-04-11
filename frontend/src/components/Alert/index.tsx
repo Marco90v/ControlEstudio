@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeStatus } from "../../store/module/classesStore";
+// import { changeStatus } from "../../store/module/classesStore";
 import { FloatAlert } from "../../styled/style";
 
 enum completed {
@@ -38,7 +38,7 @@ function Alert (){
             }
             if(Object.values(completed).includes(statusClasses)){
                 setTimeout(()=>setAlert({...alert,type:"blank"}),3000);
-                dispatch(changeStatus(""));
+                // dispatch(changeStatus(""));
             }
         }
     }, [statusClasses])
