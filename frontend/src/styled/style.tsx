@@ -18,14 +18,17 @@ export const ContentLogin = styled.main`
         grid-template-rows: auto auto auto;
         column-gap: 0.5rem;
         row-gap: 1rem;
+        background-color: var(--gris);
+        padding: 4rem;
+        border-radius: 0.3rem;
         >label{
             font-weight: bold;
         }
         >input{
             margin-left: 1rem;
-            border: 0.1rem solid var(--gris);
+            border: 0.1rem solid white;
+            background-color: white;
             padding: 0.5rem;
-            background-color: var(--gris);
             border-radius: 0.15rem;
             font-weight: 900;
         }
@@ -38,10 +41,12 @@ export const ContentLogin = styled.main`
             color: white;
             font-weight: bold;
             font-size: 0.9rem;
+            margin-top: 1rem;
             cursor: pointer;
             transition: all 0.25s ease-in-out;
             :hover{
                 box-shadow: 0 0 10px 1px #c1c1c1;
+                background-color: limegreen;
             }
         }
     }
