@@ -47,7 +47,7 @@ const Alert = styled.div`
 function Popup({setModal, children, aceptCallback}:any){
 
     const acept = () => {
-        aceptCallback()
+        aceptCallback();
         setModal((datos:any)=>{
             return{
                 ...datos,

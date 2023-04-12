@@ -25,7 +25,7 @@ export const studentsApi = createApi({
                 method: "POST",
                 body
             }),
-            invalidatesTags: ["Students"],
+            // invalidatesTags: ["Students"],
         }),
         updateStudentById : builder.mutation<any,students>({
             query: (body) => ({
@@ -33,7 +33,7 @@ export const studentsApi = createApi({
                 method: "PUT",
                 body
             }),
-            invalidatesTags: ["Students"],
+            // invalidatesTags: ["Students"],
         }),
         deleteStudentById : builder.mutation<any,{id:number}>({
             query: (body) => ({
@@ -41,7 +41,7 @@ export const studentsApi = createApi({
                 method: "DELETE",
                 body
             }),
-            invalidatesTags: ["Students"],
+            // invalidatesTags: ["Students"],
         }),
     }),
 });

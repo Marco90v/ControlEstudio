@@ -2,7 +2,7 @@ import { Img, Table } from "../../styled/style";
 import imgEdit from "../../assets/edit-solid-24.png";
 import imgTrash from "../../assets/trash-alt-solid-24.png";
 
-function TablePersons({persons, edit, remove}:any){
+function TablePersons({persons, edit, remove, wait}:any){
     return(
         <Table>
                 <thead>
@@ -24,8 +24,12 @@ function TablePersons({persons, edit, remove}:any){
                                     <td>{item.lastNames}</td>
                                     <td>{item.phone}</td>
                                     <td>{item.email}</td>
-                                    <td onClick={()=>edit(idx)} ><Img src={imgEdit} alt="edit" /></td>
-                                    <td onClick={()=>remove(item.id)} ><Img className="red" src={imgTrash} alt="delete" /></td>
+                                    <td>
+                                        <button onClick={()=>edit(idx)} disabled={wait} > <Img src={imgEdit} alt="edit" /> </button>
+                                    </td>
+                                    <td>
+                                        <button onClick={()=>remove(item)} disabled={wait} > <Img className="red" src={imgTrash} alt="delete" /> </button>
+                                    </td>
                                 </tr>
                             )
                         })

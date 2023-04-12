@@ -6,7 +6,7 @@ import { personApi } from "../../store/apis/personApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
 import { scoresApi, usePostScoreMutation, useUpdateScoreByIdMutation } from "../../store/apis/scoresApi";
-import { Select, TablePersons } from "../";
+import { Popup, Select, TablePersons } from "../";
 import { useSelector } from "react-redux";
 
 const initialDataPerson:person = {
@@ -32,13 +32,6 @@ const initialDataScores:scores = {
 
 };
 
-const initialDataStudents:students = {
-    id: 0,
-    IdPersons: 0,
-    IdProfession: 0,
-    IdSemesters: 0
-}
-
 function DataScores(){
 
     const profile = useSelector((state:store) => state.profile);
@@ -46,27 +39,31 @@ function DataScores(){
     const { data:roles=[] } = useGetRolesQuery();
     const { data:shifts=[] } = useGetShiftsQuery();
     const { data:sections=[] } = useGetSectionsQuery();
-    const [ updateScoreById ] = useUpdateScoreByIdMutation();
-    const [ postScore ] = usePostScoreMutation();
+    const [ updateScoreById, {isLoading:isLoadUpSco, isSuccess:isSuccSuccSco, isError:isErrUpSco} ] = useUpdateScoreByIdMutation();
+    const [ postScore, {isLoading:isLoadPosSco, isSuccess:isSuccPosSco, isError:isErrPosSco} ] = usePostScoreMutation();
 
     const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
-    const [ triggerStudents, { data:students=initialDataStudents, isSuccess:isSuccessStudents, isFetching:isFetchingStudents } ] = studentsApi.endpoints.getStudentsById.useLazyQuery();
+    const [ triggerStudents ] = studentsApi.endpoints.getStudentsById.useLazyQuery();
     const [ triggerGetClassesByProfessionAndSemesters, { data:classes=[] } ] = scoresApi.endpoints.getClassesByProfessionAndSemesters.useLazyQuery();
     const [ triggerGetTeachersByProfessionAndSemesters, { data:teachers=[] } ] = scoresApi.endpoints.getTeachersByProfessionAndSemesters.useLazyQuery();
     const [ triggerGetScoresByIdStudent, { data:scores=[] } ] = scoresApi.endpoints.getScoresByIdStudent.useLazyQuery();
 
-    const [ selectRole, setSelectRole ] = useState<number>(0);
-    const [ selectPerson, setSelectPeron ] = useState<number>(0);
+    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
+    const [ selectPerson, setSelectPeron ] = useState<number>(0);
     const [person, setPerson] = useState(initialDataPerson);
     const [score, setScores] = useState<scores[]>([]);
-    const [wait, setWait] = useState<boolean>(false);
+
+    useEffect(() => {  
+        if( isSuccSuccSco || isSuccPosSco ) resetInput();
+        return () => {}
+    }, [ isSuccSuccSco || isSuccPosSco ]);
     
     useEffect(() => {
         roles.forEach(e=>{
             if (e.names === "Estudiante"){
                 const ID:number = Number(e.id);
-                setSelectRole(ID);
+                // setSelectRole(ID);
                 if(e.id !== profile.role){
                     triggerPersons(ID);
                 }else{
@@ -84,11 +81,20 @@ function DataScores(){
         return () => {}
     }, [roles]);
 
-
     useEffect(() => {
         selectPerson > 0 && triggerGetScoresByIdStudent({IdStudents:selectPerson});
       return () => {}
     }, [selectPerson]);
+
+    const resetInput = () => {
+        const zero:any = 0;
+        setScores([]);
+        setSelectPeron(zero);
+    }
+
+    const isWait = () => {
+        return isLoadUpSco || isLoadPosSco;
+    }
 
     const verifyRole = () => {
         const role = roles.find(e=>e.id === profile.role)?.names ?? false;
@@ -110,13 +116,9 @@ function DataScores(){
             });
             setScores(dataComplet);
         }else{
-            const zero:any = 0;
-            setScores([]);
-            setSelectPeron(zero);
+            setModal({type:"noData",value:true, data:{id:0,names:""}});
         }
     }
-
-    const remove = (idx:number) => {}
     
     const getNameClasse = (IdClasses:number):string =>{
         return classes.find((item:classe)=>item.id===IdClasses)?.names || "";
@@ -171,6 +173,14 @@ function DataScores(){
     }
 
     const save = () => {
+        setModal({type:"edit",value:true, data:{id:0,names:""}});
+    }
+
+    const remove = (idx:number) => {
+        setModal({type:"delete",value:true, data:{id:0,names:""}});
+    }
+
+    const updateScores = () => {
         const newData:scores[] = []
         score.forEach((item:scores)=>{
             if(item.id===0){
@@ -192,8 +202,27 @@ function DataScores(){
         return temp ? false : true;
     }
 
+    const aceptCallback = () => {
+        switch (modal.type) {
+            case "edit":
+                updateScores();
+                break;
+            case "delete":
+                break;
+            case "noData":
+                resetInput();
+                break;
+        }
+    }
+
+    const cuerpoPopup:any = {
+        "edit": <p>¿Desea Guardar los cambios?</p>,
+        "delete": <p>Esta acción esta prohibida en este modulo</p>,
+        "noData": <p>Usuario sin profesión ni semestre asignado</p>
+    };
+
     return(
-        <ContentScores className="content" wait={wait}>
+        <ContentScores className="content" wait={isWait()}>
             <form onSubmit={(e)=>e.preventDefault()} className='scores' >
                 <div>
                     <label>Clases/Materia</label>
@@ -211,7 +240,7 @@ function DataScores(){
                                     changeSelect = {(e)=>changeSelectN(e, item)}
                                     value = {item.IdTeachers}
                                     data = {list(item)}
-                                    disabled = { wait || permisions(1) }
+                                    disabled = { isWait() || permisions(1) }
                                 />
                                 <input
                                     type = "number"
@@ -221,7 +250,7 @@ function DataScores(){
                                     max = "10"
                                     onChange = {(e)=>changeSelectN(e, item)}
                                     value = {item.score}
-                                    disabled = { wait || permisions(1,2) }
+                                    disabled = { isWait() || permisions(1,2) }
                                 />
                             </div>
                         )
@@ -230,17 +259,20 @@ function DataScores(){
                 {
                     score.length > 0 &&
                         <div className="save">
-                            <button className="cancel" onClick={cancel} disabled={wait} >Cancelar</button>
-                            <button onClick={save} disabled={ wait || permisions(1,2) } >Guardar</button>
+                            <button className="cancel" onClick={cancel} disabled={isWait()} >Cancelar</button>
+                            <button onClick={save} disabled={ isWait() || permisions(1,2) } >Guardar</button>
                         </div>
                 }
             </form>
             {
                 verifyRole() ?
-                    <TablePersons persons={[profile]} edit={edit} remove={remove} />
+                    <TablePersons persons={[profile]} edit={edit} remove={remove} wait={isWait()} />
                     :
-                    <TablePersons persons={persons} edit={edit} remove={remove} />
+                    <TablePersons persons={persons} edit={edit} remove={remove} wait={isWait()} />
 
+            }
+            {
+                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
         </ContentScores>
     );
