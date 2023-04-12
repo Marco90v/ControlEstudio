@@ -3,7 +3,7 @@ import { useLoginMutation } from "../../store/apis/authApi";
 import { ContentLogin } from "../../styled/style";
 
 const dataUser = {
-    user:'RafaAbraham',
+    user:'LeonadoCuellar',
     pass:'1234'
 }
 

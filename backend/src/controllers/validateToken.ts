@@ -51,6 +51,7 @@ const authorization = [
 
     {ruta:'scores',method:'GET', role:[1,2,3]},
     {ruta:'scores',method:'POST', role:[1,2]},
+    {ruta:'scores',method:'PUT', role:[1,2]},
 
     {ruta:'getClassesByProfessionAndSemesters',method:'POST', role:[1,2,3]},
     {ruta:'getTeachersByProfessionAndSemesters',method:'POST', role:[1,2,3]},

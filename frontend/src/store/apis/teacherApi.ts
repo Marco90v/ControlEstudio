@@ -24,7 +24,7 @@ export const teacherApi = createApi({
                 method: "POST",
                 body
             }),
-            invalidatesTags: ["Teachers"],
+            // invalidatesTags: ["Teachers"],
         }),
         updateTeacherById : builder.mutation<any, {body:teacher, role:number}>({
             query: ({body}) => ({
@@ -32,7 +32,7 @@ export const teacherApi = createApi({
                 method: "PUT",
                 body
             }),
-            invalidatesTags: ["Teachers"],
+            // invalidatesTags: ["Teachers"],
         }),
         deleteTeacherById : builder.mutation<any, number[] >({
             query: (ids) => ({
@@ -40,7 +40,7 @@ export const teacherApi = createApi({
                 method: "DELETE",
                 body:ids
             }),
-            invalidatesTags: ["Teachers"],
+            // invalidatesTags: ["Teachers"],
         }),
         deleteTeacherByIdPerson: builder.mutation<any, {idPersons:number}>({
             query:(idPersons) => ({
@@ -48,7 +48,7 @@ export const teacherApi = createApi({
                 method: "DELETE",
                 body:idPersons
             }),
-            invalidatesTags: ["Teachers"],
+            // invalidatesTags: ["Teachers"],
         }),
     }),
 });

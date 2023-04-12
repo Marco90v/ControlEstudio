@@ -53,7 +53,7 @@ export const ContentProfile = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    row-gap: 5rem;
+    row-gap: 2rem;
     >label{
         font-size: 2rem;
         font-weight: bold;
@@ -69,9 +69,10 @@ export const ContentProfile = styled.div`
             padding: 0.25rem;
         }
         >label:nth-child(2n+2){
-            background-color: var(--gris);
             padding: 0.25rem 0.5rem;
+            background-color: var(--gris);
             border-radius: 0.25rem;
+            border: 0.1rem solid #b9b3b3;
         }
     }
 `;
@@ -81,6 +82,9 @@ export const Main = styled.main<any>`
     height: 100vh;
     grid-template-columns: min-content auto;
     transition: grid-template-columns 0.5s ease-in-out;
+    >div:nth-child(2){
+        overflow: auto;
+    }
 `;
 
 export const Side = styled.div<any>`
@@ -98,12 +102,12 @@ export const Side = styled.div<any>`
         align-items: center;
         column-gap: 0.5rem;
         font-weight: bold;
-        color: black;
-        background-color: white;
+        color: white;
+        background-color: #b70303;
+        border: 1px solid darkred;
         border-radius: 0.25rem;
         height: 2.5rem;
         padding: 0.5rem;
-        border: 1px solid white;
         font-size: 0.9rem;
         width:${props => props.visibleSide ? "11.5rem" : "2.7rem"};
         cursor:pointer;
@@ -111,7 +115,7 @@ export const Side = styled.div<any>`
         :hover{
             background-color: red;
             border: 1px solid red;
-            color:${props => props.visibleSide ? "white" : "transparent"};
+            color:${props => props.visibleSide ? "black" : "transparent"};
             box-shadow: 0 0 10px 1px #c1c1c1;
         }
     }
@@ -147,7 +151,7 @@ export const Side = styled.div<any>`
             border-radius: 0.3rem;
             margin-top: 0.4rem;
             cursor: pointer;
-            border: 1px solid transparent;
+            border: 1px solid #b9b3b3;
             :hover{
                 background-color: var(--azul);
                 box-shadow: 0 0 10px 1px #c1c1c1;
@@ -173,8 +177,8 @@ export const MyNavLink = styled(NavLink)<any>`
     column-gap: 0.5rem;
     align-items: center;
     text-decoration: none;
-    border: 1px solid transparent;
     padding: 0.5rem;
+    border: 1px solid #b9b3b3;
     background-color: white;
     border-radius: 5px;
     margin-bottom: 0.5rem;
@@ -194,6 +198,7 @@ export const MyNavLink = styled(NavLink)<any>`
     }
     &.active{
         background-color: var(--azul);
+        border: 1px solid var(--azul);
         span{
             color: white;
         }
@@ -236,6 +241,8 @@ export const Div = styled.div`
 export const Table = styled.table`
     width: 500px;
     border-spacing: 0;
+    border: 0.1rem solid #d1d1d1;
+    border-radius: 0.3rem;
     thead > tr{
         color: white;
         background-color: black;
@@ -243,14 +250,36 @@ export const Table = styled.table`
     th{
         padding: 5px;
     }
+    th:first-child{
+        border-radius: 0.3rem 0 0 0;
+    }
+    th:last-child{
+        border-radius: 0 0.3rem 0 0;
+    }
     tbody > tr:nth-child(2n+1){
         background-color: #e1e1e1;
     }
     td{
         padding: 5px;
+        >button{
+            background-color: transparent;
+            :disabled > img{
+                background-color: grey;
+                border-color: grey;
+                cursor: default;
+            }
+        }
     }
     tbody > tr > td:nth-child(n+2){
         text-align: center;
+    }
+    tbody > tr:last-child{
+        >td:first-child{
+            border-radius: 0 0 0 0.3rem;
+        }
+        >td:last-child{
+            border-radius: 0 0 0.3rem 0;
+        }
     }
     tbody > tr:hover{
         background-color: #d1d1d1;
@@ -569,12 +598,18 @@ export const ContentScores = styled(ContentTeacher)`
                 padding: 0 0.2rem;
                 border-radius: 0.3rem;
             }
+            >input:first-child{
+                font-weight: bold;
+            }
         }
         >div:first-child{
             background: black;
             color: white;
             border-radius: 0.3rem;
             padding: 0.5rem 0 0.5rem 0.5rem;
+            >label{
+                font-weight: bold;
+            }
         }
         >div.save{
             grid-template-columns: 1fr 5rem;

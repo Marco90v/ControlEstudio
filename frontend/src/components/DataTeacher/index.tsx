@@ -8,7 +8,7 @@ import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
 import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMutation, usePostTeacherMutation, useUpdateTeacherByIdMutation } from "../../store/apis/teacherApi";
-import { Select, PersonsForms, TablePersons } from "../";
+import { Select, PersonsForms, TablePersons, Popup } from "../";
 
 const initialDataPerson:person = {
     id:0,
@@ -33,6 +33,7 @@ const initialDataTeacher:teacher = {
 
 function DataTeacher(){
 
+    
     const { data:roles=[] } = useGetRolesQuery();
     const { data:shifts=[] } = useGetShiftsQuery();
     const { data:sections=[] } = useGetSectionsQuery();
@@ -40,26 +41,34 @@ function DataTeacher(){
     const { data:semesters=[] } = useGetSemestersQuery();
     const { data:classes=[] } = useGetClassesQuery();
 
-    const [ postPerson ] = usePostPersonMutation();
-    const [ updatePerson ] = useUpdatePersonByIdMutation();
-    const [ deletePersonById ] = useDeletePersonByIdMutation();
+    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer, isError:isErrPosPer } ] = usePostPersonMutation();
+    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer, isError:isErrUpPer } ] = useUpdatePersonByIdMutation();
+    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId, isError:isErrDelPerId } ] = useDeletePersonByIdMutation();
     
-    const [ postTeacher ] = usePostTeacherMutation();
-    const [ updateTeacherById ] = useUpdateTeacherByIdMutation();
-    const [ deleteTeacherById ] = useDeleteTeacherByIdMutation();
-    const [ deleteTeacherByIdPerson ] = useDeleteTeacherByIdPersonMutation();
-
+    const [ postTeacher, { isLoading:isLoadPosTea, isSuccess:isSuccPosTea, isError:isErrPosTea } ] = usePostTeacherMutation();
+    const [ updateTeacherById, { isLoading:isLoadUpTeaId, isSuccess:isSuccUpTeaId, isError:isErrUpTeaId } ] = useUpdateTeacherByIdMutation();
+    const [ deleteTeacherById, { isLoading:isLoadDelTeaId, isSuccess:isSuccDelTeaId, isError:isErrDelTeaId } ] = useDeleteTeacherByIdMutation();
+    const [ deleteTeacherByIdPerson, { isLoading:isLoadDelTeaIdPer, isSuccess:isSuccDelTeaIdPer, isError:isErrDelTeaIdPer } ] = useDeleteTeacherByIdPersonMutation();
+    
     const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
     const [ triggerTeacher, { data:teachers=[], isSuccess:isSuccessTeacher, isFetching:isFetchingTeacher } ] = teacherApi.endpoints.getTeacherById.useLazyQuery();
+    
+    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     const [ selectPerson, setSelectPeron ] = useState<number>(0);
 
-
     const [person, setPerson] = useState(initialDataPerson);
     const [teacher, setTeacher] = useState<teacher[]>([]);
     const [deleteDataTeacher, setDeleteDataTeacher] = useState<number[]>([0]);
-    const [wait, setWait] = useState<boolean>(false);
+    
+    useEffect(() => {  
+        if( isSuccPosPer || isSuccUpPer || isSuccDelPerId || isSuccPosTea || isSuccUpTeaId || isSuccDelTeaId || isSuccDelTeaIdPer ) resetInput();
+        return () => {}
+    }, [
+        isSuccPosPer, isSuccUpPer, isSuccDelPerId,
+        isSuccPosTea, isSuccUpTeaId, isSuccDelTeaId, isSuccDelTeaIdPer
+    ]);
 
     useEffect(() => {
         roles.forEach(e=>{
@@ -77,6 +86,10 @@ function DataTeacher(){
         setTeacher(teachers);
       return () => {}
     }, [isSuccessTeacher, isFetchingTeacher])
+
+    const isWait = () => {
+        return isLoadPosPer || isLoadUpPer || isLoadDelPerId || isLoadPosTea || isLoadUpTeaId || isLoadDelTeaId || isLoadDelTeaIdPer;
+    }
    
 
     const changeRole = (e:any) => {
@@ -158,6 +171,36 @@ function DataTeacher(){
     }
 
     const editData = () => {
+        setModal({type:"edit",value:true, data:{id:0,names:""}});
+    }
+
+    const save = () => {
+        selectPerson === 0 ? newData() : editData();
+    }
+
+    const edit = (idx:number) => {
+        const {id} = persons[idx];
+        const idPerson:any = Number(id);
+        const newData = {...persons[idx], idPerson};
+        setDeleteDataTeacher([]);
+        setPerson(newData);
+        setSelectPeron(idPerson);
+        triggerTeacher(idPerson);
+    }
+
+    const cancelEdit = () => {
+        const zero:any = 0;
+        setPerson({...initialDataPerson,role:person.role});
+        setTeacher([]);
+        setDeleteDataTeacher([]);
+        setSelectPeron(zero);
+    }
+
+    const remove = (data:person) => {
+        setModal({type:"delete",value:true, data});
+    }
+
+    const updateTeacher = () => {
         const {names, lastNames, email, phone, sex, photo, role} = person;
         const newData:person = {...person,names, phone:Number(phone), id:selectPerson};
 
@@ -172,14 +215,10 @@ function DataTeacher(){
                     }
                     updatePerson(updateP);
             }
-        }
-        else{
+        }else{
             console.log("no se permiten campos vacios");
-            setWait(false);
-
         }
         if(deleteDataTeacher.length > 0){
-            setWait(true);
             deleteTeacherById(deleteDataTeacher)
         } 
         teacher.forEach((item:teacher)=>{
@@ -206,47 +245,39 @@ function DataTeacher(){
 
             }
         });
-        setWait(false);
-        resetInput();
     }
 
-    const save = () => {
-        selectPerson === 0 ? newData() : editData();
-    }
-
-    const edit = (idx:number) => {
-        const {id, name, lastNames, sex, email, phone, photo, role} = persons[idx];
-        const idPerson:any = Number(id);
-        const newData = {...persons[idx], idPerson};
-        setDeleteDataTeacher([]);
-        setPerson(newData);
-        setSelectPeron(idPerson);
-        triggerTeacher(idPerson);
-    }
-
-    const cancelEdit = () => {
-        const zero:any = 0;
-        setPerson({...initialDataPerson,role:person.role});
-        setTeacher([]);
-        setDeleteDataTeacher([]);
-        setSelectPeron(zero);
-    }
-
-    const remove = (idx:number=0) => {
-        const deleteData = {body:{id:idx},role:selectRole}
+    const deleteTeacher = (idx:number) => {
+        const deleteData = {body:{id:idx},role:selectRole};
         deletePersonById(deleteData);
         deleteTeacherByIdPerson({idPersons:idx});
     }
 
+    const aceptCallback = () => {
+        switch (modal.type) {
+            case "edit":
+                updateTeacher();
+                break;
+            case "delete":
+                deleteTeacher(modal.data.id);
+                break;
+        }
+    }
+
+    const cuerpoPopup:any = {
+        "edit": <p>¿Desea Guardar los cambios?</p>,
+        "delete": <p>¿Desea eliminar al profesor: <strong>"{modal.data.names}"</strong>?</p>
+    };
+
     return(
-        <ContentTeacher className="content" wait={wait}>
+        <ContentTeacher className="content" wait={isWait()}>
             <PersonsForms
                 person={person}
                 changeRole={changeRole}
                 changeDataPerson={changeDataPerson}
                 roles={roles}
                 selectRole={selectRole}
-                wait={wait}
+                wait={isWait()}
                 selectPerson={selectPerson}
                 cancelEdit={cancelEdit}
                 save={save}
@@ -255,40 +286,42 @@ function DataTeacher(){
                <div className="dataTeacher">
                     {
                         teacher.map((e:teacher,i)=>{
-                            const {} = e
                             return <div className="dataClasses" key={i}>
                                 <div className="listProfession">
                                     <label htmlFor="profession">Profesiones/Carreras</label>
-                                    <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e,i)} value={e.IdProfession} data={professions} disabled={wait} />
+                                    <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e,i)} value={e.IdProfession} data={professions} disabled={isWait()} />
                                 </div>
                                 <div className="listSemesters">
                                     <label htmlFor="semesters">Semestres</label>
-                                    <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e,i)} value={e.IdSemesters} data={semesters} disabled={wait} />
+                                    <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e,i)} value={e.IdSemesters} data={semesters} disabled={isWait()} />
                                 </div>
                                 <div className="listClasses">
                                     <label htmlFor="classes">Clases</label>
-                                    <Select identify="IdClasses" changeSelect={(e)=>changeSelect(e,i)} value={e.IdClasses} data={classes} disabled={wait} />
+                                    <Select identify="IdClasses" changeSelect={(e)=>changeSelect(e,i)} value={e.IdClasses} data={classes} disabled={isWait()} />
                                 </div>
                                 <div className="listShifts">
                                     <label htmlFor="shifts">Turnos</label>
-                                    <Select identify="IdShifts" changeSelect={(e)=>changeSelect(e,i)} value={e.IdShifts} data={shifts} disabled={wait} />
+                                    <Select identify="IdShifts" changeSelect={(e)=>changeSelect(e,i)} value={e.IdShifts} data={shifts} disabled={isWait()} />
                                 </div>
                                 <div className="listSections">
                                     <label htmlFor="sections">Secciones</label>
-                                    <Select identify="IdSections" changeSelect={(e)=>changeSelect(e,i)} value={e.IdSections} data={sections} disabled={wait} />
+                                    <Select identify="IdSections" changeSelect={(e)=>changeSelect(e,i)} value={e.IdSections} data={sections} disabled={isWait()} />
                                 </div>
                                 <div className="delete">
-                                    <button onClick={()=>deleteItem(i)} disabled={wait} >Eliminar</button>
+                                    <button onClick={()=>deleteItem(i)} disabled={isWait()} >Eliminar</button>
                                 </div>
                             </div>
                         })
                     }
                     <div className="addClass">
-                        <button onClick={(e)=>addProfession(e)} disabled={wait} >Agregar Clase</button>
+                        <button onClick={(e)=>addProfession(e)} disabled={isWait()} >Agregar Clase</button>
                     </div>
                 </div>
             </PersonsForms>
-            <TablePersons persons={persons} edit={edit} remove={remove} />
+            <TablePersons persons={persons} edit={edit} remove={remove} wait={isWait()} />
+            {
+                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
+            }
         </ContentTeacher>
     )
 }
