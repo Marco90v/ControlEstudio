@@ -301,33 +301,39 @@ export const Img = styled.img`
 `;
 
 export const FloatAlert = styled.div`
+    display: flex;
+    flex-direction: row;
+    grid-gap: 1rem;
     position: fixed;
     z-index: 111;
-    right: 10px;
-    padding: 5px 20px;
-    border-radius: 5px;
+    top: 1rem;
+    right: -15rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
     font-weight: bold;
     color: white;
-    transition: opacity 0.25s ease-in-out, background-color 0.25s ease-in-out, top 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+    >img{
+        cursor: pointer;
+    }
     &.blank{
         opacity: 0;
-        top: -20px;
+        top: -2rem;
     }
     &.warning{
         opacity: 1;
-        top: 10px;
+        right: 2rem;
         background-color: yellow;
-        color:black;
-    }
+        color: black;
     &.success{
         opacity: 1;
-        top: 10px;
+        right: 2rem;
         background-color: green;
         color:white;
     }
     &.error{
         opacity: 1;
-        top: 10px;
+        right: 2rem;
         background-color: red;
         color:white;
     }

@@ -1,4 +1,3 @@
-export * from "./Alert";
 export * from "./BadgeClasse";
 export * from "./BlockSemester";
 export * from "./DataClasses";

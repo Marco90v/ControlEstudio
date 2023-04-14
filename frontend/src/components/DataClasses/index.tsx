@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Div } from "../../styled/style";
-import {Alert} from "../index"
 import {Popup, InputForm, TableComponent} from "../";
 import { useDeleteClassesMutation, useGetClassesQuery, usePostClassesMutation, useUpdateClassesMutation } from "../../store/apis/classesApi";
 
@@ -8,9 +7,9 @@ function DataClasses() {
 
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
     const { data: classes=[] } = useGetClassesQuery();
-    const [postClasses] = usePostClassesMutation();
-    const [updateClasses] = useUpdateClassesMutation();
-    const [deleteClasses] = useDeleteClassesMutation();
+    const [ postClasses ] = usePostClassesMutation();
+    const [ updateClasses ] = useUpdateClassesMutation();
+    const [ deleteClasses ] = useDeleteClassesMutation();
 
     const addClasses = async (names:{names:string}) => {
         postClasses(names);
@@ -50,7 +49,6 @@ function DataClasses() {
             <Div>
                 <TableComponent edit={edit} remove={remove} data={classes} />
             </Div>
-            {/* <Alert /> */}
             {
                 modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
