@@ -99,6 +99,10 @@ export const createDataDemo = (conn:Pool):void =>{
         const data:dbLogin[] = [
             {user:"LeonadoCuellar",pass:"1234",IdPersons:1},
             {user:"AlmaFranco",pass:"1234",IdPersons:2},
+            {user:"RafaAbraham",pass:"1234",IdPersons:3},
+            {user:"OdalysMadrigal",pass:"1234",IdPersons:4},
+            {user:"AngelNavas",pass:"1234",IdPersons:5},
+            {user:"TatianaEcheverría",pass:"1234",IdPersons:6},
         ];
         actionQuery(data,'login');
     }
