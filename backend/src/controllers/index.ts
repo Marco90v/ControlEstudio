@@ -245,7 +245,6 @@ export const getProfessionWorkOut = (req,res) => {
             const newFormat:pesumFormat[] = [];
             const temp:number[]=[];
             result.forEach( (value:pensumNotFormat) => {
-                // const index = newFormat.map((e:pesumFormat)=>e.IdSemesters).indexOf(value.IdSemesters);
                 const index = temp.indexOf(value.IdSemesters);
                 if(index<0){
                     newFormat.push({
@@ -277,7 +276,6 @@ export const getProfessionWorkOut = (req,res) => {
 }
 
 export const deleteTeachersWorkOut = (req, res) => {
-    // console.log(req.body);
     services.deleteMultipleTeacher(req.body)
         .then(result=>res.status(200).json(result))
         .catch(err=>{
@@ -307,7 +305,6 @@ export const updateValueSingleTableWorkOut2 = (req,res) => {
 }
 
 export const deleteStudentWorkOut = (req, res) => {
-    // console.log(req.body);
     const table:string = req.path.slice(1);
     const id = validator.id(req.body);
     services.deleteSingle(table,id)
@@ -371,7 +368,6 @@ export const updateScoresById = (req,res) => {
 }
 
 export const getTeachersByProfessionAndSemesters = (req, res) => {
-    // const id = validator.id(req.body);
     const data = validator.professionAndSemesters(req.body);
     if(data){
         const {IdProfession, IdSemesters} = data;
@@ -390,7 +386,6 @@ export const getTeachersByProfessionAndSemesters = (req, res) => {
 }
 
 export const getClassesByProfessionAndSemesters = (req, res) => {
-    // const id = validator.id(req.body);
     const data = validator.professionAndSemesters(req.body);
     if(data){
         const {IdProfession, IdSemesters} = data;
@@ -433,7 +428,6 @@ export const getPersonByIdWorkOut = (req,res) => {
 }
 
 export const login = (req, res) => {
-    // console.log(req.headers)
     const data = validator.login(req.body);
     if(data){
         services.login(data)
@@ -452,14 +446,6 @@ export const login = (req, res) => {
                 role: result.role
             }
             const token = jwt.sign(newData,SECRET);
-            // const serialized = serialize("Token", token, {
-            //     // httpOnly: true,
-            //     // secure: process.env.NODE_ENV === "production",
-            //     sameSite: "strict",
-            //     // maxAge: 1000 * 60 * 60 * 24 * 30,
-            //     // path: "/",
-            //   });
-            // res.setHeader('Set-Cookie',serialized);
             res.status(200).json({token});
         })
         .catch(err=>{
