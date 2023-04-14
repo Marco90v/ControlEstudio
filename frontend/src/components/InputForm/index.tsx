@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchPostClasses } from "../../store/module/classesStore";
 import { Button, Form } from "../../styled/style"
 
 type props = {
@@ -16,11 +14,10 @@ function InputForm({addCallBack,title}:props) {
         setName({names:e.target.value});
     }
 
-    const add = async (e:any) => {
+    const add = (e:any) => {
         e.preventDefault();
         if(name.names !== ""){
-            const res = addCallBack(name);
-            // if(res.meta.requestStatus === "fulfilled") setName({names:""});
+            addCallBack(name);
         }else{
             console.log("Ingrese nombre de la materia");
         }

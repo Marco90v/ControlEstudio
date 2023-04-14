@@ -36,13 +36,13 @@ function DataStudents(){
     const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
     const [ triggerStudents, { data:students=initialDataStudents, isSuccess:isSuccessStudents, isFetching:isFetchingStudents } ] = studentsApi.endpoints.getStudentsById.useLazyQuery();
 
-    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer, isError:isErrPosPer } ] = usePostPersonMutation();
-    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer, isError:isErrUpPer } ] = useUpdatePersonByIdMutation();
+    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer } ] = usePostPersonMutation();
+    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer } ] = useUpdatePersonByIdMutation();
 
-    const [ postStudent, { isLoading:isLoadPosStu, isSuccess:isSuccPosStu, isError:isErrPosStu } ] = usePostStudentMutation();
-    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId, isError:isErrDelPerId } ] = useDeletePersonByIdMutation();
-    const [ updateStudentById, { isLoading:isLoadUpStuId, isSuccess:isSuccUpStuId, isError:isErrUpStuId } ] = useUpdateStudentByIdMutation();
-    const [ deleteStudentById, { isLoading:isLoadDelStuId, isSuccess:isSuccDelStuId, isError:isErrDelStuId } ] = useDeleteStudentByIdMutation();
+    const [ postStudent, { isLoading:isLoadPosStu, isSuccess:isSuccPosStu } ] = usePostStudentMutation();
+    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId } ] = useDeletePersonByIdMutation();
+    const [ updateStudentById, { isLoading:isLoadUpStuId, isSuccess:isSuccUpStuId } ] = useUpdateStudentByIdMutation();
+    const [ deleteStudentById, { isLoading:isLoadDelStuId, isSuccess:isSuccDelStuId } ] = useDeleteStudentByIdMutation();
 
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 

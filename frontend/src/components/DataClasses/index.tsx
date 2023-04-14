@@ -11,7 +11,7 @@ function DataClasses() {
     const [ updateClasses ] = useUpdateClassesMutation();
     const [ deleteClasses ] = useDeleteClassesMutation();
 
-    const addClasses = async (names:{names:string}) => {
+    const addClasses = (names:{names:string}) => {
         postClasses(names);
     }
 

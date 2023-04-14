@@ -41,14 +41,14 @@ function DataTeacher(){
     const { data:semesters=[] } = useGetSemestersQuery();
     const { data:classes=[] } = useGetClassesQuery();
 
-    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer, isError:isErrPosPer } ] = usePostPersonMutation();
-    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer, isError:isErrUpPer } ] = useUpdatePersonByIdMutation();
-    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId, isError:isErrDelPerId } ] = useDeletePersonByIdMutation();
+    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer } ] = usePostPersonMutation();
+    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer } ] = useUpdatePersonByIdMutation();
+    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId } ] = useDeletePersonByIdMutation();
     
-    const [ postTeacher, { isLoading:isLoadPosTea, isSuccess:isSuccPosTea, isError:isErrPosTea } ] = usePostTeacherMutation();
-    const [ updateTeacherById, { isLoading:isLoadUpTeaId, isSuccess:isSuccUpTeaId, isError:isErrUpTeaId } ] = useUpdateTeacherByIdMutation();
-    const [ deleteTeacherById, { isLoading:isLoadDelTeaId, isSuccess:isSuccDelTeaId, isError:isErrDelTeaId } ] = useDeleteTeacherByIdMutation();
-    const [ deleteTeacherByIdPerson, { isLoading:isLoadDelTeaIdPer, isSuccess:isSuccDelTeaIdPer, isError:isErrDelTeaIdPer } ] = useDeleteTeacherByIdPersonMutation();
+    const [ postTeacher, { isLoading:isLoadPosTea, isSuccess:isSuccPosTea } ] = usePostTeacherMutation();
+    const [ updateTeacherById, { isLoading:isLoadUpTeaId, isSuccess:isSuccUpTeaId } ] = useUpdateTeacherByIdMutation();
+    const [ deleteTeacherById, { isLoading:isLoadDelTeaId, isSuccess:isSuccDelTeaId } ] = useDeleteTeacherByIdMutation();
+    const [ deleteTeacherByIdPerson, { isLoading:isLoadDelTeaIdPer, isSuccess:isSuccDelTeaIdPer } ] = useDeleteTeacherByIdPersonMutation();
     
     const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
     const [ triggerTeacher, { data:teachers=[], isSuccess:isSuccessTeacher, isFetching:isFetchingTeacher } ] = teacherApi.endpoints.getTeacherById.useLazyQuery();

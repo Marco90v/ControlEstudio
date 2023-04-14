@@ -39,8 +39,8 @@ function DataScores(){
     const { data:roles=[] } = useGetRolesQuery();
     const { data:shifts=[] } = useGetShiftsQuery();
     const { data:sections=[] } = useGetSectionsQuery();
-    const [ updateScoreById, {isLoading:isLoadUpSco, isSuccess:isSuccSuccSco, isError:isErrUpSco} ] = useUpdateScoreByIdMutation();
-    const [ postScore, {isLoading:isLoadPosSco, isSuccess:isSuccPosSco, isError:isErrPosSco} ] = usePostScoreMutation();
+    const [ updateScoreById, {isLoading:isLoadUpSco, isSuccess:isSuccSuccSco } ] = useUpdateScoreByIdMutation();
+    const [ postScore, {isLoading:isLoadPosSco, isSuccess:isSuccPosSco } ] = usePostScoreMutation();
 
     const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
     const [ triggerStudents ] = studentsApi.endpoints.getStudentsById.useLazyQuery();
@@ -63,7 +63,6 @@ function DataScores(){
         roles.forEach(e=>{
             if (e.names === "Estudiante"){
                 const ID:number = Number(e.id);
-                // setSelectRole(ID);
                 if(e.id !== profile.role){
                     triggerPersons(ID);
                 }else{

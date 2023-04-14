@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { Div } from "../../styled/style";
-import { Alert, InputForm, Popup, TableComponent } from "../";
+import { InputForm, Popup, TableComponent } from "../";
 
 function DataProfession(){
     
@@ -49,7 +49,6 @@ function DataProfession(){
             <Div>
                 <TableComponent edit={edit} remove={remove}  data={profession} />
             </Div>
-            {/* <Alert /> */}
             {
                 modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
