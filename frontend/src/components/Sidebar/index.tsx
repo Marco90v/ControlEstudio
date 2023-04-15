@@ -32,7 +32,7 @@ const roleProtection:any = {
 const modules:any = {
     home:'Inicio',
     classes:'Clases',
-    profession:'Profesores',
+    profession:'Profesión',
     pensums:'Pensums',
     teachers:'Profesores',
     students:'Estudiantes',
