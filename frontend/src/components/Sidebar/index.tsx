@@ -29,6 +29,16 @@ const roleProtection:any = {
     record:[1,2,3],
 }
 
+const modules:any = {
+    home:'Inicio',
+    classes:'Clases',
+    profession:'Profesores',
+    pensums:'Pensums',
+    teachers:'Profesores',
+    students:'Estudiantes',
+    record:'Notas',
+}
+
 type Li = {
     ruta:string,
     img:string,
@@ -42,7 +52,7 @@ const Li = ({ruta,img,role}:Li) => {
         <li>
             <MyNavLink to={`/dashboard/${ruta}`} style={({ isActive }:any) => ( isActive ? "active" : "" )}>
                 <img src={img} />
-                <span>{ruta}</span>
+                <span>{modules[ruta]}</span>
             </MyNavLink>
         </li>
     );
