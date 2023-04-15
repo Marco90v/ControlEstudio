@@ -32,6 +32,16 @@ function DataClasses() {
                 deleteClasses({id:modal.data.id});
                 break;
         }
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
+    }
+
+    const cancelCallBack = () => {
+        setModal({type:"", value:false,  data:{id:0,names:""}});
     }
 
     const changeInputEdit = (e:any)=>{
@@ -50,7 +60,7 @@ function DataClasses() {
                 <TableComponent edit={edit} remove={remove} data={classes} />
             </Div>
             {
-                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
+                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
         </div>
     );

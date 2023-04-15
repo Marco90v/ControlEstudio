@@ -7,6 +7,15 @@ import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
 import {Popup, Select, BlockSemester} from "../";
 
+const modalInitial = {
+    type:"",
+    IdSemesters:0,
+    value:false,
+    data:{id:0,names:""},
+    id:0, semesterName:"",
+    ClasseName:""
+};
+
 function DataPensum(){
 
     const dispatch = useAppDispatch();
@@ -20,7 +29,7 @@ function DataPensum(){
     const [selectSemesters, setSelectSemesters] = useState<number>(0);
     const [selectPensum, setSelectPensum] = useState<number>(0);
 
-    const [modal,setModal] = useState({type:"", IdSemesters:0, value:false, data:{id:0,names:""}, id:0, semesterName:"", ClasseName:""});
+    const [modal,setModal] = useState(modalInitial);
     const [activeInsertSemester, setActiveInsertSemester] = useState(true);
 
     useEffect(() => {
@@ -63,6 +72,12 @@ function DataPensum(){
                 deletePensum(dataDelete);
                 break;
         }
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
     }
 
     const changeSelectProfession = (e:any) => {
@@ -118,6 +133,10 @@ function DataPensum(){
         "removeClasse": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.ClasseName}"</strong> del <strong>"{modal.semesterName}</strong>?</p>
     };
 
+    const cancelCallBack = () => {
+        setModal(modalInitial);
+    }
+
     return(        
         <ContentDataPensum>
             <SelectPensum>
@@ -136,7 +155,7 @@ function DataPensum(){
                 <button disabled={activeInsertSemester} onClick={insertNewSemester} >Agregar</button>
             </SelectSemester>
             {
-                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} >
+                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} >
                     {cuerpoPopup[modal.type]}
                 </Popup>
             }

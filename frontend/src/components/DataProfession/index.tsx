@@ -32,6 +32,12 @@ function DataProfession(){
                 deleteProfession({id:modal.data.id});
                 break;
         }
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
     }
 
     const changeInputEdit = (e:any)=>{
@@ -43,6 +49,10 @@ function DataProfession(){
         "delete": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.data.names}"</strong>?</p>
     };
 
+    const cancelCallBack = () => {
+        setModal({type:"", value:false,  data:{id:0,names:""}});
+    }
+
     return(
         <div>
             <InputForm addCallBack={addClasses} title={"Profesiones"} />
@@ -50,7 +60,7 @@ function DataProfession(){
                 <TableComponent edit={edit} remove={remove}  data={profession} />
             </Div>
             {
-                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
+                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
         </div>
     );

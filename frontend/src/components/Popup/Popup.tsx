@@ -44,20 +44,14 @@ const Alert = styled.div`
     }    
 `;
 
-function Popup({setModal, children, aceptCallback}:any){
+function Popup({children, aceptCallback, cancelCallBack}:any){
 
     const acept = () => {
         aceptCallback();
-        setModal((datos:any)=>{
-            return{
-                ...datos,
-                type:"", value:false,  data:{id:0,names:""}
-            }
-        });
     }
 
     const cancel = () => {
-        setModal({type:"", value:false,  data:{id:0,names:""}});
+        cancelCallBack();
     }
 
     return(

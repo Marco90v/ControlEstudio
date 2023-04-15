@@ -212,6 +212,12 @@ function DataScores(){
                 resetInput();
                 break;
         }
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
     }
 
     const cuerpoPopup:any = {
@@ -219,6 +225,10 @@ function DataScores(){
         "delete": <p>Esta acción esta prohibida en este modulo</p>,
         "noData": <p>Usuario sin profesión ni semestre asignado</p>
     };
+
+    const cancelCallBack = () => {
+        setModal({type:"", value:false,  data:{id:0,names:""}});
+    }
 
     return(
         <ContentScores className="content" wait={isWait()}>

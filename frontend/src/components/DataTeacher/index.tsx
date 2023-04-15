@@ -9,6 +9,7 @@ import { useGetClassesQuery } from "../../store/apis/classesApi";
 import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMutation, usePostTeacherMutation, useUpdateTeacherByIdMutation } from "../../store/apis/teacherApi";
 import { Select, PersonsForms, TablePersons, Popup } from "../";
+import { SectionClasses } from "../SectionClasses";
 
 const initialDataPerson:person = {
     id:0,
@@ -32,14 +33,8 @@ const initialDataTeacher:teacher = {
 }
 
 function DataTeacher(){
-
     
     const { data:roles=[] } = useGetRolesQuery();
-    const { data:shifts=[] } = useGetShiftsQuery();
-    const { data:sections=[] } = useGetSectionsQuery();
-    const { data:professions=[] } = useGetProfessionQuery();
-    const { data:semesters=[] } = useGetSemestersQuery();
-    const { data:classes=[] } = useGetClassesQuery();
 
     const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer } ] = usePostPersonMutation();
     const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer } ] = useUpdatePersonByIdMutation();
@@ -54,10 +49,8 @@ function DataTeacher(){
     const [ triggerTeacher, { data:teachers=[], isSuccess:isSuccessTeacher, isFetching:isFetchingTeacher } ] = teacherApi.endpoints.getTeacherById.useLazyQuery();
     
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
-
-    const [ selectRole, setSelectRole ] = useState<number>(0);
-    const [ selectPerson, setSelectPeron ] = useState<number>(0);
-
+    const [selectRole, setSelectRole] = useState<number>(0);
+    const [selectPerson, setSelectPeron] = useState<number>(0);
     const [person, setPerson] = useState(initialDataPerson);
     const [teacher, setTeacher] = useState<teacher[]>([]);
     const [deleteDataTeacher, setDeleteDataTeacher] = useState<number[]>([0]);
@@ -262,6 +255,16 @@ function DataTeacher(){
                 deleteTeacher(modal.data.id);
                 break;
         }
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
+    }
+
+    const cancelCallBack = () => {
+        setModal({type:"", value:false,  data:{id:0,names:""}});
     }
 
     const cuerpoPopup:any = {
@@ -285,32 +288,8 @@ function DataTeacher(){
             >
                <div className="dataTeacher">
                     {
-                        teacher.map((e:teacher,i)=>{
-                            return <div className="dataClasses" key={i}>
-                                <div className="listProfession">
-                                    <label htmlFor="profession">Profesiones/Carreras</label>
-                                    <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e,i)} value={e.IdProfession} data={professions} disabled={isWait()} />
-                                </div>
-                                <div className="listSemesters">
-                                    <label htmlFor="semesters">Semestres</label>
-                                    <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e,i)} value={e.IdSemesters} data={semesters} disabled={isWait()} />
-                                </div>
-                                <div className="listClasses">
-                                    <label htmlFor="classes">Clases</label>
-                                    <Select identify="IdClasses" changeSelect={(e)=>changeSelect(e,i)} value={e.IdClasses} data={classes} disabled={isWait()} />
-                                </div>
-                                <div className="listShifts">
-                                    <label htmlFor="shifts">Turnos</label>
-                                    <Select identify="IdShifts" changeSelect={(e)=>changeSelect(e,i)} value={e.IdShifts} data={shifts} disabled={isWait()} />
-                                </div>
-                                <div className="listSections">
-                                    <label htmlFor="sections">Secciones</label>
-                                    <Select identify="IdSections" changeSelect={(e)=>changeSelect(e,i)} value={e.IdSections} data={sections} disabled={isWait()} />
-                                </div>
-                                <div className="delete">
-                                    <button onClick={()=>deleteItem(i)} disabled={isWait()} >Eliminar</button>
-                                </div>
-                            </div>
+                        teacher.map((t:teacher,i)=>{
+                            return <SectionClasses key={i} idx={i} teacher={t} changeSelect={changeSelect} deleteItem={()=>deleteItem(i)} disabled={isWait()}/>
                         })
                     }
                     <div className="addClass">
@@ -320,7 +299,7 @@ function DataTeacher(){
             </PersonsForms>
             <TablePersons persons={persons} edit={edit} remove={remove} wait={isWait()} />
             {
-                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
+                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
         </ContentTeacher>
     )

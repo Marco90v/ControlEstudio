@@ -221,6 +221,16 @@ function DataStudents(){
                 deleteStudent(modal.data.id);
                 break;
         }
+        setModal((datos:any)=>{
+            return{
+                ...datos,
+                type:"", value:false,  data:{id:0,names:""}
+            }
+        });
+    }
+
+    const cancelCallBack = () => {
+        setModal({type:"", value:false,  data:{id:0,names:""}});
     }
 
     const cuerpoPopup:any = {
@@ -256,7 +266,7 @@ function DataStudents(){
             </PersonsForms>
             <TablePersons persons={persons} edit={edit} remove={remove} wait={isWait()} />
             {
-                modal.value && <Popup setModal={setModal} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
+                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
         </ContentStudent>
     );
