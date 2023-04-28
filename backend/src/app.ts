@@ -1,13 +1,9 @@
 import express from 'express';
-// import router from './api';
 import path from 'path';
-// import bodyParser from 'body-parser';
 import { conn, InitialDB } from "./services/conect";
 import v1router from './v1/routes';
 import v2router from './v2/routes';
-
 import cors from 'cors';
-
 
 const ini = ()=>{
   const app = express();
@@ -26,17 +22,13 @@ const ini = ()=>{
   app.use(express.json());
   
   app.use(express.static(path.join(__dirname, '../../frontend/dist'))),
-  
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../frontend/dist/index'));
-  });
-  
-  // app.get('/', (req, res) => {
-  //   res.send('Aqui va ir el frontend');
-  // });
-  
+    
   app.use("/api/v1",v1router);
   app.use("/api/v2",v2router);
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/dist/index'));
+  });
   
   app.listen(port, () => {
     /***
