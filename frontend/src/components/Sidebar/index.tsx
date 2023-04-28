@@ -9,14 +9,22 @@ import { profileApi } from "../../store/apis/profileApi";
 import arrow from "../../assets/left-arrow-solid-24.png";
 import close from "../../assets/log-out-regular-24.png";
 
+import home from "../../assets/home-solid-24.png";
+import classes from "../../assets/book-solid-24.png";
+import profession from "../../assets/graduation-solid-24.png";
+import pensums from "../../assets/data-solid-24.png";
+import teachers from "../../assets/male-female-regular-24.png";
+import students from "../../assets/child-regular-24.png";
+import record from "../../assets/folder-solid-24.png";
+
 const obj = {
-    home:'/src/assets/home-solid-24.png',
-    classes:'/src/assets/book-solid-24.png',
-    profession:'/src/assets/graduation-solid-24.png',
-    pensums:'/src/assets/data-solid-24.png',
-    teachers:'/src/assets/male-female-regular-24.png',
-    students:'/src/assets/child-regular-24.png',
-    record:'/src/assets/folder-solid-24.png',
+    home,
+    classes,
+    profession,
+    pensums,
+    teachers,
+    students,
+    record,
 };
 
 const roleProtection:any = {
