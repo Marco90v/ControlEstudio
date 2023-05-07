@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ContentTeacher } from "../../styled/style";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
-import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
-import { useGetProfessionQuery } from "../../store/apis/professionApi";
-import { useGetSemestersQuery } from "../../store/apis/semestersApi";
-import { useGetClassesQuery } from "../../store/apis/classesApi";
-import { personApi, useDeletePersonByIdMutation, usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
-import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMutation, usePostTeacherMutation, useUpdateTeacherByIdMutation } from "../../store/apis/teacherApi";
-import { Select, PersonsForms, TablePersons, Popup } from "../";
-import { SectionClasses } from "../SectionClasses";
+import { PersonsForms, TablePersons } from "../";
+import { Teacher } from "../Teacher";
+import { useSelector } from "react-redux";
 
 const initialDataPerson:person = {
     id:0,
@@ -22,68 +16,24 @@ const initialDataPerson:person = {
     photo: "",
     role: 0
 };
-const initialDataTeacher:teacher = {
-    id:0,
-    IdPersons:0,
-    IdProfession:0,
-    IdSemesters:0,
-    IdClasses:0,
-    IdShifts:0,
-    IdSections:0
-}
 
 function DataTeacher(){
-    
+
     const { data:roles=[] } = useGetRolesQuery();
-
-    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer } ] = usePostPersonMutation();
-    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer } ] = useUpdatePersonByIdMutation();
-    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId } ] = useDeletePersonByIdMutation();
+    const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
+    const [ selectRole, setSelectRole ] = useState<number>(0);
+    const [ person, setPerson ] = useState(initialDataPerson);
+    const handlerTeacher = useRef();
     
-    const [ postTeacher, { isLoading:isLoadPosTea, isSuccess:isSuccPosTea } ] = usePostTeacherMutation();
-    const [ updateTeacherById, { isLoading:isLoadUpTeaId, isSuccess:isSuccUpTeaId } ] = useUpdateTeacherByIdMutation();
-    const [ deleteTeacherById, { isLoading:isLoadDelTeaId, isSuccess:isSuccDelTeaId } ] = useDeleteTeacherByIdMutation();
-    const [ deleteTeacherByIdPerson, { isLoading:isLoadDelTeaIdPer, isSuccess:isSuccDelTeaIdPer } ] = useDeleteTeacherByIdPersonMutation();
-    
-    const [ triggerPersons, { data:persons=[] } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
-    const [ triggerTeacher, { data:teachers=[], isSuccess:isSuccessTeacher, isFetching:isFetchingTeacher } ] = teacherApi.endpoints.getTeacherById.useLazyQuery();
-    
-    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
-    const [selectRole, setSelectRole] = useState<number>(0);
-    const [selectPerson, setSelectPeron] = useState<number>(0);
-    const [person, setPerson] = useState(initialDataPerson);
-    const [teacher, setTeacher] = useState<teacher[]>([]);
-    const [deleteDataTeacher, setDeleteDataTeacher] = useState<number[]>([0]);
-    
-    useEffect(() => {  
-        if( isSuccPosPer || isSuccUpPer || isSuccDelPerId || isSuccPosTea || isSuccUpTeaId || isSuccDelTeaId || isSuccDelTeaIdPer ) resetInput();
-        return () => {}
-    }, [
-        isSuccPosPer, isSuccUpPer, isSuccDelPerId,
-        isSuccPosTea, isSuccUpTeaId, isSuccDelTeaId, isSuccDelTeaIdPer
-    ]);
-
     useEffect(() => {
         roles.forEach(e=>{
             if (e.names === "Profesor"){
                 const ID:number = Number(e.id);
-                setPerson({...person, role:ID});
                 setSelectRole(ID);
-                triggerPersons(ID);
             }
         });
         return () => {}
     }, [roles]);
-
-    useEffect(() => {
-        setTeacher(teachers);
-      return () => {}
-    }, [isSuccessTeacher, isFetchingTeacher])
-
-    const isWait = () => {
-        return isLoadPosPer || isLoadUpPer || isLoadDelPerId || isLoadPosTea || isLoadUpTeaId || isLoadDelTeaId || isLoadDelTeaIdPer;
-    }
-   
 
     const changeRole = (e:any) => {
         const ID:any = Number(e.target.value);
@@ -97,210 +47,21 @@ function DataTeacher(){
         setPerson((item)=>{return {...item, [camp]:value}});
     }
 
-    const addProfession = (e:any) => {
-        setTeacher([...teacher,initialDataTeacher]);
-    }
-
-    const deleteItem = (idx:number) => {
-        setTeacher(teacher.filter((t,i)=>{
-            if(i===idx && t.IdPersons>0){
-                setDeleteDataTeacher([...deleteDataTeacher,t.id]);
-            }else if(i!==idx){
-                return t;
-            }
-        }));
-    }
-
-    const changeSelect = (e:any,idx:number) => {
-        const element = e.target.id;
-        const value = e.target.value;
-        setTeacher( (e:teacher[]) => {
-            return e.map((e,i)=>{
-                return i===idx ? {...e, [element]:Number(value)} : e
-            });
-        });
-    }
-
-    const resetInput = () => {
-        setPerson({...initialDataPerson,role:person.role});
-        setTeacher([]);
-        const zero:any = 0;
-        setSelectPeron(zero)
-    }
-    
-    const newData = async () => {
-        const {name, lastNames, email, phone, sex} = person;
-        const notEmptied:boolean = fieldNotEmptied({name, lastNames, email, phone, sex});
-        const newData = {...person, phone:Number(phone), id:selectPerson};
-        if(notEmptied){
-            const insert = {
-                body: newData,
-                role: selectRole
-            }
-            try{
-                const { insertId:IdPersons } = await postPerson(insert).unwrap();
-                if(teacher.length > 0){
-                    const newTeachers = {
-                        body: teacher.map(e=>{return {...e, IdPersons}}),
-                        id: selectPerson
-                    }
-                    postTeacher(newTeachers);
-                }
-            }catch(error){
-                console.log(error);
-            }
-        }
-    }
-
-    const fieldNotEmptied = (object:any):boolean => {
-        let r:boolean = true;
-        for (const key in object) {
-            if(object[key] === 0 || object[key] === ""){
-                r=false;
-                break;
-            }
-        }
-        return r;
-    }
-
-    const editData = () => {
-        setModal({type:"edit",value:true, data:{id:0,names:""}});
-    }
-
-    const save = () => {
-        selectPerson === 0 ? newData() : editData();
-    }
-
-    const edit = (idx:number) => {
-        const {id} = persons[idx];
-        const idPerson:any = Number(id);
-        const newData = {...persons[idx], idPerson};
-        setDeleteDataTeacher([]);
-        setPerson(newData);
-        setSelectPeron(idPerson);
-        triggerTeacher(idPerson);
-    }
-
-    const cancelEdit = () => {
-        const zero:any = 0;
-        setPerson({...initialDataPerson,role:person.role});
-        setTeacher([]);
-        setDeleteDataTeacher([]);
-        setSelectPeron(zero);
-    }
-
-    const remove = (data:person) => {
-        setModal({type:"delete",value:true, data});
-    }
-
-    const updateTeacher = () => {
-        const {names, lastNames, email, phone, sex, photo, role} = person;
-        const newData:person = {...person,names, phone:Number(phone), id:selectPerson};
-
-        const notEmptied:boolean = fieldNotEmptied({names, lastNames, email, phone, sex, role});
-        if(notEmptied){
-            const personOriginal = persons.filter((item:person)=>item.id===selectPerson)[0];
-            if(names !== personOriginal.names || lastNames !== personOriginal.lastNames || email !== personOriginal.email || 
-                phone !== personOriginal.phone || sex !== personOriginal.sex || photo !== personOriginal.photo || role !== personOriginal.role){
-                    const updateP = {
-                        body:newData,
-                        role:selectRole
-                    }
-                    updatePerson(updateP);
-            }
-        }else{
-            console.log("no se permiten campos vacios");
-        }
-        if(deleteDataTeacher.length > 0){
-            deleteTeacherById(deleteDataTeacher)
-        } 
-        teacher.forEach((item:teacher)=>{
-            for (const key in teachers){
-                if(item.id === teachers[key].id){
-                    if(JSON.stringify(item) !== JSON.stringify(teachers[key])){
-                        const updateData = {
-                            body: item,
-                            role: selectPerson
-                        }
-                        updateTeacherById(updateData);
-                    }
-                }
-            }
-            const {id,IdPersons,...rTeacher} = item;
-            const notEmptied:boolean = fieldNotEmptied(rTeacher);
-
-            if(id === 0 && IdPersons === 0 && notEmptied){
-                const newTeachers = {
-                    body: [{...item, IdPersons:selectPerson}],
-                    id: selectPerson
-                }
-                postTeacher(newTeachers);
-
-            }
-        });
-    }
-
-    const deleteTeacher = (idx:number) => {
-        const deleteData = {body:{id:idx},role:selectRole};
-        deletePersonById(deleteData);
-        deleteTeacherByIdPerson({idPersons:idx});
-    }
-
-    const aceptCallback = () => {
-        switch (modal.type) {
-            case "edit":
-                updateTeacher();
-                break;
-            case "delete":
-                deleteTeacher(modal.data.id);
-                break;
-        }
-        setModal((datos:any)=>{
-            return{
-                ...datos,
-                type:"", value:false,  data:{id:0,names:""}
-            }
-        });
-    }
-
-    const cancelCallBack = () => {
-        setModal({type:"", value:false,  data:{id:0,names:""}});
-    }
-
-    const cuerpoPopup:any = {
-        "edit": <p>¿Desea Guardar los cambios?</p>,
-        "delete": <p>¿Desea eliminar al profesor: <strong>"{modal.data.names}"</strong>?</p>
-    };
-
     return(
-        <ContentTeacher className="content" wait={isWait()}>
+        <ContentTeacher className="content" wait={statusFetch}>
             <PersonsForms
-                person={person}
                 changeRole={changeRole}
-                changeDataPerson={changeDataPerson}
                 roles={roles}
                 selectRole={selectRole}
-                wait={isWait()}
-                selectPerson={selectPerson}
-                cancelEdit={cancelEdit}
-                save={save}
-                type={"teacher"}
+                saveChildren={handlerTeacher}
+                type={"Profesor"}
             >
-               <div className="dataTeacher">
-                    {
-                        teacher.map((t:teacher,i)=>{
-                            return <SectionClasses key={i} idx={i} teacher={t} changeSelect={changeSelect} deleteItem={()=>deleteItem(i)} disabled={isWait()}/>
-                        })
-                    }
-                    <div className="addClass">
-                        <button onClick={(e)=>addProfession(e)} disabled={isWait()} >Agregar Clase</button>
-                    </div>
-                </div>
+                <Teacher ref={handlerTeacher} />
             </PersonsForms>
-            <TablePersons persons={persons} edit={edit} remove={remove} wait={isWait()} />
-            {
-                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
-            }
+            <TablePersons
+                deleteChildren={handlerTeacher}
+                role={selectRole}
+            />
         </ContentTeacher>
     )
 }

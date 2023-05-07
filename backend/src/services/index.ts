@@ -114,7 +114,7 @@ export const deleteSingle = (table,data) => {
     });
 }
 
-export const deleteTeacher = (table,data) => {
+export const deleteByIdPerson = (table,data) => {
     return new Promise((resolve, reject)=>{
         conn.getConnection((MySqlErr:MysqlError,connection:PoolConnection)=>{
             if(MySqlErr){
@@ -122,7 +122,7 @@ export const deleteTeacher = (table,data) => {
                 return;
             }
             // DELETE FROM classes WHERE `classes`.`id` = 61"
-            connection.query(`DELETE FROM ${table} WHERE idPersons = ?`, data.idPersons, (QueryErr,result)=>{
+            connection.query(`DELETE FROM ${table} WHERE IdPersons = ?`, data.idPersons, (QueryErr,result)=>{
                 if(QueryErr) reject( `Error al eliminar idPersons=${data.idPersons} en la tabla ${table}: ${QueryErr}`);
                 if(result) resolve(result);
                 connection.release();

@@ -6,9 +6,9 @@ const id = (object:any):dbId | false => {
         false;
 }
 
-const idPersons = (object:any):dbIdPersons | false => {
-    return 'idPersons' in object && typeof(object.idPersons) === 'number' ?
-        {idPersons:object.idPersons} :
+const IdPersons = (object:any):dbIdPersons | false => {
+    return 'IdPersons' in object && typeof(object.IdPersons) === 'number' ?
+        {idPersons:object.IdPersons} :
         false;
 }
 
@@ -221,7 +221,7 @@ const profile = (object:token):profile | false => {
 
 export const validator = {
     id,
-    idPersons,
+    IdPersons,
     classes,
     semesters,
     profession,

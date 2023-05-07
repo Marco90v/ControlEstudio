@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
 import { useGetProfessionQuery } from "../../store/apis/professionApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
@@ -5,7 +6,22 @@ import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { Select } from "../Select"
 
-function SectionClasses({ idx, teacher, changeSelect, deleteItem, disabled}:any){
+type ids = {
+    IdProfession:number,
+    IdSemesters:number,
+    IdClasses:number,
+    IdShifts:number,
+    IdSections:number
+}
+type prop = {
+    idx:number,
+    teacher:ids,
+    changeSelect:Function,
+    deleteItem:Function,
+    disabled:boolean
+}
+
+const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:prop) => {
     const { IdProfession, IdSemesters, IdClasses, IdShifts, IdSections } = teacher;
 
     const { data:shifts=[] } = useGetShiftsQuery();
@@ -41,6 +57,6 @@ function SectionClasses({ idx, teacher, changeSelect, deleteItem, disabled}:any)
             </div>
         </div>
     )
-}
+};
 
 export {SectionClasses}

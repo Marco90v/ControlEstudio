@@ -35,7 +35,7 @@ export const studentsApi = createApi({
             }),
             // invalidatesTags: ["Students"],
         }),
-        deleteStudentById : builder.mutation<any,{id:number}>({
+        deleteStudentById : builder.mutation<any,{IdPersons:number}>({
             query: (body) => ({
                 url:"students",
                 method: "DELETE",

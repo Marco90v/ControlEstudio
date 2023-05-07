@@ -82,9 +82,9 @@ export const deleteValueSingleTableWorkOut = (req,res) => {
 
 export const deleteValueTeachersWorkOut = (req,res) => {
     const table:string = req.path.slice(1);
-    const dataValidated = validator.idPersons(req.body);
+    const dataValidated = validator.IdPersons(req.body);
     if(dataValidated){
-        services.deleteTeacher('teachers',dataValidated)
+        services.deleteByIdPerson('teachers',dataValidated)
             .then(()=>{
                 res.status(200).json({deleteId : req.body.idPersons})
             })
@@ -306,8 +306,8 @@ export const updateValueSingleTableWorkOut2 = (req,res) => {
 
 export const deleteStudentWorkOut = (req, res) => {
     const table:string = req.path.slice(1);
-    const id = validator.id(req.body);
-    services.deleteSingle(table,id)
+    const IdPersons = validator.IdPersons(req.body);
+    services.deleteByIdPerson(table,IdPersons)
         .then(result=>res.status(200).json(result))
         .catch(err=>{
             console.log(err);

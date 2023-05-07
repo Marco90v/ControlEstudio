@@ -42,11 +42,11 @@ export const teacherApi = createApi({
             }),
             // invalidatesTags: ["Teachers"],
         }),
-        deleteTeacherByIdPerson: builder.mutation<any, {idPersons:number}>({
-            query:(idPersons) => ({
+        deleteTeacherByIdPerson: builder.mutation<any, {IdPersons:number}>({
+            query:(IdPersons) => ({
                 url:"teachersDelete",
                 method: "DELETE",
-                body:idPersons
+                body:IdPersons
             }),
             // invalidatesTags: ["Teachers"],
         }),

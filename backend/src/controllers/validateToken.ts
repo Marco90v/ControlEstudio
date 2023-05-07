@@ -44,6 +44,7 @@ const authorization = [
     {ruta:'teachers',method:'POST', role:[1]},
     {ruta:'teachers',method:'PUT', role:[1]},
     {ruta:'teachers',method:'DELETE', role:[1]},
+    {ruta:'teachersDelete',method:'DELETE', role:[1]},
 
     {ruta:'pensum',method:'GET', role:[1]},
     {ruta:'pensum',method:'POST', role:[1]},

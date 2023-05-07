@@ -180,5 +180,7 @@ type store = {
     students: studentsStore,
     scores: scoresStore,
     session: {token:string | null},
-    profile: profile
+    profile: profile,
+    person: {data:person},
+    stateFetch: {data:boolean}
 }

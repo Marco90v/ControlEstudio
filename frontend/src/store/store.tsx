@@ -20,16 +20,22 @@ import { profileApi } from './apis/profileApi';
 import visibleSide from './module/visibleSideStore';
 import sessionStore from './module/sessionStore';
 import profileStore from './module/profileStore';
+import personStore from './module/personStore';
+import stateFetch from './module/statusFetch';
 
 const sidebar = visibleSide;
 const session = sessionStore;
 const profile = profileStore;
+const person = personStore;
+// const stateFetch = stateFetch;
 
 export const store = configureStore({
   reducer: {
     sidebar,
     session,
     profile,
+    person,
+    stateFetch,
     [classesApi.reducerPath]: classesApi.reducer,
     [professionApi.reducerPath]: professionApi.reducer,
     [pensumApi.reducerPath]: pensumApi.reducer,
