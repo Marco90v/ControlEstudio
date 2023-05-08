@@ -5,7 +5,7 @@ import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
 import { fieldNotEmptied } from "../../ultil";
-import { SectionClasses } from "../SectionClasses";
+import { SectionClasses } from "../";
 
 const initialDataTeacher:teacher = {
     id:0,

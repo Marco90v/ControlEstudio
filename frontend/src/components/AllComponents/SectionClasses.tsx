@@ -1,10 +1,9 @@
-import { memo } from "react";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
 import { useGetProfessionQuery } from "../../store/apis/professionApi";
 import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
 import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
-import { Select } from "../Select"
+import { Select } from "../"
 
 type ids = {
     IdProfession:number,

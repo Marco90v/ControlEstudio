@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Div } from "../../styled/style";
-import {Popup, InputForm, TableComponent} from "../";
+import {Popup, InputForm, TableComponent} from "..";
 import { useDeleteClassesMutation, useGetClassesQuery, usePostClassesMutation, useUpdateClassesMutation } from "../../store/apis/classesApi";
 
 function DataClasses() {

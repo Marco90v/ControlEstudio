@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { SelectStyle } from "../../styled/style";
 import { useSelector } from "react-redux";
+import { SelectStyle } from "../../styled/style";
 import { useAppDispatch } from "../../store/store";
 import { changePerson, resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";

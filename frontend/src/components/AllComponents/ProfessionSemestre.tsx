@@ -7,7 +7,7 @@ import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
 import { fieldNotEmptied } from "../../ultil";
-import { Select } from "../Select"
+import { Select } from "./Select"
 
 const initialDataStudents:students = {
     id: 0,

@@ -1,18 +1,17 @@
-import { Img, Table } from "../../styled/style";
-import imgEdit from "../../assets/edit-solid-24.png";
-import imgTrash from "../../assets/trash-alt-solid-24.png";
 import { useEffect, useState } from "react";
-import { personApi, useDeletePersonByIdMutation } from "../../store/apis/personApi";
-import { useAppDispatch } from "../../store/store";
-import { resetPerson, setPerson } from "../../store/module/personStore";
-import { Popup } from "../Popup/Popup";
 import { useSelector } from "react-redux";
+import { Img, Table } from "../../styled/style";
+import { useAppDispatch } from "../../store/store";
+import { personApi, useDeletePersonByIdMutation } from "../../store/apis/personApi";
 import { setStateFetch } from "../../store/module/statusFetch";
+import { resetPerson, setPerson } from "../../store/module/personStore";
+import { Popup } from "../";
+import imgTrash from "../../assets/trash-alt-solid-24.png";
+import imgEdit from "../../assets/edit-solid-24.png";
 
 function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
 
     const dispatch = useAppDispatch();
-    // const profile = useSelector((state:store) => state.profile);
     const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
     const [ triggerPersons, { data:persons=preCarga } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
     const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId } ] = useDeletePersonByIdMutation();
