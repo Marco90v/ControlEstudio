@@ -4,6 +4,7 @@ import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMut
 import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
+import { fieldNotEmptied } from "../../ultil";
 import { SectionClasses } from "../SectionClasses";
 
 const initialDataTeacher:teacher = {
@@ -74,19 +75,7 @@ const Teacher = forwardRef( (_, ref) => {
         }));
     }
 
-    const fieldNotEmptied = (object:any):boolean => {
-        let r:boolean = true;
-        for (const key in object) {
-            if(object[key] === 0 || object[key] === ""){
-                r=false;
-                break;
-            }
-        }
-        return r;
-    }
-
     const editData = () => {
-        // dispatch(setStateFetch(true));
         let updateActive = false;
         if(deleteDataTeacher.length > 0){
             deleteTeacherById(deleteDataTeacher)
@@ -123,7 +112,6 @@ const Teacher = forwardRef( (_, ref) => {
     }
 
     const newData = (IdPersons:number) => {
-        // dispatch(setStateFetch(true));
         if(teacher.length > 0){
             const newTeachers = {
                 body: teacher.map(e=>{return {...e, IdPersons}}),

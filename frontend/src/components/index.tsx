@@ -14,3 +14,6 @@ export * from "./Sidebar";
 export * from "./Table";
 export * from "./TablePersons";
 export * from "./Profile";
+export * from "./Teacher";
+export * from "./ProfessionSemestre";
+export * from "./Record";

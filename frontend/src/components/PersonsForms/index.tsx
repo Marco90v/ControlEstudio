@@ -1,11 +1,12 @@
-import { SelectStyle } from "../../styled/style";
-import { Popup, Select } from "../";
-import { useSelector } from "react-redux";
-import { changePerson, resetPerson } from "../../store/module/personStore";
-import { useAppDispatch } from "../../store/store";
 import { useState } from "react";
-import { usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
+import { SelectStyle } from "../../styled/style";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import { changePerson, resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
+import { usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
+import { fieldNotEmptied } from "../../ultil";
+import { Popup, Select } from "../";
 
 function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wait, type}:any){
 
@@ -25,17 +26,6 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
         const value = e.target.value;
         dispatch(changePerson({[camp]:value}));
         !isChange && setIsChange(true);
-    }
-
-    const fieldNotEmptied = (object:any):boolean => {
-        let r:boolean = true;
-        for (const key in object) {
-            if(object[key] === 0 || object[key] === ""){
-                r=false;
-                break;
-            }
-        }
-        return r;
     }
 
     const newData = async () => {

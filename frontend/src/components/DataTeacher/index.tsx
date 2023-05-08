@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ContentTeacher } from "../../styled/style";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { PersonsForms, TablePersons } from "../";
-import { Teacher } from "../Teacher";
+import { PersonsForms, TablePersons, Teacher } from "../";
+// import { Teacher } from "../Teacher";
 import { useSelector } from "react-redux";
 
 const initialDataPerson:person = {
@@ -22,7 +22,7 @@ function DataTeacher(){
     const { data:roles=[] } = useGetRolesQuery();
     const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
     const [ selectRole, setSelectRole ] = useState<number>(0);
-    const [ person, setPerson ] = useState(initialDataPerson);
+    // const [ person, setPerson ] = useState(initialDataPerson);
     const handlerTeacher = useRef();
     
     useEffect(() => {
@@ -38,14 +38,14 @@ function DataTeacher(){
     const changeRole = (e:any) => {
         const ID:any = Number(e.target.value);
         setSelectRole(ID);
-        changeDataPerson(e);
+        // changeDataPerson(e);
     }
 
-    const changeDataPerson = (e:any) => {
-        const camp = e.target.name;
-        const value = e.target.value;
-        setPerson((item)=>{return {...item, [camp]:value}});
-    }
+    // const changeDataPerson = (e:any) => {
+    //     const camp = e.target.name;
+    //     const value = e.target.value;
+    //     setPerson((item)=>{return {...item, [camp]:value}});
+    // }
 
     return(
         <ContentTeacher className="content" wait={statusFetch}>

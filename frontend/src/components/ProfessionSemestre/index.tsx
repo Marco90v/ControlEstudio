@@ -6,6 +6,7 @@ import { studentsApi, useDeleteStudentByIdMutation, usePostStudentMutation, useU
 import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
+import { fieldNotEmptied } from "../../ultil";
 import { Select } from "../Select"
 
 const initialDataStudents:students = {
@@ -78,17 +79,6 @@ const ProfessionSemesters = forwardRef( (_, ref) => {
         return r;
     }
 
-    const fieldNotEmptied = (object:any):boolean => {
-        let r:boolean = true;
-        for (const key in object) {
-            if(object[key] === 0 || object[key] === ""){
-                r=false;
-                break;
-            }
-        }
-        return r;
-    }
-
     const editData = () => {
         dispatch(setStateFetch(true));
         let updateActive = false;
@@ -115,7 +105,6 @@ const ProfessionSemesters = forwardRef( (_, ref) => {
     }
 
     const save = (IdPersons:number=0) => {
-        // dispatch(setStateFetch(true));
         IdPersons !== 0 ? newData(IdPersons) : editData();
     }
 

@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ContentStudent } from "../../styled/style";
-import { PersonsForms, TablePersons } from "../";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { ProfessionSemesters } from "../ProfessionSemestre";
+import { PersonsForms, TablePersons, ProfessionSemesters } from "../";
 import { useSelector } from "react-redux";
 
 const initialDataPerson:person = {

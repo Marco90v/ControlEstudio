@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { ContentScores } from "../../styled/style";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { TablePersons } from "../";
-import { useSelector } from "react-redux";
-import { Record } from "../Record";
+import { TablePersons, Record } from "../";
 
 function DataScores(){
 
