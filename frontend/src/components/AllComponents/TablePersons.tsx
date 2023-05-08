@@ -6,6 +6,7 @@ import { personApi, useDeletePersonByIdMutation } from "../../store/apis/personA
 import { setStateFetch } from "../../store/module/statusFetch";
 import { resetPerson, setPerson } from "../../store/module/personStore";
 import { Popup } from "../";
+
 import imgTrash from "../../assets/trash-alt-solid-24.png";
 import imgEdit from "../../assets/edit-solid-24.png";
 
@@ -106,4 +107,5 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
     );
 }
 
-export { TablePersons };
+export default TablePersons;
+export {TablePersons};

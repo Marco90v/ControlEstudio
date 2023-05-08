@@ -151,4 +151,5 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
     );
 }
 
-export { PersonsForms };
+export default PersonsForms;
+export {PersonsForms};

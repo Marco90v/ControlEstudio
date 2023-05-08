@@ -34,4 +34,5 @@ function InputForm({addCallBack,title}:props) {
     )
 }
 
-export { InputForm };
+export default InputForm;
+export {InputForm};

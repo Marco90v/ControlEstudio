@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ContentDataPensum, SelectPensum, SelectSemester } from "../../styled/style";
-import { addSemester, pensumApi, useDeletePensumMutation, usePostPensumMutation } from "../../store/apis/pensumApi";
 import { useAppDispatch } from "../../store/store";
+import { addSemester, pensumApi, useDeletePensumMutation, usePostPensumMutation } from "../../store/apis/pensumApi";
 import { useGetProfessionQuery } from "../../store/apis/professionApi";
 import { useGetSemestersQuery } from "../../store/apis/semestersApi";
 import { useGetClassesQuery } from "../../store/apis/classesApi";
@@ -163,4 +163,5 @@ function DataPensum(){
     );
 }
 
-export { DataPensum };
+export default DataPensum;
+export {DataPensum};

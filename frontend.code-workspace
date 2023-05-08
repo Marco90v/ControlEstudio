@@ -8,7 +8,7 @@
 		}
 	],
 	"settings": {
-		"typescript.tsdk": ".yarn/sdks/typescript/lib",
+		"typescript.tsdk": "frontend/.yarn/sdks/typescript/lib",
 		"typescript.enablePromptUseWorkspaceTsdk": true
 	}
 }

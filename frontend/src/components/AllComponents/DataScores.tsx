@@ -49,4 +49,5 @@ function DataScores(){
     );
 }
 
-export { DataScores };
+export default DataScores;
+export {DataScores};

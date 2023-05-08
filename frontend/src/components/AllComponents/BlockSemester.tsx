@@ -1,7 +1,7 @@
 import { ClassesBySemesters, Semestres } from "../../styled/style";
 import iconAdd from "../../assets/plus-circle-solid-24.png";
 import { memo } from "react";
-import { BadgeClasse } from "..";
+import { BadgeClasse } from "../";
 
 type localClasse = {
     id:number,
@@ -41,4 +41,5 @@ const BlockSemester = memo (({semester, insertNewClasse, removeClasse}:props) =>
     return n.semester.IdSemesters === p.semester.IdSemesters && JSON.stringify(n.semester.Classes) === JSON.stringify(p.semester.Classes)
 } );
 
-export {BlockSemester}
+export default BlockSemester;
+export {BlockSemester};

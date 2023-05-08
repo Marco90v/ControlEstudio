@@ -58,4 +58,5 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
     )
 };
 
-export {SectionClasses}
+export default SectionClasses;
+export {SectionClasses};

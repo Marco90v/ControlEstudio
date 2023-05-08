@@ -25,4 +25,5 @@ const Select = memo( ({identify,changeSelect,value,data,disabled}:select) => {
     return n.value===p.value && JSON.stringify(n.data)===JSON.stringify(p.data) && n.disabled === p.disabled;
 });
 
-export { Select };
+export default Select;
+export {Select};

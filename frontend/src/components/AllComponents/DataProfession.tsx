@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { Div } from "../../styled/style";
+import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { InputForm, Popup, TableComponent } from "../";
 
 function DataProfession(){
@@ -66,4 +66,5 @@ function DataProfession(){
     );
 }
 
-export {DataProfession}
+export default DataProfession;
+export {DataProfession};

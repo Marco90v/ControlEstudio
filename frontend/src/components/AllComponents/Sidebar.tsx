@@ -6,6 +6,7 @@ import { removeSession } from "../../store/module/sessionStore";
 import { removeProfile } from "../../store/module/profileStore";
 import { authApi } from "../../store/apis/authApi";
 import { profileApi } from "../../store/apis/profileApi";
+
 import arrow from "../../assets/left-arrow-solid-24.png";
 import close from "../../assets/log-out-regular-24.png";
 
@@ -103,4 +104,5 @@ function Sidebar(){
     )
 }
 
-export { Sidebar };
+export default Sidebar;
+export {Sidebar};

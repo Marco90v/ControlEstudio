@@ -149,4 +149,5 @@ const Teacher = forwardRef( (_, ref) => {
         </div>
     )
 });
+export default Teacher;
 export {Teacher};

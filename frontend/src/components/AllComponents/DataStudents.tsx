@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { ContentStudent } from "../../styled/style";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { PersonsForms, TablePersons, ProfessionSemesters } from "../";
+import { PersonsForms, TablePersons, ProfessionSemester } from "../";
 
 const initialDataPerson:person = {
     id:0,
@@ -53,7 +53,7 @@ function DataStudents(){
                 saveChildren={handlerStudent}
                 type={"Estudiante"}
             >
-                <ProfessionSemesters ref={handlerStudent} />
+                <ProfessionSemester ref={handlerStudent} />
             </PersonsForms>
             <TablePersons
                 deleteChildren={handlerStudent}
@@ -63,4 +63,5 @@ function DataStudents(){
     );
 }
 
-export {DataStudents}
+export default DataStudents;
+export {DataStudents};

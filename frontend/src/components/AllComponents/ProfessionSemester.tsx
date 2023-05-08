@@ -7,7 +7,7 @@ import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
 import { fieldNotEmptied } from "../../ultil";
-import { Select } from "./Select"
+import { Select } from ".."
 
 const initialDataStudents:students = {
     id: 0,
@@ -16,7 +16,7 @@ const initialDataStudents:students = {
     IdSemesters: 0
 }
 
-const ProfessionSemesters = forwardRef( (_, ref) => {
+const ProfessionSemester = forwardRef( (_, ref) => {
     const dispatch = useAppDispatch();
     const { data:professions=[] } = useGetProfessionQuery();
     const { data:semesters=[] } = useGetSemestersQuery();
@@ -126,4 +126,5 @@ const ProfessionSemesters = forwardRef( (_, ref) => {
     )
 })
 
-export { ProfessionSemesters }
+export default ProfessionSemester;
+export {ProfessionSemester};

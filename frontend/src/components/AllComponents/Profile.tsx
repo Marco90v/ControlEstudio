@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useGetProfileQuery } from "../../store/apis/profileApi";
 import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { ContentProfile } from "../../styled/style";
@@ -34,4 +34,5 @@ function Profile(){
     )
 }
 
-export {Profile}
+export default Profile;
+export {Profile};

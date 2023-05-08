@@ -65,4 +65,5 @@ function DataTeacher(){
     )
 }
 
-export { DataTeacher };
+export default DataTeacher;
+export {DataTeacher};

@@ -68,4 +68,5 @@ function Popup({children, aceptCallback, cancelCallBack}:any){
     );
 }
 
-export { Popup };
+export default Popup;
+export {Popup};

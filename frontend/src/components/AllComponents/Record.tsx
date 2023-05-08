@@ -8,8 +8,7 @@ import { studentsApi } from "../../store/apis/studentsApi";
 import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
-import { Popup } from "../";
-import { Select } from "./Select";
+import { Popup, Select} from "../";
 
 const initialDataScores:scores = {
     id:0,
@@ -225,4 +224,5 @@ function Record () {
         </>
     )
 }
-export { Record }
+export default Record;
+export {Record};
