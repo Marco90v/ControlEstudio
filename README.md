@@ -56,6 +56,7 @@ Este proyecto fue iniciado con la finalidad de practicar y aprender el uso de he
 - Desde la terminar navegue a la carpeta del proyecto, luego entre a la carpeta BackEnd e instale todas las dependencias con `yarn install`
 - IMPORTANTE: en la carpeta backend debe crear un archivo .env y agregar una variable `SECRET` con el valor que desee, esto sera usado para crear el JWT, ejemplo: `SECRET=pass`
 - Realice el paso anterior pero esta vez en la carpeta FrontEnd.
+- En caso de error con TypeScript al abrir el area de trabajo en Visual Studio Code ejecute en la ruta de la carpeta frontend el siguiente comando `yarn dlx @yarnpkg/sdks vscode`
 - Una vez instaladas todas las dependencias, desde cada carpeta por separada ejecute el comando `yarn dev`
 - Al ejecutar el BackEnd se creara la base de datos, tablas, columnas y datos base, de manera automática para que pueda hacer uso del proyecto.
 
