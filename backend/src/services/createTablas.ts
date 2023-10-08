@@ -1,4 +1,4 @@
-import { Connection, Pool } from "mysql";
+import { Connection, Pool } from "mysql2";
 
 export const createTables = (conn:Pool,ini):void => {
     
@@ -141,17 +141,20 @@ export const createTables = (conn:Pool,ini):void => {
         createLogin();
     }
 
-    conn.getConnection(err=>{
-        if (err) {
-            if(err.sqlMessage==="Unknown database 'controlestudio'"){
-                console.log('Error al conectar a la DB --> ', err.sqlMessage);
-            }else{
-                console.log('Error al conectar al servidor DB --> ', err);
-            }
-        }else{
-            verifyTables();
-            ini();
-        }
-    });
+    // conn.getConnection(err=>{
+    //     if (err) {
+    //         if(err.sqlMessage==="Unknown database 'controlestudio'"){
+    //             console.log('Error al conectar a la DB --> ', err.sqlMessage);
+    //         }else{
+    //             console.log('Error al conectar al servidor DB --> ', err);
+    //         }
+    //     }else{
+    //         verifyTables();
+    //         ini();
+    //     }
+    // });
+
+    verifyTables();
+    ini();
 
 }

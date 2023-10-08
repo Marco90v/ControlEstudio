@@ -1,8 +1,9 @@
-import mysql, { Connection, ConnectionConfig, Pool, PoolConfig, QueryOptions } from 'mysql';
+// import mysql, { Connection, ConnectionConfig, Pool, PoolConfig, QueryOptions } from 'mysql2';
+import mysql, { PoolOptions } from 'mysql2'
 import { createTables } from './createTablas';
 import { createDataDemo } from './insertDataDemo';
 
-const config:PoolConfig = {
+const config:PoolOptions = {
     host: 'localhost',
     user: 'admin',
     password: 'admin',
@@ -11,7 +12,8 @@ const config:PoolConfig = {
     database: 'controlestudio'
 }
 
-const conn:Pool = mysql.createPool(config);
+// const conn:Pool = mysql.createPool(config);
+const conn = mysql.createPool(config);
 
 // console.log(conn.state);
 
@@ -37,9 +39,9 @@ const conn:Pool = mysql.createPool(config);
 
 
 const InitialDB = (ini) => {
-    createTables(conn,ini); // <--crea tablas si no existen
-    createDataDemo(conn); // <--agrega datos a las tablas para usar como base de prueba
-    // ini(); // <-- si desea ejecutar el sistema sin verificar la existencia de las tablas ni crear registros, comente las 2 lineas anteriores y descomente esta.
+    // createTables(conn,ini); // <--crea tablas si no existen
+    // createDataDemo(conn); // <--agrega datos a las tablas para usar como base de prueba
+    ini(); // <-- si desea ejecutar el sistema sin verificar la existencia de las tablas ni crear registros, comente las 2 lineas anteriores y descomente esta.
 }
 
 // export {conectar,desconectar}
