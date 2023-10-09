@@ -325,6 +325,7 @@ export const FloatAlert = styled.div`
         right: 2rem;
         background-color: yellow;
         color: black;
+    }
     &.success{
         opacity: 1;
         right: 2rem;
@@ -575,7 +576,7 @@ export const ContentTeacher = styled.div<any>`
     }
 `;
 
-export const ContentStudent = styled(ContentTeacher)`
+export const ContentStudent = styled(ContentTeacher)<any>`
     >.newPerson{
         grid-template-rows: 19rem auto auto;
         >.dataUser{

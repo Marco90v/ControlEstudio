@@ -8,8 +8,8 @@ export const professionApi = createApi({
             const token = getState().session.token;
             if (token) {
               headers.set('authorization', `Bearer ${token}`)  
-              return headers
             }
+            return headers
         },
     }),
     endpoints: (builder) => ({
