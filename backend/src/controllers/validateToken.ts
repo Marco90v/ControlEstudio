@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { token } from '../types'
-import { validator } from './validator'
+import { token } from '../types/index.js'
+import { validator } from './validator.js'
 
 const dotenv = require('dotenv')
 dotenv.config()

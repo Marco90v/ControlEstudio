@@ -1,4 +1,4 @@
-import { oldFormat, scores, teacher } from '../types'
+import { oldFormat, scores, teacher } from '../types/index.js'
 
 // La siguiente funcion, tranforma un arreglo de objesto en matriz.
 // Ejemplo:

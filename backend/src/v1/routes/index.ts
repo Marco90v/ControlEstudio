@@ -1,7 +1,7 @@
 import express from 'express'
 
-import * as workOutControllers from '../../controllers'
-import { validateToken } from '../../controllers/validateToken'
+import * as workOutControllers from '../../controllers/index.js'
+import { validateToken } from '../../controllers/validateToken.js'
 
 const router = express.Router()
 

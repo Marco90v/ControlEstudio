@@ -1,7 +1,7 @@
 // import {  PoolConnection } from 'mysql2';
-import { transformData } from '../transform'
-import { allStudents, dbPersons, scores } from '../types'
-import { conn } from './conect'
+import { transformData } from '../transform/index.js'
+import { allStudents, dbPersons, scores } from '../types/index.js'
+import { conn } from './conect.js'
 
 export const getAllAdmin = async () => {
   return await new Promise(async (resolve, reject) => {

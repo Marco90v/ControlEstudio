@@ -1,7 +1,7 @@
-import * as services from '../services'
-import { transformTeacher } from '../transform'
-import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat, scores } from '../types'
-import { validator } from './validator'
+import * as services from '../services/index.js'
+import { transformTeacher } from '../transform/index.js'
+import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat, scores } from '../types/index.js'
+import { validator } from './validator.js'
 import jwt from 'jsonwebtoken'
 
 export const getAllAdminWorkOut = (_, res) => {

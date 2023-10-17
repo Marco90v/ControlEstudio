@@ -1,5 +1,5 @@
 import { Connection, MysqlError, Pool, PoolConnection } from 'mysql'
-import { dbAdmin, dbClasses, dbLogin, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts } from '../types'
+import { dbAdmin, dbClasses, dbLogin, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts } from '../types/index.js'
 
 export const createDataDemo = (conn: Pool): void => {
   let connection: PoolConnection
