@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
+import dotenv from "dotenv"
 import { token } from '../types/index.js'
 import { validator } from './validator.js'
+import { GraphQLError } from 'graphql'
 
-const dotenv = require('dotenv')
+// const dotenv = require('dotenv')
 dotenv.config()
 const SECRET = process.env.SECRET
 
@@ -78,6 +80,28 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
     console.log(e)
     return res.status(410).json({ message: 'No autorizado' })
   }
+}
+
+export const newValidaToken = (headers:string) => {
+  if (headers && headers.length > 7){
+    const token = headers.slice(7)
+    const auth = jwt.verify(token, SECRET)
+    if(auth){
+      return auth
+    }
+    throw new GraphQLError('User is not authenticated', {
+      extensions: {
+        code: 'UNAUTHENTICATED',
+        http: { status: 401 },
+      },
+    });
+  }
+  throw new GraphQLError('User is not authenticated', {
+    extensions: {
+      code: 'UNAUTHENTICATED',
+      http: { status: 401 },
+    },
+  });
 }
 
 export const getProfile = (req: Request, res: Response) => {

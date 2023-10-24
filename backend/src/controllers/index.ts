@@ -3,6 +3,8 @@ import { transformTeacher } from '../transform/index.js'
 import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat, scores } from '../types/index.js'
 import { validator } from './validator.js'
 import jwt from 'jsonwebtoken'
+import dotenv from "dotenv"
+
 
 export const getAllAdminWorkOut = (_, res) => {
   services.getAllAdmin()
@@ -426,30 +428,52 @@ export const getPersonByIdWorkOut = (req, res) => {
   }
 }
 
-export const login = (req, res) => {
-  const data = validator.login(req.body)
-  if (data) {
-    services.login(data)
-      .then((result: any) => {
-        const dotenv = require('dotenv')
-        dotenv.config()
-        const SECRET = process.env.SECRET
-        const newData = {
-          id: result.id,
-          names: result.names,
-          lastNames: result.lastNames,
-          sex: result.sex,
-          email: result.email,
-          phone: result.phone,
-          photo: result.photo,
-          role: result.role
-        }
-        const token = jwt.sign(newData, SECRET)
-        res.status(200).json({ token })
-      })
-      .catch(err => {
-        console.log(err)
-        res.status(401).json({ error: err })
-      })
-  }
+export const login = async(user:string, pass:string) => {
+// export const login = (req, res) => {
+  // const data = validator.login(req.body)
+  // if (data) {
+  //   services.login(data)
+  //     .then((result: any) => {
+  //       const dotenv = require('dotenv')
+  //       dotenv.config()
+  //       const SECRET = process.env.SECRET
+  //       const newData = {
+  //         id: result.id,
+  //         names: result.names,
+  //         lastNames: result.lastNames,
+  //         sex: result.sex,
+  //         email: result.email,
+  //         phone: result.phone,
+  //         photo: result.photo,
+  //         role: result.role
+  //       }
+  //       const token = jwt.sign(newData, SECRET)
+  //       res.status(200).json({ token })
+  //     })
+  //     .catch(err => {
+  //       console.log(err)
+  //       res.status(401).json({ error: err })
+  //     })
+  // }
+	const token = await services.login({user, pass})
+		.then((result: any) => {
+			if (result){
+				const newData = {
+					id: result.id,
+					names: result.names,
+					lastNames: result.lastNames,
+					sex: result.sex,
+					email: result.email,
+					phone: result.phone,
+					photo: result.photo,
+					role: result.role
+				}
+				return newData
+            }
+		})
+		.catch(err => {
+			console.log(err)
+			return null
+		})
+		return token
 }

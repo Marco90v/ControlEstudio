@@ -1,44 +1,156 @@
 import jwt from 'jsonwebtoken'
-import * as services from "../services/index.js"
+// import * as services from "../services/index.js"
+import * as services from '../services/index.js'
 import dotenv from "dotenv"
+import { login } from '../controllers/index.js';
+import { validator } from '../controllers/validator.js';
+import { NAMETABLE } from '../utils/const.js';
+// import { rejects } from 'assert';
+
+dotenv.config()
+
+const addData = (args, table:string) => {
+    return new Promise(async (resolve, reject)=>{
+        const data = validator[table](args)
+        if(data){
+            const res:any = await services.insertSingle(table,data).catch(error=>{return { error }})
+            const { insertId } = res
+            if(insertId){
+                resolve({
+                    id: insertId,
+                    ...args
+                })
+            }
+            reject(null)
+        }
+        reject(null)
+    })
+}
+
+const updateData = (args, table:string) => {
+    return new Promise( async (resolve, reject)=>{
+        const id = validator.id(args)
+        const data = validator[table](args)
+        const dataValidated = { ...id, ...data }
+        if(id && data){
+                const res:any = await services.updateSingle(table,dataValidated).catch(error=>{return { error }})
+                if(res.affectedRows){
+                    resolve({
+                        ...id,
+                        ...dataValidated
+                    })
+                }
+                reject(null)
+            }
+            reject(null)
+    })
+}
+
+const deleteData = (args, table:string) => {
+    return new Promise( async (resolve, reject)=>{
+        const dataValidated = validator.id(args)
+        if(dataValidated){
+            const res:any = await services.deleteSingle(table, dataValidated).catch(error=>{return { error }})
+            if(res.affectedRows){
+                resolve(true)
+            }
+            reject(false)
+        }
+        reject(false)
+    })
+}
+
 const resolvers = {
     Query: {
-      me() {
-        return { id: '1', username: '@ava' };
-      },
-      login: async(_,args)=>{
-        const user = args.user
-        const pass = args.pass
-        // let token
-        const token = await services.login({user, pass})
-          .then((result: any) => {
-            // const dotenv = require('dotenv')
-            if (result){
-              dotenv.config()
-              const SECRET = process.env.SECRET
-              const newData = {
-                id: result.id,
-                names: result.names,
-                lastNames: result.lastNames,
-                sex: result.sex,
-                email: result.email,
-                phone: result.phone,
-                photo: result.photo,
-                role: result.role
-              }
-              return jwt.sign(newData, SECRET)
-              // console.log(token)
-              // return {token}
+        __type() {
+            throw new Error('You cannot make introspection');
+        },
+        __schema() {
+            throw new Error('You cannot make introspection');
+        },
+        // LOGIN
+        login: async(_,args)=>{
+            const {user, pass} = args
+            const data = await login(user, pass)
+            if(data){
+                const SECRET = process.env.SECRET
+                const token = jwt.sign(data, SECRET)
+                return {token}
             }
-          })
-          .catch(err => {
-            console.log(err)
-            // res.status(401).json({ error: err })
             return null
-          })
-          return {token}
-      }
+        },
+        // ADMIN
+        allAdmin : async (_,args, contextValue) =>{
+            // const role = contextValue.role
+            return await services.getAllAdmin().catch(error=>{return { error }})
+        },
+        // CLASSES
+        allClasses: async (_,args, contextValue) =>{
+            return await services.getAll(NAMETABLE.classes).catch(error=>{return { error }})
+        },
+        // SEMESTERS
+        allSemesters: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.semesters).catch(error=>{return { error }})
+        },
+        // PROFESSION
+        allProfession: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.profession).catch(error=>{return { error }})
+        },
+        // SHIFTS
+        allShifts: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.shifts).catch(error=>{return { error }})
+        },
+        // SECTION
+        allSections: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.sections).catch(error=>{return { error }})
+        },
+        // ROLE
+        allRoles: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.roles).catch(error=>{return { error }})
+        },
+        // PERSON
+        allPersons: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.persons).catch(error=>{return { error }})
+        },
+        getPersonById: async (_,args, contextValue) => {
+            const id = validator.id(args)
+            if (id) return await services.getById(NAMETABLE.persons,id).catch(error=>{return { error }})
+            return null
+        },
+        getPersonByRole: async (_,{role}, contextValue) => {
+            return await services.getPersonByRole(role).catch(error=>{return { error }})
+        }
     },
+    Mutation: {
+        // CLASSES
+        addClasses: async (_,{dataClasse}, contextValue) => await addData(dataClasse,NAMETABLE.classes),
+        updateClasses: async (_,{dataClasse}, contextValue) => await updateData(dataClasse,NAMETABLE.classes),
+        deleteClasses: async (_,args, contextValue) => await deleteData(args,NAMETABLE.classes),
+        // SEMESTERS
+        addSemester: async (_,{dataSemester}, contextValue) => await addData(dataSemester,NAMETABLE.semesters),
+        updateSemester: async (_,{dataSemester}, contextValue) => await updateData(dataSemester,NAMETABLE.semesters),
+        deleteSemester: async (_,args, contextValue) => await deleteData(args,NAMETABLE.semesters),
+        // PROFESSION
+        addProfession: async (_,{dataProfession}, contextValue) => await addData(dataProfession,NAMETABLE.profession),
+        updateProfession: async (_,{dataProfession}, contextValue) => await updateData(dataProfession,NAMETABLE.profession),
+        deleteProfession: async (_,args, contextValue) => await deleteData(args,NAMETABLE.profession),
+        // SHIFTS
+        addShift: async (_,{dataShift}, contextValue) => await addData(dataShift,NAMETABLE.shifts),
+        updateShift: async (_,{dataShift}, contextValue) => await updateData(dataShift,NAMETABLE.shifts),
+        deleteShift: async (_,args, contextValue) => await deleteData(args,NAMETABLE.shifts),
+        // SECTION
+        addSection: async (_,{dataSection}, contextValue) => await addData(dataSection,NAMETABLE.sections),
+        updateSection: async (_,{dataSection}, contextValue) => await updateData(dataSection,NAMETABLE.sections),
+        deleteSection: async (_,args, contextValue) => await deleteData(args,NAMETABLE.sections),
+        // ROLES
+        addRole: async (_,{dataRole}, contextValue) => await addData(dataRole,NAMETABLE.roles),
+        updateRole: async (_,{dataRole}, contextValue) => await updateData(dataRole,NAMETABLE.roles),
+        deleteRole: async (_,args, contextValue) => await deleteData(args,NAMETABLE.roles),
+        // Person
+        addPerson: async (_,{dataPerson}, contextValue) => await addData(dataPerson,NAMETABLE.persons),
+        updatePerson: async (_,{dataPerson}, contextValue) => await updateData(dataPerson,NAMETABLE.persons),
+        deletePerson: async (_,args, contextValue) => await deleteData(args,NAMETABLE.persons),
+    }
   };
 
 export default resolvers

@@ -425,3 +425,13 @@ export const getPersonById = async ({ id }) => {
     })
   })
 }
+
+export const getById = async (table: string,{ id }) => {
+  return await new Promise((resolve, reject) => {
+    const query = `SELECT * FROM ${table} WHERE id = ?`
+    conn.query(query, id, (err, result) => {
+      if (err) reject(`Error en consulta a tabla login: ${err}`)
+      if (result) resolve(result[0])
+    })
+  })
+}

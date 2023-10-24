@@ -10,35 +10,39 @@ const router = express.Router()
 // });
 
 // RUTAS ADMIN
-router.get('/admin', workOutControllers.getAllAdminWorkOut)
+router.get('/admin', workOutControllers.getAllAdminWorkOut) // migrado
 
 // RUTAS PARA LAS MATERIAS
-router.get('/classes', validateToken, workOutControllers.getAllWorkOut)
-router.post('/classes', validateToken, workOutControllers.setValuesSingleTableWorkOut)
-router.put('/classes', validateToken, workOutControllers.updateValueSingleTableWorkOut)
-router.delete('/classes', validateToken, workOutControllers.deleteValueSingleTableWorkOut)
+router.get('/classes', validateToken, workOutControllers.getAllWorkOut) // migado
+router.post('/classes', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+router.put('/classes', validateToken, workOutControllers.updateValueSingleTableWorkOut) // migrado
+router.delete('/classes', validateToken, workOutControllers.deleteValueSingleTableWorkOut) // migrado
 
 // RUTA PARA LOS SEMESTRES
-router.get('/semesters', validateToken, workOutControllers.getAllWorkOut)
-router.post('/semesters', validateToken, workOutControllers.setValuesSingleTableWorkOut)
+router.get('/semesters', validateToken, workOutControllers.getAllWorkOut) // migrado
+router.post('/semesters', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+// agrega update y delete en la migración
 
 // RUTAS PARA LAS PROFESIONES
-router.get('/profession', validateToken, workOutControllers.getAllWorkOut)
-router.post('/profession', validateToken, workOutControllers.setValuesSingleTableWorkOut)
-router.put('/profession', validateToken, workOutControllers.updateValueSingleTableWorkOut)
-router.delete('/profession', validateToken, workOutControllers.deleteValueSingleTableWorkOut)
+router.get('/profession', validateToken, workOutControllers.getAllWorkOut) // migrado
+router.post('/profession', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+router.put('/profession', validateToken, workOutControllers.updateValueSingleTableWorkOut) // migrado
+router.delete('/profession', validateToken, workOutControllers.deleteValueSingleTableWorkOut) // migrado
 
 // RUTAS PARA LOS TURNOS
-router.get('/shifts', validateToken, workOutControllers.getAllWorkOut)
-router.post('/shifts', validateToken, workOutControllers.setValuesSingleTableWorkOut)
+router.get('/shifts', validateToken, workOutControllers.getAllWorkOut) // migrado
+router.post('/shifts', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+// agrega update y delete en migración
 
 // RUTAS PARA LAS SECCIONES
-router.get('/sections', validateToken, workOutControllers.getAllWorkOut)
-router.post('/sections', validateToken, workOutControllers.setValuesSingleTableWorkOut)
+router.get('/sections', validateToken, workOutControllers.getAllWorkOut) // migrado
+router.post('/sections', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+// agrega update y delete en migración
 
 // RUTAS PARA LOS ROLES
-router.get('/roles', validateToken, workOutControllers.getAllWorkOut)
-router.post('/roles', validateToken, workOutControllers.setValuesSingleTableWorkOut)
+router.get('/roles', validateToken, workOutControllers.getAllWorkOut) // migrado
+router.post('/roles', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+// agrega update y delete en migración
 
 // RUTAS PARA LAS PERSONAS
 router.get('/persons', validateToken, workOutControllers.getAllWorkOut)
@@ -49,7 +53,7 @@ router.put('/persons', validateToken, workOutControllers.updatePersonById)
 router.delete('/persons', validateToken, workOutControllers.deleteValueSingleTableWorkOut)
 
 // RUTA PARA LOGIN
-router.post('/login', workOutControllers.login)
+// router.post('/login', workOutControllers.login)
 // router.post('/persons', workOutControllers.setValuesSingleTableWorkOut);
 
 // RUTAS PARA LOS PROFESORES

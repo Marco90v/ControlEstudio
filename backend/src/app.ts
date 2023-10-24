@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 
 import typeDefs from './graphql/schema.js'
 import resolvers from './graphql/resolvers.js'
+import { newValidaToken } from './controllers/validateToken.js';
 
 const port = 3030
 
@@ -27,10 +28,24 @@ const __dirname = path.dirname(__filename);
 // };
 
 const app = express();
+// import { buildSubgraphSchema } from "@apollo/federation";
+
+// export const schema = buildSubgraphSchema([
+//   { typeDefs: UserTypeDefs, resolvers: UserResolvers },
+//   { typeDefs: AccountTypeDefs, resolvers: AccountResolvers },
+// ]);
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: process.env.NODE_ENV !== 'production',
+  formatError: (formattedError) => {
+    return {
+      message: formattedError.message,
+      code: formattedError.extensions.code,
+      http: formattedError.extensions.http,
+    }
+  },
 });
 
 
@@ -57,7 +72,24 @@ app.use(express.static(path.join(__dirname, '../../frontend/dist'))),
 //   res.sendFile(path.join(__dirname, '../../frontend/dist/index'))
 // })
 
-app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+
+
+app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server, {
+  context:async ({req}) => {
+    const headers = req.headers.authorization;
+    // if (headers && headers.length > 7){
+    //   const token = headers.slice(7)
+    //   const auth = jwt
+    // }
+    // console.log(headers)
+    // return headers
+    // console.log(headers)
+    return headers ? newValidaToken(headers) : null
+    // return newValidaToken(headers)
+    // return null
+  }
+}));
+// app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 // console.log(`🚀  Server ready at ${url}`);
 
 app.listen(port, () => {
