@@ -16,10 +16,13 @@ const typeDefs = `#graphql
     allSections: [section]
     # ROLES
     allRoles: [role]
-    # PERSONS: 
+    # PERSONS
     allPersons: [person]
     getPersonById(id:Int): person
     getPersonByRole(role:Int): [person]
+    # TEACHER
+    getTeachers:[teacher]
+    getTeacherByPerson(id:Int): teacher
   }
   type Mutation {
     # CLASSES
@@ -50,6 +53,10 @@ const typeDefs = `#graphql
     addPerson(dataPerson:inputPerson): person
     updatePerson(dataPerson:inputPerson): person
     deletePerson(id:Int):Boolean
+    # TEACHER
+    addTeacher(dataTeacher:[inputTeacher]): Boolean
+    updateTeacher(dataTeacher:[inputTeacher]): Boolean
+    deleteTeacher(ids:[Int]):Boolean
   }
   type Token {
     token:String
@@ -120,27 +127,49 @@ const typeDefs = `#graphql
   }
   # PERSONS
   type person {
-    id: Int
-    names: String
-    lastNames: String
-    sex: String
-    email: String
-    phone: Int
-    photo: String
+    id: Int,
+    names: String,
+    lastNames: String,
+    sex: String,
+    email: String,
+    phone: Int,
+    photo: String,
     role: Int
   }
   input inputGetPersonById{
     id: Int
   }
   input inputPerson{
-    id: Int
-    names: String
-    lastNames: String
-    sex: String
-    email: String
-    phone: Int
-    photo: String
+    id: Int,
+    names: String,
+    lastNames: String,
+    sex: String,
+    email: String,
+    phone: Int,
+    photo: String,
     role: Int
+  }
+  # TEACHERS
+  type teacher{
+    id: Int,
+    IdPersons: Int,
+    IdProfession: Int,
+    IdSemesters: Int,
+    IdClasses: Int,
+    IdShifts: Int,
+    IdSections: Int
+  }
+  input inputTeacher{
+    id: Int,
+    IdPersons: Int,
+    IdProfession: Int,
+    IdSemesters: Int,
+    IdClasses: Int,
+    IdShifts: Int,
+    IdSections: Int
+  }
+  type insertId {
+    insertId: Int
   }
 `
 export default typeDefs

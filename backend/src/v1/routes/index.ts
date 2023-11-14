@@ -45,20 +45,20 @@ router.post('/roles', validateToken, workOutControllers.setValuesSingleTableWork
 // agrega update y delete en migración
 
 // RUTAS PARA LAS PERSONAS
-router.get('/persons', validateToken, workOutControllers.getAllWorkOut)
-router.get('/persons/:role', validateToken, workOutControllers.getPersonByRoleWorkOut)
-router.get('/person', validateToken, workOutControllers.getPersonByIdWorkOut)
-router.post('/persons', validateToken, workOutControllers.setValuesSingleTableWorkOut)
-router.put('/persons', validateToken, workOutControllers.updatePersonById)
-router.delete('/persons', validateToken, workOutControllers.deleteValueSingleTableWorkOut)
+router.get('/persons', validateToken, workOutControllers.getAllWorkOut) // migrado
+router.get('/persons/:role', validateToken, workOutControllers.getPersonByRoleWorkOut) // migrado
+router.get('/person', validateToken, workOutControllers.getPersonByIdWorkOut) // migrado
+router.post('/persons', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+router.put('/persons', validateToken, workOutControllers.updatePersonById) // migrado
+router.delete('/persons', validateToken, workOutControllers.deleteValueSingleTableWorkOut) // migrado
 
 // RUTA PARA LOGIN
 // router.post('/login', workOutControllers.login)
 // router.post('/persons', workOutControllers.setValuesSingleTableWorkOut);
 
 // RUTAS PARA LOS PROFESORES
-router.get('/teachers', validateToken, workOutControllers.getAllTeachersWorkOut)
-router.get('/teachers/:id', validateToken, workOutControllers.getSingleTeachersWorkOut)
+// router.get('/teachers', validateToken, workOutControllers.getAllTeachersWorkOut)
+// router.get('/teachers/:id', validateToken, workOutControllers.getSingleTeachersWorkOut)
 // router.post('/teachers', workOutControllers.setValuesSingleTableWorkOut);
 router.post('/teachers', validateToken, workOutControllers.setValuesTeachersWorkOut)
 router.delete('/teachers', validateToken, workOutControllers.deleteValueTeachersWorkOut)

@@ -95,6 +95,28 @@ export const insertMultiple = async (table: string, datas: []) => {
   })
 }
 
+export const insertMult = async (table: string, insertListColumn:string, datas: []) => {
+  return await new Promise((resolve, reject) => {
+    const newData = transformData(datas)
+    const query = `INSERT INTO ${table} (${insertListColumn}) VALUES ?`
+    conn.query(query, [newData], (err, result) => {
+      if (err) reject(`Error en consulta a tabla ${table}: ${err}`)
+      if (result) resolve(result)
+    })
+  })
+}
+
+export const updateMult = async (table: string, insertListColumn:string, updateListValue:string, datas: []) => {
+  return await new Promise((resolve, reject) => {
+    const newData = transformData(datas)
+    const query = `INSERT INTO ${table} (id,${insertListColumn}) VALUES ? ON DUPLICATE KEY UPDATE ${updateListValue}`
+    conn.query(query, [newData], (err, result) => {
+      if (err) reject(`Error en consulta a tabla ${table}: ${err}`)
+      if (result) resolve(result)
+    })
+  })
+}
+
 export const insertMultipleTeacher = async (table: string, datas: []) => {
   return await new Promise((resolve, reject) => {
     const newData = transformData(datas)
@@ -311,6 +333,16 @@ export const updatePerson = async (dataPerson: dbPersons) => {
 export const deleteMultipleTeacher = async (ids: number[]) => {
   return await new Promise((resolve, reject) => {
     const query = 'DELETE FROM teachers WHERE id IN (?)'
+    conn.query(query, [ids], (err, result) => {
+      if (err) reject(`Error eliminar datos, deleteMultipleTeacher: ${err}`)
+      if (result) resolve(result)
+    })
+  })
+}
+
+export const deleteMult = async (table, ids: number[]) => {
+  return await new Promise((resolve, reject) => {
+    const query = `DELETE FROM ${table} WHERE id IN (?)`
     conn.query(query, [ids], (err, result) => {
       if (err) reject(`Error eliminar datos, deleteMultipleTeacher: ${err}`)
       if (result) resolve(result)

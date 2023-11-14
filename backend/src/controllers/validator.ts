@@ -1,9 +1,22 @@
+import { resolveObjectURL } from 'buffer'
 import { dbAdmin, dbClasses, dbId, dbIdPersons, dbPensum, dbPersons, dbProfession, dbRoles, dbSections, dbSemesters, dbShifts, dbStudensts, dbTeachers, profile, scores, token } from '../types'
 
 const id = (object: any): dbId | false => {
   return 'id' in object && typeof (object.id) === 'number'
     ? { id: object.id }
     : false
+}
+
+const ids = (objects: any[]): number[] | false => {
+  const newData: number[] = []
+  for(const key in objects){
+    if(typeof (objects[key]) === 'number'){
+      newData.push(objects[key])
+    }else{
+      return false
+    }
+  }
+  return newData
 }
 
 const IdPersons = (object: any): dbIdPersons | false => {
@@ -83,27 +96,63 @@ const persons = (object: any): dbPersons | false => {
 const teachers = (objects: any): dbTeachers[] | false => {
   const newData: dbTeachers[] = []
   for (const key in objects) {
-    if ('IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in objects[key] &&
-        typeof (objects[key].IdPersons) === 'number' &&
-        typeof (objects[key].IdProfession) === 'number' &&
-        typeof (objects[key].IdSemesters) === 'number' &&
-        typeof (objects[key].IdClasses) === 'number' &&
-        typeof (objects[key].IdShifts) === 'number' &&
-        typeof (objects[key].IdSections) === 'number') {
-      newData.push({
-        IdPersons: objects[key].IdPersons,
-        IdProfession: objects[key].IdProfession,
-        IdSemesters: objects[key].IdSemesters,
-        IdClasses: objects[key].IdClasses,
-        IdShifts: objects[key].IdShifts,
-        IdSections: objects[key].IdSections
-      })
+    if ('id' || 'IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in objects[key] &&
+      typeof (objects[key]?.id) === 'number' ||
+      typeof (objects[key].IdPersons) === 'number' &&
+      typeof (objects[key].IdProfession) === 'number' &&
+      typeof (objects[key].IdSemesters) === 'number' &&
+      typeof (objects[key].IdClasses) === 'number' &&
+      typeof (objects[key].IdShifts) === 'number' &&
+      typeof (objects[key].IdSections) === 'number') {
+        const id = objects[key]?.id ? {id:objects[key].id} : {}
+        newData.push({
+          ...id,
+          IdPersons: objects[key].IdPersons,
+          IdProfession: objects[key].IdProfession,
+          IdSemesters: objects[key].IdSemesters,
+          IdClasses: objects[key].IdClasses,
+          IdShifts: objects[key].IdShifts,
+          IdSections: objects[key].IdSections
+        })
     } else {
       return false
     }
   }
   return newData
 }
+
+// const teachers = (objects: any): dbTeachers | false => {
+//   // const newData: dbTeachers[] = []
+//   // for (const key in objects) {
+//     if ('IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in objects &&
+//         typeof (objects.IdPersons) === 'number' &&
+//         typeof (objects.IdProfession) === 'number' &&
+//         typeof (objects.IdSemesters) === 'number' &&
+//         typeof (objects.IdClasses) === 'number' &&
+//         typeof (objects.IdShifts) === 'number' &&
+//         typeof (objects.IdSections) === 'number') {
+//       // newData.push({
+//       //   IdPersons: objects.IdPersons,
+//       //   IdProfession: objects.IdProfession,
+//       //   IdSemesters: objects.IdSemesters,
+//       //   IdClasses: objects.IdClasses,
+//       //   IdShifts: objects.IdShifts,
+//       //   IdSections: objects.IdSections
+//       // })
+//       return {
+//         IdPersons: objects.IdPersons,
+//         IdProfession: objects.IdProfession,
+//         IdSemesters: objects.IdSemesters,
+//         IdClasses: objects.IdClasses,
+//         IdShifts: objects.IdShifts,
+//         IdSections: objects.IdSections
+//       }
+//     } else {
+//       return false
+//     }
+//   // }
+//   // return newData
+// }
 
 const students = (object: any): dbStudensts | false => {
   return 'IdPersons' && 'IdProfession' && 'IdSemesters' in object &&
@@ -221,6 +270,7 @@ const profile = (object: token): profile | false => {
 
 export const validator = {
   id,
+  ids,
   IdPersons,
   classes,
   semesters,

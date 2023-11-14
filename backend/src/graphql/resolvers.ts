@@ -4,7 +4,7 @@ import * as services from '../services/index.js'
 import dotenv from "dotenv"
 import { login } from '../controllers/index.js';
 import { validator } from '../controllers/validator.js';
-import { NAMETABLE } from '../utils/const.js';
+import { INSERT_LISTCOLUMN, NAMETABLE, UPDATE_LISTVALUES } from '../utils/const.js';
 // import { rejects } from 'assert';
 
 dotenv.config()
@@ -57,6 +57,62 @@ const deleteData = (args, table:string) => {
             reject(false)
         }
         reject(false)
+    })
+}
+
+const addMultData = (args, table:string) => {
+    return new Promise(async (resolve, reject)=>{
+        const data = validator[table](args)
+        if(data){
+            const res:any =  await services.insertMult(
+                table,
+                INSERT_LISTCOLUMN.teacher,
+                data
+            )
+            .catch(error=>{return { error }})
+            const { insertId } = res
+            if(insertId){
+                resolve(true)
+            }
+            reject(false)
+        }
+        reject(null)
+    })
+}
+
+const updateMultData = (args, table:string) => {
+    return new Promise(async (resolve, reject)=>{
+        const data = validator[table](args)
+        if(data){
+            const res:any =  await services.updateMult(
+                table,
+                INSERT_LISTCOLUMN.teacher,
+                UPDATE_LISTVALUES.teacher,
+                data
+            )
+            .catch(error=>{return { error }})
+            const { insertId } = res
+            if(insertId){
+                resolve(true)
+            }
+            reject(false)
+        }
+        reject(null)
+    })
+}
+
+const deleteMultData = (args, table:string) => {
+    return new Promise(async (resolve, reject)=>{
+        const data: number[] | false = validator.ids(args)
+        if(data){
+            const res:any =  await services.deleteMult(table,data).catch(error=>{return { error }})
+            const { affectedRows } = res
+            if(affectedRows){
+                resolve(true)
+            }
+            reject(false)
+        }
+        reject(null)
     })
 }
 
@@ -119,7 +175,16 @@ const resolvers = {
         },
         getPersonByRole: async (_,{role}, contextValue) => {
             return await services.getPersonByRole(role).catch(error=>{return { error }})
-        }
+        },
+        // TEACHER
+        getTeachers: async (_,args, contextValue) => {
+            return await services.getAllTeachers2().catch(error=>{return { error }})
+        },
+        getTeacherByPerson: async (_,{id}, contextValue) => {
+            const idTeacher: number = Number(id)
+            const res = await services.getTeacher2(idTeacher).catch(error=>{return { error }})
+            return res[0]
+        },
     },
     Mutation: {
         // CLASSES
@@ -146,10 +211,14 @@ const resolvers = {
         addRole: async (_,{dataRole}, contextValue) => await addData(dataRole,NAMETABLE.roles),
         updateRole: async (_,{dataRole}, contextValue) => await updateData(dataRole,NAMETABLE.roles),
         deleteRole: async (_,args, contextValue) => await deleteData(args,NAMETABLE.roles),
-        // Person
+        // PERSON
         addPerson: async (_,{dataPerson}, contextValue) => await addData(dataPerson,NAMETABLE.persons),
         updatePerson: async (_,{dataPerson}, contextValue) => await updateData(dataPerson,NAMETABLE.persons),
         deletePerson: async (_,args, contextValue) => await deleteData(args,NAMETABLE.persons),
+        // TEACHER
+        addTeacher: async (_,{dataTeacher}, contextValue) => await addMultData(dataTeacher, NAMETABLE.teachers),
+        updateTeacher: async (_,{dataTeacher}, contextValue) => await updateMultData(dataTeacher,NAMETABLE.teachers),
+        deleteTeacher: async (_,{ids}, contextValue) => await deleteMultData(ids,NAMETABLE.teachers),
     }
   };
 

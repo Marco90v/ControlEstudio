@@ -6,11 +6,11 @@ import { getProfile, validateToken } from '../../controllers/validateToken'
 const router = express.Router()
 
 // RUTAS PARA LOS PROFESORES
-router.get('/teachers', validateToken, workOutControllers.getAllTeachersWorkOut2)
-router.get('/teachers/:id', validateToken, workOutControllers.getSingleTeachersWorkOut2)
-router.post('/teachers', validateToken, workOutControllers.setValuesTeachersWorkOut)
-router.put('/teachers', validateToken, workOutControllers.updateValueSingleTableWorkOut2)
-router.delete('/teachers', validateToken, workOutControllers.deleteTeachersWorkOut)
+router.get('/teachers', validateToken, workOutControllers.getAllTeachersWorkOut2) // migrado
+router.get('/teachers/:id', validateToken, workOutControllers.getSingleTeachersWorkOut2) //migrado
+router.post('/teachers', validateToken, workOutControllers.setValuesTeachersWorkOut) // migrado
+router.put('/teachers', validateToken, workOutControllers.updateValueSingleTableWorkOut2) // migrado
+router.delete('/teachers', validateToken, workOutControllers.deleteTeachersWorkOut) // migrado
 router.delete('/teachersDelete', validateToken, workOutControllers.deleteValueTeachersWorkOut)
 
 // RUTAS PARA LOS ESTUDIANTES
