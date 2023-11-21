@@ -11,14 +11,14 @@ router.get('/teachers/:id', validateToken, workOutControllers.getSingleTeachersW
 router.post('/teachers', validateToken, workOutControllers.setValuesTeachersWorkOut) // migrado
 router.put('/teachers', validateToken, workOutControllers.updateValueSingleTableWorkOut2) // migrado
 router.delete('/teachers', validateToken, workOutControllers.deleteTeachersWorkOut) // migrado
-router.delete('/teachersDelete', validateToken, workOutControllers.deleteValueTeachersWorkOut)
+router.delete('/teachersDelete', validateToken, workOutControllers.deleteValueTeachersWorkOut) // migrado
 
 // RUTAS PARA LOS ESTUDIANTES
-router.get('/students', validateToken, workOutControllers.getAllStudentsWorkOut2)
-router.get('/students/:IdPersons', validateToken, workOutControllers.getStundentByIdPersonsWorkOut)
-router.post('/students', validateToken, workOutControllers.setValuesSingleTableWorkOut)
-router.put('/students', validateToken, workOutControllers.updateValueSingleTableWorkOut2)
-router.delete('/students', validateToken, workOutControllers.deleteStudentWorkOut)
+router.get('/students', validateToken, workOutControllers.getAllStudentsWorkOut2) // migrado
+router.get('/students/:IdPersons', validateToken, workOutControllers.getStundentByIdPersonsWorkOut) // migrado
+router.post('/students', validateToken, workOutControllers.setValuesSingleTableWorkOut) // migrado
+router.put('/students', validateToken, workOutControllers.updateValueSingleTableWorkOut2) // migrado
+router.delete('/students', validateToken, workOutControllers.deleteStudentWorkOut) // migrado
 
 // RUTAS PARA LOS SCORES
 router.get('/scores/:idStudents', validateToken, workOutControllers.getScoresByIdStudent)

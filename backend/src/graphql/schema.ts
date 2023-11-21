@@ -22,7 +22,10 @@ const typeDefs = `#graphql
     getPersonByRole(role:Int): [person]
     # TEACHER
     getTeachers:[teacher]
-    getTeacherByPerson(id:Int): teacher
+    getTeacherByPerson(id:Int): [teacher]
+    # STUDENTS
+    getStudents: [student]
+    getStudentsByPerson(IdPersons:Int): student
   }
   type Mutation {
     # CLASSES
@@ -57,6 +60,11 @@ const typeDefs = `#graphql
     addTeacher(dataTeacher:[inputTeacher]): Boolean
     updateTeacher(dataTeacher:[inputTeacher]): Boolean
     deleteTeacher(ids:[Int]):Boolean
+    deleteTeacherByIdPerson(IdPersons:Int): Boolean
+    # STUDENTS
+    addStudents(dataStudent:inputStudent): student
+    updateStudent(dataStudent:inputStudent): student
+    deleteStudentByIdPerson(IdPersons:Int): Boolean
   }
   type Token {
     token:String
@@ -170,6 +178,19 @@ const typeDefs = `#graphql
   }
   type insertId {
     insertId: Int
+  }
+  # STUDENTS
+  type student{
+    id: Int,
+    IdPersons: Int,
+    IdProfession: Int,
+    IdSemesters: Int
+  }
+  input inputStudent{
+    id: Int,
+    IdPersons: Int,
+    IdProfession: Int,
+    IdSemesters: Int
   }
 `
 export default typeDefs

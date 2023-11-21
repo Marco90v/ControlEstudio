@@ -299,7 +299,7 @@ export const getTeacher = async (id: number) => {
   })
 }
 
-export const getTeacher2 = async (id: number) => {
+export const getTeacher2 = async (id: number)=> {
   return await new Promise((resolve, reject) => {
     const query = 'SELECT * FROM teachers WHERE IdPersons = ?'
     conn.query(query, id, (err, result) => {

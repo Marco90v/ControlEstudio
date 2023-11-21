@@ -60,13 +60,13 @@ const deleteData = (args, table:string) => {
     })
 }
 
-const addMultData = (args, table:string) => {
+const addMultData = (args, insertListColumn, table:string) => {
     return new Promise(async (resolve, reject)=>{
         const data = validator[table](args)
         if(data){
             const res:any =  await services.insertMult(
                 table,
-                INSERT_LISTCOLUMN.teacher,
+                insertListColumn,
                 data
             )
             .catch(error=>{return { error }})
@@ -80,14 +80,14 @@ const addMultData = (args, table:string) => {
     })
 }
 
-const updateMultData = (args, table:string) => {
+const updateMultData = (args, insertListColumn, updateListValues, table:string) => {
     return new Promise(async (resolve, reject)=>{
         const data = validator[table](args)
         if(data){
             const res:any =  await services.updateMult(
                 table,
-                INSERT_LISTCOLUMN.teacher,
-                UPDATE_LISTVALUES.teacher,
+                insertListColumn,
+                updateListValues,
                 data
             )
             .catch(error=>{return { error }})
@@ -182,9 +182,21 @@ const resolvers = {
         },
         getTeacherByPerson: async (_,{id}, contextValue) => {
             const idTeacher: number = Number(id)
-            const res = await services.getTeacher2(idTeacher).catch(error=>{return { error }})
-            return res[0]
+            const res  = await services.getTeacher2(idTeacher).catch(error=>{return { error }})
+            return res
         },
+        // STUDENTS
+        getStudents: async (_,args, contextValue) => {
+            return await services.getAll(NAMETABLE.students).catch(error=>{return { error }})
+        },
+        getStudentsByPerson: async (_,args, contextValue) => {
+            const IdPersons = validator.IdPersons(args)
+            if (IdPersons){
+                return await services.getStudentsByIdPersons(IdPersons.idPersons).catch(error=>{return { error }})
+            }else{
+                return null
+            }
+        }
     },
     Mutation: {
         // CLASSES
@@ -216,9 +228,36 @@ const resolvers = {
         updatePerson: async (_,{dataPerson}, contextValue) => await updateData(dataPerson,NAMETABLE.persons),
         deletePerson: async (_,args, contextValue) => await deleteData(args,NAMETABLE.persons),
         // TEACHER
-        addTeacher: async (_,{dataTeacher}, contextValue) => await addMultData(dataTeacher, NAMETABLE.teachers),
-        updateTeacher: async (_,{dataTeacher}, contextValue) => await updateMultData(dataTeacher,NAMETABLE.teachers),
+        addTeacher: async (_,{dataTeacher}, contextValue) => await addMultData(dataTeacher,INSERT_LISTCOLUMN.teacher, NAMETABLE.teachers),
+        updateTeacher: async (_,{dataTeacher}, contextValue) => await updateMultData(dataTeacher,INSERT_LISTCOLUMN.teacher,UPDATE_LISTVALUES.teacher,NAMETABLE.teachers),
         deleteTeacher: async (_,{ids}, contextValue) => await deleteMultData(ids,NAMETABLE.teachers),
+        deleteTeacherByIdPerson: async (_,args, contextValue) => {
+            const dataValidated = validator.IdPersons(args)
+            if(dataValidated){
+                return await services.deleteByIdPerson(NAMETABLE.teachers, dataValidated)
+                .then(() => true).catch(err => null)
+            }else{
+                return null
+            }
+        },
+        // STUDENTS
+        addStudents: async (_,{dataStudent}, contextValue) => {
+            return await addData(dataStudent,NAMETABLE.students)
+        },
+        updateStudent: async (_,{dataStudent}, contextValue) => {
+            // console.log(dataStudent)
+            return await updateData(dataStudent,NAMETABLE.students)
+            // return null
+        },
+        deleteStudentByIdPerson: async (_,args, contextValue) => {
+            const dataValidated = validator.IdPersons(args)
+            if(dataValidated){
+                return await services.deleteByIdPerson(NAMETABLE.students, dataValidated)
+                .then(() => true).catch(err => null)
+            }else{
+                return null
+            }
+        }
     }
   };
 

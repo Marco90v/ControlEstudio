@@ -6,7 +6,8 @@ const NAMETABLE = {
     sections: "sections",
     roles: "roles",
     persons: "persons",
-    teachers: "teachers"
+    teachers: "teachers",
+    students: "students"
 }
 
 const INSERT_LISTCOLUMN = {
