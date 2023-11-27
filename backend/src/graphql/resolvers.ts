@@ -196,6 +196,18 @@ const resolvers = {
             }else{
                 return null
             }
+        },
+        // SCORES
+        getScores: async (_, args, contextValue) => {
+            const id = validator.id({ id: Number(args.idStudents) })
+            if(id){
+                return await services.getScoresByIdStudent(id.id).catch(error=>{return { error }})
+                // const a:any = await services.getScoresByIdStudent(id.id).catch(error=>{return { error }})
+                // return a.length > 0 ? a : null
+            }else{
+                return null
+            }
+
         }
     },
     Mutation: {
@@ -257,6 +269,14 @@ const resolvers = {
             }else{
                 return null
             }
+        },
+        // SCORE
+        addScore: async (_, {dataScores}, contextValue) => {
+            return await addMultData(dataScores, INSERT_LISTCOLUMN.scores, NAMETABLE.scores)
+            .then(() => true).catch(err => null)
+        },
+        updateScore: async(_, {dataScores}, contextValue) => {
+            return await updateMultData(dataScores, INSERT_LISTCOLUMN.scores, UPDATE_LISTVALUES.scores, NAMETABLE.scores)
         }
     }
   };

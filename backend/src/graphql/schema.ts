@@ -26,6 +26,8 @@ const typeDefs = `#graphql
     # STUDENTS
     getStudents: [student]
     getStudentsByPerson(IdPersons:Int): student
+    # SCORE
+    getScores(idStudents:Int):[score]
   }
   type Mutation {
     # CLASSES
@@ -65,6 +67,9 @@ const typeDefs = `#graphql
     addStudents(dataStudent:inputStudent): student
     updateStudent(dataStudent:inputStudent): student
     deleteStudentByIdPerson(IdPersons:Int): Boolean
+    # SCORE
+    addScore(dataScores:[inputScore]): Boolean
+    updateScore(dataScores:[inputScore]): Boolean
   }
   type Token {
     token:String
@@ -191,6 +196,25 @@ const typeDefs = `#graphql
     IdPersons: Int,
     IdProfession: Int,
     IdSemesters: Int
+  }
+  # SCORE
+  type score {
+    id: Int,
+    IdStudents: Int,
+    IdClasses: Int,
+    IdTeachers: Int,
+    IdShifts: Int,
+    IdSections: Int,
+    score: Int
+  }
+  input inputScore {
+    id: Int,
+    IdStudents: Int,
+    IdClasses: Int,
+    IdTeachers: Int,
+    IdShifts: Int,
+    IdSections: Int,
+    score: Int
   }
 `
 export default typeDefs

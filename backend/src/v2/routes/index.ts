@@ -21,9 +21,9 @@ router.put('/students', validateToken, workOutControllers.updateValueSingleTable
 router.delete('/students', validateToken, workOutControllers.deleteStudentWorkOut) // migrado
 
 // RUTAS PARA LOS SCORES
-router.get('/scores/:idStudents', validateToken, workOutControllers.getScoresByIdStudent)
-router.post('/scores', validateToken, workOutControllers.postScores)
-router.put('/scores', validateToken, workOutControllers.updateScoresById)
+router.get('/scores/:idStudents', validateToken, workOutControllers.getScoresByIdStudent) // migrado
+router.post('/scores', validateToken, workOutControllers.postScores) // migrado
+router.put('/scores', validateToken, workOutControllers.updateScoresById) // migrado
 router.post('/getClassesByProfessionAndSemesters', validateToken, workOutControllers.getClassesByProfessionAndSemesters)
 router.post('/getTeachersByProfessionAndSemesters', validateToken, workOutControllers.getTeachersByProfessionAndSemesters)
 

@@ -196,14 +196,16 @@ const scores = (objects: any): scores[] | false => {
         typeof (objects[key].IdShifts) === 'number' &&
         typeof (objects[key].IdSections) === 'number' &&
         typeof (objects[key].score) === 'number') {
-      newData.push({
-        IdStudents: objects[key].IdStudents,
-        IdClasses: objects[key].IdClasses,
-        IdTeachers: objects[key].IdTeachers,
-        IdShifts: objects[key].IdShifts,
-        IdSections: objects[key].IdSections,
-        score: objects[key].score
-      })
+          const id = objects[key]?.id ? {id:objects[key].id} : {}
+          newData.push({
+            ...id,
+            IdStudents: objects[key].IdStudents,
+            IdClasses: objects[key].IdClasses,
+            IdTeachers: objects[key].IdTeachers,
+            IdShifts: objects[key].IdShifts,
+            IdSections: objects[key].IdSections,
+            score: objects[key].score
+          })
     } else {
       return false
     }
