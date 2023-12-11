@@ -208,6 +208,21 @@ const resolvers = {
                 return null
             }
 
+        },
+        getClassesByProfessionAndSemesters: async (_, {ProfessionAndSemesters}, contextValue) => {
+            const data = validator.professionAndSemesters(ProfessionAndSemesters)
+            if (data){
+                const { IdProfession, IdSemesters } = data
+                return await services.getClassesByProfessionAndSemesters(IdProfession, IdSemesters).catch(error=>{return { error }})
+            }
+
+        },
+        getTeachersByProfessionAndSemesters: async (_, {ProfessionAndSemesters}, contextValue) => {
+            const data = validator.professionAndSemesters(ProfessionAndSemesters)
+            if(data){
+                const { IdProfession, IdSemesters } = data
+                return await services.getTeachersByProfessionAndSemesters(IdProfession, IdSemesters).catch(error=>{return { error }})
+            }
         }
     },
     Mutation: {

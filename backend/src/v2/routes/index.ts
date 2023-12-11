@@ -24,8 +24,8 @@ router.delete('/students', validateToken, workOutControllers.deleteStudentWorkOu
 router.get('/scores/:idStudents', validateToken, workOutControllers.getScoresByIdStudent) // migrado
 router.post('/scores', validateToken, workOutControllers.postScores) // migrado
 router.put('/scores', validateToken, workOutControllers.updateScoresById) // migrado
-router.post('/getClassesByProfessionAndSemesters', validateToken, workOutControllers.getClassesByProfessionAndSemesters)
-router.post('/getTeachersByProfessionAndSemesters', validateToken, workOutControllers.getTeachersByProfessionAndSemesters)
+router.post('/getClassesByProfessionAndSemesters', validateToken, workOutControllers.getClassesByProfessionAndSemesters) //migrado
+router.post('/getTeachersByProfessionAndSemesters', validateToken, workOutControllers.getTeachersByProfessionAndSemesters) //migrado
 
 router.get('/profile', getProfile)
 
