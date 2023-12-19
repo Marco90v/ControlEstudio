@@ -1,0 +1,488 @@
+/* eslint-disable */
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+/** All built-in and custom scalars, mapped to their actual values */
+export type Scalars = {
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+};
+
+export type ClassesByProfessionAndSemesters = {
+  __typename?: 'ClassesByProfessionAndSemesters';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type InputSemester = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addClasses?: Maybe<Classes>;
+  addPerson?: Maybe<Person>;
+  addProfession?: Maybe<Profession>;
+  addRole?: Maybe<Role>;
+  addScore?: Maybe<Scalars['Boolean']['output']>;
+  addSection?: Maybe<Shift>;
+  addSemester?: Maybe<Semester>;
+  addShift?: Maybe<Shift>;
+  addStudents?: Maybe<Student>;
+  addTeacher?: Maybe<Scalars['Boolean']['output']>;
+  deleteClasses?: Maybe<Scalars['Boolean']['output']>;
+  deletePerson?: Maybe<Scalars['Boolean']['output']>;
+  deleteProfession?: Maybe<Scalars['Boolean']['output']>;
+  deleteRole?: Maybe<Scalars['Boolean']['output']>;
+  deleteSection?: Maybe<Scalars['Boolean']['output']>;
+  deleteSemester?: Maybe<Scalars['Boolean']['output']>;
+  deleteShift?: Maybe<Scalars['Boolean']['output']>;
+  deleteStudentByIdPerson?: Maybe<Scalars['Boolean']['output']>;
+  deleteTeacher?: Maybe<Scalars['Boolean']['output']>;
+  deleteTeacherByIdPerson?: Maybe<Scalars['Boolean']['output']>;
+  updateClasses?: Maybe<Classes>;
+  updatePerson?: Maybe<Person>;
+  updateProfession?: Maybe<Profession>;
+  updateRole?: Maybe<Role>;
+  updateScore?: Maybe<Scalars['Boolean']['output']>;
+  updateSection?: Maybe<Shift>;
+  updateSemester?: Maybe<Semester>;
+  updateShift?: Maybe<Shift>;
+  updateStudent?: Maybe<Student>;
+  updateTeacher?: Maybe<Scalars['Boolean']['output']>;
+};
+
+
+export type MutationAddClassesArgs = {
+  dataClasse?: InputMaybe<InputClasse>;
+};
+
+
+export type MutationAddPersonArgs = {
+  dataPerson?: InputMaybe<InputPerson>;
+};
+
+
+export type MutationAddProfessionArgs = {
+  dataProfession?: InputMaybe<InputProfession>;
+};
+
+
+export type MutationAddRoleArgs = {
+  dataRole?: InputMaybe<InputRole>;
+};
+
+
+export type MutationAddScoreArgs = {
+  dataScores?: InputMaybe<Array<InputMaybe<InputScore>>>;
+};
+
+
+export type MutationAddSectionArgs = {
+  dataSection?: InputMaybe<InputSection>;
+};
+
+
+export type MutationAddSemesterArgs = {
+  dataSemester?: InputMaybe<InputSemester>;
+};
+
+
+export type MutationAddShiftArgs = {
+  dataShift?: InputMaybe<InputShift>;
+};
+
+
+export type MutationAddStudentsArgs = {
+  dataStudent?: InputMaybe<InputStudent>;
+};
+
+
+export type MutationAddTeacherArgs = {
+  dataTeacher?: InputMaybe<Array<InputMaybe<InputTeacher>>>;
+};
+
+
+export type MutationDeleteClassesArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeletePersonArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteProfessionArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteRoleArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteSectionArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteSemesterArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteShiftArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteStudentByIdPersonArgs = {
+  IdPersons?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationDeleteTeacherArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+
+export type MutationDeleteTeacherByIdPersonArgs = {
+  IdPersons?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type MutationUpdateClassesArgs = {
+  dataClasse?: InputMaybe<InputClasse>;
+};
+
+
+export type MutationUpdatePersonArgs = {
+  dataPerson?: InputMaybe<InputPerson>;
+};
+
+
+export type MutationUpdateProfessionArgs = {
+  dataProfession?: InputMaybe<InputProfession>;
+};
+
+
+export type MutationUpdateRoleArgs = {
+  dataRole?: InputMaybe<InputRole>;
+};
+
+
+export type MutationUpdateScoreArgs = {
+  dataScores?: InputMaybe<Array<InputMaybe<InputScore>>>;
+};
+
+
+export type MutationUpdateSectionArgs = {
+  dataSection?: InputMaybe<InputSection>;
+};
+
+
+export type MutationUpdateSemesterArgs = {
+  dataSemester?: InputMaybe<InputSemester>;
+};
+
+
+export type MutationUpdateShiftArgs = {
+  dataShift?: InputMaybe<InputShift>;
+};
+
+
+export type MutationUpdateStudentArgs = {
+  dataStudent?: InputMaybe<InputStudent>;
+};
+
+
+export type MutationUpdateTeacherArgs = {
+  dataTeacher?: InputMaybe<Array<InputMaybe<InputTeacher>>>;
+};
+
+export type ProfessionAndSemesters = {
+  IdProfession?: InputMaybe<Scalars['Int']['input']>;
+  IdSemesters?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Profile = {
+  __typename?: 'Profile';
+  email?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  lastNames?: Maybe<Scalars['String']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['Int']['output']>;
+  photo?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Scalars['Int']['output']>;
+  sex?: Maybe<Scalars['String']['output']>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  allAdmin?: Maybe<Array<Maybe<AllAdminAndDataPersons>>>;
+  allClasses?: Maybe<Array<Maybe<Classes>>>;
+  allPersons?: Maybe<Array<Maybe<Person>>>;
+  allProfession?: Maybe<Array<Maybe<Profession>>>;
+  allRoles?: Maybe<Array<Maybe<Role>>>;
+  allSections?: Maybe<Array<Maybe<Section>>>;
+  allSemesters?: Maybe<Array<Maybe<Semester>>>;
+  allShifts?: Maybe<Array<Maybe<Shift>>>;
+  getClassesByProfessionAndSemesters?: Maybe<Array<Maybe<ClassesByProfessionAndSemesters>>>;
+  getPersonById?: Maybe<Person>;
+  getPersonByRole?: Maybe<Array<Maybe<Person>>>;
+  getProfile?: Maybe<Profile>;
+  getScores?: Maybe<Array<Maybe<Score>>>;
+  getStudents?: Maybe<Array<Maybe<Student>>>;
+  getStudentsByPerson?: Maybe<Student>;
+  getTeacherByPerson?: Maybe<Array<Maybe<Teacher>>>;
+  getTeachers?: Maybe<Array<Maybe<Teacher>>>;
+  getTeachersByProfessionAndSemesters?: Maybe<Array<Maybe<TeachersByProfessionAndSemesters>>>;
+  login?: Maybe<Token>;
+};
+
+
+export type QueryGetClassesByProfessionAndSemestersArgs = {
+  ProfessionAndSemesters?: InputMaybe<ProfessionAndSemesters>;
+};
+
+
+export type QueryGetPersonByIdArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetPersonByRoleArgs = {
+  role?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetScoresArgs = {
+  idStudents?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetStudentsByPersonArgs = {
+  IdPersons?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetTeacherByPersonArgs = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetTeachersByProfessionAndSemestersArgs = {
+  ProfessionAndSemesters?: InputMaybe<ProfessionAndSemesters>;
+};
+
+
+export type QueryLoginArgs = {
+  pass?: InputMaybe<Scalars['String']['input']>;
+  user?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TeachersByProfessionAndSemesters = {
+  __typename?: 'TeachersByProfessionAndSemesters';
+  IdClasses?: Maybe<Scalars['Int']['output']>;
+  IdPersons?: Maybe<Scalars['Int']['output']>;
+  IdSections?: Maybe<Scalars['Int']['output']>;
+  IdShifts?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  lastNames?: Maybe<Scalars['String']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type Token = {
+  __typename?: 'Token';
+  token?: Maybe<Scalars['String']['output']>;
+};
+
+export type AllAdminAndDataPersons = {
+  __typename?: 'allAdminAndDataPersons';
+  IdAdmin?: Maybe<Scalars['String']['output']>;
+  IdPerson?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  lastNames?: Maybe<Scalars['String']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  photo?: Maybe<Scalars['String']['output']>;
+  sex?: Maybe<Scalars['String']['output']>;
+};
+
+export type Classes = {
+  __typename?: 'classes';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type InputClasse = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type InputGetPersonById = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type InputPerson = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  lastNames?: InputMaybe<Scalars['String']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['Int']['input']>;
+  photo?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Scalars['Int']['input']>;
+  sex?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type InputProfession = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type InputRole = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type InputScore = {
+  IdClasses?: InputMaybe<Scalars['Int']['input']>;
+  IdSections?: InputMaybe<Scalars['Int']['input']>;
+  IdShifts?: InputMaybe<Scalars['Int']['input']>;
+  IdStudents?: InputMaybe<Scalars['Int']['input']>;
+  IdTeachers?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  score?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type InputSection = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type InputShift = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  names?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type InputStudent = {
+  IdPersons?: InputMaybe<Scalars['Int']['input']>;
+  IdProfession?: InputMaybe<Scalars['Int']['input']>;
+  IdSemesters?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type InputTeacher = {
+  IdClasses?: InputMaybe<Scalars['Int']['input']>;
+  IdPersons?: InputMaybe<Scalars['Int']['input']>;
+  IdProfession?: InputMaybe<Scalars['Int']['input']>;
+  IdSections?: InputMaybe<Scalars['Int']['input']>;
+  IdSemesters?: InputMaybe<Scalars['Int']['input']>;
+  IdShifts?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type InsertId = {
+  __typename?: 'insertId';
+  insertId?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Person = {
+  __typename?: 'person';
+  email?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  lastNames?: Maybe<Scalars['String']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['Int']['output']>;
+  photo?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Scalars['Int']['output']>;
+  sex?: Maybe<Scalars['String']['output']>;
+};
+
+export type Profession = {
+  __typename?: 'profession';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type Role = {
+  __typename?: 'role';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type Score = {
+  __typename?: 'score';
+  IdClasses?: Maybe<Scalars['Int']['output']>;
+  IdSections?: Maybe<Scalars['Int']['output']>;
+  IdShifts?: Maybe<Scalars['Int']['output']>;
+  IdStudents?: Maybe<Scalars['Int']['output']>;
+  IdTeachers?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  score?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Section = {
+  __typename?: 'section';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type Semester = {
+  __typename?: 'semester';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type Shift = {
+  __typename?: 'shift';
+  id?: Maybe<Scalars['Int']['output']>;
+  names?: Maybe<Scalars['String']['output']>;
+};
+
+export type Student = {
+  __typename?: 'student';
+  IdPersons?: Maybe<Scalars['Int']['output']>;
+  IdProfession?: Maybe<Scalars['Int']['output']>;
+  IdSemesters?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Teacher = {
+  __typename?: 'teacher';
+  IdClasses?: Maybe<Scalars['Int']['output']>;
+  IdPersons?: Maybe<Scalars['Int']['output']>;
+  IdProfession?: Maybe<Scalars['Int']['output']>;
+  IdSections?: Maybe<Scalars['Int']['output']>;
+  IdSemesters?: Maybe<Scalars['Int']['output']>;
+  IdShifts?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+};
+
+export type GetProfileAndRolesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProfileAndRolesQuery = { __typename?: 'Query', getProfile?: { __typename?: 'Profile', id?: number | null, names?: string | null, lastNames?: string | null, sex?: string | null, email?: string | null, phone?: number | null, photo?: string | null, role?: number | null } | null, allRoles?: Array<{ __typename?: 'role', id?: number | null, names?: string | null } | null> | null };
+
+export type LoginQueryVariables = Exact<{
+  user?: InputMaybe<Scalars['String']['input']>;
+  pass?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type LoginQuery = { __typename?: 'Query', login?: { __typename: 'Token', token?: string | null } | null };
+
+
+export const GetProfileAndRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProfileAndRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}},{"kind":"Field","name":{"kind":"Name","value":"lastNames"}},{"kind":"Field","name":{"kind":"Name","value":"sex"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"photo"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"allRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}}]}}]}}]} as unknown as DocumentNode<GetProfileAndRolesQuery, GetProfileAndRolesQueryVariables>;
+export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"user"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pass"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"user"},"value":{"kind":"Variable","name":{"kind":"Name","value":"user"}}},{"kind":"Argument","name":{"kind":"Name","value":"pass"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pass"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;

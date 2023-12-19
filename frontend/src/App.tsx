@@ -10,10 +10,13 @@ import Students from './pages/students';
 import Scores from './pages/Scores';
 import { Login } from './pages/Login';
 import { Suspense } from 'react';
+import useStoreToken from './zustanStore/token';
 
 const ProtecteRoutes = () => {
   const location = useLocation();
-  const {token} = useSelector((state:store) => state.session);
+  // const {token} = useSelector((state:store) => state.session);
+  const token = useStoreToken((state) => state.token)
+  // const token = null
 
   if(location!==null){
     if((location.pathname==='/dashboard' || location.pathname==='/dashboard/') && token){
@@ -30,7 +33,9 @@ const ProtecteRoutes = () => {
 }
 
 const VerifySession = () => {
-  const {token} = useSelector((state:store) => state.session);
+  // const {token} = useSelector((state:store) => state.session);
+  // const token = null
+  const token = useStoreToken((state) => state.token)
   if(token) return <Navigate to={'/dashboard/home'} />
   return <Login />
 }
@@ -41,12 +46,12 @@ const router = createBrowserRouter(
     // <Route path="dashboard"  element={<Navigate to="/dashboard/home" />} >
       <Route path="dashboard" element={<ProtecteRoutes/>} >
         <Route path="home" element={<Inicio />} />,
-        <Route path="classes" element={<Classes />} />,
+        {/* <Route path="classes" element={<Classes />} />,
         <Route path="profession" element={<Profession />} />,
         <Route path="pensums" element={<Pensum />} />,
         <Route path="teachers" element={<Teacher />} />,
         <Route path="students" element={<Students />} />,
-        <Route path="record" element={<Scores />} />
+        <Route path="record" element={<Scores />} /> */}
       </Route>
     ,
   ])
@@ -55,12 +60,12 @@ const router = createBrowserRouter(
 function App() {
   return (
     <>
-      <Provider store={store}>
+      {/* <Provider store={store}> */}
           <RouterProvider
             router={router}
             fallbackElement={<span>cargando....</span>}
           />
-      </Provider>
+      {/* </Provider> */}
     </>
   )
 }

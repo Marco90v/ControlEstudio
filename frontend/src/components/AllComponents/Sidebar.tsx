@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { change } from "../../store/module/visibleSideStore";
 import { MyNavLink, Side, Ul } from "../../styled/style";
 import { useAppDispatch } from "../../store/store";
@@ -17,6 +17,8 @@ import pensums from "../../assets/data-solid-24.png";
 import teachers from "../../assets/male-female-regular-24.png";
 import students from "../../assets/child-regular-24.png";
 import record from "../../assets/folder-solid-24.png";
+import useStoreSideBar from "../../zustanStore/sidebar";
+import useProfile from "../../zustanStore/profile";
 
 const obj = {
     home,
@@ -69,23 +71,26 @@ const Li = ({ruta,img,role}:Li) => {
 
 function Sidebar(){
 
-    const dispatch = useAppDispatch();
-    const { role } = useSelector((state:store) => state.profile);
+    // const dispatch = useAppDispatch();
+    // const { role } = useSelector((state:store) => state.profile);
+    // const visibleSide = useSelector((state:store) => state.sidebar);
 
-    const visibleSide = useSelector((state:store) => state.sidebar);
+    const {visibleSideBar:visibleSide,toggleStatus:toggleSideBar} = useStoreSideBar((state)=>state)
+    const role = useProfile((state)=>state.profile.role)
 
     const logout = () => {
-        dispatch(removeProfile());
-        dispatch(authApi.util.resetApiState());
-        dispatch(profileApi.util.resetApiState());
-        dispatch(removeSession());
+        // dispatch(removeProfile());
+        // dispatch(authApi.util.resetApiState());
+        // dispatch(profileApi.util.resetApiState());
+        // dispatch(removeSession());
     }
 
     return(
-        <Side id="sidebar" visibleSide={visibleSide.status} >
+        <Side id="sidebar" visibleSide={visibleSide} >
             <div id="title">
-                <h1>{visibleSide.status ? "Universidad" : "U"}</h1>
-                <button onClick={()=>dispatch(change())}><img src={arrow} /> </button>
+                <h1>{visibleSide ? "Universidad" : "U"}</h1>
+                {/* <button onClick={()=>dispatch(change())}><img src={arrow} /> </button> */}
+                <button onClick={()=>toggleSideBar()}><img src={arrow} /> </button>
             </div>
             <div id="admin">
                 <Ul>

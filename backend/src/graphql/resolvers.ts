@@ -223,6 +223,10 @@ const resolvers = {
                 const { IdProfession, IdSemesters } = data
                 return await services.getTeachersByProfessionAndSemesters(IdProfession, IdSemesters).catch(error=>{return { error }})
             }
+        },
+        getProfile: async (_, args, contextValue) => {
+            // console.log(contextValue)
+            return contextValue
         }
     },
     Mutation: {

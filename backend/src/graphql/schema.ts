@@ -30,6 +30,8 @@ const typeDefs = `#graphql
     getScores(idStudents:Int):[score]
     getClassesByProfessionAndSemesters(ProfessionAndSemesters:ProfessionAndSemesters):[ClassesByProfessionAndSemesters]
     getTeachersByProfessionAndSemesters(ProfessionAndSemesters:ProfessionAndSemesters):[TeachersByProfessionAndSemesters]
+    # PROFILE
+    getProfile: Profile
   }
   type Mutation {
     # CLASSES
@@ -234,6 +236,16 @@ const typeDefs = `#graphql
   input ProfessionAndSemesters {
     IdProfession: Int,
     IdSemesters: Int
+  }
+  type Profile {
+    id: Int,
+    names: String,
+    lastNames: String,
+    sex: String,
+    email: String,
+    phone: Int,
+    photo: String,
+    role: Int,
   }
 `
 export default typeDefs
