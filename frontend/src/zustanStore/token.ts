@@ -28,11 +28,17 @@ const useStoreToken = create<State & Action>()(devtools(
   (set)=>({
     token: localStorage.getItem('token') || "",
     setToken: (token:string) => set((state) => {
-      console.log(token)
+      // console.log(token)
       setLocalStorage(token)
       return { ...state, token: token }
     }),
-    deleteToken: () => set(()=>({token:""}))
+    // deleteToken: () => set(()=>({token:""}))
+    deleteToken: () => set((state)=>{
+      localStorage.removeItem("token")
+      return {
+        ...state, token:""
+      }
+    })
   }),
   {name:"Token"}
 ))

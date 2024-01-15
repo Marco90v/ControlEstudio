@@ -37,40 +37,40 @@ const typeDefs = `#graphql
     # CLASSES
     addClasses(dataClasse:inputClasse): classes,
     updateClasses(dataClasse:inputClasse): classes,
-    deleteClasses(id:Int): Boolean,
+    deleteClasses(id:Int): Int,
     # SEMESTERS
     addSemester(dataSemester:InputSemester): semester
     updateSemester(dataSemester:InputSemester): semester
-    deleteSemester(id:Int):Boolean
+    deleteSemester(id:Int):Int
     # PROFESSION
     addProfession(dataProfession:inputProfession): profession
     updateProfession(dataProfession:inputProfession): profession
-    deleteProfession(id:Int):Boolean
+    deleteProfession(id:Int):Int
     # SHIFTS
     addShift(dataShift:inputShift): shift
     updateShift(dataShift:inputShift): shift
-    deleteShift(id:Int):Boolean
+    deleteShift(id:Int):Int
     # SECTIONS
     addSection(dataSection:inputSection): shift
     updateSection(dataSection:inputSection): shift
-    deleteSection(id:Int):Boolean
+    deleteSection(id:Int):Int
     # ROLES
     addRole(dataRole:inputRole): role
     updateRole(dataRole:inputRole): role
-    deleteRole(id:Int):Boolean
+    deleteRole(id:Int):Int
     # PERSON
     addPerson(dataPerson:inputPerson): person
     updatePerson(dataPerson:inputPerson): person
-    deletePerson(id:Int):Boolean
+    deletePerson(id:Int):Int
     # TEACHER
     addTeacher(dataTeacher:[inputTeacher]): Boolean
     updateTeacher(dataTeacher:[inputTeacher]): Boolean
     deleteTeacher(ids:[Int]):Boolean
-    deleteTeacherByIdPerson(IdPersons:Int): Boolean
+    deleteTeacherByIdPerson(IdPersons:Int): Int
     # STUDENTS
     addStudents(dataStudent:inputStudent): student
     updateStudent(dataStudent:inputStudent): student
-    deleteStudentByIdPerson(IdPersons:Int): Boolean
+    deleteStudentByIdPerson(IdPersons:Int): Int
     # SCORE
     addScore(dataScores:[inputScore]): Boolean
     updateScore(dataScores:[inputScore]): Boolean

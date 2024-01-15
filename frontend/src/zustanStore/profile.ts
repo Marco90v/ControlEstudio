@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { createJSONStorage, devtools, persist } from 'zustand/middleware'
 
 type Profile = {
     id:number,
@@ -34,16 +34,23 @@ const initialState:Profile = {
     nameRole: ''
 }
 
-const useStoreProfile = create<State & Action>()(devtools(
-  (set)=>({
-    profile: initialState,
-    setProfile: (profile:Profile) => set((state) => {
-      return { ...state, profile:{...profile}}
-    }),
-    deleteProfile: () => ({profile:{...initialState}}),
-  }),
-  {name:"Profile"}
-))
+const useStoreProfile = create<State & Action>()(
+  devtools(
+    persist(
+      (set)=>({
+        profile: initialState,
+        setProfile: (profile:Profile) => set((state) => {
+          return { ...state, profile:{...profile}}
+        }),
+        deleteProfile: () => ({profile:{...initialState}}),
+      }),
+      {
+        name:"Profile",
+        storage: createJSONStorage(() => localStorage)
+      }
+    )
+  )
+)
 
 export default useStoreProfile
 export {useStoreProfile}

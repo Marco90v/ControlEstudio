@@ -39,16 +39,16 @@ export type Mutation = {
   addShift?: Maybe<Shift>;
   addStudents?: Maybe<Student>;
   addTeacher?: Maybe<Scalars['Boolean']['output']>;
-  deleteClasses?: Maybe<Scalars['Boolean']['output']>;
-  deletePerson?: Maybe<Scalars['Boolean']['output']>;
-  deleteProfession?: Maybe<Scalars['Boolean']['output']>;
-  deleteRole?: Maybe<Scalars['Boolean']['output']>;
-  deleteSection?: Maybe<Scalars['Boolean']['output']>;
-  deleteSemester?: Maybe<Scalars['Boolean']['output']>;
-  deleteShift?: Maybe<Scalars['Boolean']['output']>;
-  deleteStudentByIdPerson?: Maybe<Scalars['Boolean']['output']>;
+  deleteClasses?: Maybe<Scalars['Int']['output']>;
+  deletePerson?: Maybe<Scalars['Int']['output']>;
+  deleteProfession?: Maybe<Scalars['Int']['output']>;
+  deleteRole?: Maybe<Scalars['Int']['output']>;
+  deleteSection?: Maybe<Scalars['Int']['output']>;
+  deleteSemester?: Maybe<Scalars['Int']['output']>;
+  deleteShift?: Maybe<Scalars['Int']['output']>;
+  deleteStudentByIdPerson?: Maybe<Scalars['Int']['output']>;
   deleteTeacher?: Maybe<Scalars['Boolean']['output']>;
-  deleteTeacherByIdPerson?: Maybe<Scalars['Boolean']['output']>;
+  deleteTeacherByIdPerson?: Maybe<Scalars['Int']['output']>;
   updateClasses?: Maybe<Classes>;
   updatePerson?: Maybe<Person>;
   updateProfession?: Maybe<Profession>;
@@ -470,6 +470,32 @@ export type Teacher = {
   id?: Maybe<Scalars['Int']['output']>;
 };
 
+export type AllClassesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllClassesQuery = { __typename?: 'Query', allClasses?: Array<{ __typename?: 'classes', id?: number | null, names?: string | null } | null> | null };
+
+export type AddClassesMutationVariables = Exact<{
+  dataClasse?: InputMaybe<InputClasse>;
+}>;
+
+
+export type AddClassesMutation = { __typename?: 'Mutation', addClasses?: { __typename?: 'classes', id?: number | null, names?: string | null } | null };
+
+export type UpdateClassesMutationVariables = Exact<{
+  dataClasse?: InputMaybe<InputClasse>;
+}>;
+
+
+export type UpdateClassesMutation = { __typename?: 'Mutation', updateClasses?: { __typename?: 'classes', id?: number | null, names?: string | null } | null };
+
+export type DeleteClassesMutationVariables = Exact<{
+  deleteClassesId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteClassesMutation = { __typename?: 'Mutation', deleteClasses?: number | null };
+
 export type GetProfileAndRolesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -484,5 +510,9 @@ export type LoginQueryVariables = Exact<{
 export type LoginQuery = { __typename?: 'Query', login?: { __typename: 'Token', token?: string | null } | null };
 
 
+export const AllClassesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AllClasses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allClasses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}}]}}]}}]} as unknown as DocumentNode<AllClassesQuery, AllClassesQueryVariables>;
+export const AddClassesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddClasses"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"dataClasse"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"inputClasse"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addClasses"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"dataClasse"},"value":{"kind":"Variable","name":{"kind":"Name","value":"dataClasse"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}}]}}]}}]} as unknown as DocumentNode<AddClassesMutation, AddClassesMutationVariables>;
+export const UpdateClassesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateClasses"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"dataClasse"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"inputClasse"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateClasses"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"dataClasse"},"value":{"kind":"Variable","name":{"kind":"Name","value":"dataClasse"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}}]}}]}}]} as unknown as DocumentNode<UpdateClassesMutation, UpdateClassesMutationVariables>;
+export const DeleteClassesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteClasses"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"deleteClassesId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteClasses"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"deleteClassesId"}}}]}]}}]} as unknown as DocumentNode<DeleteClassesMutation, DeleteClassesMutationVariables>;
 export const GetProfileAndRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProfileAndRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}},{"kind":"Field","name":{"kind":"Name","value":"lastNames"}},{"kind":"Field","name":{"kind":"Name","value":"sex"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"photo"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"allRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"names"}}]}}]}}]} as unknown as DocumentNode<GetProfileAndRolesQuery, GetProfileAndRolesQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"user"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pass"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"user"},"value":{"kind":"Variable","name":{"kind":"Name","value":"user"}}},{"kind":"Argument","name":{"kind":"Name","value":"pass"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pass"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<LoginQuery, LoginQueryVariables>;

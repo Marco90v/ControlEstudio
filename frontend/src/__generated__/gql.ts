@@ -13,6 +13,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n    query AllClasses {\n        allClasses {\n            id\n            names\n        }\n    }\n": types.AllClassesDocument,
+    "\n    mutation AddClasses($dataClasse: inputClasse) {\n        addClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n": types.AddClassesDocument,
+    "\n    mutation UpdateClasses($dataClasse: inputClasse) {\n        updateClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n": types.UpdateClassesDocument,
+    "\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n": types.DeleteClassesDocument,
     "\n    query GetProfileAndRoles {\n        getProfile {\n            id\n            names\n            lastNames\n            sex\n            email\n            phone\n            photo\n            role\n        }\n        allRoles {\n            id\n            names\n        }\n    }\n": types.GetProfileAndRolesDocument,
     "\n    query Login($user: String, $pass: String) {\n        login(user: $user, pass: $pass) {\n            token\n            __typename\n        }\n    }\n": types.LoginDocument,
 };
@@ -31,6 +35,22 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query AllClasses {\n        allClasses {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    query AllClasses {\n        allClasses {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation AddClasses($dataClasse: inputClasse) {\n        addClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    mutation AddClasses($dataClasse: inputClasse) {\n        addClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation UpdateClasses($dataClasse: inputClasse) {\n        updateClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    mutation UpdateClasses($dataClasse: inputClasse) {\n        updateClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n"): (typeof documents)["\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client/react";
+import { useLazyQuery, useQuery } from "@apollo/client";
 // import { gql } from "@apollo/client/core";
 // import { useLoginMutation } from "../../store/apis/authApi";
 import { ContentLogin } from "../../styled/style";
@@ -22,24 +22,18 @@ const LOGIN = gql(`
 
 function Login(){
     const [data, setData] = useState(dataUser);
-    const [getLogin, { loading, error, data:token } ]= useLazyQuery(LOGIN, {
-        variables: { user: data.user, pass: data.pass },
-    });
+    const [getLogin, { loading, error, data:token } ]= useLazyQuery(LOGIN);
     const setToken = useStoreToken((state) => state.setToken)
 
     useEffect(() => {
         if(token?.login?.token){
-            // console.log(token.login.token)
             setToken(token.login.token)
         }
       return () => {}
     }, [token])
-    
 
     // const [ login ] = useLoginMutation();
     
-    
-
     const changeData = (element:any) => {
         const id = element.target.id;
         const value = element.target.value;
@@ -50,8 +44,8 @@ function Login(){
     const submit = (e:any) => {
         e.preventDefault();
         // login(data);
-        getLogin()
-        // console.log(token)
+        // console.log({ variables: { user: data.user, pass: data.pass } })
+        getLogin( { variables: { user: data.user, pass: data.pass } } )
     }  
 
     return(

@@ -46,8 +46,8 @@ const router = createBrowserRouter(
     // <Route path="dashboard"  element={<Navigate to="/dashboard/home" />} >
       <Route path="dashboard" element={<ProtecteRoutes/>} >
         <Route path="home" element={<Inicio />} />,
-        {/* <Route path="classes" element={<Classes />} />,
-        <Route path="profession" element={<Profession />} />,
+        <Route path="classes" element={<Classes />} />,
+        {/* <Route path="profession" element={<Profession />} />,
         <Route path="pensums" element={<Pensum />} />,
         <Route path="teachers" element={<Teacher />} />,
         <Route path="students" element={<Students />} />,

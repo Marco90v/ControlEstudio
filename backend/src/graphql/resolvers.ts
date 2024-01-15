@@ -10,6 +10,7 @@ import { INSERT_LISTCOLUMN, NAMETABLE, UPDATE_LISTVALUES } from '../utils/const.
 dotenv.config()
 
 const addData = (args, table:string) => {
+    console.log(table, args)
     return new Promise(async (resolve, reject)=>{
         const data = validator[table](args)
         if(data){
@@ -52,7 +53,8 @@ const deleteData = (args, table:string) => {
         if(dataValidated){
             const res:any = await services.deleteSingle(table, dataValidated).catch(error=>{return { error }})
             if(res.affectedRows){
-                resolve(true)
+                // resolve(true)
+                resolve(dataValidated.id)
             }
             reject(false)
         }
@@ -125,7 +127,7 @@ const resolvers = {
             throw new Error('You cannot make introspection');
         },
         // LOGIN
-        login: async(_,args)=>{
+        login: async(_,args, contextValue)=>{
             const {user, pass} = args
             const data = await login(user, pass)
             if(data){

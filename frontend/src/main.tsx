@@ -1,12 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client/core';
 import { ApolloProvider } from '@apollo/client/react';
 import { setContext } from '@apollo/client/link/context';
 
 import App from './App'
 import { BrowserRouter } from "react-router-dom";
 import { createGlobalStyle } from "styled-components"
+import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
 // import useStoreToken from './zustanStore/token';
 
 const GlobalStyle = createGlobalStyle`
@@ -33,19 +34,26 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = JSON.parse(localStorage.getItem('token') || "");
+  // const token = JSON.parse(localStorage.getItem('token') || "");
+  const token = localStorage.getItem('token');
+  // console.log(token)
   // return the headers to the context so httpLink can read them
-  return {
+  return token ? 
+  {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: `Bearer ${JSON.parse(token)}`,
     }
   }
+  : { headers: {...headers} }
 });
 
+const removeTypenameLink = removeTypenameFromVariables();
+const link = from([removeTypenameLink, httpLink]);
 const client = new ApolloClient({
-  // uri: 'http://localhost:3030/graphql',
-  link: authLink.concat(httpLink),
+  // uri: 'http://localhost:3030',
+  // link: from([removeTypenameLink,authLink.concat(httpLink)]),
+  link: authLink.concat(link),
   cache: new InMemoryCache(),
   connectToDevTools: true
 })

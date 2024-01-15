@@ -58,7 +58,7 @@ await server.start();
 // const { url } = await startStandaloneServer(server);
 app.use(cors({
     origin: '*',
-    // origin:['http://localhost:3030/','http://localhost:5173/'],
+    // origin:['http://localhost','http://localhost:3030/','http://localhost:5173/', '*'],
     credentials: true
     // Access-Control-Allow-Credentials: true
     // 'Access-Control-Allow-Origin':true
@@ -84,7 +84,7 @@ app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(
     // console.log(headers)
     // return headers
     // console.log(headers)
-    return headers ? newValidaToken(headers) : null
+    return headers ? newValidaToken(headers) : ""
     // return newValidaToken(headers)
     // return null
   }

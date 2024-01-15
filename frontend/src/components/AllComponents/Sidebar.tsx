@@ -19,6 +19,7 @@ import students from "../../assets/child-regular-24.png";
 import record from "../../assets/folder-solid-24.png";
 import useStoreSideBar from "../../zustanStore/sidebar";
 import useProfile from "../../zustanStore/profile";
+import useStoreToken from "../../zustanStore/token";
 
 const obj = {
     home,
@@ -77,12 +78,15 @@ function Sidebar(){
 
     const {visibleSideBar:visibleSide,toggleStatus:toggleSideBar} = useStoreSideBar((state)=>state)
     const role = useProfile((state)=>state.profile.role)
+    const deleteToken = useStoreToken((state) => state.deleteToken)
+
 
     const logout = () => {
         // dispatch(removeProfile());
         // dispatch(authApi.util.resetApiState());
         // dispatch(profileApi.util.resetApiState());
         // dispatch(removeSession());
+        deleteToken()
     }
 
     return(
