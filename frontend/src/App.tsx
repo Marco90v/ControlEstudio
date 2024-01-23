@@ -48,8 +48,8 @@ const router = createBrowserRouter(
         <Route path="home" element={<Inicio />} />,
         <Route path="classes" element={<Classes />} />,
         <Route path="profession" element={<Profession />} />,
-        {/* <Route path="pensums" element={<Pensum />} />,
-        <Route path="teachers" element={<Teacher />} />,
+        <Route path="pensums" element={<Pensum />} />,
+        {/* <Route path="teachers" element={<Teacher />} />,
         <Route path="students" element={<Students />} />,
         <Route path="record" element={<Scores />} /> */}
       </Route>

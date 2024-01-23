@@ -73,7 +73,7 @@ router.post('/admin', validateToken, workOutControllers.setValuesSingleTableWork
 
 // RUTAS PARA PENSUM
 // router.get('/students', workOutControllers.getAllStudentsWorkOut);
-router.get('/pensum/:profession', validateToken, workOutControllers.getProfessionWorkOut)
+router.get('/pensum/:profession', validateToken, workOutControllers.getProfessionWorkOut) //  migrado
 router.post('/pensum', validateToken, workOutControllers.setValuesMultipleTableWorkOut)
 router.delete('/pensum', validateToken, workOutControllers.deleteValueSingleTableWorkOut)
 

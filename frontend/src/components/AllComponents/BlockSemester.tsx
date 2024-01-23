@@ -4,14 +4,14 @@ import { memo } from "react";
 import { BadgeClasse } from "../";
 
 type localClasse = {
-    id:number,
-    IdClasses:number,
-    Name_Classes:string
+    id:number | null | undefined,
+    IdClasses:number | null | undefined,
+    Name_Classes:string | null | undefined
 }
 type localSemester ={
-    IdSemesters:number,
-    Name_Semesters:string,
-    Classes:localClasse[]
+    IdSemesters:number | null | undefined,
+    Name_Semesters:string | null | undefined,
+    Classes:localClasse[] | null | undefined
 }
 type props = {
     semester:localSemester

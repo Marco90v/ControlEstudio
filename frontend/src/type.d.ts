@@ -9,10 +9,15 @@ type profession = {
     id:number,
     names:string
 }
+type ClassesPensum = {
+    id: number | null | undefined,
+    IdClasses: number | null  | undefined,
+    Name_Classes: string | null   | undefined
+}
 type pensum = {
-    IdSemesters: number,
-    Name_Semesters: string,
-    Classes: classes[]
+    IdSemesters: number | null | undefined,
+    Name_Semesters: string | null | undefined,
+    Classes: classes[]| null | undefined
 }
 type semesters = {
     id:number,

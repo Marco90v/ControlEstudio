@@ -2,13 +2,13 @@ import { memo } from "react";
 import iconRemove from "../../assets/x-circle-solid-24.png";
 
 type localClasse = {
-    id:number,
-    Name_Classes:string
+    id:number | null | undefined,
+    Name_Classes:string | null | undefined
 }
 
 type props = {
     classe:localClasse,
-    Name_Semesters: string,
+    Name_Semesters: string | null | undefined,
     removeClasse: Function
 }
 

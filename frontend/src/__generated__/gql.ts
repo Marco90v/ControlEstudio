@@ -18,6 +18,10 @@ const documents = {
     "\n    mutation UpdateClasses($dataClasse: inputClasse) {\n        updateClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n": types.UpdateClassesDocument,
     "\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n": types.DeleteClassesDocument,
     "\n    query AllProfession {\n        allProfession {\n            id\n            names\n        }\n    }\n": types.AllProfessionDocument,
+    "\n    query AllSemesters {\n        allSemesters {\n            names\n            id\n        }\n    }\n": types.AllSemestersDocument,
+    "\n    query GetPensumById($getPensumByIdId: Int) {\n        getPensumById(id: $getPensumByIdId) {\n            IdSemesters\n            Name_Semesters\n            Classes {\n                id\n                IdClasses   \n                Name_Classes\n            }\n  }\n    }\n": types.GetPensumByIdDocument,
+    "\n    mutation AddClassesPensum($dataPensum: DataPensum) {\n        addClassesPensum(DataPensum: $dataPensum)\n    }\n": types.AddClassesPensumDocument,
+    "\n    mutation DeleteClassePensum($deleteClassePensumId: Int) {\n        deleteClassePensum(id: $deleteClassePensumId)\n    }\n": types.DeleteClassePensumDocument,
     "\n    mutation AddProfession($dataProfession: inputProfession) {\n        addProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n": types.AddProfessionDocument,
     "\n    mutation UpdateProfession($dataProfession: inputProfession) {\n        updateProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n": types.UpdateProfessionDocument,
     "\n    mutation DeleteProfession($deleteProfessionId: Int) {\n        deleteProfession(id: $deleteProfessionId)\n    }\n": types.DeleteProfessionDocument,
@@ -59,6 +63,22 @@ export function gql(source: "\n    mutation DeleteClasses($deleteClassesId: Int)
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    query AllProfession {\n        allProfession {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    query AllProfession {\n        allProfession {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query AllSemesters {\n        allSemesters {\n            names\n            id\n        }\n    }\n"): (typeof documents)["\n    query AllSemesters {\n        allSemesters {\n            names\n            id\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query GetPensumById($getPensumByIdId: Int) {\n        getPensumById(id: $getPensumByIdId) {\n            IdSemesters\n            Name_Semesters\n            Classes {\n                id\n                IdClasses   \n                Name_Classes\n            }\n  }\n    }\n"): (typeof documents)["\n    query GetPensumById($getPensumByIdId: Int) {\n        getPensumById(id: $getPensumByIdId) {\n            IdSemesters\n            Name_Semesters\n            Classes {\n                id\n                IdClasses   \n                Name_Classes\n            }\n  }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation AddClassesPensum($dataPensum: DataPensum) {\n        addClassesPensum(DataPensum: $dataPensum)\n    }\n"): (typeof documents)["\n    mutation AddClassesPensum($dataPensum: DataPensum) {\n        addClassesPensum(DataPensum: $dataPensum)\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation DeleteClassePensum($deleteClassePensumId: Int) {\n        deleteClassePensum(id: $deleteClassePensumId)\n    }\n"): (typeof documents)["\n    mutation DeleteClassePensum($deleteClassePensumId: Int) {\n        deleteClassePensum(id: $deleteClassePensumId)\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

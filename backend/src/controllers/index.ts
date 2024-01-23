@@ -1,6 +1,6 @@
 import * as services from '../services/index.js'
 import { transformTeacher } from '../transform/index.js'
-import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pesumFormat, scores } from '../types/index.js'
+import { dbPersons, dbTeachers2, oldFormat, pensumNotFormat, pensumFormat, scores } from '../types/index.js'
 import { validator } from './validator.js'
 import jwt from 'jsonwebtoken'
 import dotenv from "dotenv"
@@ -243,7 +243,7 @@ export const getSingleStudentsWorkOut = (req, res) => {
 export const getProfessionWorkOut = (req, res) => {
   services.getPensum(Number(req.params.profession))
     .then((result: pensumNotFormat[]) => {
-      const newFormat: pesumFormat[] = []
+      const newFormat: pensumFormat[] = []
       const temp: number[] = []
       result.forEach((value: pensumNotFormat) => {
         const index = temp.indexOf(value.IdSemesters)

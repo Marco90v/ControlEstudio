@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Div } from "../../styled/style";
-import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
+// import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { InputForm, Popup, TableComponent } from "../";
 import { gql } from "../../__generated__";
 import { useMutation, useQuery } from "@apollo/client";

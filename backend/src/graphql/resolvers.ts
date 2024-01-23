@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import { login } from '../controllers/index.js';
 import { validator } from '../controllers/validator.js';
 import { INSERT_LISTCOLUMN, NAMETABLE, UPDATE_LISTVALUES } from '../utils/const.js';
+import { pensumNotFormat, pensumFormat } from '../types/index.js';
 // import { rejects } from 'assert';
 
 dotenv.config()
@@ -229,7 +230,38 @@ const resolvers = {
         getProfile: async (_, args, contextValue) => {
             // console.log(contextValue)
             return contextValue
-        }
+        },
+        getPensumById: async (_, args, contextValue) => {
+            const pensumNotFormat:pensumNotFormat[] | any = await services.getPensum(args.id).catch(error=>{return { error }})
+            // console.log(pensumNotFormat)
+            const pensumFormat:pensumFormat[] = []
+            const temp: number[] = []
+            pensumNotFormat.forEach((value: pensumNotFormat) => {
+                const index = temp.indexOf(value.IdSemesters)
+                if (index < 0) {
+                    pensumFormat.push({
+                    IdSemesters: value.IdSemesters,
+                    Name_Semesters: value.Name_Semesters,
+                    Classes: [
+                    {
+                        id: value.id,
+                        IdClasses: value.IdClasses,
+                        Name_Classes: value.Name_Classes
+                    }
+                    ]
+                })
+                temp.push(value.IdSemesters)
+                } else {
+                    pensumFormat[index].Classes.push({
+                    id: value.id,
+                    IdClasses: value.IdClasses,
+                    Name_Classes: value.Name_Classes
+                })
+                }
+            })
+            // console.log(pensumFormat)
+            return pensumFormat
+        },
     },
     Mutation: {
         // CLASSES
@@ -298,7 +330,17 @@ const resolvers = {
         },
         updateScore: async(_, {dataScores}, contextValue) => {
             return await updateMultData(dataScores, INSERT_LISTCOLUMN.scores, UPDATE_LISTVALUES.scores, NAMETABLE.scores)
-        }
+        },
+        // PENSUM
+        addClassesPensum: async (_, {DataPensum}, contextValue) => {
+            // console.log(DataPensum.body)
+            return await addMultData(DataPensum.body, INSERT_LISTCOLUMN.pensum, NAMETABLE.pensum)
+            .then(() => true).catch(err => null)
+            // return null
+        },
+        deleteClassePensum: async (_, args, contextValue) => {
+            return await deleteData(args, NAMETABLE.pensum)
+        },
     }
   };
 

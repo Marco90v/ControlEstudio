@@ -99,7 +99,7 @@ export interface classesFormat {
   Name_Classes: string
 }
 
-export interface pesumFormat {
+export interface pensumFormat {
   IdSemesters: number
   Name_Semesters: string
   Classes: classesFormat[]

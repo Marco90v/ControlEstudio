@@ -8,12 +8,14 @@ const NAMETABLE = {
     persons: "persons",
     teachers: "teachers",
     students: "students",
-    scores: "scores"
+    scores: "scores",
+    pensum: "pensum",
 }
 
 const INSERT_LISTCOLUMN = {
     teacher: "IdPersons,IdProfession,IdSemesters,IdClasses,IdShifts,IdSections",
-    scores: "IdStudents,IdClasses,IdTeachers,IdShifts,IdSections,score"
+    scores: "IdStudents,IdClasses,IdTeachers,IdShifts,IdSections,score",
+    pensum: "IdProfession, IdSemesters, IdClasses",
 }
 
 const UPDATE_LISTVALUES = {

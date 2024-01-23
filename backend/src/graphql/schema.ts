@@ -32,6 +32,8 @@ const typeDefs = `#graphql
     getTeachersByProfessionAndSemesters(ProfessionAndSemesters:ProfessionAndSemesters):[TeachersByProfessionAndSemesters]
     # PROFILE
     getProfile: Profile
+    # PEMSUN
+    getPensumById(id:Int): [Pensum]
   }
   type Mutation {
     # CLASSES
@@ -74,6 +76,9 @@ const typeDefs = `#graphql
     # SCORE
     addScore(dataScores:[inputScore]): Boolean
     updateScore(dataScores:[inputScore]): Boolean
+    # PENSUM
+    addClassesPensum(DataPensum:DataPensum): Boolean
+    deleteClassePensum(id:Int): Boolean
   }
   type Token {
     token:String
@@ -246,6 +251,27 @@ const typeDefs = `#graphql
     phone: Int,
     photo: String,
     role: Int,
+  }
+  # PENSUM
+  type ClasseFormatPensum {
+    id: Int,
+    IdClasses: Int,
+    Name_Classes: String,
+  }
+  type Pensum {
+    IdSemesters: Int,
+    Name_Semesters: String,
+    Classes: [ClasseFormatPensum],
+  }
+  input ClassePensum {
+    IdProfession: Int,
+    IdSemesters: Int,
+    IdClasses: Int,
+    Name_Classes: String
+  }
+  input DataPensum {
+    body: [ClassePensum],
+    p: Int
   }
 `
 export default typeDefs
