@@ -17,6 +17,10 @@ const documents = {
     "\n    mutation AddClasses($dataClasse: inputClasse) {\n        addClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n": types.AddClassesDocument,
     "\n    mutation UpdateClasses($dataClasse: inputClasse) {\n        updateClasses(dataClasse: $dataClasse) {\n            id\n            names\n        }\n    }\n": types.UpdateClassesDocument,
     "\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n": types.DeleteClassesDocument,
+    "\n    query AllProfession {\n        allProfession {\n            id\n            names\n        }\n    }\n": types.AllProfessionDocument,
+    "\n    mutation AddProfession($dataProfession: inputProfession) {\n        addProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n": types.AddProfessionDocument,
+    "\n    mutation UpdateProfession($dataProfession: inputProfession) {\n        updateProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n": types.UpdateProfessionDocument,
+    "\n    mutation DeleteProfession($deleteProfessionId: Int) {\n        deleteProfession(id: $deleteProfessionId)\n    }\n": types.DeleteProfessionDocument,
     "\n    query GetProfileAndRoles {\n        getProfile {\n            id\n            names\n            lastNames\n            sex\n            email\n            phone\n            photo\n            role\n        }\n        allRoles {\n            id\n            names\n        }\n    }\n": types.GetProfileAndRolesDocument,
     "\n    query Login($user: String, $pass: String) {\n        login(user: $user, pass: $pass) {\n            token\n            __typename\n        }\n    }\n": types.LoginDocument,
 };
@@ -51,6 +55,22 @@ export function gql(source: "\n    mutation UpdateClasses($dataClasse: inputClas
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n"): (typeof documents)["\n    mutation DeleteClasses($deleteClassesId: Int) {\n        deleteClasses(id: $deleteClassesId)\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query AllProfession {\n        allProfession {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    query AllProfession {\n        allProfession {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation AddProfession($dataProfession: inputProfession) {\n        addProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    mutation AddProfession($dataProfession: inputProfession) {\n        addProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation UpdateProfession($dataProfession: inputProfession) {\n        updateProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    mutation UpdateProfession($dataProfession: inputProfession) {\n        updateProfession(dataProfession: $dataProfession) {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation DeleteProfession($deleteProfessionId: Int) {\n        deleteProfession(id: $deleteProfessionId)\n    }\n"): (typeof documents)["\n    mutation DeleteProfession($deleteProfessionId: Int) {\n        deleteProfession(id: $deleteProfessionId)\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
