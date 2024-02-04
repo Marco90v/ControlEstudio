@@ -107,7 +107,7 @@ function DataPensum(){
     const {classes, setClasses, addClasse:AddClasseStore, deleteClasse:dC} = useStoreClasses((state)=>state)
     const {professions, setProfessions, addProfession:AddProfessionStore, deleteProfession:dP} = useStoreProfessions((state)=>state)
     const {semesters, setSemesters, addSemester:AddSemesterStore, deleteSemester:dS} = useStoreSemesters((state)=>state)
-    const {pensum, setPensum, addSemester} = useStorePensum((state)=>state)
+    const {pensum, setPensum, addSemester, clearPensum} = useStorePensum((state)=>state)
     // console.log(pensum)
 
     const [getPensumById, { loading, error, data, refetch:refetchPensum } ]= useLazyQuery(GET_PENSUM);
@@ -147,7 +147,9 @@ function DataPensum(){
             setPensum(newData)
             // console.log(newData)
         }    
-        return () => {}
+        return () => {
+            clearPensum()
+        }
     }, [data])
 
     useEffect(() => {

@@ -19,7 +19,8 @@ type State = {
 
 type Action = {
   setPensum: (pensum:Pensum[]) => void,
-  addSemester: (pensum:Pensum) => void
+  addSemester: (pensum:Pensum) => void,
+  clearPensum: () => void
 }
 
 const initialState:Pensum[] = []
@@ -41,6 +42,12 @@ const useStorePensum = create<State & Action>()(
                         ...state.pensum,
                         pensum
                     ]
+                }
+            }),
+            clearPensum: () => set((state) => {
+                return {
+                    ...state,
+                    pensum: []
                 }
             })
         }),
