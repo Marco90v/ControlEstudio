@@ -6,6 +6,10 @@ import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
 import { fieldNotEmptied } from "../../ultil";
 import { SectionClasses } from "../";
+import useStorePersons from "../../zustanStore/persons";
+import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
+import { gql } from "../../__generated__";
+import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
 
 const initialDataTeacher:teacher = {
     id:0,
@@ -17,110 +21,138 @@ const initialDataTeacher:teacher = {
     IdSections:0
 }
 
+const GET_TEACHER_BY_PERSON = gql(`
+    query GetTeacherByPerson($getTeacherByPersonId: Int) {
+        getTeacherByPerson(id: $getTeacherByPersonId) {
+            id
+            IdPersons
+            IdProfession
+            IdSemesters
+            IdClasses
+            IdShifts
+            IdSections
+        }
+    }
+`)
+
+const ADD_TEACHER = gql(`
+    mutation AddTeacher($dataTeacher: [inputTeacher]) {
+        addTeacher(dataTeacher: $dataTeacher)
+    }
+`)
+
+const UPDATE_TEACHER = gql(`
+    mutation UpdateTeacher($dataTeacher: [inputTeacher]) {
+        updateTeacher(dataTeacher: $dataTeacher)
+    }
+`)
+
+const DELETE_TEACHER = gql(`
+    mutation DeleteTeacher($ids: [Int]) {
+        deleteTeacher(ids: $ids)
+    }
+`)
+
 const Teacher = forwardRef( (_, ref) => {
-    const dispatch = useAppDispatch();
-    const { data:person } = useSelector((state:store) => state.person);
-    const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
-    const [ triggerTeacher, { data:teachers=[], isSuccess:isSuccessTeacher, isFetching:isFetchingTeacher } ] = teacherApi.endpoints.getTeacherById.useLazyQuery();
-    const [ postTeacher, { isLoading:isLoadPosTea, isSuccess:isSuccPosTea } ] = usePostTeacherMutation();
-    const [ updateTeacherById, { isLoading:isLoadUpTeaId, isSuccess:isSuccUpTeaId } ] = useUpdateTeacherByIdMutation();
-    const [ deleteTeacherById, { isLoading:isLoadDelTeaId, isSuccess:isSuccDelTeaId } ] = useDeleteTeacherByIdMutation();
-    const [ deleteTeacherByIdPerson, { isLoading:isLoadDelTeaIdPer, isSuccess:isSuccDelTeaIdPer } ] = useDeleteTeacherByIdPersonMutation();
+
+    const statusFetch = false
+
+    const idPerson = useStorePersons((state)=>state.data.person.idPerson)
+    const {teacherClasses, idsDelete, setTeacherClasses, clearTeacherClasses, addTeacherClasse, changeTeacherClasse, deleteTeacherClasse} = useStoreTeacherClasses((state)=>state)
+
+    const [postTeacher, { data:dataAddTeacher, reset:resetAddTeacher }] = useMutation(ADD_TEACHER)
+    const [updateTeacher, { data:dataUpdateTeacher, reset:resetUpdateTeacher }] = useMutation(UPDATE_TEACHER)
+    const [deleteTeacher, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER)
+
+    const [getTeacherByPerson, { loading, error, data:dataTeachers, refetch:refetchPerson } ]= useLazyQuery(GET_TEACHER_BY_PERSON);
+
     const [ teacher, setTeacher ] = useState<teacher[]>([]);
     const [ deleteDataTeacher, setDeleteDataTeacher ] = useState<number[]>([]);
 
-    useEffect(() => {  
-        if( isSuccPosTea || isSuccUpTeaId || isSuccDelTeaId || isSuccDelTeaIdPer ){
-            dispatch(resetPerson());
-            dispatch(setStateFetch(false));
-        }
-        return () => {}
-    }, [
-        isSuccPosTea, isSuccUpTeaId, isSuccDelTeaId, isSuccDelTeaIdPer
-    ]);
-
     useEffect(() => {
-      person.id > 0 && triggerTeacher(person.id);
-      person.id === 0 && dispatch(teacherApi.util.resetApiState());
+        if (idPerson > 0){
+            clearTeacherClasses()
+            getTeacherByPerson({
+                variables:{
+                    getTeacherByPersonId: idPerson
+                }
+            })
+        }    
       return () => {}
-    }, [person]);
-
+    }, [idPerson])
+    
     useEffect(() => {
-        setTeacher(teachers);
-        return () => {}
-    }, [isSuccessTeacher, isFetchingTeacher]);
+        if(dataTeachers?.getTeacherByPerson && dataTeachers?.getTeacherByPerson?.length > 0){
+            setTeacherClasses(dataTeachers?.getTeacherByPerson)
+        }
+      return () => {}
+    }, [dataTeachers])
+    
     
 
     const addProfession = (e:any) => {
-        setTeacher([...teacher,initialDataTeacher]);
+        addTeacherClasse(initialDataTeacher)
     }
 
     const changeSelect = (e:any,idx:number) => {
         const element = e.target.id;
         const value = e.target.value;
-        setTeacher( (e:teacher[]) => {
-            return e.map((e,i)=>{
-                return i===idx ? {...e, [element]:Number(value)} : e
-            });
-        });
+        changeTeacherClasse(element, value, idx)
     }
 
     const deleteItem = (idx:number) => {
-        setTeacher(teacher.filter((t,i)=>{
-            if(i===idx && t.IdPersons>0){
-                setDeleteDataTeacher([...deleteDataTeacher,t.id]);
-            }else if(i!==idx){
-                return t;
-            }
-        }));
+        deleteTeacherClasse(idx)
     }
 
     const editData = () => {
-        let updateActive = false;
-        if(deleteDataTeacher.length > 0){
-            deleteTeacherById(deleteDataTeacher)
-        } 
-        teacher.forEach((item:teacher)=>{
-            for (const key in teachers){
-                if(item.id === teachers[key].id){
-                    if(JSON.stringify(item) !== JSON.stringify(teachers[key])){
-                        const updateData = {
-                            body: item,
-                            role: person.role
-                        }
-                        updateTeacherById(updateData);
-                        updateActive=true;
-                    }
-                }
-            }
-            const {id,IdPersons,...rTeacher} = item;
-            const notEmptied:boolean = fieldNotEmptied(rTeacher);
+        let newData:any = []
+        let updateData:any = []
 
-            if(id === 0 && IdPersons === 0 && notEmptied){
-                const newTeachers = {
-                    body: [{...item, IdPersons:person.id}],
-                    id: person.id
-                }
-                postTeacher(newTeachers);
-                updateActive=true;
+        teacherClasses.forEach((e,i)=>{
+            const {id,IdPersons,...rTeacher} = e;
+            const notEmptied:boolean = fieldNotEmptied(rTeacher);
+            if(e.id === 0 && e.IdPersons === 0 && notEmptied){
+                const temp = {...e, IdPersons:idPerson}
+                newData.push(temp)
             }
-        });
-        if(!updateActive){
-            dispatch(resetPerson());
-            dispatch(setStateFetch(false));
-        } 
+            if(e.id > 0 && e.IdPersons > 0 && notEmptied){
+                updateData.push(e)
+            }
+        })
+      
+        updateTeacher({
+            variables:{
+                dataTeacher:updateData
+            }
+        })
+
+        newData.length > 0 && postTeacher({
+            variables:{
+                dataTeacher:newData
+            }
+        })
+
+        idsDelete.length > 0 && deleteTeacher({
+            variables:{
+                ids:idsDelete
+            }
+        })
     }
 
     const newData = (IdPersons:number) => {
-        if(teacher.length > 0){
-            const newTeachers = {
-                body: teacher.map(e=>{return {...e, IdPersons}}),
-                id: 0
-            }
-            postTeacher(newTeachers);
+        if(teacherClasses.length > 0){
+            const newTeachers = teacherClasses.map(e=>({...e,IdPersons}))
+             /**
+             * ADD_TEACHERS
+             */
+            postTeacher({
+                variables: {
+                    dataTeacher: newTeachers
+                }
+            })
         }else{
-            dispatch(resetPerson());
-            dispatch(setStateFetch(false));
+            // dispatch(resetPerson());
+            // dispatch(setStateFetch(false));
         }
     }
 
@@ -129,7 +161,7 @@ const Teacher = forwardRef( (_, ref) => {
     }
 
     const deleteChildren = (IdPersons:{IdPersons:number}) => {
-        deleteTeacherByIdPerson(IdPersons);
+        // deleteTeacherByIdPerson(IdPersons);
     }
 
     useImperativeHandle(ref, () => {
@@ -139,7 +171,7 @@ const Teacher = forwardRef( (_, ref) => {
     return(
         <div className="dataTeacher">
             {
-                teacher.map((t:teacher,i)=>{
+                teacherClasses.map((t:teacher,i)=>{
                     return <SectionClasses key={i} idx={i} teacher={t} changeSelect={changeSelect} deleteItem={deleteItem} disabled={statusFetch}/>
                 })
             }

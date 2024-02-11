@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { SelectStyle } from "../../styled/style";
 import { useAppDispatch } from "../../store/store";
@@ -7,42 +7,109 @@ import { setStateFetch } from "../../store/module/statusFetch";
 import { usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { fieldNotEmptied } from "../../ultil";
 import { Popup, Select } from "../";
+import { gql } from "../../__generated__";
+import { useMutation } from "@apollo/client";
+import useStorePersons from "../../zustanStore/persons";
+import useStoreShifts from "../../zustanStore/shifts";
+import useStoreSections from "../../zustanStore/sections";
+import useStoreProfessions from "../../zustanStore/profession";
+import useStoreSemesters from "../../zustanStore/semesters";
+import useStoreClasses from "../../zustanStore/classes";
+import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
+
+const ADD_PERSON = gql(`
+    mutation AddPerson($dataPerson: inputPerson) {
+        addPerson(dataPerson: $dataPerson) {
+            id
+            names
+            lastNames
+            sex
+            email
+            phone
+            photo
+            role
+        }
+    }
+`)
+
+const UPDATE_PERSON = gql(`
+    mutation UpdatePerson($dataPerson: inputPerson) {
+        updatePerson(dataPerson: $dataPerson) {
+            id
+            names
+            lastNames
+            sex
+            email
+            phone
+            photo
+            role
+        }
+    }
+`)
+
+const ADD_TEACHER = gql(`
+    mutation AddTeacher($dataTeacher: [inputTeacher]) {
+        addTeacher(dataTeacher: $dataTeacher)
+    }
+`)
 
 function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wait, type}:any){
 
-    const dispatch = useAppDispatch();
-    const [ postPerson, { isLoading:isLoadPosPer, isSuccess:isSuccPosPer } ] = usePostPersonMutation();
-    const [ updatePerson, { isLoading:isLoadUpPer, isSuccess:isSuccUpPer } ] = useUpdatePersonByIdMutation();
-    const {data:person} = useSelector((state:store) => state.person);
-    const {data:statusFetch} = useSelector((state:store) => state.stateFetch);
+    const [postPerson, { data:dataAddPerson, reset:resetAddPerson }] = useMutation(ADD_PERSON)
+    const [postTeacher, { data:dataAddTeacher, reset:resetAddTeacher }] = useMutation(ADD_TEACHER)
+
+    const [updatePerson, { data:dataUpdatePerson, reset:resetUpdatePerson }] = useMutation(UPDATE_PERSON)
+
+    const {data:{person}, setPersons, clearPersons, clearPerson, changePerson} = useStorePersons((state)=>state)
+    const clearTeacherClasses = useStoreTeacherClasses((state)=>state.clearTeacherClasses)
+
+    const statusFetch = false
     const [isChange, setIsChange] = useState(false);   
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
+    useEffect(() => {
+        if(dataAddPerson?.addPerson?.id){
+            saveChildren.current.save(dataAddPerson?.addPerson?.id);
+            resetAddPerson()
+        }
+        return () => {}
+    }, [dataAddPerson])
+    
+
     const cancelEdit = () => {
-        dispatch(resetPerson());
+        clearPerson()
+        clearTeacherClasses()
     }
     const changeDataPerson = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const camp = e.target.name;
         const value = e.target.value;
-        dispatch(changePerson({[camp]:value}));
-        !isChange && setIsChange(true);
+        changePerson(camp, value)
     }
 
     const newData = async () => {
-        dispatch(setStateFetch(true));
-        const {name, lastNames, email, phone, sex} = person;
-        const notEmptied:boolean = fieldNotEmptied({name, lastNames, email, phone, sex});
+        const {names, lastNames, email, phone, sex} = person;
+        const notEmptied:boolean = fieldNotEmptied({names, lastNames, email, phone, sex});
         const newData = {...person, phone:Number(phone), role:selectRole};
         if(notEmptied){
-            const insert = {
-                body: newData,
-                role: selectRole
-            }
             try{
-                const { insertId:IdPersons } = await postPerson(insert).unwrap();
-                saveChildren.current.save(IdPersons);
+                /**
+                 * ADD_PERSON
+                 */
+                postPerson({
+                    variables: {
+                        dataPerson: {
+                            sex: newData.sex,
+                            role: newData.role,
+                            photo: newData.photo,
+                            names: newData.names,
+                            phone: newData.phone,
+                            lastNames: newData.lastNames,
+                            email: newData.email,
+                        }
+                    }
+                })
             }catch(error){
-                console.log(error);
+                console.log("error");
             }
         }
     }
@@ -56,26 +123,22 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
     }
 
     const update = async () => {
-        dispatch(setStateFetch(true));
-        const {names, lastNames, email, phone, sex, photo, role} = person;
-        const newData:person = {...person,names, phone:Number(phone)};
-
-        const notEmptied:boolean = fieldNotEmptied({names, lastNames, email, phone, sex, role});
-        if(notEmptied){
-            if(isChange){
-                const updateP = {
-                    body:newData,
-                    role:selectRole
+        if(person){
+            updatePerson({
+                variables:{
+                    dataPerson:{
+                        id: person.id,
+                        names: person.names,
+                        lastNames: person.lastNames,
+                        sex: person.sex,
+                        email: person.email,
+                        phone: person.phone,
+                        photo: person.photo,
+                        role: person.role,
+                    }
                 }
-                await updatePerson(updateP).unwrap();
-                saveChildren.current.save();
-            }else{
-                saveChildren.current.save();
-            }
-
-        }else{
-            console.log("no se permiten campos vacios");
-            dispatch(setStateFetch(false));
+            })
+            saveChildren.current.save();
         }
     }
 

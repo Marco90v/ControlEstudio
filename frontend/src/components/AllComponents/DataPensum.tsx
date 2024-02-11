@@ -12,6 +12,7 @@ import useStoreClasses from "../../zustanStore/classes";
 import useStoreProfessions from "../../zustanStore/profession";
 import useStoreSemesters from "../../zustanStore/semesters";
 import useStorePensum from "../../zustanStore/pensum";
+import { GET_SEMESTERS } from "../../ultil/const";
 
 type data = {
     id: number,
@@ -54,14 +55,14 @@ const GET_PROFESSIONS = gql(`
     }
 `)
 
-const GET_SEMESTERS = gql(`
-    query AllSemesters {
-        allSemesters {
-            names
-            id
-        }
-    }
-`)
+// const GET_SEMESTERS = gql(`
+//     query AllSemesters {
+//         allSemesters {
+//             names
+//             id
+//         }
+//     }
+// `)
 
 const GET_PENSUM = gql(`
     query GetPensumById($getPensumByIdId: Int) {

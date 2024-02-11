@@ -77,7 +77,7 @@ type person = {
     sex: string,
     email: string,
     phone: number,
-    photo: string | null,
+    photo: string | undefined | null,
     role: number,
     idPerson: number,
     name?: string,

@@ -17,12 +17,12 @@ const typeDefs = `#graphql
     # ROLES
     allRoles: [role]
     # PERSONS
-    allPersons: [person]
-    getPersonById(id:Int): person
-    getPersonByRole(role:Int): [person]
+    allPersons: [person!]!
+    getPersonById(id:Int): person!
+    getPersonByRole(role:Int): [person!]!
     # TEACHER
     getTeachers:[teacher]
-    getTeacherByPerson(id:Int): [teacher]
+    getTeacherByPerson(id:Int): [teacher!]!
     # STUDENTS
     getStudents: [student]
     getStudentsByPerson(IdPersons:Int): student
@@ -81,22 +81,22 @@ const typeDefs = `#graphql
     deleteClassePensum(id:Int): Boolean
   }
   type Token {
-    token:String
+    token:String!
   }
   type allAdminAndDataPersons {
-    IdAdmin: String,
-    IdPerson: String,
-    names: String,
-    lastNames: String,
-    sex: String,
-    email: String,
-    phone: String,
+    IdAdmin: String!,
+    IdPerson: String!,
+    names: String!,
+    lastNames: String!,
+    sex: String!,
+    email: String!,
+    phone: String!,
     photo: String
   }
   # CLASSES
   type classes {
-    id: Int,
-    names: String
+    id: Int!,
+    names: String!
   }
   input inputClasse{
     id: Int,
@@ -104,8 +104,8 @@ const typeDefs = `#graphql
   }
   # SEMESTERS
   type semester {
-    id: Int,
-    names: String
+    id: Int!,
+    names: String!
   }
   input InputSemester{
     id: Int,
@@ -113,8 +113,8 @@ const typeDefs = `#graphql
   }
   # PROFESSION
   type profession {
-    id: Int,
-    names: String
+    id: Int!,
+    names: String!
   }
   input inputProfession {
     id: Int,
@@ -122,8 +122,8 @@ const typeDefs = `#graphql
   }
   # SHIFTS
   type shift {
-    id: Int,
-    names:String
+    id: Int!,
+    names:String!
   }
   input inputShift {
     id: Int,
@@ -131,8 +131,8 @@ const typeDefs = `#graphql
   }
   # SECTIONS
   type section {
-    id: Int
-    names:String
+    id: Int!
+    names:String!
   }
   input inputSection {
     id: Int,
@@ -140,8 +140,8 @@ const typeDefs = `#graphql
   }
   # ROLES
   type role {
-    id: Int,
-    names:String
+    id: Int!,
+    names:String!
   }
   input inputRole {
     id: Int,
@@ -149,14 +149,14 @@ const typeDefs = `#graphql
   }
   # PERSONS
   type person {
-    id: Int,
-    names: String,
-    lastNames: String,
-    sex: String,
-    email: String,
-    phone: Int,
+    id: Int!,
+    names: String!,
+    lastNames: String!,
+    sex: String!,
+    email: String!,
+    phone: Int!,
     photo: String,
-    role: Int
+    role: Int!
   }
   input inputGetPersonById{
     id: Int
@@ -173,13 +173,13 @@ const typeDefs = `#graphql
   }
   # TEACHERS
   type teacher{
-    id: Int,
-    IdPersons: Int,
-    IdProfession: Int,
-    IdSemesters: Int,
-    IdClasses: Int,
-    IdShifts: Int,
-    IdSections: Int
+    id: Int!,
+    IdPersons: Int!,
+    IdProfession: Int!,
+    IdSemesters: Int!,
+    IdClasses: Int!,
+    IdShifts: Int!,
+    IdSections: Int!
   }
   input inputTeacher{
     id: Int,
@@ -191,14 +191,14 @@ const typeDefs = `#graphql
     IdSections: Int
   }
   type insertId {
-    insertId: Int
+    insertId: Int!
   }
   # STUDENTS
   type student{
-    id: Int,
-    IdPersons: Int,
-    IdProfession: Int,
-    IdSemesters: Int
+    id: Int!,
+    IdPersons: Int!,
+    IdProfession: Int!,
+    IdSemesters: Int!
   }
   input inputStudent{
     id: Int,
@@ -208,13 +208,13 @@ const typeDefs = `#graphql
   }
   # SCORE
   type score {
-    id: Int,
-    IdStudents: Int,
-    IdClasses: Int,
-    IdTeachers: Int,
-    IdShifts: Int,
-    IdSections: Int,
-    score: Int
+    id: Int!,
+    IdStudents: Int!,
+    IdClasses: Int!,
+    IdTeachers: Int!,
+    IdShifts: Int!,
+    IdSections: Int!,
+    score: Int!
   }
   input inputScore {
     id: Int,
@@ -226,42 +226,42 @@ const typeDefs = `#graphql
     score: Int
   }
   type ClassesByProfessionAndSemesters{
-    id: Int,
-    names: String
+    id: Int!,
+    names: String!
   }
   type TeachersByProfessionAndSemesters{
-    id: Int,
-    IdPersons: Int,
-    names: String,
-    lastNames: String,
-    IdClasses: Int,
-    IdShifts: Int,
-    IdSections: Int
+    id: Int!,
+    IdPersons: Int!,
+    names: String!,
+    lastNames: String!,
+    IdClasses: Int!,
+    IdShifts: Int!,
+    IdSections: Int!
   }
   input ProfessionAndSemesters {
     IdProfession: Int,
     IdSemesters: Int
   }
   type Profile {
-    id: Int,
-    names: String,
-    lastNames: String,
-    sex: String,
-    email: String,
-    phone: Int,
+    id: Int!,
+    names: String!,
+    lastNames: String!,
+    sex: String!,
+    email: String!,
+    phone: Int!,
     photo: String,
-    role: Int,
+    role: Int!,
   }
   # PENSUM
   type ClasseFormatPensum {
-    id: Int,
-    IdClasses: Int,
-    Name_Classes: String,
+    id: Int!,
+    IdClasses: Int!,
+    Name_Classes: String!,
   }
   type Pensum {
-    IdSemesters: Int,
-    Name_Semesters: String,
-    Classes: [ClasseFormatPensum],
+    IdSemesters: Int!,
+    Name_Semesters: String!,
+    Classes: [ClasseFormatPensum]!,
   }
   input ClassePensum {
     IdProfession: Int,

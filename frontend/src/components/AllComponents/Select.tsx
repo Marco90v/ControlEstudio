@@ -13,6 +13,7 @@ const Select = memo( ({identify,changeSelect,value,data,disabled}:select) => {
         <SelectStyle name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}>
             <option value="0"></option>
             {
+                data &&
                 data.map((item:profession | semesters | classe)=>{
                     return(
                         <option key={item.id} value={item.id}>{item.names}</option>

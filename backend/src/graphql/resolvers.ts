@@ -93,9 +93,11 @@ const updateMultData = (args, insertListColumn, updateListValues, table:string) 
                 updateListValues,
                 data
             )
-            .catch(error=>{return { error }})
-            const { insertId } = res
-            if(insertId){
+            .catch(error=>{
+                return { error }}
+            )
+            const { insertId, affectedRows } = res
+            if(insertId || affectedRows){
                 resolve(true)
             }
             reject(false)

@@ -9,32 +9,81 @@ import { Popup } from "../";
 
 import imgTrash from "../../assets/trash-alt-solid-24.png";
 import imgEdit from "../../assets/edit-solid-24.png";
+import { gql } from "../../__generated__";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import useStorePersons from "../../zustanStore/persons";
+import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
+
+const GET_PERSON_BY_ROLE = gql(`
+    query GetPersonByRole($role: Int) {
+        getPersonByRole(role: $role) {
+            id
+            names
+            lastNames
+            sex
+            email
+            phone
+            photo
+            role
+        }
+    }
+`)
+
+const DELETE_TEACHER_BY_PERSON = gql(`
+    mutation DeleteTeacherByIdPerson($idPersons: Int) {
+        deleteTeacherByIdPerson(IdPersons: $idPersons)
+    }
+`)
+
+const DELETE_PERSON = gql(`
+    mutation DeletePerson($deletePersonId: Int) {
+        deletePerson(id: $deletePersonId)
+    }
+`)
 
 function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
+    const statusFetch = false;
 
-    const dispatch = useAppDispatch();
-    const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
-    const [ triggerPersons, { data:persons=preCarga } ] = personApi.endpoints.getPersonByRole.useLazyQuery();
-    const [ deletePersonById, { isLoading:isLoadDelPerId, isSuccess:isSuccDelPerId } ] = useDeletePersonByIdMutation();
+    const {data:dataPersons, setPersons, selectPerson, clearPersons} = useStorePersons((state)=>state)
+    const {clearTeacherClasses} = useStoreTeacherClasses((state)=>state)
+
+
+    const [getPersonByRole, { loading, error, data, refetch:refetchPerson } ]= useLazyQuery(GET_PERSON_BY_ROLE);
+    const [deleteTeacherByPerson, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER_BY_PERSON)
+    const [deletePersonByID, { data:dataPersonDelete, reset:resetPersonDelete }] = useMutation(DELETE_PERSON)
+    
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
+    
 
     useEffect(() => {
-        role > 0 && triggerPersons(role);
+        role > 0 && getPersonByRole({
+            variables:{
+                role
+            }
+        });
     return () => {
-        dispatch(resetPerson());
     }
     }, [role]);
 
     const edit = (idx:number) => {
-        const person:person = persons[idx];
-        dispatch(setPerson(person));
+        if(data?.getPersonByRole){
+            const {__typename, ...rest} = data?.getPersonByRole[idx]
+            selectPerson({...rest, idPerson:rest.id, name:rest.names})
+        }
     }
 
     const deletePerson = (idx:number) => {
-        dispatch(setStateFetch(true));
-        const deleteData = {body:{id:idx},role};
-        deletePersonById(deleteData);
-        deleteChildren.current.deleteChildren({IdPersons:idx})
+        deleteTeacherByPerson({
+            variables:{
+                idPersons:idx
+            }
+        })
+        deletePersonByID({
+            variables:{
+                deletePersonId:idx
+            }
+        })
+        refetchPerson()
     }
 
     const aceptCallback = () => {
@@ -60,7 +109,7 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
         "scoresDelete": <p>Esta acción esta prohibida en este modulo</p>
     };
 
-    const remove = (data:person) => {
+    const remove = (data:any) => {
         if(scores){
             setModal({type:"scoresDelete",value:true, data});
         }else{
@@ -82,12 +131,13 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
             </thead>
             <tbody>
                 {
-                    persons.map((item:person,idx:number)=>{
+                    // dataPersons.persons.map((item,idx:number)=>{
+                        data && data?.getPersonByRole.map((item,idx:number)=>{
                         return(
                             <tr key={idx}>
                                 <td>{item.names}</td>
                                 <td>{item.lastNames}</td>
-                                <td>{item.phone}</td>
+                                <td>{item.phone.toString()}</td>
                                 <td>{item.email}</td>
                                 <td>
                                     <button onClick={()=>edit(idx)} disabled={statusFetch} > <Img src={imgEdit} alt="edit" /> </button>
