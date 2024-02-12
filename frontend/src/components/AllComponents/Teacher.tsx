@@ -53,6 +53,12 @@ const DELETE_TEACHER = gql(`
     }
 `)
 
+const DELETE_TEACHER_BY_PERSON = gql(`
+    mutation DeleteTeacherByIdPerson($idPersons: Int) {
+        deleteTeacherByIdPerson(IdPersons: $idPersons)
+    }
+`)
+
 const Teacher = forwardRef( (_, ref) => {
 
     const statusFetch = false
@@ -65,19 +71,28 @@ const Teacher = forwardRef( (_, ref) => {
     const [deleteTeacher, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER)
 
     const [getTeacherByPerson, { loading, error, data:dataTeachers, refetch:refetchPerson } ]= useLazyQuery(GET_TEACHER_BY_PERSON);
+    const [deleteTeacherByPerson, { data:dataDeleteByPerson, reset:resetDeleteByPerson }] = useMutation(DELETE_TEACHER_BY_PERSON)
+
 
     const [ teacher, setTeacher ] = useState<teacher[]>([]);
     const [ deleteDataTeacher, setDeleteDataTeacher ] = useState<number[]>([]);
 
     useEffect(() => {
-        if (idPerson > 0){
+        if(idPerson > 0){
+            if(dataTeachers?.getTeacherByPerson[0]?.IdPersons === idPerson){
+                setTeacherClasses(dataTeachers?.getTeacherByPerson)
+            }else{
+                clearTeacherClasses()
+                getTeacherByPerson({
+                    variables:{
+                        getTeacherByPersonId: idPerson
+                    }
+                })
+            }
+        }
+        if(idPerson === 0){
             clearTeacherClasses()
-            getTeacherByPerson({
-                variables:{
-                    getTeacherByPersonId: idPerson
-                }
-            })
-        }    
+        }
       return () => {}
     }, [idPerson])
     
@@ -160,8 +175,13 @@ const Teacher = forwardRef( (_, ref) => {
         IdPersons !== 0 ? newData(IdPersons) : editData();
     }
 
-    const deleteChildren = (IdPersons:{IdPersons:number}) => {
+    const deleteChildren = (idPersons:number) => {
         // deleteTeacherByIdPerson(IdPersons);
+        deleteTeacherByPerson({
+            variables:{
+                idPersons
+            }
+        })
     }
 
     useImperativeHandle(ref, () => {

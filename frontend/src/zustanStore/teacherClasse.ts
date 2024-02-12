@@ -20,7 +20,7 @@ type Action = {
   setTeacherClasses: (classes:Classe[]) => void,
   addTeacherClasse: (classe:Classe) => void,
   deleteTeacherClasse: (idx:number) => void,
-  changeTeacherClasse: (camp:string, value:string, idx:number) => void
+  changeTeacherClasse: (camp:string, value:string, idx:number) => void,
   clearTeacherClasses: () => void,
 }
 

@@ -78,7 +78,7 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
 
     const cancelEdit = () => {
         clearPerson()
-        clearTeacherClasses()
+        // clearTeacherClasses()
     }
     const changeDataPerson = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const camp = e.target.name;

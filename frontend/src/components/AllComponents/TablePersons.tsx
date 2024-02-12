@@ -49,7 +49,7 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
 
 
     const [getPersonByRole, { loading, error, data, refetch:refetchPerson } ]= useLazyQuery(GET_PERSON_BY_ROLE);
-    const [deleteTeacherByPerson, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER_BY_PERSON)
+    // const [deleteTeacherByPerson, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER_BY_PERSON)
     const [deletePersonByID, { data:dataPersonDelete, reset:resetPersonDelete }] = useMutation(DELETE_PERSON)
     
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
@@ -73,16 +73,17 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
     }
 
     const deletePerson = (idx:number) => {
-        deleteTeacherByPerson({
-            variables:{
-                idPersons:idx
-            }
-        })
+        // deleteTeacherByPerson({
+        //     variables:{
+        //         idPersons:idx
+        //     }
+        // })
         deletePersonByID({
             variables:{
                 deletePersonId:idx
             }
         })
+        deleteChildren.current.deleteChildren(idx)
         refetchPerson()
     }
 
