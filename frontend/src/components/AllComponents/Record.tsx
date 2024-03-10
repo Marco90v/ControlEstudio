@@ -9,6 +9,15 @@ import { resetPerson } from "../../store/module/personStore";
 import { setStateFetch } from "../../store/module/statusFetch";
 import { useAppDispatch } from "../../store/store";
 import { Popup, Select} from "../";
+import useStoreProfile from "../../zustanStore/profile";
+import useStorePersons from "../../zustanStore/persons";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { gql } from "../../__generated__";
+import { GET_SECTIONS, GET_SHIFTS } from "../../ultil/const";
+import useStoreStudentProfessionSemester from "../../zustanStore/studentClasses";
+import useStoreScores from "../../zustanStore/scores";
+import { filter__typename } from "../../ultil";
+import { ClassesByProfessionAndSemesters, TeachersByProfessionAndSemesters } from "../../__generated__/graphql";
 
 const initialDataScores:scores = {
     id:0,
@@ -20,6 +29,65 @@ const initialDataScores:scores = {
     score:0
 };
 
+const GET_ROLES = gql(`
+    query AllRoles {
+        allRoles {
+            id
+            names
+        }
+    }
+`)
+
+const GET_STUDENT_BY_PERSON = gql(`
+    query GetStudentsByPerson($idPersons: Int) {
+        getStudentsByPerson(IdPersons: $idPersons) {
+            id
+            IdPersons
+            IdProfession
+            IdSemesters
+        }
+    }
+`)
+
+const DATA_SCORES = gql(`
+    query dataScore($professionAndSemesters: ProfessionAndSemesters, $idStudents: Int) {
+        getClassesByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {
+            id
+            names
+        }
+        getTeachersByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {
+            id
+            IdPersons
+            names
+            lastNames
+            IdClasses
+            IdShifts
+            IdSections
+        }
+        getScores(idStudents: $idStudents) {
+            id
+            IdStudents
+            IdTeachers
+            IdClasses
+            IdShifts
+            IdSections
+            score
+        }
+    }
+`)
+
+const ADD_SCORE = gql(`
+    mutation Mutation($dataScores: [inputScore]) {
+        addScore(dataScores: $dataScores)
+    }
+`)
+
+const UPDATE_SCORE = gql(`
+    mutation UpdateScore($dataScores: [inputScore]) {
+        updateScore(dataScores: $dataScores)
+    }
+`)
+
 const cuerpoPopup:any = {
     "edit": <p>¿Desea Guardar los cambios?</p>,
     "delete": <p>Esta acción esta prohibida en este modulo</p>,
@@ -27,69 +95,119 @@ const cuerpoPopup:any = {
 };
 
 function Record () {
-    const dispatch = useAppDispatch();
-    const profile = useSelector((state:store) => state.profile);
-    const {data:person} = useSelector((state:store) => state.person);
-    const {data:statusFetch} = useSelector((state:store) => state.stateFetch);
+    const profile = useStoreProfile((state)=>state.profile)
+    const {professionSemester, setProfessionSemester, clearProfessionSemester} = useStoreStudentProfessionSemester((state)=>state)
+    const {classes, teachers,scores, setClasses, setTeachers, setScores, changeScores, clearScore } = useStoreScores((state)=>state)
+    const person = useStorePersons((state)=>state.data.person)
+    const clearPerson = useStorePersons((state)=>state.clearPerson)
+    const statusFetch = false
 
-    const { data:roles=[] } = useGetRolesQuery();
-    const { data:shifts=[] } = useGetShiftsQuery();
-    const { data:sections=[] } = useGetSectionsQuery();
+    const { data:roles } = useQuery(GET_ROLES);
+    const { data:shifts } = useQuery(GET_SHIFTS);
+    const { data:sections } = useQuery(GET_SECTIONS);
 
-    const [ updateScoreById, {isLoading:isLoadUpSco, isSuccess:isSuccSuccSco } ] = useUpdateScoreByIdMutation();
-    const [ postScore, {isLoading:isLoadPosSco, isSuccess:isSuccPosSco } ] = usePostScoreMutation();
-    
-    const [ triggerStudents ] = studentsApi.endpoints.getStudentsById.useLazyQuery();
-    const [ triggerGetClassesByProfessionAndSemesters, { data:classes=[] } ] = scoresApi.endpoints.getClassesByProfessionAndSemesters.useLazyQuery();
-    const [ triggerGetTeachersByProfessionAndSemesters, { data:teachers=[] } ] = scoresApi.endpoints.getTeachersByProfessionAndSemesters.useLazyQuery();
-    const [ triggerGetScoresByIdStudent, { data:scores=[] } ] = scoresApi.endpoints.getScoresByIdStudent.useLazyQuery();
+    const [getStudentByPerson, { data:personData }] = useLazyQuery(GET_STUDENT_BY_PERSON)
+    const [getDataScores, { data:data }] = useLazyQuery(DATA_SCORES)
 
-    const [score, setScores] = useState<scores[]>([]);
+    const [AddScore, { data:dataAddScore }] = useMutation(ADD_SCORE)
+    const [UpdateScore, { data:dataUpdateScore }] = useMutation(UPDATE_SCORE)
+
+
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
-
-    useEffect(() => {  
-        if( isSuccSuccSco || isSuccPosSco ) dispatch(setStateFetch(false));
-        return () => {}
-    }, [ isSuccSuccSco || isSuccPosSco ]);
 
     useEffect(() => {
         if(person.id > 0){
             getScores();
-        }
-        if(person.id === 0){
-            dispatch(studentsApi.util.resetApiState());
-            setScores([]);
-        }
-    
+        }    
       return () => {}
     }, [person]);
 
+    useEffect(() => {
+        if(personData?.getStudentsByPerson && personData?.getStudentsByPerson.IdPersons > 0){
+            setProfessionSemester(filter__typename(personData.getStudentsByPerson))
+        }    
+      return () => {}
+    }, [personData])
+
+    useEffect(() => {
+        setDataScores()
+      return () => {}
+    }, [data])
+    
+
+    useEffect(() => {
+      if(professionSemester.IdPersons>0){
+        getClassesAndTeachers()
+      }
+    
+      return () => {}
+    }, [professionSemester])
+        
+
     const resetInput = () => {
-        setScores([]);
+        // setScores([]);
+    }
+
+    const setDataScores = () => {
+        if(data){
+            const {
+                getClassesByProfessionAndSemesters,
+                getTeachersByProfessionAndSemesters,
+                getScores} = data
+            if(getClassesByProfessionAndSemesters && getClassesByProfessionAndSemesters.length >0){
+                const c = getClassesByProfessionAndSemesters.map(e=>filter__typename<ClassesByProfessionAndSemesters>(e))
+                setClasses(c)
+            }
+            if(getTeachersByProfessionAndSemesters && getTeachersByProfessionAndSemesters.length >0){
+                const t = getTeachersByProfessionAndSemesters.map(e=>filter__typename<TeachersByProfessionAndSemesters>(e))
+                setTeachers(t)
+            }
+            if(getClassesByProfessionAndSemesters && getClassesByProfessionAndSemesters.length >0 && getScores){
+                const c = getClassesByProfessionAndSemesters.map(e=>filter__typename<ClassesByProfessionAndSemesters>(e))
+                const newScores = c.map(e=>({...initialDataScores,IdClasses:e.id, IdStudents:professionSemester.id }))
+                const completScores = newScores.map(nS=>{
+                    const res = getScores.find(s=>nS.IdClasses === s?.IdClasses)
+                    return res ? res : nS;
+                })
+                setScores(completScores)
+            }
+        }
+    }
+
+    const getClassesAndTeachers = () => {
+        getDataScores({
+            variables:{
+                professionAndSemesters: {
+                    IdProfession: professionSemester.IdProfession,
+                    IdSemesters: professionSemester.IdSemesters
+                },
+                idStudents: professionSemester.id,
+            }
+        })
     }
 
     const getScores = async () => {
         const IdPersons:number | undefined = verifyRole() ? profile.id : person.id;
-        const studentByIdPerson = await triggerStudents(IdPersons).unwrap();
-        if(studentByIdPerson){
-            const {IdProfession,IdSemesters,id} = studentByIdPerson;
-            const classeByIds = await triggerGetClassesByProfessionAndSemesters({IdProfession,IdSemesters}).unwrap();
-            const newData:scores[] = classeByIds.map((item:classe)=> { return { ...initialDataScores, IdClasses:item.id, IdStudents:id } } );
-            await triggerGetTeachersByProfessionAndSemesters({IdProfession,IdSemesters});
-            const scoresById = await triggerGetScoresByIdStudent({IdStudents:id}).unwrap();
-            const dataComplet = newData.map((nD:scores)=>{
-                const res = scoresById.find(( sC:scores) => nD.IdClasses === sC.IdClasses );
-                return res ? res : nD;
-            });
-            setScores(dataComplet);
+        if(personData?.getStudentsByPerson && personData?.getStudentsByPerson?.IdPersons > 0 && person.id === personData?.getStudentsByPerson?.IdPersons){
+            setProfessionSemester(filter__typename(personData.getStudentsByPerson))
+            setDataScores()
         }else{
-            setModal({type:"noData",value:true, data:{id:0,names:""}});
+            clearScore()
+            getStudentByPerson({
+                variables:{
+                    idPersons:IdPersons
+                }
+            })
         }
     }
     
     const verifyRole = () => {
-        const role = roles.find((e:role)=>e.id === profile.role)?.names ?? false;
-        return role === "Estudiante" ? true : false;
+        if(roles?.allRoles){
+            const role = roles?.allRoles.find((e)=>e?.id === profile.role)?.names ?? false;
+            return role === "Estudiante" ? true : false;
+        }else{
+            return false
+        }
     }
     const getNameClasse = (IdClasses:number):string =>{
         return classes.find((item:classe)=>item.id===IdClasses)?.names || "";
@@ -98,38 +216,23 @@ function Record () {
         const element = e.target.id;
         const value = Number(e.target.value);
         const {IdClasses} = item;
-        setScores( (e:scores[])=>{
-            return e.map((x:scores)=>{
-                if(element==='IdTeachers'){
-                    if(x.IdClasses===IdClasses && value===0) return {...x, IdShifts:0, IdSections:0, [element]:value}
-                    if(x.IdClasses===IdClasses){
-                        const teacher = teachers.find((x:teacherByPSC)=>x.id===value);
-                        if(teacher){
-                            const { IdShifts, IdSections } = teacher;
-                            return {...x, IdShifts, IdSections, [element]:value};
-                        }
-                    }
-                    return x;
-                }else{
-                    return x.IdClasses===IdClasses ? {...x, [element]:value} : x;
-                }
-            })
-            }
-        );
+        changeScores(element, value, IdClasses)
     }
     const list = (scoreStudent:scores):[] => {
         const {IdClasses} = scoreStudent;
         const newData:any = [];
         teachers.forEach((t:teacherByPSC)=>{
             if(t.IdClasses===IdClasses){
-                const nameShift = shifts.find((s:shifts)=>s.id===t.IdShifts)?.names.toLocaleLowerCase();
-                const nameSection = sections.find((s:sections)=>s.id===t.IdSections)?.names;
-                newData.push(
-                    {
-                        id:t.id, 
-                        names:`Profesor: ${t.names} ${t.lastNames}  -  Turno: ${nameShift}  -  Seccion: ${nameSection}`
-                    }
-                );
+                if(shifts?.allShifts && sections?.allSections){
+                    const nameShift = shifts?.allShifts.find((s)=>s?.id===t.IdShifts)?.names.toLocaleLowerCase();
+                    const nameSection = sections?.allSections.find((s)=>s?.id===t.IdSections)?.names;
+                    newData.push(
+                        {
+                            id:t.id, 
+                            names:`Profesor: ${t.names} ${t.lastNames}  -  Turno: ${nameShift}  -  Seccion: ${nameSection}`
+                        }
+                    );
+                }
             }
         });
         return newData;
@@ -143,12 +246,15 @@ function Record () {
         setModal({type:"edit",value:true, data:{id:0,names:""}});
     }
     const cancel = () => {
-        dispatch(resetPerson());
+        clearPerson()
+        clearProfessionSemester()
+        clearScore()
     }
     const updateScores = () => {
-        dispatch(setStateFetch(true));
         const newData:scores[] = []
-        score.forEach((item:scores)=>{
+        const tempOld = data?.getScores?.map(i=>filter__typename<ClassesByProfessionAndSemesters>(i)) || []
+
+        scores.forEach((item:scores)=>{
             if(item.id===0){
                 if(item.IdTeachers && item.IdShifts && item.IdSections){
                     newData.push(item);
@@ -156,11 +262,21 @@ function Record () {
                     console.log("faltan campos para insertar");
                 }
             }else{
-                const oldData = scores.find((ele:scores)=>ele.id===item.id);
-                if(JSON.stringify(item)!==JSON.stringify(oldData)) updateScoreById(item);
+                const existData = tempOld.find(ele=>ele.id===item.id)
+                if(JSON.stringify(item)!==JSON.stringify(existData)){
+                    UpdateScore({
+                        variables:{
+                            dataScores:[item]
+                        }
+                    })
+                }
             }
         });
-        newData.length > 0 && postScore(newData);
+        newData.length > 0 && AddScore({
+            variables:{
+                dataScores: newData
+            }
+        })
     }
     const aceptCallback = () => {
         switch (modal.type) {
@@ -184,7 +300,7 @@ function Record () {
                     <label>Nota</label>
                 </div>
                 {
-                    score.map((item:scores, idx:number)=>{
+                    scores.map((item:scores, idx:number)=>{
                         const id = item.id.toString();
                         return(
                             <div key={idx}>
@@ -201,7 +317,7 @@ function Record () {
                                     name = "score"
                                     id = "score"
                                     min = "0"
-                                    max = "10"
+                                    max = "20"
                                     onChange = {(e)=>changeSelectN(e, item)}
                                     value = {item.score}
                                     disabled = { statusFetch || permisions(1,2) }
@@ -211,7 +327,7 @@ function Record () {
                     })
                 }
                 {
-                    score.length > 0 &&
+                    scores.length > 0 &&
                         <div className="save">
                             <button className="cancel" onClick={cancel} disabled={ statusFetch } >Cancelar</button>
                             <button onClick={save} disabled={ statusFetch || permisions(1,2) } >Guardar</button>

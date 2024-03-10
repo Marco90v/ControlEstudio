@@ -51,7 +51,7 @@ const router = createBrowserRouter(
         <Route path="pensums" element={<Pensum />} />,
         <Route path="teachers" element={<Teacher />} />,
         <Route path="students" element={<Students />} />,
-        {/* <Route path="record" element={<Scores />} /> */}
+        <Route path="record" element={<Scores />} />
       </Route>
     ,
   ])

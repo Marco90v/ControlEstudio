@@ -33,6 +33,9 @@ const documents = {
     "\n    mutation UpdateStudent($dataStudent: inputStudent) {\n        updateStudent(dataStudent: $dataStudent) {\n            id\n            IdPersons\n            IdProfession\n            IdSemesters\n        }\n    }\n": types.UpdateStudentDocument,
     "\n    mutation DeleteStudentByIdPerson($idPersons: Int) {\n        deleteStudentByIdPerson(IdPersons: $idPersons)\n    }\n": types.DeleteStudentByIdPersonDocument,
     "\n    query GetProfileAndRoles {\n        getProfile {\n            id\n            names\n            lastNames\n            sex\n            email\n            phone\n            photo\n            role\n        }\n        allRoles {\n            id\n            names\n        }\n    }\n": types.GetProfileAndRolesDocument,
+    "\n    query dataScore($professionAndSemesters: ProfessionAndSemesters, $idStudents: Int) {\n        getClassesByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {\n            id\n            names\n        }\n        getTeachersByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {\n            id\n            IdPersons\n            names\n            lastNames\n            IdClasses\n            IdShifts\n            IdSections\n        }\n        getScores(idStudents: $idStudents) {\n            id\n            IdStudents\n            IdTeachers\n            IdClasses\n            IdShifts\n            IdSections\n            score\n        }\n    }\n": types.DataScoreDocument,
+    "\n    mutation Mutation($dataScores: [inputScore]) {\n        addScore(dataScores: $dataScores)\n    }\n": types.MutationDocument,
+    "\n    mutation UpdateScore($dataScores: [inputScore]) {\n        updateScore(dataScores: $dataScores)\n    }\n": types.UpdateScoreDocument,
     "\n    query GetPersonByRole($role: Int) {\n        getPersonByRole(role: $role) {\n            id\n            names\n            lastNames\n            sex\n            email\n            phone\n            photo\n            role\n        }\n    }\n": types.GetPersonByRoleDocument,
     "\n    mutation DeleteTeacherByIdPerson($idPersons: Int) {\n        deleteTeacherByIdPerson(IdPersons: $idPersons)\n    }\n": types.DeleteTeacherByIdPersonDocument,
     "\n    mutation DeletePerson($deletePersonId: Int) {\n        deletePerson(id: $deletePersonId)\n    }\n": types.DeletePersonDocument,
@@ -139,6 +142,18 @@ export function gql(source: "\n    mutation DeleteStudentByIdPerson($idPersons: 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    query GetProfileAndRoles {\n        getProfile {\n            id\n            names\n            lastNames\n            sex\n            email\n            phone\n            photo\n            role\n        }\n        allRoles {\n            id\n            names\n        }\n    }\n"): (typeof documents)["\n    query GetProfileAndRoles {\n        getProfile {\n            id\n            names\n            lastNames\n            sex\n            email\n            phone\n            photo\n            role\n        }\n        allRoles {\n            id\n            names\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query dataScore($professionAndSemesters: ProfessionAndSemesters, $idStudents: Int) {\n        getClassesByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {\n            id\n            names\n        }\n        getTeachersByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {\n            id\n            IdPersons\n            names\n            lastNames\n            IdClasses\n            IdShifts\n            IdSections\n        }\n        getScores(idStudents: $idStudents) {\n            id\n            IdStudents\n            IdTeachers\n            IdClasses\n            IdShifts\n            IdSections\n            score\n        }\n    }\n"): (typeof documents)["\n    query dataScore($professionAndSemesters: ProfessionAndSemesters, $idStudents: Int) {\n        getClassesByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {\n            id\n            names\n        }\n        getTeachersByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {\n            id\n            IdPersons\n            names\n            lastNames\n            IdClasses\n            IdShifts\n            IdSections\n        }\n        getScores(idStudents: $idStudents) {\n            id\n            IdStudents\n            IdTeachers\n            IdClasses\n            IdShifts\n            IdSections\n            score\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation Mutation($dataScores: [inputScore]) {\n        addScore(dataScores: $dataScores)\n    }\n"): (typeof documents)["\n    mutation Mutation($dataScores: [inputScore]) {\n        addScore(dataScores: $dataScores)\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation UpdateScore($dataScores: [inputScore]) {\n        updateScore(dataScores: $dataScores)\n    }\n"): (typeof documents)["\n    mutation UpdateScore($dataScores: [inputScore]) {\n        updateScore(dataScores: $dataScores)\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

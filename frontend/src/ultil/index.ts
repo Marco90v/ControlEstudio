@@ -9,4 +9,9 @@ function fieldNotEmptied<T> (object:T):boolean {
     return r;
 }
 
-export { fieldNotEmptied }
+function filter__typename<T>(data:any):T{
+    const {__typename, ...rest} = data
+    return rest
+}
+
+export { fieldNotEmptied, filter__typename }
