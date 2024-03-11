@@ -7,20 +7,21 @@ import useStoreProfile from "../../zustanStore/profile";
 import { useQuery } from "@apollo/client";
 import { gql } from "../../__generated__";
 import useStoreRoles from "../../zustanStore/roles";
+import { GET_ROLES } from "../../ultil/const";
 
 interface role {
     id: number | null | undefined,
     names: string | null | undefined
 }
 
-const GET_ROLES = gql(`
-    query AllRoles {
-        allRoles {
-            id
-            names
-        }
-    }
-`)
+// const GET_ROLES = gql(`
+//     query AllRoles {
+//         allRoles {
+//             id
+//             names
+//         }
+//     }
+// `)
 
 function DataScores(){
 

@@ -5,40 +5,41 @@ import {Popup, InputForm, TableComponent} from "../";
 import { useMutation, useQuery } from "@apollo/client";
 import { gql } from "../../__generated__";
 import useStoreClasses from "../../zustanStore/classes";
+import { ADD_CLASSE, DELETE_CLASSE, GET_ClASSES, UPDATE_CLASSE } from "../../ultil/const";
 
 
-const GET_ClASSES = gql(`
-    query AllClasses {
-        allClasses {
-            id
-            names
-        }
-    }
-`)
+// const GET_ClASSES = gql(`
+//     query AllClasses {
+//         allClasses {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const ADD_CLASSE = gql(`
-    mutation AddClasses($dataClasse: inputClasse) {
-        addClasses(dataClasse: $dataClasse) {
-            id
-            names
-        }
-    }
-`)
+// const ADD_CLASSE = gql(`
+//     mutation AddClasses($dataClasse: inputClasse) {
+//         addClasses(dataClasse: $dataClasse) {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const UPDATE_CLASSE = gql(`
-    mutation UpdateClasses($dataClasse: inputClasse) {
-        updateClasses(dataClasse: $dataClasse) {
-            id
-            names
-        }
-    }
-`)
+// const UPDATE_CLASSE = gql(`
+//     mutation UpdateClasses($dataClasse: inputClasse) {
+//         updateClasses(dataClasse: $dataClasse) {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const DELETE_CLASSE = gql(`
-    mutation DeleteClasses($deleteClassesId: Int) {
-        deleteClasses(id: $deleteClassesId)
-    }
-`)
+// const DELETE_CLASSE = gql(`
+//     mutation DeleteClasses($deleteClassesId: Int) {
+//         deleteClasses(id: $deleteClassesId)
+//     }
+// `)
 
 function DataClasses() {
 

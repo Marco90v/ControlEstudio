@@ -1,57 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { SelectStyle } from "../../styled/style";
-import { useAppDispatch } from "../../store/store";
-import { changePerson, resetPerson } from "../../store/module/personStore";
-import { setStateFetch } from "../../store/module/statusFetch";
-import { usePostPersonMutation, useUpdatePersonByIdMutation } from "../../store/apis/personApi";
 import { fieldNotEmptied } from "../../ultil";
 import { Popup, Select } from "../";
-import { gql } from "../../__generated__";
 import { useMutation } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
-import useStoreShifts from "../../zustanStore/shifts";
-import useStoreSections from "../../zustanStore/sections";
-import useStoreProfessions from "../../zustanStore/profession";
-import useStoreSemesters from "../../zustanStore/semesters";
-import useStoreClasses from "../../zustanStore/classes";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
-
-const ADD_PERSON = gql(`
-    mutation AddPerson($dataPerson: inputPerson) {
-        addPerson(dataPerson: $dataPerson) {
-            id
-            names
-            lastNames
-            sex
-            email
-            phone
-            photo
-            role
-        }
-    }
-`)
-
-const UPDATE_PERSON = gql(`
-    mutation UpdatePerson($dataPerson: inputPerson) {
-        updatePerson(dataPerson: $dataPerson) {
-            id
-            names
-            lastNames
-            sex
-            email
-            phone
-            photo
-            role
-        }
-    }
-`)
-
-const ADD_TEACHER = gql(`
-    mutation AddTeacher($dataTeacher: [inputTeacher]) {
-        addTeacher(dataTeacher: $dataTeacher)
-    }
-`)
+import { ADD_PERSON, ADD_TEACHER, UPDATE_PERSON } from "../../ultil/const";
 
 function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wait, type}:any){
 
@@ -78,7 +32,6 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
 
     const cancelEdit = () => {
         clearPerson()
-        // clearTeacherClasses()
     }
     const changeDataPerson = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const camp = e.target.name;

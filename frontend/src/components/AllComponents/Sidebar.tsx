@@ -1,11 +1,4 @@
-// import { useDispatch, useSelector } from "react-redux";
-import { change } from "../../store/module/visibleSideStore";
 import { MyNavLink, Side, Ul } from "../../styled/style";
-import { useAppDispatch } from "../../store/store";
-import { removeSession } from "../../store/module/sessionStore";
-import { removeProfile } from "../../store/module/profileStore";
-import { authApi } from "../../store/apis/authApi";
-import { profileApi } from "../../store/apis/profileApi";
 
 import arrow from "../../assets/left-arrow-solid-24.png";
 import close from "../../assets/log-out-regular-24.png";
@@ -71,21 +64,11 @@ const Li = ({ruta,img,role}:Li) => {
 }
 
 function Sidebar(){
-
-    // const dispatch = useAppDispatch();
-    // const { role } = useSelector((state:store) => state.profile);
-    // const visibleSide = useSelector((state:store) => state.sidebar);
-
     const {visibleSideBar:visibleSide,toggleStatus:toggleSideBar} = useStoreSideBar((state)=>state)
     const role = useProfile((state)=>state.profile.role)
     const deleteToken = useStoreToken((state) => state.deleteToken)
 
-
     const logout = () => {
-        // dispatch(removeProfile());
-        // dispatch(authApi.util.resetApiState());
-        // dispatch(profileApi.util.resetApiState());
-        // dispatch(removeSession());
         deleteToken()
     }
 

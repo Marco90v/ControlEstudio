@@ -12,7 +12,7 @@ import useStoreClasses from "../../zustanStore/classes";
 import useStoreProfessions from "../../zustanStore/profession";
 import useStoreSemesters from "../../zustanStore/semesters";
 import useStorePensum from "../../zustanStore/pensum";
-import { GET_SEMESTERS } from "../../ultil/const";
+import { ADD_CLASSES_PENSUM, DELETE_CLASSES_PENSUM, GET_ClASSES, GET_PENSUM, GET_PROFESSIONS, GET_SEMESTERS } from "../../ultil/const";
 
 type data = {
     id: number,
@@ -37,58 +37,49 @@ const modalInitial: modalInitial = {
     ClasseName:""
 };
 
-const GET_ClASSES = gql(`
-    query AllClasses {
-        allClasses {
-            id
-            names
-        }
-    }
-`)
-
-const GET_PROFESSIONS = gql(`
-    query AllProfession {
-        allProfession {
-            id
-            names
-        }
-    }
-`)
-
-// const GET_SEMESTERS = gql(`
-//     query AllSemesters {
-//         allSemesters {
-//             names
+// const GET_ClASSES = gql(`
+//     query AllClasses {
+//         allClasses {
 //             id
+//             names
 //         }
 //     }
 // `)
 
-const GET_PENSUM = gql(`
-    query GetPensumById($getPensumByIdId: Int) {
-        getPensumById(id: $getPensumByIdId) {
-            IdSemesters
-            Name_Semesters
-            Classes {
-                id
-                IdClasses   
-                Name_Classes
-            }
-  }
-    }
-`)
+// const GET_PROFESSIONS = gql(`
+//     query AllProfession {
+//         allProfession {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const ADD_CLASSES_PENSUM = gql(`
-    mutation AddClassesPensum($dataPensum: DataPensum) {
-        addClassesPensum(DataPensum: $dataPensum)
-    }
-`)
+// const GET_PENSUM = gql(`
+//     query GetPensumById($getPensumByIdId: Int) {
+//         getPensumById(id: $getPensumByIdId) {
+//             IdSemesters
+//             Name_Semesters
+//             Classes {
+//                 id
+//                 IdClasses   
+//                 Name_Classes
+//             }
+//   }
+//     }
+// `)
 
-const DELETE_CLASSES_PENSUM = gql(`
-    mutation DeleteClassePensum($deleteClassePensumId: Int) {
-        deleteClassePensum(id: $deleteClassePensumId)
-    }
-`)
+// const ADD_CLASSES_PENSUM = gql(`
+//     mutation AddClassesPensum($dataPensum: DataPensum) {
+//         addClassesPensum(DataPensum: $dataPensum)
+//     }
+// `)
+
+// const DELETE_CLASSES_PENSUM = gql(`
+//     mutation DeleteClassePensum($deleteClassePensumId: Int) {
+//         deleteClassePensum(id: $deleteClassePensumId)
+//     }
+// `)
 
 function DataPensum(){
 

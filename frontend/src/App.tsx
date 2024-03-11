@@ -1,29 +1,19 @@
-import { store } from './store/store';
-import { Provider, useSelector } from 'react-redux';
-import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, Navigate, Outlet, BrowserRouter, Routes, useLocation} from "react-router-dom";
-import Classes from "./pages/classes";
-import Inicio from './pages/inicio';
-import Profession from './pages/profession';
-import Pensum from './pages/pensum';
-import Teacher from './pages/teacher';
-import Students from './pages/students';
-import Scores from './pages/Scores';
-import { Login } from './pages/Login';
-import { Suspense } from 'react';
+import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, Navigate, useLocation} from "react-router-dom";
+import { Login } from './pages/login';
 import useStoreToken from './zustanStore/token';
+import { DataClasses, DataPensum, DataProfession, DataScores, DataStudents, DataTeacher, Profile } from './components';
+import Dashboard from "./pages/dashboard";
 
 const ProtecteRoutes = () => {
   const location = useLocation();
-  // const {token} = useSelector((state:store) => state.session);
   const token = useStoreToken((state) => state.token)
-  // const token = null
 
   if(location!==null){
     if((location.pathname==='/dashboard' || location.pathname==='/dashboard/') && token){
       return <Navigate to={'/dashboard/home'} />
     }
     if(location.pathname!=='/dashboard' && location.pathname!=='/dashboard/' && token){
-      return <Outlet/>
+      return <Dashboard />
     }
     if(!token){
       return <Navigate to={'/'} />
@@ -33,8 +23,6 @@ const ProtecteRoutes = () => {
 }
 
 const VerifySession = () => {
-  // const {token} = useSelector((state:store) => state.session);
-  // const token = null
   const token = useStoreToken((state) => state.token)
   if(token) return <Navigate to={'/dashboard/home'} />
   return <Login />
@@ -43,15 +31,14 @@ const VerifySession = () => {
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route path="/" element={<VerifySession/>} />,
-    // <Route path="dashboard"  element={<Navigate to="/dashboard/home" />} >
       <Route path="dashboard" element={<ProtecteRoutes/>} >
-        <Route path="home" element={<Inicio />} />,
-        <Route path="classes" element={<Classes />} />,
-        <Route path="profession" element={<Profession />} />,
-        <Route path="pensums" element={<Pensum />} />,
-        <Route path="teachers" element={<Teacher />} />,
-        <Route path="students" element={<Students />} />,
-        <Route path="record" element={<Scores />} />
+        <Route path="home" element={<Profile />} />,
+        <Route path="classes" element={<DataClasses />} />,
+        <Route path="profession" element={<DataProfession />} />,
+        <Route path="pensums" element={<DataPensum />} />,
+        <Route path="teachers" element={<DataTeacher  />} />,
+        <Route path="students" element={<DataStudents />} />,
+        <Route path="record" element={<DataScores />} />
       </Route>
     ,
   ])
@@ -59,14 +46,10 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <>
-      {/* <Provider store={store}> */}
-          <RouterProvider
-            router={router}
-            fallbackElement={<span>cargando....</span>}
-          />
-      {/* </Provider> */}
-    </>
+      <RouterProvider
+        router={router}
+        fallbackElement={<span>cargando....</span>}
+      />
   )
 }
 

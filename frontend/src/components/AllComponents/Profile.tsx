@@ -1,72 +1,15 @@
-import { Suspense, useEffect, useState } from "react";
-// import { useGetProfileQuery } from "../../store/apis/profileApi";
-// import { useGetRolesQuery } from "../../store/apis/rolesApi";
+import { useEffect } from "react";
 import { ContentProfile } from "../../styled/style";
-// import { gql } from "@apollo/client/core";
 import { useQuery } from "@apollo/client";
 import useStoreProfile from "../../zustanStore/profile";
-import { gql } from "../../__generated__";
-
-// const GET_PROFILE = gql`
-//     query GetProfile {
-//         getProfile {
-//             id
-//             names
-//             lastNames
-//             sex
-//             email
-//             phone
-//             photo
-//             role
-//         }
-//     }
-// `
-
-// const GET_ROLES = gql`
-//     query AllRoles {
-//         allRoles {
-//             id
-//             names
-//         }
-//     }
-// `
-
-const GET_PROFILE_AND_ROLES = gql(`
-    query GetProfileAndRoles {
-        getProfile {
-            id
-            names
-            lastNames
-            sex
-            email
-            phone
-            photo
-            role
-        }
-        allRoles {
-            id
-            names
-        }
-    }
-`)
+import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
 
 function Profile(){
-    // const [rol, setRol] = useState<string>("");
-    // const { data } = useGetProfileQuery();
-    // const { data:roles } = useGetRolesQuery();
-
-    // const { data } = useQuery(GET_PROFILE);
-    // const { data:roles } = useQuery(GET_ROLES);
     const { data } = useQuery(GET_PROFILE_AND_ROLES);
     const {profile, setProfile} = useStoreProfile((state)=>state)
 
-    
     useEffect(() => {
-        // const nameRol= roles?.find(e=>e.id===data?.role);
-        // setRol(nameRol?.names || "");
-        // return () => {}
         if(data){
-            // console.log(data)
             const nameRole = data?.allRoles?.find(e=>e?.id===data.getProfile?.role)?.names || ""
             const newProfile = {
                 id:data.getProfile?.id || 0,
@@ -79,7 +22,6 @@ function Profile(){
                 role: data.getProfile?.role || 0,
                 nameRole
             }
-            // console.log(newProfile)
             setProfile(newProfile)
         }
     }, [data])

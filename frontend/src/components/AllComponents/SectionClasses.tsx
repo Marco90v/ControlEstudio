@@ -1,17 +1,5 @@
-import { useGetClassesQuery } from "../../store/apis/classesApi";
-import { useGetProfessionQuery } from "../../store/apis/professionApi";
-import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
-import { useGetSemestersQuery } from "../../store/apis/semestersApi";
-import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
 import { Select } from "../"
-import useStoreClasses from "../../zustanStore/classes";
-import useStoreProfessions from "../../zustanStore/profession";
-import useStoreSemesters from "../../zustanStore/semesters";
-import useStoreShifts from "../../zustanStore/shifts";
-import useStoreSections from "../../zustanStore/sections";
-import { useEffect } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { gql } from "../../__generated__";
+import { useQuery } from "@apollo/client";
 import { GET_CLASSES, GET_PROFESSIONS, GET_SECTIONS, GET_SEMESTERS, GET_SHIFTS } from "../../ultil/const";
 
 type ids = {

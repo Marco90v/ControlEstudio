@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { ContentStudent } from "../../styled/style";
-import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { PersonsForms, TablePersons, ProfessionSemester } from "../";
 import { useQuery } from "@apollo/client";
-import { gql } from "../../__generated__";
 import useStoreRoles from "../../zustanStore/roles";
+import { GET_ROLES } from "../../ultil/const";
 
 interface role {
     id: number | null | undefined,
@@ -24,26 +22,10 @@ const initialDataPerson:person = {
     role: 0
 };
 
-const GET_ROLES = gql(`
-    query AllRoles {
-        allRoles {
-            id
-            names
-        }
-    }
-`)
-
 function DataStudents(){
-
-    // const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
-    // const { data:roles=[] } = useGetRolesQuery();
     const statusFetch = false
     const { data:dataRoles } = useQuery(GET_ROLES);
-
     const {roles, setRoles, clearRoles} = useStoreRoles((state)=>state)
-
-
-    // const roles:any = []
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     const [ person, setPerson ] = useState(initialDataPerson);

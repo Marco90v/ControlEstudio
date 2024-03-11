@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { ContentTeacher } from "../../styled/style";
-import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { PersonsForms, TablePersons, Teacher } from "../";
 import { useQuery } from "@apollo/client";
-import { gql } from "../../__generated__";
 import useStoreRoles from "../../zustanStore/roles";
+import { GET_ROLES } from "../../ultil/const";
 
 const initialDataPerson:person = {
     id:0,
@@ -24,34 +22,15 @@ interface role {
     names: string | null | undefined
 }
 
-const GET_ROLES = gql(`
-    query AllRoles {
-        allRoles {
-            id
-            names
-        }
-    }
-`)
-
 function DataTeacher(){
-
-    // const { data:roles=[] } = useGetRolesQuery();
-    // const { data:statusFetch } = useSelector((state:store) => state.stateFetch);
     const { data:dataRoles } = useQuery(GET_ROLES);
     const {roles, setRoles, clearRoles} = useStoreRoles((state)=>state)
     const statusFetch = false;
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
-    // const [ person, setPerson ] = useState(initialDataPerson);
     const handlerTeacher = useRef();
     
     useEffect(() => {
-        // roles.forEach(e=>{
-        //     if (e.names === "Profesor"){
-        //         const ID:number = Number(e.id);
-        //         setSelectRole(ID);
-        //     }
-        // });
         if(dataRoles?.allRoles){
             const newData:role[] = dataRoles.allRoles.map(e=>{
                 if (e?.names === "Profesor"){
@@ -64,7 +43,6 @@ function DataTeacher(){
                 }
             })
             setRoles(newData)
-            // console.log(newData)
         }
         return () => {}
     }, [dataRoles]);
@@ -72,14 +50,7 @@ function DataTeacher(){
     const changeRole = (e:any) => {
         const ID:any = Number(e.target.value);
         setSelectRole(ID);
-        // changeDataPerson(e);
     }
-
-    // const changeDataPerson = (e:any) => {
-    //     const camp = e.target.name;
-    //     const value = e.target.value;
-    //     setPerson((item)=>{return {...item, [camp]:value}});
-    // }
 
     return(
         <ContentTeacher className="content" wait={statusFetch}>

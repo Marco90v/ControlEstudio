@@ -1,15 +1,10 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useSelector } from "react-redux";
-import { teacherApi, useDeleteTeacherByIdMutation, useDeleteTeacherByIdPersonMutation, usePostTeacherMutation, useUpdateTeacherByIdMutation } from "../../store/apis/teacherApi";
-import { resetPerson } from "../../store/module/personStore";
-import { setStateFetch } from "../../store/module/statusFetch";
-import { useAppDispatch } from "../../store/store";
 import { fieldNotEmptied } from "../../ultil";
 import { SectionClasses } from "../";
 import useStorePersons from "../../zustanStore/persons";
-import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
-import { gql } from "../../__generated__";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
+import { ADD_TEACHER, DELETE_TEACHER, DELETE_TEACHER_BY_PERSON, GET_TEACHER_BY_PERSON, UPDATE_TEACHER } from "../../ultil/const";
 
 const initialDataTeacher:teacher = {
     id:0,
@@ -20,44 +15,6 @@ const initialDataTeacher:teacher = {
     IdShifts:0,
     IdSections:0
 }
-
-const GET_TEACHER_BY_PERSON = gql(`
-    query GetTeacherByPerson($getTeacherByPersonId: Int) {
-        getTeacherByPerson(id: $getTeacherByPersonId) {
-            id
-            IdPersons
-            IdProfession
-            IdSemesters
-            IdClasses
-            IdShifts
-            IdSections
-        }
-    }
-`)
-
-const ADD_TEACHER = gql(`
-    mutation AddTeacher($dataTeacher: [inputTeacher]) {
-        addTeacher(dataTeacher: $dataTeacher)
-    }
-`)
-
-const UPDATE_TEACHER = gql(`
-    mutation UpdateTeacher($dataTeacher: [inputTeacher]) {
-        updateTeacher(dataTeacher: $dataTeacher)
-    }
-`)
-
-const DELETE_TEACHER = gql(`
-    mutation DeleteTeacher($ids: [Int]) {
-        deleteTeacher(ids: $ids)
-    }
-`)
-
-const DELETE_TEACHER_BY_PERSON = gql(`
-    mutation DeleteTeacherByIdPerson($idPersons: Int) {
-        deleteTeacherByIdPerson(IdPersons: $idPersons)
-    }
-`)
 
 const Teacher = forwardRef( (_, ref) => {
 

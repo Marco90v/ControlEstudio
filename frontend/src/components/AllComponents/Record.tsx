@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useGetRolesQuery } from "../../store/apis/rolesApi";
-import { scoresApi, usePostScoreMutation, useUpdateScoreByIdMutation } from "../../store/apis/scoresApi";
-import { useGetSectionsQuery } from "../../store/apis/sectionsApi";
-import { useGetShiftsQuery } from "../../store/apis/shiftsApi";
-import { studentsApi } from "../../store/apis/studentsApi";
-import { resetPerson } from "../../store/module/personStore";
-import { setStateFetch } from "../../store/module/statusFetch";
-import { useAppDispatch } from "../../store/store";
 import { Popup, Select} from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import useStorePersons from "../../zustanStore/persons";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { gql } from "../../__generated__";
-import { GET_SECTIONS, GET_SHIFTS } from "../../ultil/const";
+import { ADD_SCORE, DATA_SCORES, GET_ROLES, GET_SECTIONS, GET_SHIFTS, GET_STUDENT_BY_PERSON, UPDATE_SCORE } from "../../ultil/const";
 import useStoreStudentProfessionSemester from "../../zustanStore/studentClasses";
 import useStoreScores from "../../zustanStore/scores";
 import { filter__typename } from "../../ultil";
@@ -28,65 +18,6 @@ const initialDataScores:scores = {
     IdSections:0,
     score:0
 };
-
-const GET_ROLES = gql(`
-    query AllRoles {
-        allRoles {
-            id
-            names
-        }
-    }
-`)
-
-const GET_STUDENT_BY_PERSON = gql(`
-    query GetStudentsByPerson($idPersons: Int) {
-        getStudentsByPerson(IdPersons: $idPersons) {
-            id
-            IdPersons
-            IdProfession
-            IdSemesters
-        }
-    }
-`)
-
-const DATA_SCORES = gql(`
-    query dataScore($professionAndSemesters: ProfessionAndSemesters, $idStudents: Int) {
-        getClassesByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {
-            id
-            names
-        }
-        getTeachersByProfessionAndSemesters(ProfessionAndSemesters: $professionAndSemesters) {
-            id
-            IdPersons
-            names
-            lastNames
-            IdClasses
-            IdShifts
-            IdSections
-        }
-        getScores(idStudents: $idStudents) {
-            id
-            IdStudents
-            IdTeachers
-            IdClasses
-            IdShifts
-            IdSections
-            score
-        }
-    }
-`)
-
-const ADD_SCORE = gql(`
-    mutation Mutation($dataScores: [inputScore]) {
-        addScore(dataScores: $dataScores)
-    }
-`)
-
-const UPDATE_SCORE = gql(`
-    mutation UpdateScore($dataScores: [inputScore]) {
-        updateScore(dataScores: $dataScores)
-    }
-`)
 
 const cuerpoPopup:any = {
     "edit": <p>¿Desea Guardar los cambios?</p>,

@@ -1,59 +1,21 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Img, Table } from "../../styled/style";
-import { useAppDispatch } from "../../store/store";
-import { personApi, useDeletePersonByIdMutation } from "../../store/apis/personApi";
-import { setStateFetch } from "../../store/module/statusFetch";
-import { resetPerson, setPerson } from "../../store/module/personStore";
 import { Popup } from "../";
 
 import imgTrash from "../../assets/trash-alt-solid-24.png";
 import imgEdit from "../../assets/edit-solid-24.png";
-import { gql } from "../../__generated__";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
-
-const GET_PERSON_BY_ROLE = gql(`
-    query GetPersonByRole($role: Int) {
-        getPersonByRole(role: $role) {
-            id
-            names
-            lastNames
-            sex
-            email
-            phone
-            photo
-            role
-        }
-    }
-`)
-
-const DELETE_TEACHER_BY_PERSON = gql(`
-    mutation DeleteTeacherByIdPerson($idPersons: Int) {
-        deleteTeacherByIdPerson(IdPersons: $idPersons)
-    }
-`)
-
-const DELETE_PERSON = gql(`
-    mutation DeletePerson($deletePersonId: Int) {
-        deletePerson(id: $deletePersonId)
-    }
-`)
+import { DELETE_PERSON, GET_PERSON_BY_ROLE } from "../../ultil/const";
 
 function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
     const statusFetch = false;
-
     const {data:dataPersons, setPersons, selectPerson, clearPersons} = useStorePersons((state)=>state)
     const {clearTeacherClasses} = useStoreTeacherClasses((state)=>state)
-
-
     const [getPersonByRole, { loading, error, data, refetch:refetchPerson } ]= useLazyQuery(GET_PERSON_BY_ROLE);
-    // const [deleteTeacherByPerson, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER_BY_PERSON)
     const [deletePersonByID, { data:dataPersonDelete, reset:resetPersonDelete }] = useMutation(DELETE_PERSON)
-    
-    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
-    
+    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});    
 
     useEffect(() => {
         role > 0 && getPersonByRole({
@@ -71,13 +33,7 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:any){
             selectPerson({...rest, idPerson:rest.id, name:rest.names})
         }
     }
-
     const deletePerson = (idx:number) => {
-        // deleteTeacherByPerson({
-        //     variables:{
-        //         idPersons:idx
-        //     }
-        // })
         deletePersonByID({
             variables:{
                 deletePersonId:idx

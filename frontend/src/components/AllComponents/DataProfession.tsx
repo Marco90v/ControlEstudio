@@ -5,39 +5,40 @@ import { InputForm, Popup, TableComponent } from "../";
 import { gql } from "../../__generated__";
 import { useMutation, useQuery } from "@apollo/client";
 import useStoreProfessions from "../../zustanStore/profession";
+import { ADD_PROFESSION, DELETE_PROFESSION, GET_PROFESSIONS, UPDATE_PROFESSION } from "../../ultil/const";
 
-const GET_PROFESSION = gql(`
-    query AllProfession {
-        allProfession {
-            id
-            names
-        }
-    }
-`)
+// const GET_PROFESSION = gql(`
+//     query AllProfession {
+//         allProfession {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const ADD_PROFESSION = gql(`
-    mutation AddProfession($dataProfession: inputProfession) {
-        addProfession(dataProfession: $dataProfession) {
-            id
-            names
-        }
-    }
-`)
+// const ADD_PROFESSION = gql(`
+//     mutation AddProfession($dataProfession: inputProfession) {
+//         addProfession(dataProfession: $dataProfession) {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const UPDATE_PROFESSION = gql(`
-    mutation UpdateProfession($dataProfession: inputProfession) {
-        updateProfession(dataProfession: $dataProfession) {
-            id
-            names
-        }
-    }
-`)
+// const UPDATE_PROFESSION = gql(`
+//     mutation UpdateProfession($dataProfession: inputProfession) {
+//         updateProfession(dataProfession: $dataProfession) {
+//             id
+//             names
+//         }
+//     }
+// `)
 
-const DELETE_PROFESSION = gql(`
-    mutation DeleteProfession($deleteProfessionId: Int) {
-        deleteProfession(id: $deleteProfessionId)
-    }
-`)
+// const DELETE_PROFESSION = gql(`
+//     mutation DeleteProfession($deleteProfessionId: Int) {
+//         deleteProfession(id: $deleteProfessionId)
+//     }
+// `)
 
 function DataProfession(){
     
@@ -48,7 +49,7 @@ function DataProfession(){
     // const [updateProfession] = useUpdateProfessionMutation();
     // const [deleteProfession] = useDeleteProfessionMutation();
 
-    const { data } = useQuery(GET_PROFESSION);
+    const { data } = useQuery(GET_PROFESSIONS);
     const {professions, setProfessions, addProfession:AddProfessionStore, deleteProfession:dP} = useStoreProfessions((state)=>state)
 
     const [add, { data:resAdd, reset:resetAdd }] = useMutation(ADD_PROFESSION)
