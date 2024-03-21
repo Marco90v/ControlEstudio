@@ -18,21 +18,16 @@ const initialDataTeacher:teacher = {
 
 const Teacher = forwardRef( (_, ref) => {
 
-    const statusFetch = false
-
     const idPerson = useStorePersons((state)=>state.data.person.idPerson)
     const {teacherClasses, idsDelete, setTeacherClasses, clearTeacherClasses, addTeacherClasse, changeTeacherClasse, deleteTeacherClasse} = useStoreTeacherClasses((state)=>state)
+    
+    const [postTeacher, { loading:loadingAddTeacher }] = useMutation(ADD_TEACHER)
+    const [updateTeacher, { loading:loadingUpdateTeacher }] = useMutation(UPDATE_TEACHER)
+    const [deleteTeacher, { loading:loadingDeleteTeacher }] = useMutation(DELETE_TEACHER)
+    const [getTeacherByPerson, { loading:loadingGetTeacherByPerson, data:dataTeachers } ]= useLazyQuery(GET_TEACHER_BY_PERSON);
+    const [deleteTeacherByPerson, { loading:loadingDeleteTeacherByPerson }] = useMutation(DELETE_TEACHER_BY_PERSON)
 
-    const [postTeacher, { data:dataAddTeacher, reset:resetAddTeacher }] = useMutation(ADD_TEACHER)
-    const [updateTeacher, { data:dataUpdateTeacher, reset:resetUpdateTeacher }] = useMutation(UPDATE_TEACHER)
-    const [deleteTeacher, { data:dataDelete, reset:resetDelete }] = useMutation(DELETE_TEACHER)
-
-    const [getTeacherByPerson, { loading, error, data:dataTeachers, refetch:refetchPerson } ]= useLazyQuery(GET_TEACHER_BY_PERSON);
-    const [deleteTeacherByPerson, { data:dataDeleteByPerson, reset:resetDeleteByPerson }] = useMutation(DELETE_TEACHER_BY_PERSON)
-
-
-    const [ teacher, setTeacher ] = useState<teacher[]>([]);
-    const [ deleteDataTeacher, setDeleteDataTeacher ] = useState<number[]>([]);
+    const loading = loadingAddTeacher || loadingUpdateTeacher || loadingDeleteTeacher || loadingGetTeacherByPerson || loadingDeleteTeacherByPerson
 
     useEffect(() => {
         if(idPerson > 0){
@@ -60,8 +55,6 @@ const Teacher = forwardRef( (_, ref) => {
       return () => {}
     }, [dataTeachers])
     
-    
-
     const addProfession = (e:any) => {
         addTeacherClasse(initialDataTeacher)
     }
@@ -114,17 +107,12 @@ const Teacher = forwardRef( (_, ref) => {
     const newData = (IdPersons:number) => {
         if(teacherClasses.length > 0){
             const newTeachers = teacherClasses.map(e=>({...e,IdPersons}))
-             /**
-             * ADD_TEACHERS
-             */
+            // ADD_TEACHERS
             postTeacher({
                 variables: {
                     dataTeacher: newTeachers
                 }
             })
-        }else{
-            // dispatch(resetPerson());
-            // dispatch(setStateFetch(false));
         }
     }
 
@@ -133,7 +121,6 @@ const Teacher = forwardRef( (_, ref) => {
     }
 
     const deleteChildren = (idPersons:number) => {
-        // deleteTeacherByIdPerson(IdPersons);
         deleteTeacherByPerson({
             variables:{
                 idPersons
@@ -149,11 +136,20 @@ const Teacher = forwardRef( (_, ref) => {
         <div className="dataTeacher">
             {
                 teacherClasses.map((t:teacher,i)=>{
-                    return <SectionClasses key={i} idx={i} teacher={t} changeSelect={changeSelect} deleteItem={deleteItem} disabled={statusFetch}/>
+                    return (
+                        <SectionClasses
+                            key={i}
+                            idx={i}
+                            teacher={t}
+                            changeSelect={changeSelect}
+                            deleteItem={deleteItem}
+                            disabled={loading}
+                        />
+                    )
                 })
             }
             <div className="addClass">
-                <button onClick={(e)=>addProfession(e)} disabled={statusFetch} >Agregar Clase</button>
+                <button onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</button>
             </div>
         </div>
     )

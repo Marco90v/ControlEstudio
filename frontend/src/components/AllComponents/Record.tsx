@@ -47,6 +47,7 @@ function Record () {
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
     useEffect(() => {
+        console.log(person)
         if(person.id > 0){
             getScores();
         }    
@@ -73,14 +74,10 @@ function Record () {
     
       return () => {}
     }, [professionSemester])
-        
-
-    const resetInput = () => {
-        // setScores([]);
-    }
 
     const setDataScores = () => {
         if(data){
+            console.log(data)
             const {
                 getClassesByProfessionAndSemesters,
                 getTeachersByProfessionAndSemesters,

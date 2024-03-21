@@ -1,5 +1,18 @@
 import { gql } from "../__generated__"
 
+export const ROLES = {
+    TEACHER: "Profesor",
+    STUDENT: "Estudiante"
+}
+
+export const identifySelect = {
+    IDPROFESSION: "IdProfession",
+    IDSEMESTERS: "IdSemesters",
+    SEMESTERS: "semestres",
+    PROFESSION: "profession",
+    CLASSES: "classes",
+}
+
 export const GET_SHIFTS =gql(`
     query AllShifts {
         allShifts {

@@ -3,7 +3,7 @@ import { ContentStudent } from "../../styled/style";
 import { PersonsForms, TablePersons, ProfessionSemester } from "../";
 import { useQuery } from "@apollo/client";
 import useStoreRoles from "../../zustanStore/roles";
-import { GET_ROLES } from "../../ultil/const";
+import { GET_ROLES, ROLES } from "../../ultil/const";
 
 interface role {
     id: number | null | undefined,
@@ -25,7 +25,7 @@ const initialDataPerson:person = {
 function DataStudents(){
     const statusFetch = false
     const { data:dataRoles } = useQuery(GET_ROLES);
-    const {roles, setRoles, clearRoles} = useStoreRoles((state)=>state)
+    const {roles, setRoles} = useStoreRoles((state)=>state)
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     const [ person, setPerson ] = useState(initialDataPerson);
@@ -34,7 +34,7 @@ function DataStudents(){
     useEffect(() => {
         if(dataRoles?.allRoles){
             const newData:role[] = dataRoles.allRoles.map(e=>{
-                if (e?.names === "Estudiante"){
+                if (e?.names === ROLES.STUDENT){
                     const ID:number = Number(e.id);
                     setSelectRole(ID);
                 }
@@ -65,7 +65,7 @@ function DataStudents(){
                 roles={roles}
                 selectRole={selectRole}
                 saveChildren={handlerStudent}
-                type={"Estudiante"}
+                type={ROLES.STUDENT}
             >
                 <ProfessionSemester ref={handlerStudent} />
             </PersonsForms>

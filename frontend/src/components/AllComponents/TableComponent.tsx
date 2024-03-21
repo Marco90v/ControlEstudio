@@ -1,8 +1,27 @@
 import { Img, Table } from "../../styled/style";
 import imgEdit from "../../assets/edit-solid-24.png";
 import imgTrash from "../../assets/trash-alt-solid-24.png";
+import { useEffect, useState } from "react";
 
-function TableComponent({edit,remove,columnsHeaders=["Nombre"],data}:any){
+type props = {
+    edit:Function,
+    remove:Function,
+    loading: boolean[],
+    columnsHeaders?:string[],
+    data:any[] | undefined | null
+}
+
+function TableComponent({edit,remove,loading,columnsHeaders=["Nombre"],data=[]}:props){
+    const [status, setStatus] = useState(false)
+    useEffect(() => {
+        let status = false
+        loading.forEach(element => {
+            if(element) status = true
+        });
+        setStatus(status)
+      return () => {}
+    }, loading)
+    
     return(
         <Table>
             <thead>
@@ -14,12 +33,20 @@ function TableComponent({edit,remove,columnsHeaders=["Nombre"],data}:any){
             </thead>
             <tbody>
                 {
-                    data.map((item:classe)=>{
+                    data && data.map((item:classe)=>{
                         return(
                             <tr key={item.id}>
                                 <td>{item.names}</td>
-                                <td onClick={()=>edit(item)} ><Img src={imgEdit} alt="edit" /></td>
-                                <td onClick={()=>remove(item)} ><Img className="red" src={imgTrash} alt="delete" /></td>
+                                <td>
+                                    <button onClick={()=>edit(item)} disabled={status}>
+                                        <Img src={imgEdit} alt="edit" />
+                                    </button>
+                                </td>
+                                <td  >
+                                    <button onClick={()=>remove(item)} disabled={status}>
+                                        <Img className="red" src={imgTrash} alt="delete" />
+                                    </button>
+                                </td>
                             </tr>
                         )
                     })

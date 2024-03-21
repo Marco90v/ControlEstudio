@@ -17,21 +17,31 @@ type props = {
     semester:localSemester
     insertNewClasse:Function,
     removeClasse:Function
+    disabled:boolean
 }
 
-const BlockSemester = memo (({semester, insertNewClasse, removeClasse}:props) => {
+const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}:props) => {
     const {IdSemesters, Name_Semesters, Classes} = semester;
     return(
         <Semestres >
             <h2>
                 {Name_Semesters}
-                <img src={iconAdd} alt="add" onClick={()=>insertNewClasse(IdSemesters)} />
+                <img
+                    src={iconAdd}
+                    alt="add"
+                    onClick={()=>insertNewClasse(IdSemesters)}
+                />
             </h2>
             <ClassesBySemesters>
                 {
                     Classes?.map((classe:any)=>{
-                        // const {id,Name_Classes} = classe;
-                        return <BadgeClasse key={classe.id} classe={classe} Name_Semesters={Name_Semesters} removeClasse={removeClasse} />
+                        return <BadgeClasse
+                                    key={classe.id}
+                                    classe={classe}
+                                    Name_Semesters={Name_Semesters}
+                                    removeClasse={removeClasse}
+                                    disabled={disabled}
+                                />
                     })
                 }
             </ClassesBySemesters>

@@ -1,45 +1,43 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { ContentScores } from "../../styled/style";
-import { useGetRolesQuery } from "../../store/apis/rolesApi";
 import { TablePersons, Record } from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import { useQuery } from "@apollo/client";
-import { gql } from "../../__generated__";
 import useStoreRoles from "../../zustanStore/roles";
-import { GET_ROLES } from "../../ultil/const";
+import { GET_ROLES, ROLES } from "../../ultil/const";
+
+// type Person = {
+//     email: string,
+//     id: number,
+//     lastNames: string,
+//     names: string,
+//     phone: number,
+//     role: number,
+//     sex: string,
+//     idPerson: number,
+//     name:string,
+//     photo?: string | undefined | null,
+// }
 
 interface role {
     id: number | null | undefined,
     names: string | null | undefined
 }
 
-// const GET_ROLES = gql(`
-//     query AllRoles {
-//         allRoles {
-//             id
-//             names
-//         }
-//     }
-// `)
-
 function DataScores(){
 
-    // const profile = useSelector((state:store) => state.profile);
-    const {profile, setProfile} = useStoreProfile((state)=>state)
-    // const {data:statusFetch} = useSelector((state:store) => state.stateFetch);
-    const statusFetch = false
-    const {roles, setRoles, clearRoles} = useStoreRoles((state)=>state)
-
-    // const { data:roles=[] } = useGetRolesQuery();
+    const { profile } = useStoreProfile((state)=>state)
+    // console.log(profile)
+    const { roles, setRoles } = useStoreRoles((state)=>state)
     const { data:dataRoles } = useQuery(GET_ROLES);
+    const statusFetch = false
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     
     useEffect(() => {
         if(dataRoles?.allRoles){
             const newData:role[] = dataRoles.allRoles.map(e=>{
-                if(e?.names === "Estudiante" ){
+                if(e?.names === ROLES.STUDENT ){
                     const ID:number = Number(e.id)
                     setSelectRole(ID)
                 }
@@ -49,9 +47,6 @@ function DataScores(){
                 }
             });
             setRoles(newData)
-            // setSelectRole(()=>{
-            //     return res ? res.id : 0
-            // });
         }
         return () => {}
     }, [dataRoles]);
@@ -71,7 +66,7 @@ function DataScores(){
                     <TablePersons
                         deleteChildren={{current:deleteChildren}}
                         role={0}
-                        preCarga={[profile]}
+                        preCarga={[profile as any]}
                         scores={true}
                     />
                     :

@@ -48,7 +48,7 @@ export type InputSemester = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addClasses?: Maybe<Classes>;
+  addClasses: Classes;
   addClassesPensum?: Maybe<Scalars['Boolean']['output']>;
   addPerson?: Maybe<Person>;
   addProfession?: Maybe<Profession>;
@@ -269,7 +269,7 @@ export type Profile = {
 export type Query = {
   __typename?: 'Query';
   allAdmin?: Maybe<Array<Maybe<AllAdminAndDataPersons>>>;
-  allClasses?: Maybe<Array<Maybe<Classes>>>;
+  allClasses: Array<Classes>;
   allPersons: Array<Person>;
   allProfession?: Maybe<Array<Maybe<Profession>>>;
   allRoles?: Maybe<Array<Maybe<Role>>>;
@@ -537,7 +537,7 @@ export type AllSemestersQuery = { __typename?: 'Query', allSemesters?: Array<{ _
 export type AllClassesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllClassesQuery = { __typename?: 'Query', allClasses?: Array<{ __typename?: 'classes', id: number, names: string } | null> | null };
+export type AllClassesQuery = { __typename?: 'Query', allClasses: Array<{ __typename?: 'classes', id: number, names: string }> };
 
 export type LoginQueryVariables = Exact<{
   user?: InputMaybe<Scalars['String']['input']>;
@@ -552,7 +552,7 @@ export type AddClassesMutationVariables = Exact<{
 }>;
 
 
-export type AddClassesMutation = { __typename?: 'Mutation', addClasses?: { __typename?: 'classes', id: number, names: string } | null };
+export type AddClassesMutation = { __typename?: 'Mutation', addClasses: { __typename?: 'classes', id: number, names: string } };
 
 export type UpdateClassesMutationVariables = Exact<{
   dataClasse?: InputMaybe<InputClasse>;

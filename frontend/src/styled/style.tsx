@@ -211,7 +211,9 @@ export const MyNavLink = styled(NavLink)<any>`
 `;
 
 export const Form = styled.form`
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 1fr 1fr;
     justify-content: center;
     align-items: center;
     padding: 20px;
@@ -220,6 +222,15 @@ export const Form = styled.form`
         padding: 5px;
         border-radius: 5px;
         border: 1px solid grey;
+    }
+    span {
+        grid-column-start: span 3;
+        text-align: center;
+        background-color: #d9d9d9;
+        color: #0e7002;
+        border-radius: 10px;
+        padding: 0.25rem 0;
+        margin-top: 0.5rem;
     }
 `;
 
@@ -294,7 +305,7 @@ export const Table = styled.table`
 export const Img = styled.img`
     background-color: green;
     border-radius: 5px;
-    cursor: pointer;
+    // cursor: pointer;
     &.red{
         background-color: red;
     }

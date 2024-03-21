@@ -13,6 +13,7 @@ import record from "../../assets/folder-solid-24.png";
 import useStoreSideBar from "../../zustanStore/sidebar";
 import useProfile from "../../zustanStore/profile";
 import useStoreToken from "../../zustanStore/token";
+import { useQuery } from "@apollo/client";
 
 const obj = {
     home,
@@ -66,7 +67,7 @@ const Li = ({ruta,img,role}:Li) => {
 function Sidebar(){
     const {visibleSideBar:visibleSide,toggleStatus:toggleSideBar} = useStoreSideBar((state)=>state)
     const role = useProfile((state)=>state.profile.role)
-    const deleteToken = useStoreToken((state) => state.deleteToken)
+    const deleteToken = useStoreToken((state) => state.deleteToken)    // const {client} = useQuery("")
 
     const logout = () => {
         deleteToken()

@@ -10,9 +10,10 @@ type props = {
     classe:localClasse,
     Name_Semesters: string | null | undefined,
     removeClasse: Function
+    disabled:boolean
 }
 
-const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse}:props) => {
+const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse, disabled}:props) => {
     const {id,Name_Classes} = classe;
     return(
         <li key={id}>

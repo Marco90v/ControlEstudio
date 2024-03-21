@@ -4,22 +4,29 @@ import { fieldNotEmptied } from "../../ultil";
 import { Popup, Select } from "../";
 import { useMutation } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
-import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
-import { ADD_PERSON, ADD_TEACHER, UPDATE_PERSON } from "../../ultil/const";
+import { ADD_PERSON, ROLES, UPDATE_PERSON } from "../../ultil/const";
 
-function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wait, type}:any){
+type Role = {
+    id: number | null | undefined,
+    names: string | null | undefined,
+}
 
-    const [postPerson, { data:dataAddPerson, reset:resetAddPerson }] = useMutation(ADD_PERSON)
-    const [postTeacher, { data:dataAddTeacher, reset:resetAddTeacher }] = useMutation(ADD_TEACHER)
+interface props {
+    children:React.ReactNode,
+    saveChildren:React.MutableRefObject<any>,
+    changeRole:Function,
+    roles:Role[],
+    selectRole:number,
+    type:string
+}
 
-    const [updatePerson, { data:dataUpdatePerson, reset:resetUpdatePerson }] = useMutation(UPDATE_PERSON)
+function PersonsForms({children, saveChildren, changeRole, roles, selectRole, type}:props){
 
-    const {data:{person}, setPersons, clearPersons, clearPerson, changePerson} = useStorePersons((state)=>state)
-    const clearTeacherClasses = useStoreTeacherClasses((state)=>state.clearTeacherClasses)
-
-    const statusFetch = false
-    const [isChange, setIsChange] = useState(false);   
+    const [postPerson, { data:dataAddPerson, loading:loadingAddPerson, reset:resetAddPerson }] = useMutation(ADD_PERSON)
+    const [updatePerson, { loading:loadingUpdatePerson }] = useMutation(UPDATE_PERSON)
+    const {data:{person}, clearPerson, changePerson} = useStorePersons((state)=>state)
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
+    const loading = loadingAddPerson || loadingUpdatePerson
 
     useEffect(() => {
         if(dataAddPerson?.addPerson?.id){
@@ -45,9 +52,8 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
         const newData = {...person, phone:Number(phone), role:selectRole};
         if(notEmptied){
             try{
-                /**
-                 * ADD_PERSON
-                 */
+
+                // ADD_PERSON
                 postPerson({
                     variables: {
                         dataPerson: {
@@ -122,15 +128,15 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
             <div className="dataUser">
                 <div className="names">
                     <label htmlFor="names">Nombre Completo</label>
-                    <input type="text" name="names" id="names" value={person.names} onChange={e=>changeDataPerson(e)} disabled={statusFetch} />
+                    <input type="text" name="names" id="names" value={person.names} onChange={e=>changeDataPerson(e)} disabled={loading} />
                 </div>
                 <div className="lastNames">
                     <label htmlFor="lastNames">Apellido Completo</label>
-                    <input type="text" name="lastNames" id="lastNames" value={person.lastNames} onChange={e=>changeDataPerson(e)} disabled={statusFetch} />
+                    <input type="text" name="lastNames" id="lastNames" value={person.lastNames} onChange={e=>changeDataPerson(e)} disabled={loading} />
                 </div>
                 <div className="sex">
                     <label htmlFor="selectSex">Genero</label>
-                    <SelectStyle name="sex" id="sex" value={person.sex} onChange={e=>changeDataPerson(e)} disabled={statusFetch} >
+                    <SelectStyle name="sex" id="sex" value={person.sex} onChange={e=>changeDataPerson(e)} disabled={loading} >
                         <option value=""></option>
                         <option value="M">Masculino</option>
                         <option value="F">Femenino</option>
@@ -138,25 +144,25 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, wa
                 </div>
                 <div className="data">
                     <label htmlFor="email">Email</label>
-                    <input type="text" name="email" id="email" value={person.email} onChange={e=>changeDataPerson(e)} disabled={statusFetch} />
+                    <input type="text" name="email" id="email" value={person.email} onChange={e=>changeDataPerson(e)} disabled={loading} />
                     <label htmlFor="phone">Telefono</label>
-                    <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={statusFetch} />
+                    <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={loading} />
                     <label htmlFor="role">Rol</label>
                     <Select identify="role" changeSelect={(e)=>changeRole(e)} value={selectRole} data={roles} disabled={true} />
                     <label htmlFor="photo">Foto</label>
                     <input type="file" name="photo" id="photo" disabled={true} />
                 </div>
-                {type === "Estudiante" && children}
+                {type === ROLES.STUDENT && children}
             </div>
-                {type === "Profesor" && children}
+                {type === ROLES.TEACHER && children}
                 
             <div className="save">
                 {
                     person.id === 0 ?
-                    <button onClick={save} disabled={statusFetch} >Guardar</button> :
+                    <button onClick={save} disabled={loading} >Guardar</button> :
                     <>
-                        <button onClick={()=>cancelEdit()} className="cancel" disabled={statusFetch} >Cancelar</button>
-                        <button className="edit" onClick={save} disabled={statusFetch} >Guardar cambios</button>
+                        <button onClick={()=>cancelEdit()} className="cancel" disabled={loading} >Cancelar</button>
+                        <button className="edit" onClick={save} disabled={loading} >Guardar cambios</button>
                     </>
                 }
             </div>

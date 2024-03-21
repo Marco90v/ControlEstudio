@@ -3,7 +3,7 @@ import { ContentTeacher } from "../../styled/style";
 import { PersonsForms, TablePersons, Teacher } from "../";
 import { useQuery } from "@apollo/client";
 import useStoreRoles from "../../zustanStore/roles";
-import { GET_ROLES } from "../../ultil/const";
+import { GET_ROLES, ROLES } from "../../ultil/const";
 
 const initialDataPerson:person = {
     id:0,
@@ -24,16 +24,16 @@ interface role {
 
 function DataTeacher(){
     const { data:dataRoles } = useQuery(GET_ROLES);
-    const {roles, setRoles, clearRoles} = useStoreRoles((state)=>state)
+    const {roles, setRoles} = useStoreRoles((state)=>state)
     const statusFetch = false;
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
-    const handlerTeacher = useRef();
+    const handlerTeacher = useRef<any>();
     
     useEffect(() => {
         if(dataRoles?.allRoles){
             const newData:role[] = dataRoles.allRoles.map(e=>{
-                if (e?.names === "Profesor"){
+                if (e?.names === ROLES.TEACHER){
                     const ID:number = Number(e.id)
                     setSelectRole(ID)
                 }
@@ -59,7 +59,7 @@ function DataTeacher(){
                 roles={roles}
                 selectRole={selectRole}
                 saveChildren={handlerTeacher}
-                type={"Profesor"}
+                type={ROLES.TEACHER}
             >
                 <Teacher ref={handlerTeacher} />
             </PersonsForms>
@@ -68,7 +68,6 @@ function DataTeacher(){
                 role={selectRole}
             />
         </ContentTeacher>
-        // null
     )
 }
 

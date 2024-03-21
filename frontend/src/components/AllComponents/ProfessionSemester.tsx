@@ -1,32 +1,25 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { fieldNotEmptied } from "../../ultil";
 import { Select } from ".."
-import { ADD_STUDENT, DELETE_STUDENT_BY_PERSON, GET_PROFESSIONS, GET_PROFESSION_SEMESTER_BY_PERSON, GET_SEMESTERS, UPDATE_STUDENT } from "../../ultil/const";
+import { ADD_STUDENT, DELETE_STUDENT_BY_PERSON, GET_PROFESSIONS, GET_PROFESSION_SEMESTER_BY_PERSON, GET_SEMESTERS, UPDATE_STUDENT, identifySelect } from "../../ultil/const";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
 import useStoreStudentProfessionSemester from "../../zustanStore/studentClasses";
-import { gql } from "../../__generated__";
-
-const initialDataStudents:students = {
-    id: 0,
-    IdPersons: 0,
-    IdProfession: 0,
-    IdSemesters: 0
-}
 
 const ProfessionSemester = forwardRef( (_, ref) => {
-    const statusFetch = false
-
+    
     const idPerson = useStorePersons((state)=>state.data.person.idPerson)
     const {professionSemester, setProfessionSemester, changeProfessionSemester, clearProfessionSemester} = useStoreStudentProfessionSemester((state)=>state)
-
+    
     const { data:professions } = useQuery(GET_PROFESSIONS);
     const { data:semesters } = useQuery(GET_SEMESTERS);
+    
+    const [getProfessionSemesterByPerson, { loading:loadingGetSemesterByPerson, data:dataProfessionSemester, refetch:refetchProfessionSemester } ]= useLazyQuery(GET_PROFESSION_SEMESTER_BY_PERSON);
+    const [postStudent, {loading:loadingAddStudent}] = useMutation(ADD_STUDENT);
+    const [UpdateStudent, {loading:loadingUpdateStudent}] = useMutation(UPDATE_STUDENT);
+    const [deleteStudent, {loading:loadingDeleteStudentByPerson}] = useMutation(DELETE_STUDENT_BY_PERSON);
 
-    const [getProfessionSemesterByPerson, { loading, error, data:dataProfessionSemester, refetch:refetchProfessionSemester } ]= useLazyQuery(GET_PROFESSION_SEMESTER_BY_PERSON);
-    const [postStudent, {data:dataPostStudent}] = useMutation(ADD_STUDENT);
-    const [useUpdateStudent, {data:dataUpdataStudent}] = useMutation(UPDATE_STUDENT);
-    const [deleteStudent, {data:dataDeleteStudent}] = useMutation(DELETE_STUDENT_BY_PERSON);
+    const loading = loadingGetSemesterByPerson || loadingAddStudent || loadingUpdateStudent || loadingDeleteStudentByPerson
 
     useEffect(() => {
       if(idPerson > 0){
@@ -75,10 +68,10 @@ const ProfessionSemester = forwardRef( (_, ref) => {
         }
     }
 
-    const updateStudent = ():boolean => {
-        let r:boolean = false;
-        return r;
-    }
+    // const updateStudent = ():boolean => {
+    //     let r:boolean = false;
+    //     return r;
+    // }
 
     const editData = () => {
         const {id,IdPersons,...rStudent} = professionSemester;
@@ -93,7 +86,7 @@ const ProfessionSemester = forwardRef( (_, ref) => {
                     }
                 })
             }else{
-                useUpdateStudent({
+                UpdateStudent({
                     variables:{
                         dataStudent:professionSemester
                     }
@@ -122,11 +115,23 @@ const ProfessionSemester = forwardRef( (_, ref) => {
         <div className="professionSemesters">
             <div className="profession">
                 <label htmlFor="selectProfession">Profesión</label>
-                <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e)} value={professionSemester.IdProfession} data={professions?.allProfession} disabled={statusFetch} />
+                <Select
+                    identify={identifySelect.IDPROFESSION}
+                    changeSelect={(e)=>changeSelect(e)}
+                    value={professionSemester.IdProfession}
+                    data={professions?.allProfession}
+                    disabled={loading}
+                />
             </div>
             <div className="selectSemester">
                 <label htmlFor="selectSemester">Semestres</label>
-                <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e)} value={professionSemester.IdSemesters} data={semesters?.allSemesters} disabled={statusFetch} />
+                <Select
+                    identify={identifySelect.IDSEMESTERS}
+                    changeSelect={(e)=>changeSelect(e)}
+                    value={professionSemester.IdSemesters}
+                    data={semesters?.allSemesters}
+                    disabled={loading}
+                />
             </div>
         </div>
     )

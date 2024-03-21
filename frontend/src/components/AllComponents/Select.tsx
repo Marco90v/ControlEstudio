@@ -5,10 +5,10 @@ type select = {
     identify:string,
     changeSelect:React.ChangeEventHandler<HTMLSelectElement>,
     value:number | string,
-    data:any,
-    disabled?:boolean
+    data:any[] | undefined | null,
+    disabled:boolean
 }
-const Select = memo( ({identify,changeSelect,value,data,disabled}:select) => {
+const Select = memo( ({identify,changeSelect,value,disabled, data=[]}:select) => {
     return(
         <SelectStyle name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}>
             <option value="0"></option>

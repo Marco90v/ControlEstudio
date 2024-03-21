@@ -5,7 +5,7 @@ const typeDefs = `#graphql
     # ADMIN
     allAdmin: [allAdminAndDataPersons],
     # CLASSES
-    allClasses: [classes],
+    allClasses: [classes!]!,
     # SEMESTERS
     allSemesters: [semester],
     # PROFESSION
@@ -37,7 +37,7 @@ const typeDefs = `#graphql
   }
   type Mutation {
     # CLASSES
-    addClasses(dataClasse:inputClasse): classes,
+    addClasses(dataClasse:inputClasse): classes!,
     updateClasses(dataClasse:inputClasse): classes,
     deleteClasses(id:Int): Int,
     # SEMESTERS

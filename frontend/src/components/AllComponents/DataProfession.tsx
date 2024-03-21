@@ -1,94 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Div } from "../../styled/style";
-// import { useDeleteProfessionMutation, useGetProfessionQuery, usePostProfessionMutation, useUpdateProfessionMutation } from "../../store/apis/professionApi";
 import { InputForm, Popup, TableComponent } from "../";
-import { gql } from "../../__generated__";
 import { useMutation, useQuery } from "@apollo/client";
-import useStoreProfessions from "../../zustanStore/profession";
 import { ADD_PROFESSION, DELETE_PROFESSION, GET_PROFESSIONS, UPDATE_PROFESSION } from "../../ultil/const";
-
-// const GET_PROFESSION = gql(`
-//     query AllProfession {
-//         allProfession {
-//             id
-//             names
-//         }
-//     }
-// `)
-
-// const ADD_PROFESSION = gql(`
-//     mutation AddProfession($dataProfession: inputProfession) {
-//         addProfession(dataProfession: $dataProfession) {
-//             id
-//             names
-//         }
-//     }
-// `)
-
-// const UPDATE_PROFESSION = gql(`
-//     mutation UpdateProfession($dataProfession: inputProfession) {
-//         updateProfession(dataProfession: $dataProfession) {
-//             id
-//             names
-//         }
-//     }
-// `)
-
-// const DELETE_PROFESSION = gql(`
-//     mutation DeleteProfession($deleteProfessionId: Int) {
-//         deleteProfession(id: $deleteProfessionId)
-//     }
-// `)
 
 function DataProfession(){
     
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
-    // const profession:any = []
-    // const { data: profession=[] } = useGetProfessionQuery();
-    // const [postProfession] = usePostProfessionMutation();
-    // const [updateProfession] = useUpdateProfessionMutation();
-    // const [deleteProfession] = useDeleteProfessionMutation();
 
-    const { data } = useQuery(GET_PROFESSIONS);
-    const {professions, setProfessions, addProfession:AddProfessionStore, deleteProfession:dP} = useStoreProfessions((state)=>state)
+    const { data, refetch } = useQuery(GET_PROFESSIONS);
 
-    const [add, { data:resAdd, reset:resetAdd }] = useMutation(ADD_PROFESSION)
-    const [update, { data:resUpdate, reset:resetUpdate }] = useMutation(UPDATE_PROFESSION)
-    const [deleteProfession, { data:resDelete, reset:resetDelete }] = useMutation(DELETE_PROFESSION)
-
-
-    useEffect(() => {
-        if (resAdd) {
-            const id = resAdd.addProfession?.id
-            const names = resAdd.addProfession?.names
-            AddProfessionStore({id, names})
-            resetAdd()
-        } 
-        return () => {}
-    }, [resAdd])
-
-    useEffect(()=>{
-        if(resDelete?.deleteProfession){
-            dP(resDelete.deleteProfession)
-            resetDelete()
-        }
-    }, [resDelete])
-
-    useEffect(() => {
-        if(data?.allProfession?.length && data?.allProfession?.length > 0){
-          const newData = data.allProfession.map(item => ({id:item?.id, names:item?.names}))
-          setProfessions(newData)
-        }    
-        return () => {}
-      }, [data])
+    const [add, { loading:loadingAdd, error:errorAdd }] = useMutation(ADD_PROFESSION)
+    const [update, { loading:loadingUpdate, error:errorUpdate }] = useMutation(UPDATE_PROFESSION)
+    const [deleteProfession, { loading:loadingDelete, error:errorDelete }] = useMutation(DELETE_PROFESSION)
 
     const addProfession = async (names:{names:string}) => {
-        // postProfession(names);
         add({
             variables:{
                 dataProfession:{...names}
             }
         })
+        refetch()
     }
 
     const edit = (data:profession) => {
@@ -102,20 +34,20 @@ function DataProfession(){
     const aceptCallback = () => {
         switch (modal.type) {
             case "edit":
-                // updateProfession(modal.data);
                 update({
                     variables:{
                         dataProfession:{...modal.data}
                     }
                 })
+                refetch()
                 break;
             case "delete":
-                // deleteProfession({id:modal.data.id});
                 deleteProfession({
                     variables:{
                         deleteProfessionId:modal.data.id
                     }
                 })
+                refetch()
                 break;
         }
         setModal((datos:any)=>{
@@ -141,9 +73,19 @@ function DataProfession(){
 
     return(
         <div>
-            <InputForm addCallBack={addProfession} title={"Profesiones"} />
+            <InputForm
+                addCallBack={addProfession}
+                title={"Profesiones"}
+                loading={[loadingAdd, loadingUpdate, loadingDelete]}
+                error={[errorAdd, errorUpdate,errorDelete]}
+            />
             <Div>
-                <TableComponent edit={edit} remove={remove}  data={professions} />
+                <TableComponent
+                    edit={edit}
+                    remove={remove}
+                    loading={[loadingAdd, loadingUpdate, loadingDelete]}
+                    data={data?.allProfession}
+                />
             </Div>
             {
                 modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
