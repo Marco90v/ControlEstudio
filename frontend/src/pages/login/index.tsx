@@ -33,18 +33,32 @@ function Login(){
     }  
 
     return(
-        // <ContentLogin>
-        <div className="min-h-screen flex flex-col gap-y-20 justify-center justify-items-center">
-            <label>Universidad</label>
-            <form onSubmit={submit} >
-                <label htmlFor="">Usuario</label>
-                <input type="text" name="user" id="user" value={data.user} onChange={(e)=>changeData(e)} />
-                <label htmlFor="">Contraseña</label>
-                <input type="password" name="pass" id="pass" value={data.pass} onChange={(e)=>changeData(e)} />
-                <button type="submit">Ingresar</button>
+        <main className="min-h-screen flex flex-col gap-y-20 justify-center items-center">
+            <label
+                className="text-4xl font-bold"
+            >
+                Universidad
+            </label>
+            <form
+                className="grid grid-cols-2 grid-rows-[repeat(3,minmax(1fr, 1fr))] gap-x-2 gap-y-4 bg-neutral-200 p-16 rounded-md items-center"
+                onSubmit={submit}
+            >
+                <label className="font-bold" htmlFor="">Usuario</label>
+                <input
+                    className="border-2 border-white bg-white p-2 rounded-sm "
+                    type="text" name="user" id="user" value={data.user} onChange={(e)=>changeData(e)} />
+                <label className="font-bold" htmlFor="">Contraseña</label>
+                <input
+                    className="border-2 border-white bg-white p-2 rounded-sm "
+                    type="password" name="pass" id="pass" value={data.pass} onChange={(e)=>changeData(e)} />
+                <button
+                    className="col-span-2 p-2 bg-green-600 border-green-600 border-2 rounded text-white font-bold text-sm mt-4 cursor-pointer hover:bg-green-500 hover:shadow-lg hover:shadow-green-500/50 transition-all duration-500"
+                    type="submit"
+                >
+                    Ingresar
+                </button>
             </form>
-        </div>
-        // </ContentLogin>
+        </main>
     );
 }
 
