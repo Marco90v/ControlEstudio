@@ -31,7 +31,6 @@ function Record () {
     const {classes, teachers,scores, setClasses, setTeachers, setScores, changeScores, clearScore } = useStoreScores((state)=>state)
     const person = useStorePersons((state)=>state.data.person)
     const clearPerson = useStorePersons((state)=>state.clearPerson)
-    const statusFetch = false
 
     const { data:roles } = useQuery(GET_ROLES);
     const { data:shifts } = useQuery(GET_SHIFTS);
@@ -40,14 +39,14 @@ function Record () {
     const [getStudentByPerson, { data:personData }] = useLazyQuery(GET_STUDENT_BY_PERSON)
     const [getDataScores, { data:data }] = useLazyQuery(DATA_SCORES)
 
-    const [AddScore, { data:dataAddScore }] = useMutation(ADD_SCORE)
-    const [UpdateScore, { data:dataUpdateScore }] = useMutation(UPDATE_SCORE)
+    const [AddScore, { loading:loadingAddScore}] = useMutation(ADD_SCORE)
+    const [UpdateScore, { loading:loadingUpdateScore }] = useMutation(UPDATE_SCORE)
 
+    const loading = loadingAddScore || loadingUpdateScore
 
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
 
     useEffect(() => {
-        console.log(person)
         if(person.id > 0){
             getScores();
         }    
@@ -77,7 +76,6 @@ function Record () {
 
     const setDataScores = () => {
         if(data){
-            console.log(data)
             const {
                 getClassesByProfessionAndSemesters,
                 getTeachersByProfessionAndSemesters,
@@ -238,7 +236,7 @@ function Record () {
                                     changeSelect = {(e)=>changeSelectN(e, item)}
                                     value = {item.IdTeachers}
                                     data = {list(item)}
-                                    disabled = { statusFetch || permisions(1) }
+                                    disabled = { loading || permisions(1) }
                                 />
                                 <input
                                     type = "number"
@@ -248,7 +246,7 @@ function Record () {
                                     max = "20"
                                     onChange = {(e)=>changeSelectN(e, item)}
                                     value = {item.score}
-                                    disabled = { statusFetch || permisions(1,2) }
+                                    disabled = { loading || permisions(1,2) }
                                 />
                             </div>
                         )
@@ -257,8 +255,8 @@ function Record () {
                 {
                     scores.length > 0 &&
                         <div className="save">
-                            <button className="cancel" onClick={cancel} disabled={ statusFetch } >Cancelar</button>
-                            <button onClick={save} disabled={ statusFetch || permisions(1,2) } >Guardar</button>
+                            <button className="cancel" onClick={cancel} disabled={ loading } >Cancelar</button>
+                            <button onClick={save} disabled={ loading || permisions(1,2) } >Guardar</button>
                         </div>
                 }
             </form>
