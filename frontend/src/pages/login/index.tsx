@@ -1,23 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
-import { ContentLogin } from "../../styled/style";
+// import { ContentLogin } from "../../styled/style";
 import useStoreToken from "../../zustanStore/token";
-import { gql } from "../../__generated__";
 import { LOGIN } from "../../ultil/const";
 
 const dataUser = {
     user:'LeonadoCuellar',
     pass:'1234'
 }
-
-// const LOGIN = gql(`
-//     query Login($user: String, $pass: String) {
-//         login(user: $user, pass: $pass) {
-//             token
-//             __typename
-//         }
-//     }
-// `);
 
 function Login(){
     const [data, setData] = useState(dataUser);
@@ -43,7 +33,8 @@ function Login(){
     }  
 
     return(
-        <ContentLogin>
+        // <ContentLogin>
+        <div className="min-h-screen flex flex-col gap-y-20 justify-center justify-items-center">
             <label>Universidad</label>
             <form onSubmit={submit} >
                 <label htmlFor="">Usuario</label>
@@ -52,7 +43,8 @@ function Login(){
                 <input type="password" name="pass" id="pass" value={data.pass} onChange={(e)=>changeData(e)} />
                 <button type="submit">Ingresar</button>
             </form>
-        </ContentLogin>
+        </div>
+        // </ContentLogin>
     );
 }
 

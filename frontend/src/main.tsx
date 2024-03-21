@@ -5,10 +5,11 @@ import { ApolloProvider } from '@apollo/client/react';
 import { setContext } from '@apollo/client/link/context';
 
 import App from './App'
-import { BrowserRouter } from "react-router-dom";
+// import { BrowserRouter } from "react-router-dom";
 import { createGlobalStyle } from "styled-components"
 import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
 // import useStoreToken from './zustanStore/token';
+import './index.css';
 
 const GlobalStyle = createGlobalStyle`
   :root{
