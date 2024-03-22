@@ -1,5 +1,10 @@
 import { gql } from "../__generated__"
 
+export const COLORS = {
+    yellow500: "bg-yellow-500",
+    red700: "bg-red-700"
+}
+
 export const ROLES = {
     TEACHER: "Profesor",
     STUDENT: "Estudiante"

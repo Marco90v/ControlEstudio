@@ -28,4 +28,7 @@
     .labelInfoProfile{
         @apply font-bold p-1
     }
+    .btn-greend{
+        @apply bg-green-700 text-white py-1 px-2 rounded-md border-solid border-2 border-green-700 font-bold cursor-pointer transition-all duration-300 hover:bg-green-600 hover:shadow-md
+    }
 }
