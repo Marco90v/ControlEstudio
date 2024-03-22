@@ -27,24 +27,22 @@ function Profile(){
     }, [data])
     
     return(
-        <div className="overflow-auto">
-            {/* <ContentProfile> */}
-                <label>Perfil</label>
-                <div className="profile">
-                    <label>Nombres</label>
-                    <label> { profile?.names } </label>
-                    <label>Apellido</label>
-                    <label> { profile?.lastNames } </label>
-                    <label>Genero</label>
-                    <label> { profile?.sex === "M" ? "Masculino" : "Femenino" } </label>
-                    <label>Correo</label>
-                    <label> { profile?.email } </label>
-                    <label>N° Telefonico</label>
-                    <label> { profile?.phone } </label>
-                    <label>Rol</label>
-                    <label> { profile.nameRole } </label>
-                </div>
-            {/* </ContentProfile> */}
+        <div className="overflow-auto min-h-screen flex justify-center items-center flex-col gap-y-8">
+            <label className="text-4xl font-bold">Perfil</label>
+            <div className="grid grid-cols-2 grid-rows-6 gap-x-2 gap-y-4">
+                <label className="labelInfoProfile">Nombres</label>
+                <label className="labelDataProfile"> { profile.names } </label>
+                <label className="labelInfoProfile">Apellido</label>
+                <label className="labelDataProfile"> { profile.lastNames } </label>
+                <label className="labelInfoProfile">Genero</label>
+                <label className="labelDataProfile"> { profile.sex === "M" ? "Masculino" : "Femenino" } </label>
+                <label className="labelInfoProfile">Correo</label>
+                <label className="labelDataProfile"> { profile.email } </label>
+                <label className="labelInfoProfile">N° Telefonico</label>
+                <label className="labelDataProfile"> { profile.phone } </label>
+                <label className="labelInfoProfile">Rol</label>
+                <label className="labelDataProfile"> { profile.nameRole } </label>
+            </div>
         </div>
     )
 }

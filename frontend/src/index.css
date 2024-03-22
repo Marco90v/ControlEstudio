@@ -22,4 +22,10 @@
     .sidebard{
         @apply bg-neutral-200 border-solid border-r-2 border-neutral-300 p-4 overflow-hidden grid grid-cols-[1fr] grid-rows-[auto_1fr_2rem] transition-all
     }
+    .labelDataProfile{
+        @apply px-2 py-1 bg-gray-200 rounded border-solid border-2 border-gray-400
+    }
+    .labelInfoProfile{
+        @apply font-bold p-1
+    }
 }
