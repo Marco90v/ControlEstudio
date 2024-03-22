@@ -12,3 +12,14 @@
     border-spacing: 0;
     box-sizing: border-box;
 }
+@layer components{
+    .btn-loggout{
+        @apply flex items-center gap-x-2 font-bold text-white border-solid bg-red-800 border-2 border-red-900 rounded h-10 p-2 text-sm cursor-pointer hover:bg-red-600 hover:border-red-700 hover:shadow-md hover:shadow-gray-400 transition-all duration-300
+    }
+    .btn-menu{
+        @apply overflow-hidden font-bold text-black flex gap-x-2 items-center no-underline p-2 rounded bg-white border-solid border-2 border-white mb-2 cursor-pointer transition-all duration-300 hover:bg-blue-200 hover:shadow-md hover:border-blue-400
+    }
+    .sidebard{
+        @apply bg-neutral-200 border-solid border-r-2 border-neutral-300 p-4 overflow-hidden grid grid-cols-[1fr] grid-rows-[auto_1fr_2rem] transition-all
+    }
+}

@@ -4,13 +4,11 @@ import { Main } from "../../styled/style"
 import useStoreSideBar from "../../zustanStore/sidebar"
 
 const Dashboard = () => {
-    const visibleSide = useStoreSideBar((state)=>state.visibleSideBar)
-
     return(
-        <Main visibleSide={visibleSide}>
+      <main className={`h-screen grid grid-cols-[min-content_auto]`}>
           <Sidebar  />
           <Outlet />
-        </Main>
+      </main>
     )
 }
 

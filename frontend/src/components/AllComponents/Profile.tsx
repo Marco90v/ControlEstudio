@@ -27,23 +27,25 @@ function Profile(){
     }, [data])
     
     return(
-        <ContentProfile>
-            <label>Perfil</label>
-            <div className="profile">
-                <label>Nombres</label>
-                <label> { profile?.names } </label>
-                <label>Apellido</label>
-                <label> { profile?.lastNames } </label>
-                <label>Genero</label>
-                <label> { profile?.sex === "M" ? "Masculino" : "Femenino" } </label>
-                <label>Correo</label>
-                <label> { profile?.email } </label>
-                <label>N° Telefonico</label>
-                <label> { profile?.phone } </label>
-                <label>Rol</label>
-                <label> { profile.nameRole } </label>
-            </div>
-        </ContentProfile>
+        <div className="overflow-auto">
+            {/* <ContentProfile> */}
+                <label>Perfil</label>
+                <div className="profile">
+                    <label>Nombres</label>
+                    <label> { profile?.names } </label>
+                    <label>Apellido</label>
+                    <label> { profile?.lastNames } </label>
+                    <label>Genero</label>
+                    <label> { profile?.sex === "M" ? "Masculino" : "Femenino" } </label>
+                    <label>Correo</label>
+                    <label> { profile?.email } </label>
+                    <label>N° Telefonico</label>
+                    <label> { profile?.phone } </label>
+                    <label>Rol</label>
+                    <label> { profile.nameRole } </label>
+                </div>
+            {/* </ContentProfile> */}
+        </div>
     )
 }
 
