@@ -1,52 +1,6 @@
-import styled from "styled-components";
-import { Button } from "../../styled/style";
-
-const ContenAlert = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(0 0 0 / 50%);
-`;
-const Alert = styled.div`
-    background-color: white;
-    position: fixed;
-    display: grid;
-    grid-template-rows: 30px 80px 40px;
-    grid-template-columns: 500px;
-    border-radius: 5px;
-    div:last-child{
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 10px;
-        padding: 5px;
-    }
-    div:nth-child(2){
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        input{
-            padding: 5px;
-            width: 90%;
-        }
-    }
-    div:first-child{
-        background-color: black;
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 5px 5px 0 0;
-        padding: 5px 0;
-    }    
-`;
-
 function Popup({children, aceptCallback, cancelCallBack}:any){
 
-    const acept = () => {
+    const accept = () => {
         aceptCallback();
     }
 
@@ -55,16 +9,16 @@ function Popup({children, aceptCallback, cancelCallBack}:any){
     }
 
     return(
-        <ContenAlert>
-            <Alert>
-                <div>Alerta</div>
-                <div>{children}</div>
-                <div>
-                    <Button className="red" onClick={cancel}>Cancelar</Button>
-                    <Button onClick={acept}>Aceptar</Button>
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+            <div className="bg-white grid grid-cols-[500px] grid-rows-[2.5rem_6rem_4rem] rounded-xl fixed border-solid border border-gray-300 shadow-md shadow-gray-600">
+                <h2 className="border-b border-solid border-gray-300 text-center items-center py-3 font-bold text-gray-600 bg-gray-300 rounded-t-xl">Alerta</h2>
+                <div className="flex justify-center items-center border-t border-solid border-gray-300">{children}</div>
+                <div className="grid grid-cols-2 gap-x-6 py-3 px-5 border-t border-solid border-gray-300">
+                    <button className="btn-red" onClick={cancel}>Cancelar</button>
+                    <button className="btn-greend" onClick={accept}>Aceptar</button>
                 </div>
-            </Alert>
-        </ContenAlert>
+            </div>
+        </div>
     );
 }
 

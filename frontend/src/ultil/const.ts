@@ -2,7 +2,10 @@ import { gql } from "../__generated__"
 
 export const COLORS = {
     yellow500: "bg-yellow-500",
-    red700: "bg-red-700"
+    red600: "bg-red-600",
+    red700: "bg-red-700",
+    green600: "bg-green-600",
+    green700: "bg-green-700",
 }
 
 export const ROLES = {

@@ -68,7 +68,7 @@ function DataClasses() {
     }
 
     const cuerpoPopup:any = {
-        "edit": <input type="text" value={modal.data.names} onChange={changeInputEdit} />,
+        "edit": <input className="p-1 w-[90%] border border-solid border-gray-200 rounded focus:outline-none focus:border-gray-400" type="text" value={modal.data.names} onChange={changeInputEdit} />,
         "delete": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.data.names}"</strong>?</p>
     };
 
@@ -80,14 +80,14 @@ function DataClasses() {
                 loading={[loadingAdd, loadingUpdate, loadingDelete]}
                 error={[errorAdd, errorUpdate,errorDelete]}
             />
-            <Div>
+            <div className="flex justify-center pb-12">
                 <TableComponent
                     edit={edit}
                     remove={remove}
                     loading={[loadingAdd, loadingUpdate, loadingDelete]}
                     data={data?.allClasses}
                 />
-            </Div>
+            </div>
             {
                 modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }
