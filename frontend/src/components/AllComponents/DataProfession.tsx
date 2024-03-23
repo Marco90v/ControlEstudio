@@ -3,6 +3,8 @@ import { Div } from "../../styled/style";
 import { InputForm, Popup, TableComponent } from "../";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_PROFESSION, DELETE_PROFESSION, GET_PROFESSIONS, UPDATE_PROFESSION } from "../../ultil/const";
+import InputPopUp from "./InputPopUp";
+import DeletePopUp from "./DeletePopUp";
 
 function DataProfession(){
     
@@ -63,8 +65,8 @@ function DataProfession(){
     }
 
     const cuerpoPopup:any = {
-        "edit": <input type="text" value={modal.data.names} onChange={changeInputEdit} />,
-        "delete": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.data.names}"</strong>?</p>
+        "edit": <InputPopUp type="text" value={modal.data.names} actionChange={changeInputEdit} />,
+        "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Profesión"} textFin={"?"} />
     };
 
     const cancelCallBack = () => {
@@ -79,14 +81,14 @@ function DataProfession(){
                 loading={[loadingAdd, loadingUpdate, loadingDelete]}
                 error={[errorAdd, errorUpdate,errorDelete]}
             />
-            <Div>
+            <div className="flex justify-center pb-12">
                 <TableComponent
                     edit={edit}
                     remove={remove}
                     loading={[loadingAdd, loadingUpdate, loadingDelete]}
                     data={data?.allProfession}
                 />
-            </Div>
+            </div>
             {
                 modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
             }

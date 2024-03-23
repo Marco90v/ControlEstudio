@@ -3,6 +3,8 @@ import { Div } from "../../styled/style";
 import {Popup, InputForm, TableComponent} from "../";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_CLASSE, DELETE_CLASSE, GET_ClASSES, UPDATE_CLASSE } from "../../ultil/const";
+import InputPopUp from "./InputPopUp";
+import DeletePopUp from "./DeletePopUp";
 
 
 function DataClasses() {
@@ -68,8 +70,8 @@ function DataClasses() {
     }
 
     const cuerpoPopup:any = {
-        "edit": <input className="p-1 w-[90%] border border-solid border-gray-200 rounded focus:outline-none focus:border-gray-400" type="text" value={modal.data.names} onChange={changeInputEdit} />,
-        "delete": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.data.names}"</strong>?</p>
+        "edit": <InputPopUp type="text" value={modal.data.names} actionChange={changeInputEdit} />,
+        "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Clases/Materia"} textFin={"?"} />
     };
 
     return(
