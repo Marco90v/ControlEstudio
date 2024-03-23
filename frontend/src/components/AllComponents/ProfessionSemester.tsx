@@ -112,8 +112,8 @@ const ProfessionSemester = forwardRef( (_, ref) => {
     });   
 
     return(
-        <div className="professionSemesters">
-            <div className="profession">
+        <div className="col-start-1 col-end-4 grid grid-rows-[1fr] grid-cols-[auto_auto] gap-4">
+            <div className="grid grid-rows-[1fr] grid-cols-[auto_1fr] gap-x-4">
                 <label htmlFor="selectProfession">Profesión</label>
                 <Select
                     identify={identifySelect.IDPROFESSION}
@@ -123,7 +123,7 @@ const ProfessionSemester = forwardRef( (_, ref) => {
                     disabled={loading}
                 />
             </div>
-            <div className="selectSemester">
+            <div className="grid grid-rows-[1fr] grid-cols-[auto_1fr] gap-x-4">
                 <label htmlFor="selectSemester">Semestres</label>
                 <Select
                     identify={identifySelect.IDSEMESTERS}

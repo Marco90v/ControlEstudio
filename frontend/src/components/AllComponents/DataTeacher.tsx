@@ -53,7 +53,7 @@ function DataTeacher(){
     }
 
     return(
-        <div className="content m-8" >
+        <div className="m-8" >
             <PersonsForms
                 changeRole={changeRole}
                 roles={roles}

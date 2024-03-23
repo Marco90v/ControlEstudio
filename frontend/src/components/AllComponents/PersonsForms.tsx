@@ -18,10 +18,11 @@ interface props {
     changeRole:Function,
     roles:Role[],
     selectRole:number,
-    type:string
+    type:string,
+    style?:string
 }
 
-function PersonsForms({children, saveChildren, changeRole, roles, selectRole, type}:props){
+function PersonsForms({children, saveChildren, changeRole, roles, selectRole, type, style}:props){
 
     const [postPerson, { data:dataAddPerson, loading:loadingAddPerson, reset:resetAddPerson }] = useMutation(ADD_PERSON)
     const [updatePerson, { loading:loadingUpdatePerson }] = useMutation(UPDATE_PERSON)
@@ -131,7 +132,7 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
     };
 
     return(
-        <form className="grid gap-y-4 grid-rows-[14rem_auto_auto] mb-4 border-solid border border-gray-200 p-4 rounded-lg shadow" onSubmit={(e)=>e.preventDefault()} >
+        <form className="grid gap-y-4 mb-4 border-solid border border-gray-200 p-4 rounded-lg shadow" onSubmit={(e)=>e.preventDefault()} >
             <div className="grid grid-cols-3 grid-rows-[1.8rem_auto] gap-y-4 gap-x-4">
                 <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
                     <label className="font-semibold" htmlFor="names">Nombre Completo</label>

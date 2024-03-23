@@ -59,7 +59,8 @@ function DataStudents(){
     }
 
     return(
-        <ContentStudent className="content" wait={statusFetch}>
+        // <ContentStudent className="content" wait={statusFetch}>
+        <div className="m-8">
             <PersonsForms
                 changeRole={changeRole}
                 roles={roles}
@@ -73,7 +74,8 @@ function DataStudents(){
                 deleteChildren={handlerStudent}
                 role={selectRole}
             />
-        </ContentStudent>
+        {/* </ContentStudent> */}
+        </div>
     );
 }
 
