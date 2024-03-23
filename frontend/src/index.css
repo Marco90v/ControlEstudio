@@ -29,10 +29,10 @@
         @apply font-bold p-1
     }
     .btn-greend{
-        @apply bg-green-700 text-white py-1 px-2 rounded-md border-solid border-2 border-green-700 font-bold cursor-pointer transition-all duration-300 hover:bg-green-600 hover:shadow-md
+        @apply bg-green-700 text-white px-2 rounded-md border-solid border-2 border-green-700 font-bold cursor-pointer transition-all duration-300 hover:bg-green-600 hover:shadow-md disabled:bg-gray-400 disabled:border-gray-600 disabled:cursor-default
     }
     .btn-red{
-        @apply bg-red-700 text-white py-1 px-2 rounded-md border-solid border-2 border-red-700 font-bold cursor-pointer transition-all duration-300 hover:bg-red-600 hover:shadow-md
+        @apply bg-red-700 text-white px-2 rounded-md border-solid border-2 border-red-700 font-bold cursor-pointer transition-all duration-300 hover:bg-red-600 hover:shadow-md
     }
     .btn-transparent{
         @apply bg-transparent cursor-pointer disabled:cursor-default

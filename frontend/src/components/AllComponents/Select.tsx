@@ -1,5 +1,4 @@
 import { memo } from "react";
-import { SelectStyle } from "../../styled/style";
 
 type select = {
     identify:string,
@@ -8,9 +7,13 @@ type select = {
     data:any[] | undefined | null,
     disabled:boolean
 }
+
 const Select = memo( ({identify,changeSelect,value,disabled, data=[]}:select) => {
     return(
-        <SelectStyle name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}>
+        <select
+            className="h-8 border-solid border border-gray-200 rounded focus-visible:outline focus-visible:outline-1 focus-visible:outline-gray-300"
+            name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}
+        >
             <option value="0"></option>
             {
                 data &&
@@ -20,7 +23,7 @@ const Select = memo( ({identify,changeSelect,value,disabled, data=[]}:select) =>
                     )
                 })
             }
-        </SelectStyle>
+        </select>
     )
 },(n:any,p:any)=>{
     return n.value===p.value && JSON.stringify(n.data)===JSON.stringify(p.data) && n.disabled === p.disabled;

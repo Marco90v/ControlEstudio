@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { ContentDataPensum, SelectPensum, SelectSemester } from "../../styled/style";
 import { Popup, Select, BlockSemester } from "../";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorePensum from "../../zustanStore/pensum";
 import { ADD_CLASSES_PENSUM, DELETE_CLASSES_PENSUM, GET_ClASSES, GET_PENSUM, GET_PROFESSIONS, GET_SEMESTERS, identifySelect } from "../../ultil/const";
 import { filter__typename } from "../../ultil";
 import { ClasseFormatPensum, Pensum } from "../../__generated__/graphql";
+import DeletePopUp from "./DeletePopUp";
 
 type data = {
     id: number,
@@ -188,7 +188,7 @@ function DataPensum(){
                             data={dataClasses?.allClasses}
                             disabled={loading}
                         />,
-        "removeClasse": <p>¿Desea eliminar la Clases/Materia <strong>"{modal.ClasseName}"</strong> del <strong>"{modal.semesterName}</strong>?</p>
+        "removeClasse": <DeletePopUp value={modal.ClasseName} textIni={"¿Desea eliminar la Clases/Materia"} textFin={"?"} />
     };
 
     const cancelCallBack = () => {
@@ -196,9 +196,9 @@ function DataPensum(){
     }
 
     return(        
-        <ContentDataPensum>
-            <SelectPensum>
-                <h2>Profesiones</h2>
+        <div className="p-5 m-5">
+            <div className="grid grid-cols-[200px_1fr] mb-5">
+                <h2 className="text-lg font-semibold text-gray-800">Profesiones</h2>
                 <Select
                     identify={identifySelect.PROFESSION}
                     changeSelect={changeSelectProfession}
@@ -206,21 +206,23 @@ function DataPensum(){
                     data={dataProfessions?.allProfession}
                     disabled={loading}
                 />
-            </SelectPensum>
+            </div>
             <section>
                 {
                     pensum.map((semester:pensum)=>{
-                        return <BlockSemester
-                                    key={semester?.IdSemesters}
-                                    semester={semester}
-                                    insertNewClasse={insertNewClasse}
-                                    removeClasse={removeClasse}
-                                    disabled={loading}
-                                />
+                        return (
+                            <BlockSemester
+                                key={semester?.IdSemesters}
+                                semester={semester}
+                                insertNewClasse={insertNewClasse}
+                                removeClasse={removeClasse}
+                                disabled={loading}
+                            />
+                        )
                     })
                 }
             </section>
-            <SelectSemester>
+            <div  className="grid grid-cols-[1fr_200px] gap-x-5 mt-5">
                 <Select
                     identify={identifySelect.SEMESTERS}
                     changeSelect={changeSelectSemester}
@@ -229,18 +231,21 @@ function DataPensum(){
                     disabled={loadingAddClasse || loadingDeleteClasse}
                 />
                 <button
+                    className="btn-greend"
                     disabled={activeInsertSemester || loading}
                     onClick={insertNewSemester}
                 >
                     Agregar    
                 </button>
-            </SelectSemester>
+            </div>
             {
-                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} >
-                    {cuerpoPopup[modal.type]}
-                </Popup>
+                modal.value && (
+                    <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} >
+                        {cuerpoPopup[modal.type]}
+                    </Popup>
+                )
             }
-        </ContentDataPensum>
+        </div>
     );
 }
 

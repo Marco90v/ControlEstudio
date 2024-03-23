@@ -16,9 +16,15 @@ type props = {
 const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse, disabled}:props) => {
     const {id,Name_Classes} = classe;
     return(
-        <li key={id}>
+        <li
+            className="grid grid-cols-[auto_20px] items-center gap-x-2 bg-green-500 font-bold rounded py-1 px-2 my-0 mx-1"
+            key={id}
+        >
             {Name_Classes}
-            <img src={iconRemove} alt="remove" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}/>
+            <img
+                className="bg-white rounded-full cursor-pointer transition-all duration-300 hover:bg-black"
+                src={iconRemove} alt="remove" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}
+            />
         </li>
     )
 }, (n:props,p:props)=>n.classe.id === p.classe.id );

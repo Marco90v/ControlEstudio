@@ -23,29 +23,32 @@ type props = {
 const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}:props) => {
     const {IdSemesters, Name_Semesters, Classes} = semester;
     return(
-        <Semestres >
-            <h2>
+        <div className="text-center rounded mt-7 border-solid border border-gray-300" >
+            <h2 className="p-1 bg-blue-400 text-white border-t-4 font-bold">
                 {Name_Semesters}
                 <img
+                    className="float-right mr-2 bg-white rounded-full cursor-pointer transition-all duration-300 hover:bg-black"
                     src={iconAdd}
                     alt="add"
                     onClick={()=>insertNewClasse(IdSemesters)}
                 />
             </h2>
-            <ClassesBySemesters>
+            <ul className="list-none bg-neutral-200 rounded-b flex flex-wrap gap-y-5 justify-center items-center py-5 px-2">
                 {
                     Classes?.map((classe:any)=>{
-                        return <BadgeClasse
-                                    key={classe.id}
-                                    classe={classe}
-                                    Name_Semesters={Name_Semesters}
-                                    removeClasse={removeClasse}
-                                    disabled={disabled}
-                                />
+                        return (
+                            <BadgeClasse
+                                key={classe.id}
+                                classe={classe}
+                                Name_Semesters={Name_Semesters}
+                                removeClasse={removeClasse}
+                                disabled={disabled}
+                            />
+                        )
                     })
                 }
-            </ClassesBySemesters>
-        </Semestres>
+            </ul>
+        </div>
     )
 }, (n:props,p:props)=>{
     return n.semester.IdSemesters === p.semester.IdSemesters && JSON.stringify(n.semester.Classes) === JSON.stringify(p.semester.Classes)
