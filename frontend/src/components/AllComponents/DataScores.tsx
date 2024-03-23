@@ -6,19 +6,6 @@ import { useQuery } from "@apollo/client";
 import useStoreRoles from "../../zustanStore/roles";
 import { GET_ROLES, ROLES } from "../../ultil/const";
 
-// type Person = {
-//     email: string,
-//     id: number,
-//     lastNames: string,
-//     names: string,
-//     phone: number,
-//     role: number,
-//     sex: string,
-//     idPerson: number,
-//     name:string,
-//     photo?: string | undefined | null,
-// }
-
 interface role {
     id: number | null | undefined,
     names: string | null | undefined
@@ -27,7 +14,6 @@ interface role {
 function DataScores(){
 
     const { profile } = useStoreProfile((state)=>state)
-    // console.log(profile)
     const { roles, setRoles } = useStoreRoles((state)=>state)
     const { data:dataRoles } = useQuery(GET_ROLES);
     const statusFetch = false

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Img, Table } from "../../styled/style";
-import { Popup } from "../";
-import imgTrash from "../../assets/trash-alt-solid-24.png";
-import imgEdit from "../../assets/edit-solid-24.png";
+// import { Img, Table } from "../../styled/style";
+import { Popup, TableComponent } from "../";
+// import imgTrash from "../../assets/trash-alt-solid-24.png";
+// import imgEdit from "../../assets/edit-solid-24.png";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
 import { DELETE_PERSON, GET_PERSON_BY_ROLE } from "../../ultil/const";
+import DeletePopUp from "./DeletePopUp";
 
 type Person = {
     email: string,
@@ -35,6 +36,9 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:props){
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
     const loading = loadingGetPersonByrole || loadingDeletePersonByID
 
+    const columnsHeaders=["Nombres", "Apellidos", "Correo", "Telefono" ]
+    
+
     const data = (preCarga.length>0) ? preCarga : 
                     (dataGetPersonByRole && dataGetPersonByRole?.getPersonByRole) ? 
                     dataGetPersonByRole.getPersonByRole : 
@@ -50,13 +54,15 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:props){
     }
     }, [role]);
 
-    const edit = (idx:number) => {
+    const edit = (data:any) => {
         if(dataGetPersonByRole?.getPersonByRole){
-            const {__typename, ...rest} = dataGetPersonByRole?.getPersonByRole[idx]
+            const {__typename, ...rest} = data
             selectPerson({...rest, idPerson:rest.id, name:rest.names})
+
         }else{
             selectPerson({...preCarga[0]})
         }
+
     }
     const deletePerson = (idx:number) => {
         deletePersonByID({
@@ -87,8 +93,8 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:props){
     }
 
     const cuerpoPopup:any = {
-        "delete": <p>¿Desea eliminar a: <strong>"{modal.data.names}"</strong>?</p>,
-        "scoresDelete": <p>Esta acción esta prohibida en este modulo</p>
+        "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar a:"} textFin={"?"} />,
+        "scoresDelete": <p className="text-center">Esta acción esta prohibida en este modulo</p>
     };
 
     const remove = (data:any) => {
@@ -100,46 +106,26 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:props){
     }
 
     return(
-        <Table>
-            <thead>
-                <tr>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Telefono</th>
-                    <th>Correo</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    // dataPersons.persons.map((item,idx:number)=>{
-                        data.map((item,idx:number)=>{
-                        return(
-                            <tr key={idx}>
-                                <td>{item.names}</td>
-                                <td>{item.lastNames}</td>
-                                <td>{item.phone.toString()}</td>
-                                <td>{item.email}</td>
-                                <td>
-                                    <button onClick={()=>edit(idx)} disabled={loading} >
-                                        <Img src={imgEdit} alt="edit" />
-                                    </button>
-                                </td>
-                                <td>
-                                    <button onClick={()=>remove(item)} disabled={loading} >
-                                        <Img className="red" src={imgTrash} alt="delete" />
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })
-                }
-            </tbody>
+        <>
+            <TableComponent
+                edit={edit}
+                remove={remove}
+                loading={[loadingGetPersonByrole || loadingDeletePersonByID]}
+                data={data}
+                columnsHeaders={columnsHeaders}
+            />
             {
-                modal.value && <Popup key={'TablePersons'} cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
+                modal.value && (
+                    <Popup
+                        key={'TablePersons'}
+                        cancelCallBack={cancelCallBack}
+                        aceptCallback={aceptCallback}
+                    >
+                        {cuerpoPopup[modal.type]}
+                    </Popup>
+                )
             }
-        </Table>
+        </>
     );
 }
 

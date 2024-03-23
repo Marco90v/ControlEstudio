@@ -53,7 +53,7 @@ function DataTeacher(){
     }
 
     return(
-        <ContentTeacher className="content" wait={statusFetch}>
+        <div className="content m-8" >
             <PersonsForms
                 changeRole={changeRole}
                 roles={roles}
@@ -67,7 +67,7 @@ function DataTeacher(){
                 deleteChildren={handlerTeacher}
                 role={selectRole}
             />
-        </ContentTeacher>
+        </div>
     )
 }
 

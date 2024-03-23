@@ -70,7 +70,7 @@ function DataClasses() {
     }
 
     const cuerpoPopup:any = {
-        "edit": <InputPopUp type="text" value={modal.data.names} actionChange={changeInputEdit} />,
+        "edit": <InputPopUp type="text" identify={"names"} value={modal.data.names} actionChange={changeInputEdit} />,
         "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Clases/Materia"} textFin={"?"} />
     };
 

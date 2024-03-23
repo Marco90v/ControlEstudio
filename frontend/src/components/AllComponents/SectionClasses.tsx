@@ -27,29 +27,29 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
     const { data:classes } = useQuery(GET_CLASSES);
 
     return (
-        <div className="dataClasses" >
-            <div className="listProfession">
+        <div className="grid gap-y-2 gap-x-4 grid-cols-3 grid-rows-2 bg-white p-2 rounded-lg border-solid border border-gray-200 hover:bg-gray-50 mb-4" >
+            <div className="grid grid-cols-[auto_1fr] gap-x-2">
                 <label htmlFor="profession">Profesiones/Carreras</label>
                 <Select identify="IdProfession" changeSelect={(e)=>changeSelect(e,idx)} value={IdProfession} data={professions?.allProfession} disabled={disabled} />
             </div>
-            <div className="listSemesters">
+            <div className="grid grid-cols-[auto_1fr] gap-x-2">
                 <label htmlFor="semesters">Semestres</label>
                 <Select identify="IdSemesters" changeSelect={(e)=>changeSelect(e,idx)} value={IdSemesters} data={semesters?.allSemesters} disabled={disabled} />
             </div>
-            <div className="listClasses">
+            <div className="grid grid-cols-[auto_1fr] gap-x-2">
                 <label htmlFor="classes">Clases</label>
                 <Select identify="IdClasses" changeSelect={(e)=>changeSelect(e,idx)} value={IdClasses} data={classes?.allClasses} disabled={disabled} />
             </div>
-            <div className="listShifts">
+            <div className="grid grid-cols-[auto_1fr] gap-x-2">
                 <label htmlFor="shifts">Turnos</label>
                 <Select identify="IdShifts" changeSelect={(e)=>changeSelect(e,idx)} value={IdShifts} data={shifts?.allShifts} disabled={disabled} />
             </div>
-            <div className="listSections">
+            <div className="grid grid-cols-[auto_1fr] gap-x-2">
                 <label htmlFor="sections">Secciones</label>
                 <Select identify="IdSections" changeSelect={(e)=>changeSelect(e,idx)} value={IdSections} data={sections?.allSections} disabled={disabled} />
             </div>
-            <div className="delete">
-                <button onClick={()=>deleteItem(idx)} disabled={disabled} >Eliminar</button>
+            <div className="grid gap-x-2 grid-cols-[auto] row-start-1 row-end-3 col-start-4 col-end-5 py-5">
+                <button className="btn-red" onClick={()=>deleteItem(idx)} disabled={disabled} >Eliminar</button>
             </div>
         </div>
     )

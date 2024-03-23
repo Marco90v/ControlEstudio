@@ -5,6 +5,7 @@ import { Popup, Select } from "../";
 import { useMutation } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
 import { ADD_PERSON, ROLES, UPDATE_PERSON } from "../../ultil/const";
+import InputPopUp from "./InputPopUp";
 
 type Role = {
     id: number | null | undefined,
@@ -27,6 +28,12 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
     const {data:{person}, clearPerson, changePerson} = useStorePersons((state)=>state)
     const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
     const loading = loadingAddPerson || loadingUpdatePerson
+
+    const selectSex = [
+        {id:0, names:""},
+        {id:"M", names:"Masculino"},
+        {id:"F", names:"Femenino"},
+    ]
 
     useEffect(() => {
         if(dataAddPerson?.addPerson?.id){
@@ -124,45 +131,41 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
     };
 
     return(
-        <form className="newPerson" onSubmit={(e)=>e.preventDefault()} >
-            <div className="dataUser">
-                <div className="names">
-                    <label htmlFor="names">Nombre Completo</label>
-                    <input type="text" name="names" id="names" value={person.names} onChange={e=>changeDataPerson(e)} disabled={loading} />
+        <form className="grid gap-y-4 grid-rows-[14rem_auto_auto] mb-4 border-solid border border-gray-200 p-4 rounded-lg shadow" onSubmit={(e)=>e.preventDefault()} >
+            <div className="grid grid-cols-3 grid-rows-[1.8rem_auto] gap-y-4 gap-x-4">
+                <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
+                    <label className="font-semibold" htmlFor="names">Nombre Completo</label>
+                    <InputPopUp type="text" identify="names" value={person.names} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full" />
                 </div>
-                <div className="lastNames">
-                    <label htmlFor="lastNames">Apellido Completo</label>
-                    <input type="text" name="lastNames" id="lastNames" value={person.lastNames} onChange={e=>changeDataPerson(e)} disabled={loading} />
+                <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
+                    <label className="font-semibold" htmlFor="lastNames">Apellido Completo</label>
+                    <InputPopUp type="text" identify="lastNames" value={person.lastNames} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full" />
                 </div>
-                <div className="sex">
-                    <label htmlFor="selectSex">Genero</label>
-                    <SelectStyle name="sex" id="sex" value={person.sex} onChange={e=>changeDataPerson(e)} disabled={loading} >
-                        <option value=""></option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
-                    </SelectStyle>
+                <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
+                    <label className="font-semibold" htmlFor="selectSex">Genero</label>
+                    <Select identify="sex" value={person.sex} data={selectSex} changeSelect={(e)=>changeDataPerson(e)} disabled={loading} />
                 </div>
-                <div className="data">
-                    <label htmlFor="email">Email</label>
-                    <input type="text" name="email" id="email" value={person.email} onChange={e=>changeDataPerson(e)} disabled={loading} />
-                    <label htmlFor="phone">Telefono</label>
-                    <input type="number" name="phone" id="phone" value={person.phone || ""} onChange={e=>changeDataPerson(e)} disabled={loading} />
-                    <label htmlFor="role">Rol</label>
+                <div className="grid grid-cols-[auto_1fr] min-h-7 gap-x-2 col-start-1 col-end-4 gap-y-4">
+                    <label className="font-semibold" htmlFor="email">Email</label>
+                    <InputPopUp type="email" identify="email" value={person.email} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full min-h-7" />
+                    <label className="font-semibold" htmlFor="phone">Telefono</label>
+                    <InputPopUp type="number" identify="phone" value={person.phone || ""} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full min-h-7" />
+                    <label className="font-semibold" htmlFor="role">Rol</label>
                     <Select identify="role" changeSelect={(e)=>changeRole(e)} value={selectRole} data={roles} disabled={true} />
-                    <label htmlFor="photo">Foto</label>
-                    <input type="file" name="photo" id="photo" disabled={true} />
+                    <label className="font-semibold" htmlFor="photo">Foto</label>
+                    <InputPopUp type="file" identify="photo" value={person.photo || ""} actionChange={(e)=>changeDataPerson(e)} disabled={true} style="w-full min-h-7" />
                 </div>
                 {type === ROLES.STUDENT && children}
             </div>
                 {type === ROLES.TEACHER && children}
                 
-            <div className="save">
+            <div className="grid grid-cols-[auto_auto] gap-x-2 justify-end">
                 {
                     person.id === 0 ?
-                    <button onClick={save} disabled={loading} >Guardar</button> :
+                    <button className="btn-greend" onClick={save} disabled={loading} >Guardar</button> :
                     <>
-                        <button onClick={()=>cancelEdit()} className="cancel" disabled={loading} >Cancelar</button>
-                        <button className="edit" onClick={save} disabled={loading} >Guardar cambios</button>
+                        <button onClick={()=>cancelEdit()} className="btn-red" disabled={loading} >Cancelar</button>
+                        <button className="btn-yellow" onClick={save} disabled={loading} >Guardar cambios</button>
                     </>
                 }
             </div>

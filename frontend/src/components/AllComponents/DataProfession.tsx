@@ -65,7 +65,7 @@ function DataProfession(){
     }
 
     const cuerpoPopup:any = {
-        "edit": <InputPopUp type="text" value={modal.data.names} actionChange={changeInputEdit} />,
+        "edit": <InputPopUp identify={"names"} type="text" value={modal.data.names} actionChange={changeInputEdit} />,
         "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Profesión"} textFin={"?"} />
     };
 

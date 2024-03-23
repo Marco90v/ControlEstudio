@@ -133,7 +133,7 @@ const Teacher = forwardRef( (_, ref) => {
     });    
 
     return(
-        <div className="dataTeacher">
+        <div className="">
             {
                 teacherClasses.map((t:teacher,i)=>{
                     return (
@@ -148,8 +148,8 @@ const Teacher = forwardRef( (_, ref) => {
                     )
                 })
             }
-            <div className="addClass">
-                <button onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</button>
+            <div className="">
+                <button className="btn-blue" onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</button>
             </div>
         </div>
     )
