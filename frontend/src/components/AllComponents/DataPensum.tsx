@@ -231,7 +231,7 @@ function DataPensum(){
                     disabled={loadingAddClasse || loadingDeleteClasse}
                 />
                 <button
-                    className="btn-greend"
+                    className="btn btn-greend"
                     disabled={activeInsertSemester || loading}
                     onClick={insertNewSemester}
                 >

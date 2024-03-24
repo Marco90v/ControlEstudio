@@ -85,7 +85,7 @@ function InputForm({addCallBack,title, loading, error}:props) {
                     value={name.names}
                 />
                 <button
-                    className="btn-greend"
+                    className="btn btn-greend"
                     type="submit"
                     disabled={status.status}
                 >

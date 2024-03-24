@@ -162,10 +162,10 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
             <div className="grid grid-cols-[auto_auto] gap-x-2 justify-end">
                 {
                     person.id === 0 ?
-                    <button className="btn-greend" onClick={save} disabled={loading} >Guardar</button> :
+                    <button className="btn btn-greend" onClick={save} disabled={loading} >Guardar</button> :
                     <>
-                        <button onClick={()=>cancelEdit()} className="btn-red" disabled={loading} >Cancelar</button>
-                        <button className="btn-yellow" onClick={save} disabled={loading} >Guardar cambios</button>
+                        <button className="btn btn-red" onClick={()=>cancelEdit()} disabled={loading} >Cancelar</button>
+                        <button className="btn btn-yellow" onClick={save} disabled={loading} >Guardar cambios</button>
                     </>
                 }
             </div>

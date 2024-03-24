@@ -16,8 +16,8 @@ function Popup({children, aceptCallback, cancelCallBack}:any){
                     {children}
                 </div>
                 <div className="grid grid-cols-2 gap-x-6 py-3 px-5 border-t border-solid border-gray-300">
-                    <button className="btn-red" onClick={cancel}>Cancelar</button>
-                    <button className="btn-greend" onClick={accept}>Aceptar</button>
+                    <button className="btn btn-red" onClick={cancel}>Cancelar</button>
+                    <button className="btn btn-greend" onClick={accept}>Aceptar</button>
                 </div>
             </div>
         </div>

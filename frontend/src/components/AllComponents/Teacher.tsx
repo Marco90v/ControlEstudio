@@ -149,7 +149,7 @@ const Teacher = forwardRef( (_, ref) => {
                 })
             }
             <div className="">
-                <button className="btn-blue" onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</button>
+                <button className="btn btn-blue" onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</button>
             </div>
         </div>
     )
