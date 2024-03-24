@@ -15,5 +15,5 @@ export function filter__typename<T>(data:any):T{
 }
 
 export function filterKeyColumn(key:any){
-    return key !== "__typename" && key !== "id" && key !== "photo" && key !== "role" && key !== "sex"
+    return key !== "__typename" && key !== "id" && key !== "photo" && key !== "role" && key !== "sex" && key !== "nameRole"
 }

@@ -14,7 +14,7 @@
 }
 @layer components{
     .btn{
-        @apply px-2 rounded-md border-solid border-2 cursor-pointer transition-all duration-300 hover:shadow-md disabled:bg-gray-400 disabled:border-gray-600 disabled:cursor-default
+        @apply px-2 rounded-md border-solid border-2 cursor-pointer transition-all duration-300 hover:shadow-md disabled:bg-gray-400 disabled:border-gray-600 disabled:hover:bg-gray-400 disabled:cursor-default
     }
     .btn-loggout{
         @apply flex items-center gap-x-2 font-bold text-white border-solid bg-red-800 border-2 border-red-900 rounded h-10 p-2 text-sm cursor-pointer hover:bg-red-600 hover:border-red-700 hover:shadow-md hover:shadow-gray-400 transition-all duration-300
