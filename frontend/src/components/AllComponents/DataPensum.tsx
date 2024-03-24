@@ -196,7 +196,7 @@ function DataPensum(){
     }
 
     return(        
-        <div className="p-5 m-5">
+        <div className="p-5 m-5 overflow-auto">
             <div className="grid grid-cols-[200px_1fr] mb-5">
                 <h2 className="text-lg font-semibold text-gray-800">Profesiones</h2>
                 <Select

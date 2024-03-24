@@ -75,7 +75,7 @@ function DataClasses() {
     };
 
     return(
-        <div>
+        <div className="overflow-auto">
             <InputForm
                 addCallBack={addClasses}
                 title={"Clase/Materia"}

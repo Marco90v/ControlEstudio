@@ -45,7 +45,7 @@ function DataScores(){
     const deleteChildren = (idx:number) => {}
 
     return(
-        <div className="m-8" >
+        <div className="m-8 overflow-auto" >
             <Record />
             {
                 verifyRole() ?

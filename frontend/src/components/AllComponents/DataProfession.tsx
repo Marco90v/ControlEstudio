@@ -74,7 +74,7 @@ function DataProfession(){
     }
 
     return(
-        <div>
+        <div className="overflow-auto">
             <InputForm
                 addCallBack={addProfession}
                 title={"Profesiones"}
