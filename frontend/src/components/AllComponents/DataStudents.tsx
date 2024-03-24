@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { ContentStudent } from "../../styled/style";
 import { PersonsForms, TablePersons, ProfessionSemester } from "../";
 import { useQuery } from "@apollo/client";
 import useStoreRoles from "../../zustanStore/roles";
@@ -23,7 +22,6 @@ const initialDataPerson:person = {
 };
 
 function DataStudents(){
-    const statusFetch = false
     const { data:dataRoles } = useQuery(GET_ROLES);
     const {roles, setRoles} = useStoreRoles((state)=>state)
 

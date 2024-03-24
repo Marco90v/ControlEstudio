@@ -164,7 +164,7 @@ function Record () {
         });
         return newData;
     }
-    // const isWait = () => {return false}
+    
     const permisions = (...rls:number[]) => {
         const temp = rls.find( e => e===profile.role );
         return temp ? false : true;

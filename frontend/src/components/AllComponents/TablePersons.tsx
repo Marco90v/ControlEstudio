@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-// import { Img, Table } from "../../styled/style";
 import { Popup, TableComponent } from "../";
-// import imgTrash from "../../assets/trash-alt-solid-24.png";
-// import imgEdit from "../../assets/edit-solid-24.png";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import useStorePersons from "../../zustanStore/persons";
 import { DELETE_PERSON, GET_PERSON_BY_ROLE } from "../../ultil/const";

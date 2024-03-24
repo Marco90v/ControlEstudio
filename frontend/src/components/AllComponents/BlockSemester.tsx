@@ -1,4 +1,3 @@
-import { ClassesBySemesters, Semestres } from "../../styled/style";
 import iconAdd from "../../assets/plus-circle-solid-24.png";
 import { memo } from "react";
 import { BadgeClasse } from "../";

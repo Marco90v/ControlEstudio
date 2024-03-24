@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { SelectStyle } from "../../styled/style";
 import { fieldNotEmptied } from "../../ultil";
 import { Popup, Select } from "../";
 import { useMutation } from "@apollo/client";

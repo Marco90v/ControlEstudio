@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Div } from "../../styled/style";
 import {Popup, InputForm, TableComponent} from "../";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_CLASSE, DELETE_CLASSE, GET_ClASSES, UPDATE_CLASSE } from "../../ultil/const";

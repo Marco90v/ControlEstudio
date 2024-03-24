@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { ContentProfile } from "../../styled/style";
 import { useQuery } from "@apollo/client";
 import useStoreProfile from "../../zustanStore/profile";
 import { GET_PROFILE_AND_ROLES } from "../../ultil/const";

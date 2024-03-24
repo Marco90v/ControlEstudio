@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import { ContentScores } from "../../styled/style";
 import { TablePersons, Record } from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import { useQuery } from "@apollo/client";
@@ -16,7 +15,6 @@ function DataScores(){
     const { profile } = useStoreProfile((state)=>state)
     const { roles, setRoles } = useStoreRoles((state)=>state)
     const { data:dataRoles } = useQuery(GET_ROLES);
-    // const statusFetch = false
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     

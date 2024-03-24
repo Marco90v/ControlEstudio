@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { ContentTeacher } from "../../styled/style";
 import { PersonsForms, TablePersons, Teacher } from "../";
 import { useQuery } from "@apollo/client";
 import useStoreRoles from "../../zustanStore/roles";
