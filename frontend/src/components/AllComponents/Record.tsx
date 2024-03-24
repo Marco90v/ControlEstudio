@@ -8,6 +8,7 @@ import useStoreStudentProfessionSemester from "../../zustanStore/studentClasses"
 import useStoreScores from "../../zustanStore/scores";
 import { filter__typename } from "../../ultil";
 import { ClassesByProfessionAndSemesters, TeachersByProfessionAndSemesters } from "../../__generated__/graphql";
+import InputPopUp from "./InputPopUp";
 
 const initialDataScores:scores = {
     id:0,
@@ -219,18 +220,18 @@ function Record () {
     }
     return(
         <>
-            <form onSubmit={(e)=>e.preventDefault()} className='scores' >
-                <div>
-                    <label>Clases/Materia</label>
-                    <label>Profesor</label>
-                    <label>Nota</label>
+            <form className="border-solid border-l border-r border-b border-gray-200 mb-4 rounded-lg min-h-32 shadow" onSubmit={(e)=>e.preventDefault()} >
+                <div className="grid grid-cols-[1fr_1fr_5rem] gap-x-4 mb-4 bg-gray-300 text-gray-500 rounded-md p-[0.5rem_0_0.5rem_0.5rem]">
+                    <label className="font-bold">Clases/Materia</label>
+                    <label className="font-bold">Profesor</label>
+                    <label className="font-bold">Nota</label>
                 </div>
                 {
                     scores.map((item:scores, idx:number)=>{
                         const id = item.id.toString();
                         return(
-                            <div key={idx}>
-                                <input type="text" name="classes" id={id} value={getNameClasse(item.IdClasses)} disabled={true} />
+                            <div className="grid grid-cols-[1fr_1fr_5rem] gap-x-4 m-4" key={idx}>
+                                <InputPopUp type="text" identify={id} value={getNameClasse(item.IdClasses)} disabled={true} actionChange={()=>null} style="w-full" />
                                 <Select
                                     identify = "IdTeachers"
                                     changeSelect = {(e)=>changeSelectN(e, item)}
@@ -238,15 +239,17 @@ function Record () {
                                     data = {list(item)}
                                     disabled = { loading || permisions(1) }
                                 />
-                                <input
-                                    type = "number"
-                                    name = "score"
-                                    id = "score"
-                                    min = "0"
-                                    max = "20"
-                                    onChange = {(e)=>changeSelectN(e, item)}
-                                    value = {item.score}
-                                    disabled = { loading || permisions(1,2) }
+                                <InputPopUp
+                                    type="number"
+                                    identify="score"
+                                    value={item.score}
+                                    actionChange={(e)=>changeSelectN(e, item)}
+                                    disabled={loading || permisions(1,2)}
+                                    style="w-full"
+                                    otherAtribute={{
+                                        min:"0",
+                                        max:"20"
+                                    }}
                                 />
                             </div>
                         )
@@ -254,9 +257,9 @@ function Record () {
                 }
                 {
                     scores.length > 0 &&
-                        <div className="save">
-                            <button className="cancel" onClick={cancel} disabled={ loading } >Cancelar</button>
-                            <button onClick={save} disabled={ loading || permisions(1,2) } >Guardar</button>
+                        <div className="grid grid-cols-[1fr_auto] gap-4 m-4">
+                            <button className="btn-red ml-auto" onClick={cancel} disabled={ loading } >Cancelar</button>
+                            <button className="btn-greend items-end" onClick={save} disabled={ loading || permisions(1,2) } >Guardar</button>
                         </div>
                 }
             </form>

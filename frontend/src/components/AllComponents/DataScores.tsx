@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ContentScores } from "../../styled/style";
+// import { ContentScores } from "../../styled/style";
 import { TablePersons, Record } from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import { useQuery } from "@apollo/client";
@@ -16,7 +16,7 @@ function DataScores(){
     const { profile } = useStoreProfile((state)=>state)
     const { roles, setRoles } = useStoreRoles((state)=>state)
     const { data:dataRoles } = useQuery(GET_ROLES);
-    const statusFetch = false
+    // const statusFetch = false
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     
@@ -45,7 +45,7 @@ function DataScores(){
     const deleteChildren = (idx:number) => {}
 
     return(
-        <ContentScores className="content" wait={ statusFetch }>
+        <div className="m-8" >
             <Record />
             {
                 verifyRole() ?
@@ -62,7 +62,7 @@ function DataScores(){
                         scores={true}
                     />
             }
-        </ContentScores>
+        </div>
     );
 }
 

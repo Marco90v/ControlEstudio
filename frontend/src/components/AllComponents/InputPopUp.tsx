@@ -6,10 +6,11 @@ interface props{
     actionChange:(event: ChangeEvent<HTMLInputElement>)=> void,
     identify:string,
     style?:string,
-    disabled?:boolean
+    disabled?:boolean,
+    otherAtribute?:React.InputHTMLAttributes<HTMLInputElement>,
 }
 
-function InputPopUp({type, value, actionChange, style, identify, disabled=false}:props){
+function InputPopUp({type, value, actionChange, style, identify, disabled=false, otherAtribute}:props){
     return(
         <input
             className={`p-1 w-[90%] border border-solid border-gray-200 rounded focus:outline-none focus:border-gray-400 ${style}`}
@@ -19,6 +20,7 @@ function InputPopUp({type, value, actionChange, style, identify, disabled=false}
             id={identify}
             onChange={actionChange}
             disabled={disabled}
+            {...otherAtribute}
         />
     )
 }
