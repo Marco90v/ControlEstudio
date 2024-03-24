@@ -5,28 +5,8 @@ import { ApolloProvider } from '@apollo/client/react';
 import { setContext } from '@apollo/client/link/context';
 
 import App from './App'
-// import { BrowserRouter } from "react-router-dom";
-import { createGlobalStyle } from "styled-components"
 import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
-// import useStoreToken from './zustanStore/token';
 import './index.css';
-
-const GlobalStyle = createGlobalStyle`
-  :root{
-    font-size: 16px;
-    --azul: #67aafd;
-    --gris: #e5e5e5
-  }
-  *{
-    margin: 0;
-    padding: 0;
-    border: 0;
-    box-sizing: border-box;
-  }
-`;
-
-// const token = useStoreToken((state) => state.token)
-
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:3030/graphql',
@@ -62,7 +42,6 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <>
     <React.StrictMode>
-      <GlobalStyle/>
       <ApolloProvider client={client}>
       {/* <BrowserRouter > */}
         <App />

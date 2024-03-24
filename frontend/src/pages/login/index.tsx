@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
-// import { ContentLogin } from "../../styled/style";
 import useStoreToken from "../../zustanStore/token";
 import { LOGIN } from "../../ultil/const";
 

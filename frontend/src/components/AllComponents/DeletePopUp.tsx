@@ -1,4 +1,3 @@
-import { ChangeEvent } from "react"
 
 interface props{
     value:any,
