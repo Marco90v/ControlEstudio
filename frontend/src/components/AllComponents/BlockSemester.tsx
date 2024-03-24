@@ -1,6 +1,6 @@
+import { BadgeClasse } from "..";
 import iconAdd from "../../assets/plus-circle-solid-24.png";
 import { memo } from "react";
-import { BadgeClasse } from "../";
 
 type localClasse = {
     id:number | null | undefined,
@@ -23,7 +23,7 @@ const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}
     const {IdSemesters, Name_Semesters, Classes} = semester;
     return(
         <div className="text-center rounded mt-7 border-solid border border-gray-300" >
-            <h2 className="p-1 bg-blue-400 text-white border-t-4 font-bold">
+            <h2 className="p-1 bg-blue-400 text-white rounded-t font-bold">
                 {Name_Semesters}
                 <img
                     className="float-right mr-2 bg-white rounded-full cursor-pointer transition-all duration-300 hover:bg-black"

@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { fieldNotEmptied } from "../../ultil";
 import { SectionClasses } from "../";
 import useStorePersons from "../../zustanStore/persons";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client/react/hooks";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
 import { ADD_TEACHER, DELETE_TEACHER, DELETE_TEACHER_BY_PERSON, GET_TEACHER_BY_PERSON, UPDATE_TEACHER } from "../../ultil/const";
 

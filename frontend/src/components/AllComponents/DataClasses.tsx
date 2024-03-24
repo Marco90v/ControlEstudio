@@ -1,10 +1,7 @@
 import { useState } from "react";
-import {Popup, InputForm, TableComponent} from "../";
-import { useMutation, useQuery } from "@apollo/client";
+import {Popup, InputForm, TableComponent, InputPopUp, DeletePopUp } from "../";
+import { useMutation, useQuery } from "@apollo/client/react/hooks";
 import { ADD_CLASSE, DELETE_CLASSE, GET_ClASSES, UPDATE_CLASSE } from "../../ultil/const";
-import InputPopUp from "./InputPopUp";
-import DeletePopUp from "./DeletePopUp";
-
 
 function DataClasses() {
 

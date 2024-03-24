@@ -1,5 +1,5 @@
 import { Select } from "../"
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react/hooks";
 import { GET_CLASSES, GET_PROFESSIONS, GET_SECTIONS, GET_SEMESTERS, GET_SHIFTS } from "../../ultil/const";
 
 type ids = {

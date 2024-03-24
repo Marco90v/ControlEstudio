@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react/hooks";
 import useStoreProfile from "../../zustanStore/profile";
 import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
 

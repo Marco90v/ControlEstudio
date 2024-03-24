@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Popup, Select, BlockSemester } from "../";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { Popup, Select, BlockSemester, DeletePopUp } from "../";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react/hooks";
 import useStorePensum from "../../zustanStore/pensum";
 import { ADD_CLASSES_PENSUM, DELETE_CLASSES_PENSUM, GET_ClASSES, GET_PENSUM, GET_PROFESSIONS, GET_SEMESTERS, identifySelect } from "../../ultil/const";
 import { filter__typename } from "../../ultil";
 import { ClasseFormatPensum, Pensum } from "../../__generated__/graphql";
-import DeletePopUp from "./DeletePopUp";
 
 type data = {
     id: number,

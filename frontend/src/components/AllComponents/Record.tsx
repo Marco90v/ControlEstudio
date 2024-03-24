@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { Popup, Select} from "../";
+import { Popup, Select, InputPopUp} from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import useStorePersons from "../../zustanStore/persons";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react/hooks";
 import { ADD_SCORE, DATA_SCORES, GET_ROLES, GET_SECTIONS, GET_SHIFTS, GET_STUDENT_BY_PERSON, UPDATE_SCORE } from "../../ultil/const";
 import useStoreStudentProfessionSemester from "../../zustanStore/studentClasses";
 import useStoreScores from "../../zustanStore/scores";
 import { filter__typename } from "../../ultil";
 import { ClassesByProfessionAndSemesters, TeachersByProfessionAndSemesters } from "../../__generated__/graphql";
-import InputPopUp from "./InputPopUp";
 
 const initialDataScores:scores = {
     id:0,

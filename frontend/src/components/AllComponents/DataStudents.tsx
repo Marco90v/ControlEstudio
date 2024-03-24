@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PersonsForms, TablePersons, ProfessionSemester } from "../";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react/hooks";
 import useStoreRoles from "../../zustanStore/roles";
 import { GET_ROLES, ROLES } from "../../ultil/const";
 

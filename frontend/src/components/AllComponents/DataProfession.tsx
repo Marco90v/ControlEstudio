@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { InputForm, Popup, TableComponent } from "../";
-import { useMutation, useQuery } from "@apollo/client";
+import { DeletePopUp, InputForm, InputPopUp, Popup, TableComponent } from "../";
+import { useMutation, useQuery } from "@apollo/client/react/hooks";
 import { ADD_PROFESSION, DELETE_PROFESSION, GET_PROFESSIONS, UPDATE_PROFESSION } from "../../ultil/const";
-import InputPopUp from "./InputPopUp";
-import DeletePopUp from "./DeletePopUp";
 
 function DataProfession(){
     

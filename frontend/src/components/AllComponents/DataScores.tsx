@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TablePersons, Record } from "../";
 import useStoreProfile from "../../zustanStore/profile";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react/hooks";
 import useStoreRoles from "../../zustanStore/roles";
 import { GET_ROLES, ROLES } from "../../ultil/const";
 

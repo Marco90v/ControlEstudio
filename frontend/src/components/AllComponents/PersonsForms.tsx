@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { fieldNotEmptied } from "../../ultil";
-import { Popup, Select } from "../";
-import { useMutation } from "@apollo/client";
+import { Popup, Select, InputPopUp } from "../";
+import { useMutation } from "@apollo/client/react/hooks";
 import useStorePersons from "../../zustanStore/persons";
 import { ADD_PERSON, ROLES, UPDATE_PERSON } from "../../ultil/const";
-import InputPopUp from "./InputPopUp";
 
 type Role = {
     id: number | null | undefined,

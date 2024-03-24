@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Popup, TableComponent } from "../";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { Popup, TableComponent, DeletePopUp } from "../";
+import { useLazyQuery, useMutation } from "@apollo/client/react/hooks";
 import useStorePersons from "../../zustanStore/persons";
 import { DELETE_PERSON, GET_PERSON_BY_ROLE } from "../../ultil/const";
-import DeletePopUp from "./DeletePopUp";
 
 type Person = {
     email: string,
