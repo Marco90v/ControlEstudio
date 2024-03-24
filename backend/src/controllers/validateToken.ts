@@ -9,7 +9,7 @@ import { GraphQLError } from 'graphql'
 dotenv.config()
 const SECRET = process.env.SECRET
 
-const authorization = [
+export const authorization = [
   { ruta: 'classes', method: 'GET', role: [1] },
   { ruta: 'classes', method: 'POST', role: [1] },
   { ruta: 'classes', method: 'PUT', role: [1] },
@@ -82,10 +82,24 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
   }
 }
 
-export const newValidaToken = (headers:string) => {
+declare module 'jsonwebtoken' {
+  export interface profileToken extends jwt.JwtPayload {
+    id: number,
+    names: string,
+    lastNames: string,
+    sex: string,
+    email: string,
+    phone: number,
+    photo: string | null,
+    role: number,  
+  }
+}
+
+export const newValidaToken = (req) => {
+  const headers = req.headers.authorization
   if (headers && headers.length > 7){
     const token = headers.slice(7)
-    const auth = jwt.verify(token, SECRET)
+    const auth = <jwt.profileToken>jwt.verify(token, SECRET)
     if(auth){
       return auth
     }
