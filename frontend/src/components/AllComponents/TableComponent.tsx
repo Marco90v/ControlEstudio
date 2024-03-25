@@ -25,7 +25,7 @@ function TableComponent({edit,remove,loading,columnsHeaders=["Nombre"],data=[]}:
     }, loading)
  
     return(
-        <div className="flex flex-col">
+        <div className="flex flex-col max-w-[90%] ml-auto mr-auto mt-8">
             <div className="-m-1.5 overflow-x-auto">
                 <div className="p-1.5 min-w-full inline-block align-middle">
                     <div className="border rounded-lg shadow overflow-hidden dark:border-gray-700 dark:shadow-gray-900">
