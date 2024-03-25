@@ -24,15 +24,6 @@ const validatePermissions = (path:string, method:string, rol:number, callback:Fu
     }
 }
 
-const errorPermissions = () => {
-    throw new GraphQLError('Acción no autorizada',{
-        extensions:{
-            code:'UNAUTHENTICATED',
-            http: {status:403}
-        }
-    })
-}
-
 const addData = (args, table:string) => {
     console.log(table, args)
     return new Promise(async (resolve, reject)=>{
