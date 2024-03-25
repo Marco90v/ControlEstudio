@@ -121,39 +121,6 @@ const teachers = (objects: any): dbTeachers[] | false => {
   return newData
 }
 
-// const teachers = (objects: any): dbTeachers | false => {
-//   // const newData: dbTeachers[] = []
-//   // for (const key in objects) {
-//     if ('IdPersons' && 'IdProfession' && 'IdSemesters' && 'IdClasses' && 'IdShifts' && 'IdSections' in objects &&
-//         typeof (objects.IdPersons) === 'number' &&
-//         typeof (objects.IdProfession) === 'number' &&
-//         typeof (objects.IdSemesters) === 'number' &&
-//         typeof (objects.IdClasses) === 'number' &&
-//         typeof (objects.IdShifts) === 'number' &&
-//         typeof (objects.IdSections) === 'number') {
-//       // newData.push({
-//       //   IdPersons: objects.IdPersons,
-//       //   IdProfession: objects.IdProfession,
-//       //   IdSemesters: objects.IdSemesters,
-//       //   IdClasses: objects.IdClasses,
-//       //   IdShifts: objects.IdShifts,
-//       //   IdSections: objects.IdSections
-//       // })
-//       return {
-//         IdPersons: objects.IdPersons,
-//         IdProfession: objects.IdProfession,
-//         IdSemesters: objects.IdSemesters,
-//         IdClasses: objects.IdClasses,
-//         IdShifts: objects.IdShifts,
-//         IdSections: objects.IdSections
-//       }
-//     } else {
-//       return false
-//     }
-//   // }
-//   // return newData
-// }
-
 const students = (object: any): dbStudensts | false => {
   return 'IdPersons' && 'IdProfession' && 'IdSemesters' in object &&
         typeof (object.IdPersons) === 'number' &&

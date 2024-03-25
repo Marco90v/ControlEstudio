@@ -5,7 +5,6 @@ import { token } from '../types/index.js'
 import { validator } from './validator.js'
 import { GraphQLError } from 'graphql'
 
-// const dotenv = require('dotenv')
 dotenv.config()
 const SECRET = process.env.SECRET
 
