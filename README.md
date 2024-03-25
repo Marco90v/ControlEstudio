@@ -31,10 +31,10 @@ Los permisos por roles son los siguientes:
 Este proyecto fue iniciado con la finalidad de practicar y aprender el uso de herramientas para el desarrollo de aplicaciones Webs tanto en Front-End y Back-End.
 
 ## Tecnologías
-- CSS (Grid-Flex)
+- TaildWind
 - React
-- Redux / RTK Query
-- StyledComponent
+- Zustand
+- GraphQL
 - Express
 - JWT
 - Autenticación
@@ -65,7 +65,7 @@ Este proyecto fue iniciado con la finalidad de practicar y aprender el uso de he
 user:"LeonadoCuellar", pass:"1234", rol:"Administrador"
 user:"AlmaFranco", pass:"1234", rol:"Administrador"
 
-user:"RafaAbraham", pass:"1234", rol:"Profesor"
+user:"RafaCozar", pass:"1234", rol:"Profesor"
 user:"OdalysMadrigal", pass:"1234", rol:"Profesor"
 
 user:"AngelNavas", pass:"1234", rol:"Estudiante"
