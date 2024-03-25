@@ -11,7 +11,7 @@ type select = {
 const Select = memo( ({identify,changeSelect,value,disabled, data=[]}:select) => {
     return(
         <select
-            className="h-8 border-solid border border-gray-200 rounded focus-visible:outline focus-visible:outline-1 focus-visible:outline-gray-300"
+            className="h-8 border-solid border border-gray-200 bg-gray-100 rounded cursor-pointer focus-visible:outline focus-visible:outline-1 focus-visible:outline-gray-400 disabled:bg-gray-400 disabled:cursor-not-allowed"
             name={identify} id={identify} onChange={changeSelect} value={value} disabled={disabled}
         >
             <option value="0"></option>
