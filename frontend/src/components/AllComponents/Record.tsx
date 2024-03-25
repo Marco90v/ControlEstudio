@@ -256,7 +256,8 @@ function Record () {
                 }
                 {
                     scores.length > 0 &&
-                        <div className="grid grid-cols-[1fr_auto] gap-4 m-4">
+                        <div className="grid grid-cols-[1fr_auto_auto] gap-4 m-4">
+                            <p className="ml-auto mr-8 font-bold italic px-4 rounded bg-gray-200 text-gray-700">Estudiante: <span className="font-normal">{person.names} {person.lastNames}</span></p>
                             <button className="btn btn-red ml-auto" onClick={cancel} disabled={ loading } >Cancelar</button>
                             <button className="btn btn-greend items-end" onClick={save} disabled={ loading || permisions(1,2) } >Guardar</button>
                         </div>
