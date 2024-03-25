@@ -63,14 +63,14 @@ Este proyecto fue iniciado con la finalidad de practicar y aprender el uso de he
 ## Usuarios y contraseñas para iniciar sesion
 ```json
 {
-    user:"LeonadoCuellar", pass:"1234", rol:"Administrador",
-    user:"AlmaFranco", pass:"1234", rol:"Administrador",
+    "user":"LeonadoCuellar", "pass":"1234", "rol":"Administrador",
+    "user":"AlmaFranco", "pass":"1234", "rol":"Administrador",
 
-    user:"RafaCozar", pass:"1234", rol:"Profesor",
-    user:"OdalysMadrigal", pass:"1234", rol:"Profesor",
+    "user":"RafaCozar", "pass":"1234", "rol":"Profesor",
+    "user":"OdalysMadrigal", "pass":"1234", "rol":"Profesor",
 
-    user:"AngelNavas", pass:"1234", rol:"Estudiante",
-    user:"TatianaEcheverría", pass:"1234", rol:"Estudiante",
+    "user":"AngelNavas", "pass":"1234", "rol":"Estudiante",
+    "user":"TatianaEcheverría", "pass":"1234", "rol":"Estudiante",
 }
 ```
 
