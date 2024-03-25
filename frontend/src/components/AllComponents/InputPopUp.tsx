@@ -13,7 +13,7 @@ interface props{
 function InputPopUp({type, value, actionChange, style, identify, disabled=false, otherAtribute}:props){
     return(
         <input
-            className={`p-1 w-[90%] border border-solid border-gray-200 rounded focus:outline-none focus:border-gray-400 ${style}`}
+            className={`p-1 w-[90%] border border-solid border-gray-200 rounded focus:outline-none focus:border-gray-400 disabled:cursor-not-allowed ${style}`}
             type={type}
             value={value}
             name={identify}
