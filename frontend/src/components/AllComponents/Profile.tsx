@@ -8,7 +8,7 @@ function Profile(){
     const {profile, setProfile} = useStoreProfile((state)=>state)
 
     useEffect(() => {
-        if(data){
+        if(data && data.getProfile?.id !== profile.id){
             const nameRole = data?.allRoles?.find(e=>e?.id===data.getProfile?.role)?.names || ""
             const newProfile = {
                 id:data.getProfile?.id || 0,

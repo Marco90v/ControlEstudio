@@ -9,9 +9,11 @@ import teachers from "../../assets/male-female-regular-24.png";
 import students from "../../assets/child-regular-24.png";
 import record from "../../assets/folder-solid-24.png";
 import useStoreSideBar from "../../zustanStore/sidebar";
-import useProfile from "../../zustanStore/profile";
+import useProfile, { useStoreProfile } from "../../zustanStore/profile";
 import useStoreToken from "../../zustanStore/token";
 import { NavLink } from "react-router-dom";
+import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
+import { useQuery } from "@apollo/client";
 
 const obj = {
     home,
@@ -72,9 +74,13 @@ const Li = ({visibleSide, w, ruta,img,role}:Li) => {
 }
 
 function Sidebar(){
+
+    const { client } = useQuery(GET_PROFILE_AND_ROLES);
+
     const {visibleSideBar:visibleSide,toggleStatus:toggleSideBar} = useStoreSideBar((state)=>state)
     const role = useProfile((state)=>state.profile.role)
     const deleteToken = useStoreToken((state) => state.deleteToken)
+    const deleteProfile = useStoreProfile((state) => state.deleteProfile)
 
     const side = visibleSide ? "w-[217px]": "w-[72px]"
     const width = visibleSide ? "w-[11.5rem]" : "w-[2.7rem]"
@@ -82,7 +88,11 @@ function Sidebar(){
     const toogleButton = visibleSide ? "rotate-0" : "rotate-180"
 
     const logout = () => {
+        deleteProfile()
         deleteToken()
+        useStoreProfile.persist.clearStorage()
+        client.clearStore()
+        client.cache.reset()
     }
 
     return(

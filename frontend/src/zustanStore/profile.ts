@@ -19,7 +19,7 @@ type State = {
 
 type Action = {
   setProfile: (profile:Profile) => void,
-  deleteProfile: () => State
+  deleteProfile: () => void
 }
 
 const initialState:Profile = {
@@ -46,7 +46,7 @@ const useStoreProfile = create<State & Action>()(
       }),
       {
         name:"Profile",
-        storage: createJSONStorage(() => localStorage)
+        storage: createJSONStorage(() => sessionStorage)
       }
     )
   )
