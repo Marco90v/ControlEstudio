@@ -17,12 +17,12 @@ export * from "./AllComponents/DeletePopUp";
 export * from "./AllComponents/InputPopUp";
 export * from "./AllComponents/Popup";
 export * from "./AllComponents/ProfessionSemester";
-export * from "./AllComponents/Record";
+// export * from "./AllComponents/Record";
 export * from "./AllComponents/Select";
 export * from "./AllComponents/SectionClasses";
 export * from "./AllComponents/Select";
 export * from "./AllComponents/Sidebar";
-export * from "./AllComponents/Teacher";
+// export * from "./AllComponents/Teacher";
 export * from "./AllComponents/Loading";
 
 export * from "./AllComponents/Input";
@@ -38,6 +38,8 @@ export const DataScores = lazy(() => import('./AllComponents/DataScores').then(m
 export const DataStudents = lazy(() => import('./AllComponents/DataStudents').then(module => ({ default: module.DataStudents })))
 export const DataTeacher = lazy(() => import('./AllComponents/DataTeacher').then(module => ({ default: module.DataTeacher })))
 export const Profile = lazy(() => import('./AllComponents/Profile').then(module => ({ default: module.Profile })))
+export const Record = lazy(() => import('./AllComponents/Record').then(module => ({ default: module.Record })))
+export const Teacher = lazy(() => import('./AllComponents/Teacher').then(module => ({ default: module.Teacher })))
 
 export const InputForm = lazy(() => import('./AllComponents/InputForm').then(module => ({ default: module.InputForm })))
 export const TableComponent = lazy(() => import('./AllComponents/TableComponent').then(module => ({ default: module.TableComponent })))

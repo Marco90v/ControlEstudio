@@ -39,7 +39,15 @@ app.use(cors({
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(express.static(path.join(__dirname, '../../frontend/dist'))),
+app.use(express.static(path.resolve(__dirname, '../../frontend/dist'))),
+
+app.get('*', function(req, res) {
+  res.sendFile(path.resolve(__dirname, '../../frontend/dist/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
 
 app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server, {
   context:async ({req}) => {
