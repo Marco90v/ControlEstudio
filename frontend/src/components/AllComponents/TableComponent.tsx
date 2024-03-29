@@ -1,9 +1,8 @@
-import imgEdit from "../../assets/edit-solid-24.png";
-import imgTrash from "../../assets/trash-alt-solid-24.png";
 import { useEffect, useState } from "react";
-import { COLORS } from "../../ultil/const";
 import { Person } from "../../__generated__/graphql";
 import { filterKeyColumn } from "../../ultil";
+import Button from "./Button";
+import { BiEdit, BiSolidTrashAlt } from "react-icons/bi";
 
 type props = {
     edit:Function,
@@ -54,26 +53,14 @@ function TableComponent({edit,remove,loading,columnsHeaders=["Nombre"],data=[]}:
                                                     })
                                                 }
                                                 <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                                                    <button
-                                                        className="group/edit btn-transparent"
-                                                        onClick={()=>edit(item)} disabled={status}
-                                                    >
-                                                        <img
-                                                            className={`transition-all duration-300 rounded ${COLORS.green700} group-hover/edit:bg-green-600 group-disabled/edit:bg-gray-600`}
-                                                            src={imgEdit} alt="edit"
-                                                        />
-                                                    </button>
+                                                    <Button type="button" color="green" className="text-white px-1" onClick={()=>edit(item)} disabled={status} >
+                                                        <BiEdit className="text-xl" />
+                                                    </Button>
                                                 </td>
                                                 <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                                                    <button
-                                                        className="group/delete btn-transparent"
-                                                        onClick={()=>remove(item)} disabled={status}
-                                                    >
-                                                        <img
-                                                            className={`transition-all duration-300 rounded ${COLORS.red700} group-hover/delete:bg-red-600 group-disabled/delete:bg-gray-600`}
-                                                            src={imgTrash} alt="delete"
-                                                        />
-                                                    </button>
+                                                    <Button type="button" color="red" className="text-white px-1" onClick={()=>remove(item)} disabled={status} >
+                                                        <BiSolidTrashAlt className="text-xl" />
+                                                    </Button>
                                                 </td>
                                             </tr>
                                         )

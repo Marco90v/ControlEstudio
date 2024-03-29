@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { useQuery } from "@apollo/client/react/hooks";
 import useStoreProfile from "../../zustanStore/profile";
 import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
+import Input from "./Input";
+
+const disabled = true
 
 function Profile(){
     const { data } = useQuery(GET_PROFILE_AND_ROLES);
@@ -30,17 +33,17 @@ function Profile(){
             <label className="text-4xl font-bold">Perfil</label>
             <div className="grid grid-cols-2 grid-rows-6 gap-x-2 gap-y-4">
                 <label className="labelInfoProfile">Nombres</label>
-                <label className="labelDataProfile"> { profile.names } </label>
+                <Input id="names" name="names" type="text" value={profile.names}  disabled={disabled}/>
                 <label className="labelInfoProfile">Apellido</label>
-                <label className="labelDataProfile"> { profile.lastNames } </label>
+                <Input id="lastNames" name="lastNames" type="text" value={profile.lastNames} disabled={disabled}/>
                 <label className="labelInfoProfile">Genero</label>
-                <label className="labelDataProfile"> { profile.sex === "M" ? "Masculino" : "Femenino" } </label>
+                <Input id="sex" name="sex" type="text" value={ profile.sex === "M" ? "Masculino" : "Femenino" } disabled={disabled}/>
                 <label className="labelInfoProfile">Correo</label>
-                <label className="labelDataProfile"> { profile.email } </label>
+                <Input id="email" name="email" type="text" value={profile.email} disabled={disabled}/>
                 <label className="labelInfoProfile">N° Telefonico</label>
-                <label className="labelDataProfile"> { profile.phone } </label>
+                <Input id="phone" name="phone" type="text" value={profile.phone} disabled={disabled}/>
                 <label className="labelInfoProfile">Rol</label>
-                <label className="labelDataProfile"> { profile.nameRole } </label>
+                <Input id="role" name="role" type="text" value={profile.nameRole} disabled={disabled}/>
             </div>
         </div>
     )

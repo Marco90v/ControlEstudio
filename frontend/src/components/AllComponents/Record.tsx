@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Popup, Select, InputPopUp} from "../";
+import { Popup, Select, InputPopUp, Button} from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import useStorePersons from "../../zustanStore/persons";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react/hooks";
@@ -258,8 +258,8 @@ function Record () {
                     scores.length > 0 &&
                         <div className="grid grid-cols-[1fr_auto_auto] gap-4 m-4">
                             <p className="ml-auto mr-8 font-bold italic px-4 rounded bg-gray-200 text-gray-700">Estudiante: <span className="font-normal">{person.names} {person.lastNames}</span></p>
-                            <button className="btn btn-red ml-auto" onClick={cancel} disabled={ loading } >Cancelar</button>
-                            <button className="btn btn-greend items-end" onClick={save} disabled={ loading || permisions(1,2) } >Guardar</button>
+                            <Button type="button" color="red" className="font-semibold text-white ml-auto" onClick={cancel} disabled={ loading } >Cancelar</Button>
+                            <Button type="button" color="green" className="font-semibold text-white items-end" onClick={save} disabled={ loading || permisions(1,2) } >Guardar</Button>
                         </div>
                 }
             </form>

@@ -15,7 +15,7 @@ const COLORS = {
     PURPLE: "purple",
     ORANGE: "orange",
 }
-const styleBase = "px-2 py-1 border border-solid border-gray-400 rounded cursor-pointer transition-all duration-300 enabled:hover:shadow disabled:cursor-not-allowed disabled:bg-gray-200"
+const styleBase = "px-2 py-1 border border-solid border-gray-400 rounded-md cursor-pointer transition-all duration-300 enabled:hover:shadow disabled:cursor-not-allowed disabled:bg-gray-200 disabled:border-gray-400"
 const styleWithIcon = " flex justify-center items-center gap-2"
 const buttonBlue = " bg-blue-700 border-blue-800 hover:bg-blue-600"
 const buttonRed = " bg-red-700 border-red-800 hover:bg-red-600"

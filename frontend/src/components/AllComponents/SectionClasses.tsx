@@ -1,4 +1,4 @@
-import { Select } from "../"
+import { Button, Select } from "../"
 import { useQuery } from "@apollo/client/react/hooks";
 import { GET_CLASSES, GET_PROFESSIONS, GET_SECTIONS, GET_SEMESTERS, GET_SHIFTS } from "../../ultil/const";
 
@@ -49,7 +49,7 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
                 <Select identify="IdSections" changeSelect={(e)=>changeSelect(e,idx)} value={IdSections} data={sections?.allSections} disabled={disabled} />
             </div>
             <div className="grid gap-x-2 grid-cols-[auto] row-start-1 row-end-3 col-start-4 col-end-5 py-5">
-                <button className="btn btn-red" onClick={()=>deleteItem(idx)} disabled={disabled} >Eliminar</button>
+                <Button type="button" color="red" className="font-semibold text-white" onClick={()=>deleteItem(idx)} disabled={disabled} >Eliminar</Button>
             </div>
         </div>
     )

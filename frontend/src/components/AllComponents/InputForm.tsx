@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ApolloError } from "@apollo/client";
 import { COLORS } from "../../ultil/const";
+import Input from "./Input";
+import Button from "./Button";
 
 type props = {
     addCallBack: Function,
@@ -76,21 +78,8 @@ function InputForm({addCallBack,title, loading, error}:props) {
                 onSubmit={add}
             >
                 <label className="font-bold" htmlFor="">{title}</label>
-                <input
-                    className="p-1 rounded border-solid border-2 border-gray-200"
-                    type="text"
-                    name="inputName"
-                    id="inputName"
-                    onChange={changeInputName}
-                    value={name.names}
-                />
-                <button
-                    className="btn btn-greend"
-                    type="submit"
-                    disabled={status.status}
-                >
-                    Agregar
-                </button>
+                <Input id="inputName" name="inputName" type="text" value={name.names} onChange={changeInputName} />
+                <Button type="submit" color="green" className="font-semibold text-white" disabled={status.status}>Agregar</Button>
                 {
                     status.status && (
                         <span

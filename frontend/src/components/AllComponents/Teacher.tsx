@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { fieldNotEmptied } from "../../ultil";
-import { SectionClasses } from "../";
+import { Button, SectionClasses } from "../";
 import useStorePersons from "../../zustanStore/persons";
 import { useLazyQuery, useMutation } from "@apollo/client/react/hooks";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
@@ -149,7 +149,7 @@ const Teacher = forwardRef( (_, ref) => {
                 })
             }
             <div className="">
-                <button className="btn btn-blue" onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</button>
+                <Button type="button" className="font-semibold text-white" color="blue" onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</Button>
             </div>
         </div>
     )

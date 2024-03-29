@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 function Popup({children, aceptCallback, cancelCallBack}:any){
 
     const accept = () => {
@@ -16,8 +18,8 @@ function Popup({children, aceptCallback, cancelCallBack}:any){
                     {children}
                 </div>
                 <div className="grid grid-cols-2 gap-x-6 py-3 px-5 border-t border-solid border-gray-300">
-                    <button className="btn btn-red" onClick={cancel}>Cancelar</button>
-                    <button className="btn btn-greend" onClick={accept}>Aceptar</button>
+                    <Button type="button" color="red" className="text-white font-semibold" onClick={cancel} >Cancelar</Button>
+                    <Button type="button" color="green" className="text-white font-semibold" onClick={accept} >Aceptar</Button>
                 </div>
             </div>
         </div>

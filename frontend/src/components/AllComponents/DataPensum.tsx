@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Popup, Select, BlockSemester, DeletePopUp } from "../";
+import { Popup, Select, BlockSemester, DeletePopUp, Button } from "../";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react/hooks";
 import useStorePensum from "../../zustanStore/pensum";
 import { ADD_CLASSES_PENSUM, DELETE_CLASSES_PENSUM, GET_ClASSES, GET_PENSUM, GET_PROFESSIONS, GET_SEMESTERS, identifySelect } from "../../ultil/const";
@@ -229,13 +229,7 @@ function DataPensum(){
                     data={dataSemesters?.allSemesters}
                     disabled={loadingAddClasse || loadingDeleteClasse}
                 />
-                <button
-                    className="btn btn-greend"
-                    disabled={activeInsertSemester || loading}
-                    onClick={insertNewSemester}
-                >
-                    Agregar    
-                </button>
+                <Button type="button" color="green" className="font-semibold text-white" onClick={insertNewSemester} disabled={activeInsertSemester || loading} >Agregar</Button>
             </div>
             {
                 modal.value && (

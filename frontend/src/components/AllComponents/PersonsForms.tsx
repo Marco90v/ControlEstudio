@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fieldNotEmptied } from "../../ultil";
-import { Popup, Select, InputPopUp } from "../";
+import { Popup, Select, InputPopUp, Button, Input } from "../";
 import { useMutation } from "@apollo/client/react/hooks";
 import useStorePersons from "../../zustanStore/persons";
 import { ADD_PERSON, ROLES, UPDATE_PERSON } from "../../ultil/const";
@@ -134,11 +134,11 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
             <div className="grid grid-cols-3 grid-rows-[1.8rem_auto] gap-y-4 gap-x-4">
                 <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
                     <label className="font-semibold" htmlFor="names">Nombre Completo</label>
-                    <InputPopUp type="text" identify="names" value={person.names} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full" />
+                    <Input className="w-full" id="names" name="names" type="text" value={person.names} onChange={(e)=>changeDataPerson(e)} disabled={loading} />
                 </div>
                 <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
                     <label className="font-semibold" htmlFor="lastNames">Apellido Completo</label>
-                    <InputPopUp type="text" identify="lastNames" value={person.lastNames} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full" />
+                    <Input className="w-full" id="lastNames" name="lastNames" type="text" value={person.lastNames} onChange={(e)=>changeDataPerson(e)} disabled={loading} />
                 </div>
                 <div className="grid grid-cols-[auto_1fr] grid-rows-1 min-h-7 gap-x-2">
                     <label className="font-semibold" htmlFor="selectSex">Genero</label>
@@ -146,13 +146,13 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
                 </div>
                 <div className="grid grid-cols-[auto_1fr] min-h-7 gap-x-2 col-start-1 col-end-4 gap-y-4">
                     <label className="font-semibold" htmlFor="email">Email</label>
-                    <InputPopUp type="email" identify="email" value={person.email} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full min-h-7" />
+                    <Input className="w-full min-h-7" id="email" name="email" type="email" value={person.email} onChange={(e)=>changeDataPerson(e)} disabled={loading} />
                     <label className="font-semibold" htmlFor="phone">Telefono</label>
-                    <InputPopUp type="number" identify="phone" value={person.phone || ""} actionChange={(e)=>changeDataPerson(e)} disabled={loading} style="w-full min-h-7" />
+                    <Input className="w-full min-h-7" id="phone" name="phone" type="number" value={person.phone || ""} onChange={(e)=>changeDataPerson(e)} disabled={loading} />
                     <label className="font-semibold" htmlFor="role">Rol</label>
                     <Select identify="role" changeSelect={(e)=>changeRole(e)} value={selectRole} data={roles} disabled={true} />
                     <label className="font-semibold" htmlFor="photo">Foto</label>
-                    <InputPopUp type="file" identify="photo" value={person.photo || ""} actionChange={(e)=>changeDataPerson(e)} disabled={true} style="w-full min-h-7" />
+                    <Input className="w-full min-h-7 text-sm" id="phophotone" name="photo" type="file" value={person.photo || ""} onChange={(e)=>changeDataPerson(e)} disabled={true} />
                 </div>
                 {type === ROLES.STUDENT && children}
             </div>
@@ -161,10 +161,10 @@ function PersonsForms({children, saveChildren, changeRole, roles, selectRole, ty
             <div className="grid grid-cols-[auto_auto] gap-x-2 justify-end">
                 {
                     person.id === 0 ?
-                    <button className="btn btn-greend" onClick={save} disabled={loading} >Guardar</button> :
+                    <Button type="button" color="green" className="font-semibold text-white" onClick={save} disabled={loading} >Guardar</Button> :
                     <>
-                        <button className="btn btn-red" onClick={()=>cancelEdit()} disabled={loading} >Cancelar</button>
-                        <button className="btn btn-yellow" onClick={save} disabled={loading} >Guardar cambios</button>
+                        <Button type="button" color="red" className="font-semibold text-white" onClick={()=>cancelEdit()} disabled={loading} >Cancelar</Button>
+                        <Button type="button" color="yellow" className="font-semibold" onClick={save} disabled={loading} >Guardar cambios</Button>
                     </>
                 }
             </div>
