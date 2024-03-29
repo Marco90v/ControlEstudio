@@ -25,6 +25,9 @@ export * from "./AllComponents/Sidebar";
 export * from "./AllComponents/Teacher";
 export * from "./AllComponents/Loading";
 
+export * from "./AllComponents/Input";
+export * from "./AllComponents/Button";
+
 // export const BadgeClasse = React.lazy(() => import('./AllComponents/BadgeClasse'));
 // export const BadgeClasse = React.lazy(() => import('./AllComponents/BadgeClasse').then(module => ({ default: module.BadgeClasse })))
 

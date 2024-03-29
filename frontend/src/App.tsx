@@ -3,6 +3,7 @@ import { Login } from './pages/login';
 import useStoreToken from './zustanStore/token';
 import { DataClasses, DataPensum, DataProfession, DataScores, DataStudents, DataTeacher, Profile } from './components';
 import Dashboard from "./pages/dashboard";
+import ViewComponents from "./pages/viewComponents";
 
 const ProtecteRoutes = () => {
   const location = useLocation();
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
         <Route path="teachers" element={<DataTeacher  />} />,
         <Route path="students" element={<DataStudents />} />,
         <Route path="record" element={<DataScores />} />
+        <Route path="components" element={<ViewComponents />} />
       </Route>
     ,
   ])
