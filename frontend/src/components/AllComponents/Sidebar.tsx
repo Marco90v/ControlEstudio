@@ -1,15 +1,12 @@
-import arrow from "../../assets/left-arrow-solid-24.png";
+import { BiSolidHome, BiBook, BiSolidGraduation, BiSolidData, BiMaleFemale, BiChild, BiSolidFolder, BiSolidLeftArrow, BiLogOut } from "react-icons/bi";
 
-import { BiSolidHome, BiBook, BiSolidGraduation, BiSolidData, BiMaleFemale, BiChild, BiSolidFolder } from "react-icons/bi";
-
+import { useQuery } from "@apollo/client";
 import useStoreSideBar from "../../zustanStore/sidebar";
 import useProfile, { useStoreProfile } from "../../zustanStore/profile";
 import useStoreToken from "../../zustanStore/token";
-import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
-import { useQuery } from "@apollo/client";
 import Button from "./Button";
-import { BiLogOut } from "react-icons/bi";
 import ButtonSideBar from "./ButtonSideBar";
+import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
 
 const size = "size-6"
 
@@ -48,12 +45,9 @@ function Sidebar(){
         <div className={`sidebard ${side}`}>
             <div className="grid grid-rows-[1fr_auto] grid-cols-[1fr]" id="title">
                 <h1 className={`text-2xl font-bold pb-2 m-auto transition-all `}>{visibleSide ? "Universidad" : "U"}</h1>
-                <button
-                    className="m-auto transition-all bg-white p-2 rounded-md cursor-pointer border-solid border-2 border-gray-400 hover:bg-blue-200 hover:shadow-md hover:border-blue-400"
-                    onClick={()=>toggleSideBar()}
-                >
-                    <img className={`transition-all origen-center ${toogleButton}`} src={arrow} />
-                </button>
+                <Button type="button" onClick={()=>toggleSideBar()} className="m-auto py-2 bg-white border-2 hover:bg-blue-200 hover:shadow-md hover:border-blue-400" >
+                    <BiSolidLeftArrow className={`size-6 transition-all origen-center ${toogleButton}`} />
+                </Button>
             </div>
             <div id="admin">
                 <ul className="list-none mt-4">
