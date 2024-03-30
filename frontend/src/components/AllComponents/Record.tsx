@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Popup, Select, InputPopUp, Button} from "../";
+import { Popup, Select, InputPopUp, Button, Input} from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import useStorePersons from "../../zustanStore/persons";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react/hooks";
@@ -230,7 +230,7 @@ function Record () {
                         const id = item.id.toString();
                         return(
                             <div className="grid grid-cols-[1fr_1fr_5rem] gap-x-4 m-4" key={idx}>
-                                <InputPopUp type="text" identify={id} value={getNameClasse(item.IdClasses)} disabled={true} actionChange={()=>null} style="w-full" />
+                                <Input type="text" id={id} name={id} value={getNameClasse(item.IdClasses)} disabled={true} className="w-full" />
                                 <Select
                                     identify = "IdTeachers"
                                     changeSelect = {(e)=>changeSelectN(e, item)}
@@ -238,14 +238,15 @@ function Record () {
                                     data = {list(item)}
                                     disabled = { loading || permisions(1) }
                                 />
-                                <InputPopUp
+                                <Input
                                     type="number"
-                                    identify="score"
+                                    id="score"
+                                    name="score"
                                     value={item.score}
-                                    actionChange={(e)=>changeSelectN(e, item)}
+                                    onChange={(e)=>changeSelectN(e, item)}
                                     disabled={loading || permisions(1,2)}
-                                    style="w-full"
-                                    otherAtribute={{
+                                    className="w-full"
+                                    otherAtributes={{
                                         min:"0",
                                         max:"20"
                                     }}

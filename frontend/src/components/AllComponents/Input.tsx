@@ -6,16 +6,18 @@ interface props{
     name: string,
     onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined,
     value?: string | number | undefined,
-    className?: string
-    disabled?: boolean
+    className?: string,
+    disabled?: boolean,
+    otherAtributes?: React.InputHTMLAttributes<HTMLInputElement> | undefined
 }
 
-function Input({className, ...rest}:props){
+function Input({className, otherAtributes, ...rest}:props){
     if(rest.type !== "password"){
         return(
             <input
                 className={`focus:outline-none px-2 py-1 bg-white border border-solid border-gray-200 rounded focus:border-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed ${className}`}
                 {...rest}
+                {...otherAtributes}
             />
         )
     }else{
@@ -32,6 +34,7 @@ function Input({className, ...rest}:props){
                     className={`px-2 py-1 bg-white border border-solid border-gray-400 rounded disabled:bg-gray-200 disabled:cursor-not-allowed ${className}`}
                     {...rest}
                     type={show ? "text" : "password"}
+                    {...otherAtributes}
                 />
                 {
                     show ? 
