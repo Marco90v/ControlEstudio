@@ -1,77 +1,27 @@
 import arrow from "../../assets/left-arrow-solid-24.png";
-import close from "../../assets/log-out-regular-24.png";
 
-import home from "../../assets/home-solid-24.png";
-import classes from "../../assets/book-solid-24.png";
-import profession from "../../assets/graduation-solid-24.png";
-import pensums from "../../assets/data-solid-24.png";
-import teachers from "../../assets/male-female-regular-24.png";
-import students from "../../assets/child-regular-24.png";
-import record from "../../assets/folder-solid-24.png";
+import { BiSolidHome, BiBook, BiSolidGraduation, BiSolidData, BiMaleFemale, BiChild, BiSolidFolder } from "react-icons/bi";
+
 import useStoreSideBar from "../../zustanStore/sidebar";
 import useProfile, { useStoreProfile } from "../../zustanStore/profile";
 import useStoreToken from "../../zustanStore/token";
-import { NavLink } from "react-router-dom";
 import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
 import { useQuery } from "@apollo/client";
+import Button from "./Button";
+import { BiLogOut } from "react-icons/bi";
+import ButtonSideBar from "./ButtonSideBar";
+
+const size = "size-6"
 
 const obj = {
-    home,
-    classes,
-    profession,
-    pensums,
-    teachers,
-    students,
-    record,
+    home: <BiSolidHome className={size} />,
+    classes: <BiBook className={size} />,
+    profession: <BiSolidGraduation className={size} />,
+    pensums: <BiSolidData className={size} />,
+    teachers: <BiMaleFemale className={size} />,
+    students: <BiChild className={size} />,
+    record: <BiSolidFolder className={size} />,
 };
-
-const roleProtection:any = {
-    home:[1,2,3],
-    classes:[1],
-    profession:[1],
-    pensums:[1],
-    teachers:[1],
-    students:[1],
-    record:[1,2,3],
-}
-
-const modules:any = {
-    home:'Inicio',
-    classes:'Clases',
-    profession:'Profesión',
-    pensums:'Pensums',
-    teachers:'Profesores',
-    students:'Estudiantes',
-    record:'Notas',
-}
-
-type Li = {
-    ruta:string,
-    img:string,
-    role:number,
-    w:string,
-    visibleSide:boolean
-}
-
-const Li = ({visibleSide, w, ruta,img,role}:Li) => {
-    const permision = roleProtection[ruta].find((x:number)=>x===role);
-    if(!permision) return null;
-    return(
-        <li className={`transition-all overflow-hidden duration-300 ${w} ${visibleSide ? "text-black" : "text-transparent"}`}>
-            <NavLink to={`/dashboard/${ruta}`}
-                className={({isActive})=>{
-                    const active =  isActive ? "bg-blue-200 border-blue-400 shadow-md has-[span]:text-white" : ""
-                    return `group btn-menu ${active} `
-                }}
-            >
-                <img src={img} />
-                <span className="transition-all duration-300 group-hover:text-white">
-                    {modules[ruta]}
-                </span>
-            </NavLink>
-        </li>
-    );
-}
 
 function Sidebar(){
 
@@ -84,7 +34,6 @@ function Sidebar(){
 
     const side = visibleSide ? "w-[217px]": "w-[72px]"
     const width = visibleSide ? "w-[11.5rem]" : "w-[2.7rem]"
-    const textLoggout = visibleSide ? "text-[black]" : "text-[transparent]"
     const toogleButton = visibleSide ? "rotate-0" : "rotate-180"
 
     const logout = () => {
@@ -110,18 +59,22 @@ function Sidebar(){
                 <ul className="list-none mt-4">
                     {
                         Object.entries(obj).map(([k,v],idx)=>{
-                            return <Li visibleSide={visibleSide} w={width} key={idx} ruta={k} img={v} role={role} />
+                            return <ButtonSideBar
+                                        visibleSide={visibleSide}
+                                        w={width}
+                                        key={idx}
+                                        ruta={k as Ruta}
+                                        icon={v}
+                                        role={role}
+                                    />
                         })
                     }
                 </ul>
             </div>
-            <button
-                className={`btn-loggout ${width} hover:${textLoggout} ${!visibleSide && "text-transparent"}`}
-                onClick={logout}
-            >
-                <img src={close} />
-                <span>Cerrar Sesion</span>
-            </button>
+            <Button type="button" color="red" className={`${!visibleSide && "m-auto size-[2.7rem] overflow-hidden" } font-semibold text-white`} icon={true} onClick={logout} >
+                <BiLogOut className="size-6" />
+                {visibleSide && "Cerrar Sesion"}
+            </Button>
         </div>
     )
 }

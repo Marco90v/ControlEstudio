@@ -1,3 +1,5 @@
+type Ruta = "home" | "classes" | "profession" | "pensums" | "teachers" | "students" | "record"
+
 type visibleSide = {
     status:boolean
   }
