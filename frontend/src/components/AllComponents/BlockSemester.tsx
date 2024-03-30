@@ -1,6 +1,6 @@
-import { BadgeClasse } from "..";
-import iconAdd from "../../assets/plus-circle-solid-24.png";
+import { BadgeClasse, Button } from "..";
 import { memo } from "react";
+import { BiSolidPlusCircle } from "react-icons/bi";
 
 type localClasse = {
     id:number | null | undefined,
@@ -25,12 +25,9 @@ const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}
         <div className="text-center rounded mt-7 border-solid border border-gray-300" >
             <h2 className="p-1 bg-blue-400 text-white rounded-t font-bold">
                 {Name_Semesters}
-                <img
-                    className="float-right mr-2 bg-white rounded-full cursor-pointer transition-all duration-300 hover:bg-black"
-                    src={iconAdd}
-                    alt="add"
-                    onClick={()=>insertNewClasse(IdSemesters)}
-                />
+                <Button type="button" className="size-6 px-0 py-0 float-right mr-2 bg-white border-0 rounded-[100%]" onClick={()=>insertNewClasse(IdSemesters)}>
+                    <BiSolidPlusCircle className="size-6 bg-white rounded-full text-green-600 transition-all duration-300 hover:bg-black" />
+                </Button>
             </h2>
             <ul className="list-none bg-neutral-200 rounded-b flex flex-wrap gap-y-5 justify-center items-center py-5 px-2">
                 {

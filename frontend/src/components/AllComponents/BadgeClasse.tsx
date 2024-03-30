@@ -1,5 +1,7 @@
 import { memo } from "react";
-import iconRemove from "../../assets/x-circle-solid-24.png";
+import { BiSolidXCircle } from "react-icons/bi";
+
+import Button from "./Button";
 
 type localClasse = {
     id:number | null | undefined,
@@ -21,10 +23,9 @@ const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse, disabled}:prop
             key={id}
         >
             {Name_Classes}
-            <img
-                className="bg-white rounded-full cursor-pointer transition-all duration-300 hover:bg-black"
-                src={iconRemove} alt="remove" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}
-            />
+            <Button type="button" className="size-6 px-0 py-0 float-right mr-2 bg-white border-0 rounded-[100%]" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}>
+                <BiSolidXCircle className="size-6 bg-white rounded-full text-red-700 transition-all duration-300 hover:bg-black" />
+            </Button>
         </li>
     )
 }, (n:props,p:props)=>n.classe.id === p.classe.id );
