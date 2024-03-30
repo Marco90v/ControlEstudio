@@ -1,4 +1,4 @@
-import { BiSolidHome, BiBook, BiSolidGraduation, BiSolidData, BiMaleFemale, BiChild, BiSolidFolder, BiSolidLeftArrow, BiLogOut } from "react-icons/bi";
+import { BiSolidHome, BiSolidBook, BiSolidGraduation, BiSolidData, BiMaleFemale, BiChild, BiSolidFolder, BiSolidLeftArrow, BiLogOut } from "react-icons/bi";
 
 import { useQuery } from "@apollo/client";
 import useStoreSideBar from "../../zustanStore/sidebar";
@@ -12,7 +12,7 @@ const size = "size-6"
 
 const obj = {
     home: <BiSolidHome className={size} />,
-    classes: <BiBook className={size} />,
+    classes: <BiSolidBook className={size} />,
     profession: <BiSolidGraduation className={size} />,
     pensums: <BiSolidData className={size} />,
     teachers: <BiMaleFemale className={size} />,
