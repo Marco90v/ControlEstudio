@@ -30,20 +30,20 @@ function Profile(){
     
     return(
         <div className="overflow-auto min-h-screen flex justify-center items-center flex-col gap-y-8">
-            <label className="text-4xl font-bold">Perfil</label>
-            <div className="grid grid-cols-2 grid-rows-6 gap-x-2 gap-y-4">
+            <label className="text-4xl font-bold text-gray-800">Perfil</label>
+            <div className="grid grid-cols-3 grid-rows-6 gap-x-2 gap-y-4 border border-solid border-gray-200 p-6 rounded-lg bg-gray-50 shadow-md">
                 <label className="labelInfoProfile">Nombres</label>
-                <Input id="names" name="names" type="text" value={profile.names}  disabled={disabled}/>
+                <Input id="names" name="names" type="text" value={profile.names}  disabled={disabled} className="text-gray-800 col-span-2"/>
                 <label className="labelInfoProfile">Apellido</label>
-                <Input id="lastNames" name="lastNames" type="text" value={profile.lastNames} disabled={disabled}/>
+                <Input id="lastNames" name="lastNames" type="text" value={profile.lastNames} disabled={disabled} className="text-gray-800 col-span-2"/>
                 <label className="labelInfoProfile">Genero</label>
-                <Input id="sex" name="sex" type="text" value={ profile.sex === "M" ? "Masculino" : "Femenino" } disabled={disabled}/>
+                <Input id="sex" name="sex" type="text" value={ profile.sex === "M" ? "Masculino" : "Femenino" } disabled={disabled} className="text-gray-800 col-span-2"/>
                 <label className="labelInfoProfile">Correo</label>
-                <Input id="email" name="email" type="text" value={profile.email} disabled={disabled}/>
+                <Input id="email" name="email" type="text" value={profile.email} disabled={disabled} className="text-gray-800 col-span-2"/>
                 <label className="labelInfoProfile">N° Telefonico</label>
-                <Input id="phone" name="phone" type="text" value={profile.phone} disabled={disabled}/>
+                <Input id="phone" name="phone" type="text" value={profile.phone} disabled={disabled} className="text-gray-800 col-span-2"/>
                 <label className="labelInfoProfile">Rol</label>
-                <Input id="role" name="role" type="text" value={profile.nameRole} disabled={disabled}/>
+                <Input id="role" name="role" type="text" value={profile.nameRole} disabled={disabled} className="text-gray-800 col-span-2"/>
             </div>
         </div>
     )
