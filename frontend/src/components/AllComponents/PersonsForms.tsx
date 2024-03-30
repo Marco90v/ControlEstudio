@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fieldNotEmptied } from "../../ultil";
-import { Popup, Select, InputPopUp, Button, Input } from "../";
+import { Popup, Select, Button, Input } from "../";
 import { useMutation } from "@apollo/client/react/hooks";
 import useStorePersons from "../../zustanStore/persons";
 import { ADD_PERSON, ROLES, UPDATE_PERSON } from "../../ultil/const";

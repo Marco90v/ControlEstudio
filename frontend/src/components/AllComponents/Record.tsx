@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Popup, Select, InputPopUp, Button, Input} from "../";
+import { Popup, Select, Button, Input} from "../";
 import useStoreProfile from "../../zustanStore/profile";
 import useStorePersons from "../../zustanStore/persons";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react/hooks";

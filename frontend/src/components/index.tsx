@@ -14,7 +14,7 @@ import { lazy } from "react";
 export * from "./AllComponents/BadgeClasse";
 export * from "./AllComponents/BlockSemester";
 export * from "./AllComponents/DeletePopUp";
-export * from "./AllComponents/InputPopUp";
+// export * from "./AllComponents/InputPopUp";
 export * from "./AllComponents/Popup";
 export * from "./AllComponents/ProfessionSemester";
 // export * from "./AllComponents/Record";

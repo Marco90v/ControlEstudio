@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Popup, InputForm, TableComponent, InputPopUp, DeletePopUp } from "../";
+import {Popup, InputForm, TableComponent, DeletePopUp, Input } from "../";
 import { useMutation, useQuery } from "@apollo/client/react/hooks";
 import { ADD_CLASSE, DELETE_CLASSE, GET_ClASSES, UPDATE_CLASSE } from "../../ultil/const";
 
@@ -66,7 +66,7 @@ function DataClasses() {
     }
 
     const cuerpoPopup:any = {
-        "edit": <InputPopUp type="text" identify={"names"} value={modal.data.names} actionChange={changeInputEdit} />,
+        "edit": <Input type="text" id="names" name="names" className="w-[90%]" value={modal.data.names} onChange={changeInputEdit} />,
         "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Clases/Materia"} textFin={"?"} />
     };
 

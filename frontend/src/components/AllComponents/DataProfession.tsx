@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DeletePopUp, InputForm, InputPopUp, Popup, TableComponent } from "../";
+import { DeletePopUp, Input, InputForm, Popup, TableComponent } from "../";
 import { useMutation, useQuery } from "@apollo/client/react/hooks";
 import { ADD_PROFESSION, DELETE_PROFESSION, GET_PROFESSIONS, UPDATE_PROFESSION } from "../../ultil/const";
 
@@ -62,7 +62,7 @@ function DataProfession(){
     }
 
     const cuerpoPopup:any = {
-        "edit": <InputPopUp identify={"names"} type="text" value={modal.data.names} actionChange={changeInputEdit} />,
+        "edit": <Input id="names" name="names" type="text" className="w-[90%]" value={modal.data.names} onChange={changeInputEdit} />,
         "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Profesión"} textFin={"?"} />
     };
 
