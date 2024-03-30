@@ -11,11 +11,13 @@ interface props{
     otherAtributes?: React.InputHTMLAttributes<HTMLInputElement> | undefined
 }
 
+const styleBase = "focus:outline-none px-2 py-1 bg-white border border-solid border-gray-200 rounded focus:border-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed"
+
 function Input({className, otherAtributes, ...rest}:props){
     if(rest.type !== "password"){
         return(
             <input
-                className={`focus:outline-none px-2 py-1 bg-white border border-solid border-gray-200 rounded focus:border-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed ${className}`}
+                className={`${styleBase} ${className}`}
                 {...rest}
                 {...otherAtributes}
             />
@@ -31,16 +33,16 @@ function Input({className, otherAtributes, ...rest}:props){
         return(
             <div className="relative inline">
                 <input
-                    className={`px-2 py-1 bg-white border border-solid border-gray-400 rounded disabled:bg-gray-200 disabled:cursor-not-allowed ${className}`}
+                    className={`${styleBase} ${className}`}
                     {...rest}
                     type={show ? "text" : "password"}
                     {...otherAtributes}
                 />
                 {
                     show ? 
-                    <BiHide className="absolute top-0 bottom-0 right-2 size-5 cursor-pointer disabled:cursor-not-allowed" onClick={changeShow} />
+                    <BiHide className="absolute inset-y-0 right-0 size-5 h-full mr-2 cursor-pointer disabled:cursor-not-allowed" onClick={changeShow} />
                     :
-                    <BiShow className="absolute top-0 bottom-0 right-2 size-5 cursor-pointer disabled:cursor-not-allowed" onClick={changeShow} />
+                    <BiShow className="absolute inset-y-0 right-0 size-5 h-full mr-2 cursor-pointer disabled:cursor-not-allowed" onClick={changeShow} />
                 }
             </div>
         )
