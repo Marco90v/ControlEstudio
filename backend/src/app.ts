@@ -41,7 +41,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, '../../frontend/dist'))),
 
-app.get('*', function(req, res) {
+app.get('/dashboard/*', function(req, res) {
   res.sendFile(path.resolve(__dirname, '../../frontend/dist/index.html'), function(err) {
     if (err) {
       res.status(500).send(err)

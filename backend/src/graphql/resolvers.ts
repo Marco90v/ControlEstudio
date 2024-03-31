@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'
-import * as services from '../services/index.js'
+// import * as services from '../services/index.js'
+import * as services from '../services/supabase.js'
 import dotenv from "dotenv"
-import { login } from '../controllers/index.js';
+// import { login } from '../controllers/index.js';
 import { validator } from '../controllers/validator.js';
 import { INSERT_LISTCOLUMN, NAMETABLE, UPDATE_LISTVALUES } from '../utils/const.js';
 import { pensumNotFormat, pensumFormat } from '../types/index.js';
@@ -145,10 +146,10 @@ const resolvers = {
         // LOGIN
         login: async(_,args, contextValue)=>{
             const {user, pass} = args
-            const data = await login(user, pass)
+            const data = await services.login({user, pass})
             if(data){
                 const SECRET = process.env.SECRET
-                const token = jwt.sign(data, SECRET)
+                const token = jwt.sign(JSON.stringify(data), SECRET)
                 return {token}
             }
             return null
