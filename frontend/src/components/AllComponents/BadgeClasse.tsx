@@ -23,7 +23,7 @@ const BadgeClasse = memo( ({classe, Name_Semesters, removeClasse, disabled}:prop
             key={id}
         >
             {Name_Classes}
-            <Button type="button" className="size-6 px-0 py-0 float-right mr-2 bg-white border-0 rounded-[100%]" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}>
+            <Button type="button" className="size-6 px-[0] py-[0] float-right mr-2 bg-white border-0 rounded-[100rem]" onClick={()=>removeClasse(id,Name_Semesters,Name_Classes)}>
                 <BiSolidXCircle className="size-6 bg-white rounded-full text-red-700 transition-all duration-300 hover:bg-black" />
             </Button>
         </li>

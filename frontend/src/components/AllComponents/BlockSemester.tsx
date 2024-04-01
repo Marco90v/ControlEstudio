@@ -25,7 +25,7 @@ const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}
         <div className="text-center rounded mt-7 border-solid border border-gray-300" >
             <h2 className="p-1 bg-blue-400 text-white rounded-t font-bold">
                 {Name_Semesters}
-                <Button type="button" className="size-6 px-0 py-0 float-right mr-2 bg-white border-0 rounded-[100%]" onClick={()=>insertNewClasse(IdSemesters)}>
+                <Button type="button" className="size-6 px-[0] py-[0] float-right mr-2 bg-white border-0 rounded-[100rem]" onClick={()=>insertNewClasse(IdSemesters)}>
                     <BiSolidPlusCircle className="size-6 bg-white rounded-full text-green-600 transition-all duration-300 hover:bg-black" />
                 </Button>
             </h2>
