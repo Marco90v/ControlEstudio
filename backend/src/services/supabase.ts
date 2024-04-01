@@ -1,4 +1,3 @@
-import { match } from 'assert'
 import { supabase } from './conectSupabase.js'
 
 export const getAllAdmin = () => {
