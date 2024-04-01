@@ -68,7 +68,7 @@ const typeDefs = `#graphql
     addTeacher(dataTeacher:[inputTeacher]): Boolean
     updateTeacher(dataTeacher:[inputTeacher]): Boolean
     deleteTeacher(ids:[Int]):Boolean
-    deleteTeacherByIdPerson(IdPersons:Int): Int
+    deleteTeacherByIdPerson(IdPersons:Int): Boolean
     # STUDENTS
     addStudents(dataStudent:inputStudent): student
     updateStudent(dataStudent:inputStudent): student

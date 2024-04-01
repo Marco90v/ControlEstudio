@@ -26,18 +26,11 @@ const validatePermissions = (path:string, method:string, rol:number, callback:Fu
 }
 
 const addData = (args, table:string) => {
-    console.log(table, args)
     return new Promise(async (resolve, reject)=>{
         const data = validator[table](args)
         if(data){
             const res:any = await services.insertSingle(table,data).catch(error=>{return { error }})
-            const { insertId } = res
-            if(insertId){
-                resolve({
-                    id: insertId,
-                    ...args
-                })
-            }
+            if(res) resolve(res)
             reject(null)
         }
         reject(null)
