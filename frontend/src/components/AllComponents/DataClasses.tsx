@@ -1,94 +1,113 @@
-import { useState } from "react";
-import {Popup, InputForm, TableComponent, DeletePopUp, Input } from "../";
-import { useMutation, useQuery } from "@apollo/client/react/hooks";
-import { ADD_CLASSE, DELETE_CLASSE, GET_ClASSES, UPDATE_CLASSE } from "../../ultil/const";
+import { useEffect } from "react";
+import {Popup, InputForm, TableComponent, Input, DeletePopUp} from "../";
+
+import { useShallow } from 'zustand/react/shallow'
+import useStoreClasses from "../../zustanStore/classes";
+import useStoreLoading from "../../zustanStore/loading";
+import useStoreModal from "../../zustanStore/modal";
+import useStoreSupabase from "../../zustanStore/supabase";
+
+import { useSupabase } from "../../hooks/useSupabase";
+import { supaService } from "../../supabase/supaService";
+import { TABLE_NAME } from "../../ultil/const";
 
 function DataClasses() {
 
-    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase:state.supabase
+    })))
+    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase)
 
-    const { data, refetch } = useQuery(GET_ClASSES);
+    const {handlerChange} = useStoreModal(useShallow((state=>({
+        handlerChange: state.handlerChange,
+    }))))
 
-    const [add, { loading:loadingAdd, error:errorAdd }] = useMutation(ADD_CLASSE)
-    const [update, { loading:loadingUpdate, error:errorUpdate }] = useMutation(UPDATE_CLASSE)
-    const [deleteClasse, { loading:loadingDelete, error:errorDelete }] = useMutation(DELETE_CLASSE)
+    const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
+        handlerError: state.handlerError,
+        handlerLoading: state.handlerLoading
+    }))))
+    const {classes, addClasse, setClasses, updateClasse, deleteClasse} = useStoreClasses(
+        useShallow( (state => ({
+            classes: state.classes,
+            addClasse: state.addClasse,
+            setClasses: state.setClasses,
+            updateClasse: state.updateClasse,
+            deleteClasse: state.deleteClasse,
+        })))
+    )
+    const {getSupabase, insertSupabase, updateSupabase, deleteSupabase} = useSupabase(TABLE_NAME.CLASSES,handlerLoading, handlerError)
+
+    useEffect(() => {
+        if(classes.length===0) getSupabase(getAll, setClasses)
+        return () => {}
+    }, [])
+
     
-    const addClasses = (names:{names:string}) => {
-        add({
-                variables:{
-                    dataClasse:{...names}
-                }
-        })
-        refetch()
+    const addClasses = async (names:{names:string}) => {
+        insertSupabase(insertSingle, names, addClasse)
+    }
+
+    const upDate = async (data:any | {id:number}) => {
+        updateSupabase(updateSingle, data, {eq:'id', eqData:data.id}, updateClasse)
+    }
+
+    const removeClasse = async (id:number) => {
+        deleteSupabase(removeSingle,{eq:'id', eqData:id}, deleteClasse)
     }
 
     const edit = (data:classe) => {
-        setModal({type:"edit",value:true, data});
+        handlerChange({type:"edit",value:true, data})
     }
 
     const remove = (data:classe) => {
-        setModal({type:"delete",value:true, data});
+        handlerChange({type:"delete",value:true, data})
     }
 
-    const aceptCallback = () => {
-        switch (modal.type) {
+    const aceptCallback = (type:string, data?:any | {id:number}) => {
+        switch (type) {
             case "edit":
-                update({
-                    variables:{
-                        dataClasse:{...modal.data}
-                    }
-                })
-                refetch()
+                upDate(data)
                 break;
             case "delete":
-                deleteClasse({
-                    variables:{
-                        deleteClassesId:modal.data.id
-                    }
-                })
-                refetch()
+                removeClasse(data.id)
                 break;
         }
-        setModal((datos:any)=>{
-            return{
-                ...datos,
-                type:"", value:false,  data:{id:0,names:""}
-            }
-        });
+        handlerChange({type:"", value:false,  data:{id:0,names:""}})
     }
 
     const cancelCallBack = () => {
-        setModal({type:"", value:false,  data:{id:0,names:""}});
+        handlerChange({type:"", value:false,  data:{id:0,names:""}})
     }
 
-    const changeInputEdit = (e:any)=>{
-        setModal({...modal,data:{...modal.data,names:e.target.value}})
+    const changeInputEdit = (e:React.ChangeEvent<HTMLInputElement>, data:any, type:string, valueModal:boolean)=>{
+        handlerChange( {type, value:valueModal,  data:{...data, [e.target.name]:e.target.value }} )
     }
 
-    const cuerpoPopup:any = {
-        "edit": <Input type="text" id="names" name="names" className="w-[90%]" value={modal.data.names} onChange={changeInputEdit} />,
-        "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Clases/Materia"} textFin={"?"} />
-    };
+    const bodyModal = (type:string, value:string, data:any, valueModal:boolean) => {
+        switch (type) {
+            case "edit":
+                return <Input type="text" id="names" name="names" className="w-[90%]" value={value} onChange={(e)=>changeInputEdit(e, data, type, valueModal)} />
+            case "delete":
+                return <DeletePopUp value={value} textIni={"¿Desea eliminar la Clases/Materia"} textFin={"?"} />
+            default:
+                return null;
+        }
+    }
 
     return(
         <div className="overflow-auto">
             <InputForm
                 addCallBack={addClasses}
                 title={"Clase/Materia"}
-                loading={[loadingAdd, loadingUpdate, loadingDelete]}
-                error={[errorAdd, errorUpdate,errorDelete]}
             />
             <div className="flex justify-center pb-12">
                 <TableComponent
                     edit={edit}
                     remove={remove}
-                    loading={[loadingAdd, loadingUpdate, loadingDelete]}
-                    data={data?.allClasses}
+                    data={classes}
                 />
             </div>
-            {
-                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
-            }
+            <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} bodyModal={bodyModal} />
         </div>
     );
 }

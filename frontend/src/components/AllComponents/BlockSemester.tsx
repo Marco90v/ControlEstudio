@@ -1,6 +1,8 @@
 import { BadgeClasse, Button } from "..";
 import { memo } from "react";
 import { BiSolidPlusCircle } from "react-icons/bi";
+import useStoreLoading from "../../zustanStore/loading";
+import { useShallow } from "zustand/react/shallow";
 
 type localClasse = {
     id:number | null | undefined,
@@ -16,10 +18,12 @@ type props = {
     semester:localSemester
     insertNewClasse:Function,
     removeClasse:Function
-    disabled:boolean
 }
 
-const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}:props) => {
+const BlockSemester = memo (({semester, insertNewClasse, removeClasse}:props) => {
+    const { loading } = useStoreLoading(useShallow((state=>({
+        loading: state.loading,
+    }))))
     const {IdSemesters, Name_Semesters, Classes} = semester;
     return(
         <div className="text-center rounded mt-7 border-solid border border-gray-300" >
@@ -38,7 +42,7 @@ const BlockSemester = memo (({semester, insertNewClasse, removeClasse, disabled}
                                 classe={classe}
                                 Name_Semesters={Name_Semesters}
                                 removeClasse={removeClasse}
-                                disabled={disabled}
+                                disabled={loading}
                             />
                         )
                     })

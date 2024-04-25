@@ -1,32 +1,29 @@
 import { useEffect } from "react";
-import { useQuery } from "@apollo/client/react/hooks";
 import useStoreProfile from "../../zustanStore/profile";
-import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
 import Input from "./Input";
+import { TABLE_NAME } from "../../ultil/const";
+import useStoreSupabase from "../../zustanStore/supabase";
 
 const disabled = true
 
 function Profile(){
-    const { data } = useQuery(GET_PROFILE_AND_ROLES);
     const {profile, setProfile} = useStoreProfile((state)=>state)
+    const supabase = useStoreSupabase(state=>state.supabase)
 
     useEffect(() => {
-        if(data && data.getProfile?.id !== profile.id){
-            const nameRole = data?.allRoles?.find(e=>e?.id===data.getProfile?.role)?.names || ""
-            const newProfile = {
-                id:data.getProfile?.id || 0,
-                names: data.getProfile?.names || '',
-                lastNames: data.getProfile?.lastNames || '',
-                sex: data.getProfile?.sex || '',
-                email: data.getProfile?.email || '',
-                phone: data.getProfile?.phone || 0,
-                photo: data.getProfile?.photo || '',
-                role: data.getProfile?.role || 0,
-                nameRole
+        supabase.auth.getUser().then(({data:{user}})=>{
+            if(user && user.id && profile.userUID !== user.id){
+                supabase.from(TABLE_NAME.PERSONS).select('*, roles!inner(names)').eq('userUID', user.id)
+                .then( ({data}) => {
+                    if(data && data.length > 0){
+                        const { roles, ...rest } = data[0]
+                        const newData = {...rest, nameRole:roles.names}
+                        setProfile(newData)
+                    }
+                })
             }
-            setProfile(newProfile)
-        }
-    }, [data])
+        })
+    }, [])
     
     return(
         <div className="overflow-auto min-h-screen flex justify-center items-center flex-col gap-y-8">

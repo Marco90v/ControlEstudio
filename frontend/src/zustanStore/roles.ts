@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import { createJSONStorage, devtools, persist } from 'zustand/middleware'
 
 type Role = {
-    id: number | null | undefined,
-    names: string | null | undefined,
+    id: number,
+    names: string,
 }
 
 type State = {
@@ -19,25 +19,27 @@ const initialState:Role[] = []
 
 const useStoreRoles = create<State & Action>()(
     devtools(
-        (set)=>({
-            roles: initialState,
-            setRoles: (roles:Role[]) => set((state) => {
-                return {
-                    ...state,
-                    roles: roles
-                }
+        persist(
+            (set)=>({
+                roles: initialState,
+                setRoles: (roles:Role[]) => set((state) => {
+                    return {
+                        ...state,
+                        roles: roles
+                    }
+                }),
+                clearRoles: () => set((state) => {
+                    return {
+                        ...state,
+                        roles: []
+                    }
+                })
             }),
-            clearRoles: () => set((state) => {
-                return {
-                    ...state,
-                    roles: []
-                }
-            })
-        }),
-        {
-        name:"Roles",
-        // storage: createJSONStorage(() => sessionStorage)
-        }
+            {
+            name:"Roles",
+            // storage: createJSONStorage(() => sessionStorage)
+            }
+        )
     )
 )
 

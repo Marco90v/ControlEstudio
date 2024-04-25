@@ -23,10 +23,13 @@ type State = {
 
 type Action = {
   setPersons: (persons:Person[]) => void,
-  selectPerson: (person:Person) => void,
   clearPersons: () => void,
+  updatePersons: (person:Person) => void,
+  selectPerson: (person:Person) => void,
+  addPerson: (person:Person) => void,
   clearPerson: () => void,
-  changePerson: (camp:string, value:string) => void
+  changePerson: (camp:string, value:string) => void,
+  removePerson: (id:number) => void,
 }
 
 const initialState={
@@ -47,58 +50,90 @@ const initialState={
 
 const useStorePersons = create<State & Action>()(
     devtools(
-        (set)=>({
-            data: initialState,
-            setPersons: (persons:Person[]) => set((state) => {
-                return {
-                    ...state,
-                    data:{
-                        ...state.data,
-                        persons:persons,
-                    }
-                }
-            }),
-            selectPerson: (person:Person) => set((state) => {
-                return {
-                    ...state,
-                    data:{
-                        ...state.data,
-                        person:person
-                    }
-                }
-            }),
-            clearPersons: () => set((state) => {
-                return {
-                    ...state,
-                    data: {...initialState}
-                }
-            }),
-            clearPerson: () => set((state) => {
-                return {
-                    ...state,
-                    data:{
-                        ...state.data,
-                        person: initialState.person
-                    }
-                }
-            }),
-            changePerson: (camp:string, value:string) => set((state) => {
-                return {
-                    ...state,
-                    data: {
-                        ...state.data,
-                        person: {
-                            ...state.data.person,
-                            [camp]:value
+        persist(
+            (set)=>({
+                data: initialState,
+                setPersons: (persons:Person[]) => set((state) => {
+                    return {
+                        ...state,
+                        data:{
+                            ...state.data,
+                            persons:persons,
                         }
                     }
-                }
-            })
-        }),
-        {
-        name:"Persons",
-        // storage: createJSONStorage(() => sessionStorage)
-        }
+                }),
+                selectPerson: (person:Person) => set((state) => {
+                    return {
+                        ...state,
+                        data:{
+                            ...state.data,
+                            person:person
+                        }
+                    }
+                }),
+                clearPersons: () => set((state) => {
+                    return {
+                        ...state,
+                        data: {...initialState}
+                    }
+                }),
+                clearPerson: () => set((state) => {
+                    return {
+                        ...state,
+                        data:{
+                            ...state.data,
+                            person: initialState.person
+                        }
+                    }
+                }),
+                changePerson: (camp:string, value:string) => set((state) => {
+                    return {
+                        ...state,
+                        data: {
+                            ...state.data,
+                            person: {
+                                ...state.data.person,
+                                [camp]:value
+                            }
+                        }
+                    }
+                }),
+                addPerson: (person:Person) => set(state=>{
+                    return{
+                        ...state,
+                        data:{
+                            ...state.data,
+                            persons:[
+                                ...state.data.persons,
+                                person
+                            ]
+                        }
+                    }
+                }),
+                removePerson: (id:Number) => set(state => {
+                    return {
+                        ...state,
+                        data:{
+                            ...state.data,
+                            persons: state.data.persons.filter(p=>p.id!==id)
+                        }
+                    }
+                }),
+                updatePersons: (person:Person) => set(state => {
+                    return{
+                        ...state,
+                        data: {
+                            ...state.data,
+                            persons: state.data.persons.map( p => p.id === person.id ? person : p )
+                        }
+                    }
+                })
+            }),
+            {
+            name:"Persons",
+            // storage: createJSONStorage(() => sessionStorage)
+            }
+        )
     )
 )
 

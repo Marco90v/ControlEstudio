@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useState } from "react";
 import useStoreToken from "../../zustanStore/token";
-import { LOGIN } from "../../ultil/const";
 import { Button, Input } from "../../components";
+import useStoreSupabase from "../../zustanStore/supabase";
 
 const dataUser = {
-    user:'LeonadoCuellar',
+    // user:'LeonadoCuellar',
+    email:'LeonadoCuellar@email.com',
     pass:'1234'
 }
 
 function Login(){
-    const [data, setData] = useState(dataUser);
-    const [getLogin, { loading, error, data:token } ]= useLazyQuery(LOGIN);
+    const [dataForm, setData] = useState(dataUser);
     const setToken = useStoreToken((state) => state.setToken)
-
-    useEffect(() => {
-        if(token?.login?.token){
-            setToken(token.login.token)
-        }
-      return () => {}
-    }, [token])
+    const supabase = useStoreSupabase(state=>state.supabase)
     
     const changeData = (element:any) => {
         const id = element.target.id;
@@ -27,9 +20,13 @@ function Login(){
         setData((e)=>({...e,[id]:value}))
     }
 
-    const submit = (e:any) => {
+    const submit = async (e:any) => {
         e.preventDefault();
-        getLogin( { variables: { user: data.user, pass: data.pass } } )
+        supabase.auth.signInWithPassword({email:dataForm.email, password:dataForm.pass})
+        .then(({data})=>{
+            const token = data.session?.access_token
+            if(token) setToken(token)
+        })
     }  
 
     return(
@@ -44,9 +41,9 @@ function Login(){
                 onSubmit={submit}
             >
                 <label className="font-bold" htmlFor="">Usuario</label>
-                <Input type="text" id="user" name="user" value={data.user} onChange={(e)=>changeData(e)} />
+                <Input type="email" id="email" name="email" value={dataForm.email} onChange={(e)=>changeData(e)} />
                 <label className="font-bold" htmlFor="">Contraseña</label>
-                <Input type="password" id="pass" name="pass" value={data.pass} onChange={(e)=>changeData(e)} />
+                <Input type="password" id="pass" name="pass" value={dataForm.pass} onChange={(e)=>changeData(e)} />
                 <Button type="submit" color="green" className="font-bold text-white col-span-2 mt-4 enabled:hover:shadow-lg enabled:hover:shadow-green-500/50">
                     Ingresar
                 </Button>

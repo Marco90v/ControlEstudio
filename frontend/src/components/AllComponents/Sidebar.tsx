@@ -1,12 +1,11 @@
 import { BiSolidHome, BiSolidBook, BiSolidGraduation, BiSolidData, BiMaleFemale, BiChild, BiSolidFolder, BiSolidLeftArrow, BiLogOut } from "react-icons/bi";
-
-import { useQuery } from "@apollo/client";
-import useStoreSideBar from "../../zustanStore/sidebar";
-import useProfile, { useStoreProfile } from "../../zustanStore/profile";
-import useStoreToken from "../../zustanStore/token";
 import Button from "./Button";
 import ButtonSideBar from "./ButtonSideBar";
-import { GET_PROFILE_AND_ROLES } from "../../ultil/const";
+import useStoreSideBar from "../../zustanStore/sidebar";
+import useStoreToken from "../../zustanStore/token";
+import useStoreSupabase from "../../zustanStore/supabase";
+import { useShallow } from "zustand/react/shallow";
+import useStoreProfile from "../../zustanStore/profile";
 
 const size = "size-6"
 
@@ -22,23 +21,31 @@ const obj = {
 
 function Sidebar(){
 
-    const { client } = useQuery(GET_PROFILE_AND_ROLES);
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase: state.supabase,
+    })))
 
-    const {visibleSideBar:visibleSide,toggleStatus:toggleSideBar} = useStoreSideBar((state)=>state)
-    const role = useProfile((state)=>state.profile.role)
-    const deleteToken = useStoreToken((state) => state.deleteToken)
-    const deleteProfile = useStoreProfile((state) => state.deleteProfile)
+    const { visibleSideBar:visibleSide, toggleStatus:toggleSideBar } = useStoreSideBar(useShallow(state=>({
+        visibleSideBar: state.visibleSideBar,
+        toggleStatus: state.toggleStatus,
+    })))
+    const { role, deleteProfile } = useStoreProfile(useShallow(state=>({
+        role: state.profile.role,
+        deleteProfile: state.deleteProfile
+    })))
+    const { deleteToken } = useStoreToken(useShallow(state=>({
+        deleteToken: state.deleteToken,
+    })))
 
     const side = visibleSide ? "w-[217px]": "w-[72px]"
     const width = visibleSide ? "w-[11.5rem]" : "w-[2.7rem]"
     const toogleButton = visibleSide ? "rotate-0" : "rotate-180"
 
-    const logout = () => {
+    const logout = async () => {
         deleteProfile()
         deleteToken()
-        useStoreProfile.persist.clearStorage()
-        client.clearStore()
-        client.cache.reset()
+        await supabase.auth.signOut()
+        localStorage.clear()
     }
 
     return(

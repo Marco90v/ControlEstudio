@@ -1,10 +1,14 @@
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { fieldNotEmptied } from "../../ultil";
+import {TABLE_NAME} from "../../ultil/const";
 import { Button, SectionClasses } from "../";
+import { supaService } from "../../supabase/supaService";
+import { useSupabase } from "../../hooks/useSupabase";
+import useStoreSupabase from "../../zustanStore/supabase";
 import useStorePersons from "../../zustanStore/persons";
-import { useLazyQuery, useMutation } from "@apollo/client/react/hooks";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
-import { ADD_TEACHER, DELETE_TEACHER, DELETE_TEACHER_BY_PERSON, GET_TEACHER_BY_PERSON, UPDATE_TEACHER } from "../../ultil/const";
+import { useShallow } from "zustand/react/shallow";
+import useStoreLoading from "../../zustanStore/loading";
 
 const initialDataTeacher:teacher = {
     id:0,
@@ -18,28 +22,44 @@ const initialDataTeacher:teacher = {
 
 const Teacher = forwardRef( (_, ref) => {
 
-    const idPerson = useStorePersons((state)=>state.data.person.idPerson)
-    const {teacherClasses, idsDelete, setTeacherClasses, clearTeacherClasses, addTeacherClasse, changeTeacherClasse, deleteTeacherClasse} = useStoreTeacherClasses((state)=>state)
-    
-    const [postTeacher, { loading:loadingAddTeacher }] = useMutation(ADD_TEACHER)
-    const [updateTeacher, { loading:loadingUpdateTeacher }] = useMutation(UPDATE_TEACHER)
-    const [deleteTeacher, { loading:loadingDeleteTeacher }] = useMutation(DELETE_TEACHER)
-    const [getTeacherByPerson, { loading:loadingGetTeacherByPerson, data:dataTeachers } ]= useLazyQuery(GET_TEACHER_BY_PERSON);
-    const [deleteTeacherByPerson, { loading:loadingDeleteTeacherByPerson }] = useMutation(DELETE_TEACHER_BY_PERSON)
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase:state.supabase
+    })))
 
-    const loading = loadingAddTeacher || loadingUpdateTeacher || loadingDeleteTeacher || loadingGetTeacherByPerson || loadingDeleteTeacherByPerson
+    const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
+        handlerError: state.handlerError,
+        handlerLoading: state.handlerLoading
+    }))))
+
+    const {idPerson, clearPerson} = useStorePersons(
+        useShallow((state=>({
+            idPerson: state.data.person.idPerson,
+            clearPerson: state.clearPerson
+        })))
+    )
+
+    const {teacherClasses, idsDelete, setTeacherClasses, clearTeacherClasses, addTeacherClasse, changeTeacherClasse, deleteTeacherClasse} = useStoreTeacherClasses(
+        useShallow((state=>({
+            teacherClasses: state.teacherClasses,
+            idsDelete: state.idsDelete,
+            setTeacherClasses: state.setTeacherClasses,
+            clearTeacherClasses: state.clearTeacherClasses,
+            addTeacherClasse: state.addTeacherClasse,
+            changeTeacherClasse: state.changeTeacherClasse,
+            deleteTeacherClasse: state.deleteTeacherClasse,
+        })))
+    )
+
+    const {getAll, insertSingle, removeSingle, removeMultiple, updateMultiple } = supaService(supabase)
+    const {getSupabase:getTP, insertSupabase, updateMultipleSupabase, deleteSupabase} = useSupabase(TABLE_NAME.TEACHERS,handlerLoading, handlerError)
 
     useEffect(() => {
         if(idPerson > 0){
-            if(dataTeachers?.getTeacherByPerson[0]?.IdPersons === idPerson){
-                setTeacherClasses(dataTeachers?.getTeacherByPerson)
+            if(teacherClasses[0]?.IdPersons === idPerson){
+                setTeacherClasses(teacherClasses)
             }else{
-                clearTeacherClasses()
-                getTeacherByPerson({
-                    variables:{
-                        getTeacherByPersonId: idPerson
-                    }
-                })
+                const eqObj = {eq:"IdPersons", eqData:idPerson}
+                getTP(getAll, setTeacherClasses, eqObj)
             }
         }
         if(idPerson === 0){
@@ -47,13 +67,6 @@ const Teacher = forwardRef( (_, ref) => {
         }
       return () => {}
     }, [idPerson])
-    
-    useEffect(() => {
-        if(dataTeachers?.getTeacherByPerson && dataTeachers?.getTeacherByPerson?.length > 0){
-            setTeacherClasses(dataTeachers?.getTeacherByPerson)
-        }
-      return () => {}
-    }, [dataTeachers])
     
     const addProfession = (e:any) => {
         addTeacherClasse(initialDataTeacher)
@@ -77,7 +90,7 @@ const Teacher = forwardRef( (_, ref) => {
             const {id,IdPersons,...rTeacher} = e;
             const notEmptied:boolean = fieldNotEmptied(rTeacher);
             if(e.id === 0 && e.IdPersons === 0 && notEmptied){
-                const temp = {...e, IdPersons:idPerson}
+                const {id, ...temp} = {...e, IdPersons:idPerson}
                 newData.push(temp)
             }
             if(e.id > 0 && e.IdPersons > 0 && notEmptied){
@@ -85,34 +98,32 @@ const Teacher = forwardRef( (_, ref) => {
             }
         })
       
-        updateTeacher({
-            variables:{
-                dataTeacher:updateData
-            }
-        })
+        updateMultipleSupabase(updateMultiple, updateData)
 
-        newData.length > 0 && postTeacher({
-            variables:{
-                dataTeacher:newData
-            }
-        })
+        newData.length > 0 && insertSupabase(insertSingle, newData)
 
-        idsDelete.length > 0 && deleteTeacher({
-            variables:{
-                ids:idsDelete
-            }
-        })
+        const eqObj = {
+            eq:"id",
+            eqData: idsDelete
+        }
+        idsDelete.length > 0 && deleteSupabase(removeMultiple, eqObj)
+        
+        clearPerson()
     }
 
     const newData = (IdPersons:number) => {
         if(teacherClasses.length > 0){
-            const newTeachers = teacherClasses.map(e=>({...e,IdPersons}))
-            // ADD_TEACHERS
-            postTeacher({
-                variables: {
-                    dataTeacher: newTeachers
+            const newTeachers = teacherClasses.map(e=>{
+                return{
+                    IdPersons,
+                    IdClasses: e.IdClasses,
+                    IdProfession: e.IdProfession,
+                    IdSections: e.IdSections,
+                    IdSemesters: e.IdSemesters,
+                    IdShifts: e.IdShifts,
                 }
             })
+            insertSupabase(insertSingle, newTeachers, clearTeacherClasses)
         }
     }
 
@@ -121,11 +132,11 @@ const Teacher = forwardRef( (_, ref) => {
     }
 
     const deleteChildren = (idPersons:number) => {
-        deleteTeacherByPerson({
-            variables:{
-                idPersons
-            }
-        })
+        const eqObj = {
+            eq:"IdPersons",
+            eqData:idPersons
+        }
+        deleteSupabase(removeSingle, eqObj)
     }
 
     useImperativeHandle(ref, () => {
@@ -143,13 +154,12 @@ const Teacher = forwardRef( (_, ref) => {
                             teacher={t}
                             changeSelect={changeSelect}
                             deleteItem={deleteItem}
-                            disabled={loading}
                         />
                     )
                 })
             }
             <div className="">
-                <Button type="button" className="font-semibold text-white" color="blue" onClick={(e)=>addProfession(e)} disabled={loading} >Agregar Clase</Button>
+                <Button type="button" className="font-semibold text-white" color="blue" onClick={(e)=>addProfession(e)} >Agregar Clase</Button>
             </div>
         </div>
     )

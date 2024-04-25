@@ -13,6 +13,7 @@ type State = {
 type Action = {
   setClasses: (classe:Classe[]) => void,
   addClasse: (classe:Classe) => void,
+  updateClasse: (classe:Classe) => void,
   deleteClasse: (id:number) => void
 }
 
@@ -35,6 +36,12 @@ const useStoreClasses = create<State & Action>()(
             classes: [...state.classes, {id, names}]
           }
         }),
+        updateClasse: (classe:Classe) => set((state)=>{
+          return{
+            ...state,
+            classes: state.classes.map(c=>c.id===classe.id ? classe : c)
+          }
+        }),
         deleteClasse: (id:number) => set((state)=>{
           return {
             ...state,
@@ -44,7 +51,7 @@ const useStoreClasses = create<State & Action>()(
       }),
       {
         name:"Classes",
-        storage: createJSONStorage(() => sessionStorage)
+        // storage: createJSONStorage(() => sessionStorage)
       }
     )
   )

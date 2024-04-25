@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type Semester = {
-    id:number | null | undefined,
-    names: string | null | undefined,
+    id:number,
+    names: string,
 }
 
 type State = {
@@ -11,8 +11,9 @@ type State = {
 }
 
 type Action = {
-  setSemesters: (Semester:Semester[]) => void,
-  addSemester: (Semester:Semester) => void,
+  setSemesters: (semester:Semester[]) => void,
+  addSemester: (semester:Semester) => void,
+  updateSemester:(semester:Semester) => void,
   deleteSemester: (id:number) => void
 }
 
@@ -35,6 +36,12 @@ const useStoreSemesters = create<State & Action>()(
             semesters: [...state.semesters, {id, names}]
           }
         }),
+        updateSemester: (semester:Semester) => set((state)=> {
+          return {
+            ...state,
+            professions: state.semesters.map(s=>s.id===semester.id ? semester : s)
+          }
+        }),
         deleteSemester: (id:number) => set((state)=>{
           return {
             ...state,
@@ -44,7 +51,6 @@ const useStoreSemesters = create<State & Action>()(
       }),
       {
         name:"Semester",
-        storage: createJSONStorage(() => sessionStorage)
       }
     )
   )

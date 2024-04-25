@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type Profession = {
     id:number | null | undefined,
@@ -13,6 +13,7 @@ type State = {
 type Action = {
   setProfessions: (profession:Profession[]) => void,
   addProfession: (profession:Profession) => void,
+  updateProfession:(profession:Profession) => void,
   deleteProfession: (id:number) => void
 }
 
@@ -29,10 +30,16 @@ const useStoreProfessions = create<State & Action>()(
                 professions: profession 
             }
         }),
-        addProfession: ({id,names}:Profession) => set((state)=> {
+        addProfession: (profession:Profession) => set((state)=> {
           return {
             ...state,
-            professions: [...state.professions, {id, names}]
+            professions: [...state.professions, profession]
+          }
+        }),
+        updateProfession: (profession:Profession) => set((state)=> {
+          return {
+            ...state,
+            professions: state.professions.map(p=>p.id===profession.id ? profession : p)
           }
         }),
         deleteProfession: (id:number) => set((state)=>{
@@ -43,8 +50,7 @@ const useStoreProfessions = create<State & Action>()(
         })
       }),
       {
-        name:"Profession",
-        storage: createJSONStorage(() => sessionStorage)
+        name:"Profession"
       }
     )
   )

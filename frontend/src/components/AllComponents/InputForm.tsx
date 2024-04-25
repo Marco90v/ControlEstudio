@@ -3,57 +3,59 @@ import { ApolloError } from "@apollo/client";
 import { COLORS } from "../../ultil/const";
 import Input from "./Input";
 import Button from "./Button";
+import useStoreLoading from "../../zustanStore/loading";
+import { useShallow } from "zustand/react/shallow";
 
 type props = {
     addCallBack: Function,
     title:string,
-    loading:boolean[],
-    error: (ApolloError | undefined)[]
+    // loading:boolean[],
+    // error?: (ApolloError | undefined)[]
+    // error?: ({message:string} | null)[]
 }
 
 const initialStatus = {
-    status:false,
     msg:"",
     bgColor:""
 }
 
-function InputForm({addCallBack,title, loading, error}:props) {
+function InputForm({addCallBack,title}:props) {
 
     const [name,setName] = useState({names:""});
     const [status,setStatus] = useState(initialStatus);
 
-    useEffect(() => {
-        let status = false
-        let msg = ""
-        let bgColor = ""
-        loading.forEach(element => {
-            if(element) {
-                status = true
-                msg = "Procesando datos"
-                bgColor = COLORS.yellow500
-            }
-        });
-        setStatus({status, msg, bgColor})
-        return () => {}
-    }, loading)
+    const {loading, error} = useStoreLoading(useShallow((state=>({
+        loading: state.loading,
+        error: state.error
+    }))))
 
     useEffect(() => {
-        let status = false
         let msg = ""
         let bgColor = ""
-        error.forEach(element => {
-            if(element) {
-                status = true
-                msg = element.message
-                bgColor = COLORS.red700
-            }
-        });
-        setStatus({status, msg, bgColor})
-        setTimeout(() => {
+        if(loading) {
+            msg = "Procesando datos"
+            bgColor = COLORS.yellow500
+            setStatus({msg, bgColor})
+        }else{
             setStatus(initialStatus)
-        }, 5000);
+        }
         return () => {}
-    }, error)
+    }, [loading])
+
+    useEffect(() => {
+        let msg = ""
+        let bgColor = ""
+        if(error) {
+            console.log(error)
+            msg = error.message || ""
+            bgColor = COLORS.red700
+            setStatus({msg, bgColor})
+            setTimeout(() => {
+                setStatus(initialStatus)
+            }, 5000);
+        }
+        return () => {}
+    }, [error])
     
     const changeInputName = (e:any) => {
         setName({names:e.target.value});
@@ -64,7 +66,7 @@ function InputForm({addCallBack,title, loading, error}:props) {
         if(name.names !== ""){
             addCallBack(name);
         }else{
-            setStatus({status:true, msg:"Ingrese clase/materia", bgColor:COLORS.yellow500})
+            setStatus({msg:"Ingrese clase/materia", bgColor:COLORS.yellow500})
             setTimeout(() => {
                 setStatus(initialStatus)
             }, 3000);
@@ -79,9 +81,9 @@ function InputForm({addCallBack,title, loading, error}:props) {
             >
                 <label className="font-bold" htmlFor="">{title}</label>
                 <Input id="inputName" name="inputName" type="text" value={name.names} onChange={changeInputName} />
-                <Button type="submit" color="green" className="font-semibold text-white" disabled={status.status}>Agregar</Button>
+                <Button type="submit" color="green" className="font-semibold text-white">Agregar</Button>
                 {
-                    status.status && (
+                    (loading || error || status.msg !== "") && (
                         <span
                             className={`col-span-3 text-center rounded p-1 mt-2 ${status.bgColor}`}
                         >

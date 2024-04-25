@@ -10,7 +10,8 @@ type Profile = {
     phone: number,
     photo: string,
     role: number,
-    nameRole: string
+    nameRole: string,
+    userUID: string
 }
 
 type State = {
@@ -31,7 +32,8 @@ const initialState:Profile = {
     phone: 0,
     photo: '',
     role: 0,
-    nameRole: ''
+    nameRole: '',
+    userUID: ''
 }
 
 const useStoreProfile = create<State & Action>()(

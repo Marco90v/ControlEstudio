@@ -14,7 +14,7 @@ type State = {
 }
 
 type Action = {
-  setProfessionSemester: (professionSemester:ProfessionSemester) => void,
+  setProfessionSemester: (professionSemester:ProfessionSemester[]) => void,
   changeProfessionSemester: (camp:string, value:string) => void,
   clearProfessionSemester: () => void,
 }
@@ -28,35 +28,37 @@ const initialState:ProfessionSemester = {
 
 const useStoreStudentProfessionSemester = create<State & Action>()(
     devtools(
-        (set)=>({
-            professionSemester: initialState,
-            idsProfessionSemester:[],
-            setProfessionSemester: (professionSemester:ProfessionSemester) => set((state) => {
-                return {
-                    ...state,
-                    professionSemester: {...professionSemester}
-                }
-            }),
-            changeProfessionSemester: (camp:string, value:string) => set((state) => {
-                return {
-                    ...state,
-                    professionSemester: {
-                        ...state.professionSemester,
-                        [camp]:Number(value)
+        persist(
+            (set)=>({
+                professionSemester: initialState,
+                idsProfessionSemester:[],
+                setProfessionSemester: (professionSemester:ProfessionSemester[]) => set((state) => {
+                    return {
+                        ...state,
+                        professionSemester: {...professionSemester[0]}
                     }
-                }
+                }),
+                changeProfessionSemester: (camp:string, value:string) => set((state) => {
+                    return {
+                        ...state,
+                        professionSemester: {
+                            ...state.professionSemester,
+                            [camp]:Number(value)
+                        }
+                    }
+                }),
+                clearProfessionSemester: () => set((state) => {
+                    return {
+                        ...state,
+                        professionSemester: {...initialState}
+                    }
+                })
             }),
-            clearProfessionSemester: () => set((state) => {
-                return {
-                    ...state,
-                    professionSemester: {...initialState}
-                }
-            })
-        }),
-        {
-        name:"useStoreStudentProfessionSemester",
-        // storage: createJSONStorage(() => sessionStorage)
-        }
+            {
+            name:"useStoreStudentProfessionSemester",
+            // storage: createJSONStorage(() => sessionStorage)
+            }
+        )
     )
 )
 

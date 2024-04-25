@@ -1,94 +1,112 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
+import useStoreProfessions from "../../zustanStore/profession";
+import useStoreLoading from "../../zustanStore/loading";
+import useStoreModal from "../../zustanStore/modal";
+import useStoreSupabase from "../../zustanStore/supabase";
+import { useSupabase } from "../../hooks/useSupabase";
+import { supaService } from "../../supabase/supaService";
 import { DeletePopUp, Input, InputForm, Popup, TableComponent } from "../";
-import { useMutation, useQuery } from "@apollo/client/react/hooks";
-import { ADD_PROFESSION, DELETE_PROFESSION, GET_PROFESSIONS, UPDATE_PROFESSION } from "../../ultil/const";
+import { TABLE_NAME } from "../../ultil/const";
 
 function DataProfession(){
     
-    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase:state.supabase
+    })))
+    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase)
 
-    const { data, refetch } = useQuery(GET_PROFESSIONS);
+    const {handlerChange} = useStoreModal(useShallow((state=>({
+        handlerChange: state.handlerChange,
+    }))))
 
-    const [add, { loading:loadingAdd, error:errorAdd }] = useMutation(ADD_PROFESSION)
-    const [update, { loading:loadingUpdate, error:errorUpdate }] = useMutation(UPDATE_PROFESSION)
-    const [deleteProfession, { loading:loadingDelete, error:errorDelete }] = useMutation(DELETE_PROFESSION)
+    const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
+        handlerError: state.handlerError,
+        handlerLoading: state.handlerLoading
+    }))))
 
-    const addProfession = async (names:{names:string}) => {
-        add({
-            variables:{
-                dataProfession:{...names}
-            }
-        })
-        refetch()
+    const {professions, addProfession, setProfessions, updateProfession, deleteProfession} = useStoreProfessions(
+        useShallow( (state => ({
+            professions: state.professions,
+            addProfession: state.addProfession,
+            setProfessions: state.setProfessions,
+            updateProfession: state.updateProfession,
+            deleteProfession: state.deleteProfession,
+        })))
+    )
+
+    const {getSupabase, insertSupabase, updateSupabase, deleteSupabase} = useSupabase(TABLE_NAME.PROFESSION,handlerLoading, handlerError)
+
+    useEffect(() => {
+        if(professions.length===0) getSupabase(getAll, setProfessions)
+        return () => {}
+    }, [])
+
+    const add = (names:{names:string}) => {
+        insertSupabase(insertSingle, names, addProfession)
     }
 
     const edit = (data:profession) => {
-        setModal({type:"edit",value:true, data});
+        handlerChange({type:"edit",value:true, data})
     }
 
     const remove = (data:profession) => {
-        setModal({type:"delete",value:true, data});
+        handlerChange({type:"delete",value:true, data})
     }
 
-    const aceptCallback = () => {
-        switch (modal.type) {
+    const upDate = (data:any | {id:number}) => {
+        updateSupabase(updateSingle, data, {eq:'id', eqData:data.id}, updateProfession)
+    }
+
+    const removeClasse = (id:number) => {
+        deleteSupabase(removeSingle,{eq:'id', eqData:id}, deleteProfession)
+    }
+
+    const aceptCallback = (type:string, data?:any | {id:number}) => {
+        switch (type) {
             case "edit":
-                update({
-                    variables:{
-                        dataProfession:{...modal.data}
-                    }
-                })
-                refetch()
+                upDate(data)
                 break;
             case "delete":
-                deleteProfession({
-                    variables:{
-                        deleteProfessionId:modal.data.id
-                    }
-                })
-                refetch()
+                removeClasse(data.id)
                 break;
         }
-        setModal((datos:any)=>{
-            return{
-                ...datos,
-                type:"", value:false,  data:{id:0,names:""}
-            }
-        });
+        handlerChange({type:"", value:false,  data:{id:0,names:""}})
     }
 
-    const changeInputEdit = (e:any)=>{
-        setModal({...modal,data:{...modal.data,names:e.target.value}})
+    const changeInputEdit = (e:React.ChangeEvent<HTMLInputElement>, data:any, type:string, valueModal:boolean)=>{
+        handlerChange( {type, value:valueModal,  data:{...data, [e.target.name]:e.target.value }} )
     }
-
-    const cuerpoPopup:any = {
-        "edit": <Input id="names" name="names" type="text" className="w-[90%]" value={modal.data.names} onChange={changeInputEdit} />,
-        "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar la Profesión"} textFin={"?"} />
-    };
 
     const cancelCallBack = () => {
-        setModal({type:"", value:false,  data:{id:0,names:""}});
+        handlerChange({type:"", value:false,  data:{id:0,names:""}})
+    }
+
+    const bodyModal = (type:string, value:string, data:any, valueModal:boolean) => {
+        switch (type) {
+            case "edit":
+                return <Input type="text" id="names" name="names" className="w-[90%]" value={value} onChange={(e)=>changeInputEdit(e, data, type, valueModal)} />
+            case "delete":
+                return <DeletePopUp value={value} textIni={"¿Desea eliminar la Profesión"} textFin={"?"} />
+            default:
+                return null;
+        }
     }
 
     return(
         <div className="overflow-auto">
             <InputForm
-                addCallBack={addProfession}
+                addCallBack={add}
                 title={"Profesiones"}
-                loading={[loadingAdd, loadingUpdate, loadingDelete]}
-                error={[errorAdd, errorUpdate,errorDelete]}
             />
             <div className="flex justify-center pb-12">
                 <TableComponent
                     edit={edit}
                     remove={remove}
-                    loading={[loadingAdd, loadingUpdate, loadingDelete]}
-                    data={data?.allProfession}
+                    data={professions}
                 />
             </div>
-            {
-                modal.value && <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} > {cuerpoPopup[modal.type]} </Popup>
-            }
+            <Popup cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} bodyModal={bodyModal} />
         </div>
     );
 }

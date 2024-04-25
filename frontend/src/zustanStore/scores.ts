@@ -48,61 +48,63 @@ const initialState:State = {
 
 const useStoreScores = create<State & Action>()(
     devtools(
-        (set)=>({
-            classes:[],
-            teachers:[],
-            scores:[],
-            setClasses: (classes:ClassesByProfessionAndSemester[]) => set((state) => {
-                return {
-                    ...state,
-                    classes
-                }
-            }),
-            setTeachers: (teachers:TeachersByProfessionAndSemester[]) => set((state) => {
-                return {
-                    ...state,
-                    teachers
-                }
-            }),
-            setScores:(scores:Score[]) => set((state) => {
-                return {
-                    ...state,
-                    scores
-                }
-            }),
-            changeScores: (key:string, value:number, IdClasses:number) => set((state)=>{
-                return{
-                    ...state,
-                    scores: state.scores.map(e=>{
-                        if(key==='IdTeachers'){
-                            if(e.IdClasses===IdClasses && value===0) return {...e, IdShifts:0, IdSections:0, [key]:value}
-                            if(e.IdClasses===IdClasses){
-                                const teacher = state.teachers.find((x:teacherByPSC)=>x.id===value);
-                                if(teacher){
-                                    const { IdShifts, IdSections } = teacher;
-                                    return {...e, IdShifts, IdSections, [key]:value};
+        persist(
+            (set)=>({
+                classes:[],
+                teachers:[],
+                scores:[],
+                setClasses: (classes:ClassesByProfessionAndSemester[]) => set((state) => {
+                    return {
+                        ...state,
+                        classes
+                    }
+                }),
+                setTeachers: (teachers:TeachersByProfessionAndSemester[]) => set((state) => {
+                    return {
+                        ...state,
+                        teachers
+                    }
+                }),
+                setScores:(scores:Score[]) => set((state) => {
+                    return {
+                        ...state,
+                        scores
+                    }
+                }),
+                changeScores: (key:string, value:number, IdClasses:number) => set((state)=>{
+                    return{
+                        ...state,
+                        scores: state.scores.map(e=>{
+                            if(key==='IdTeachers'){
+                                if(e.IdClasses===IdClasses && value===0) return {...e, IdShifts:0, IdSections:0, [key]:value}
+                                if(e.IdClasses===IdClasses){
+                                    const teacher = state.teachers.find((x:teacherByPSC)=>x.id===value);
+                                    if(teacher){
+                                        const { IdShifts, IdSections } = teacher;
+                                        return {...e, IdShifts, IdSections, [key]:value};
+                                    }
                                 }
+                                return e
+                            }else{
+                                return e.IdClasses===IdClasses ? {...e, [key]:value} : e;
                             }
-                            return e
-                        }else{
-                            return e.IdClasses===IdClasses ? {...e, [key]:value} : e;
-                        }
-                    })
-                }
+                        })
+                    }
+                }),
+                clearScore: () => set((state) => {
+                    return {
+                        ...state,
+                        classes:[],
+                        teachers:[],
+                        scores:[]
+                    }
+                })
             }),
-            clearScore: () => set((state) => {
-                return {
-                    ...state,
-                    classes:[],
-                    teachers:[],
-                    scores:[]
-                }
-            })
-        }),
-        {
-        name:"useStoreScores",
-        // storage: createJSONStorage(() => sessionStorage)
-        }
+            {
+            name:"useStoreScores",
+            // storage: createJSONStorage(() => sessionStorage)
+            }
+        )
     )
 )
 

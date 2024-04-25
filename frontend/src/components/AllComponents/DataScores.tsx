@@ -1,39 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TablePersons, Record } from "../";
-import useStoreProfile from "../../zustanStore/profile";
-import { useQuery } from "@apollo/client/react/hooks";
+import { ROLES, TABLE_NAME } from "../../ultil/const";
+import { supaService } from "../../supabase/supaService";
+import { useSupabase } from "../../hooks/useSupabase";
+import { useShallow } from "zustand/react/shallow";
 import useStoreRoles from "../../zustanStore/roles";
-import { GET_ROLES, ROLES } from "../../ultil/const";
-
-interface role {
-    id: number | null | undefined,
-    names: string | null | undefined
-}
+import useStoreProfile from "../../zustanStore/profile";
+import useStoreSupabase from "../../zustanStore/supabase";
+import useStoreLoading from "../../zustanStore/loading";
 
 function DataScores(){
 
-    const { profile } = useStoreProfile((state)=>state)
-    const { roles, setRoles } = useStoreRoles((state)=>state)
-    const { data:dataRoles } = useQuery(GET_ROLES);
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase:state.supabase
+    })))
+    const { getAll } = supaService(supabase)
 
-    const [ selectRole, setSelectRole ] = useState<number>(0);
-    
+    const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
+        handlerError: state.handlerError,
+        handlerLoading: state.handlerLoading
+    }))))
+
+    const {getSupabase:getRole} = useSupabase(TABLE_NAME.ROLES,handlerLoading, handlerError)
+
+    const {profile} = useStoreProfile(useShallow((state=>({
+        profile: state.profile,
+    }))))
+
+    const {roles, setRoles} = useStoreRoles(useShallow((state=>({
+        roles: state.roles,
+        setRoles: state.setRoles,
+    }))))
+
     useEffect(() => {
-        if(dataRoles?.allRoles){
-            const newData:role[] = dataRoles.allRoles.map(e=>{
-                if(e?.names === ROLES.STUDENT ){
-                    const ID:number = Number(e.id)
-                    setSelectRole(ID)
-                }
-                return {
-                    id: e?.id,
-                    names: e?.names
-                }
-            });
-            setRoles(newData)
-        }
+        roles.length <= 0 && getRole(getAll, setRoles)
         return () => {}
-    }, [dataRoles]);
+    }, [roles])
+    
 
     const verifyRole = () => {
         const role = roles.find(e=>e.id === profile.role)?.names ?? false;
@@ -49,15 +52,15 @@ function DataScores(){
                 verifyRole() ?
                     <TablePersons
                         deleteChildren={{current:deleteChildren}}
-                        role={0}
                         preCarga={[profile as any]}
                         scores={true}
+                        type={ROLES.STUDENT}
                     />
                     :
                     <TablePersons
                         deleteChildren={{current:deleteChildren}}
-                        role={selectRole}
                         scores={true}
+                        type={ROLES.STUDENT}
                     />
             }
         </div>

@@ -1,51 +1,42 @@
 import { useEffect, useRef, useState } from "react";
 import { PersonsForms, TablePersons, Teacher } from "../";
-import { useQuery } from "@apollo/client/react/hooks";
 import useStoreRoles from "../../zustanStore/roles";
-import { GET_ROLES, ROLES } from "../../ultil/const";
-
-const initialDataPerson:person = {
-    id:0,
-    idPerson:0,
-    names: "",
-    lastNames: "",
-    sex: "",
-    email: "",
-    phone: 0,
-    photo: "",
-    role: 0
-};
-
-interface role {
-    id: number | null | undefined,
-    names: string | null | undefined
-}
+import { ROLES, TABLE_NAME } from "../../ultil/const";
+import { useShallow } from "zustand/react/shallow";
+import useStoreSupabase from "../../zustanStore/supabase";
+import useStoreLoading from "../../zustanStore/loading";
+import { useSupabase } from "../../hooks/useSupabase";
+import { supaService } from "../../supabase/supaService";
 
 function DataTeacher(){
-    const { data:dataRoles } = useQuery(GET_ROLES);
-    const {roles, setRoles} = useStoreRoles((state)=>state)
-    const statusFetch = false;
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase:state.supabase
+    })))
+    const {getAll} = supaService(supabase)
+
+    const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
+        handlerError: state.handlerError,
+        handlerLoading: state.handlerLoading
+    }))))
+
+    const {roles, setRoles} = useStoreRoles(
+        useShallow((state=>({
+            roles: state.roles,
+            setRoles: state.setRoles,
+            clearRoles: state.clearRoles
+        })))
+    )
+
+    const {getSupabase:getR} = useSupabase(TABLE_NAME.ROLES,handlerLoading, handlerError)
 
     const [ selectRole, setSelectRole ] = useState<number>(0);
     const handlerTeacher = useRef<any>();
-    
-    useEffect(() => {
-        if(dataRoles?.allRoles){
-            const newData:role[] = dataRoles.allRoles.map(e=>{
-                if (e?.names === ROLES.TEACHER){
-                    const ID:number = Number(e.id)
-                    setSelectRole(ID)
-                }
-                return {
-                    id: e?.id,
-                    names: e?.names
-                }
-            })
-            setRoles(newData)
-        }
-        return () => {}
-    }, [dataRoles]);
 
+    useEffect(() => {
+      roles.length <= 0 && getR(getAll, setRoles)
+      return () => {}
+    }, [])
+    
     const changeRole = (e:any) => {
         const ID:any = Number(e.target.value);
         setSelectRole(ID);
@@ -55,8 +46,6 @@ function DataTeacher(){
         <div className="m-8 overflow-auto" >
             <PersonsForms
                 changeRole={changeRole}
-                roles={roles}
-                selectRole={selectRole}
                 saveChildren={handlerTeacher}
                 type={ROLES.TEACHER}
             >
@@ -64,7 +53,7 @@ function DataTeacher(){
             </PersonsForms>
             <TablePersons
                 deleteChildren={handlerTeacher}
-                role={selectRole}
+                type={ROLES.TEACHER}
             />
         </div>
     )

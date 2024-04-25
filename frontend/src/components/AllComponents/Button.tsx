@@ -1,3 +1,6 @@
+import { useShallow } from "zustand/react/shallow"
+import useStoreLoading from "../../zustanStore/loading"
+
 interface props{
     type: "button" | "submit",
     children: any
@@ -5,7 +8,7 @@ interface props{
     color?: "blue" | "red" | "green" | "yellow" | "purple" | "orange",
     icon?: boolean,
     onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined,
-    disabled?: boolean,
+    disabled?:boolean,
 }
 const COLORS = {
     BLUE: "blue",
@@ -23,7 +26,10 @@ const buttonGreen = " bg-green-600 border-green-800 hover:bg-green-500"
 const buttonYellow = " bg-yellow-400 border-yellow-600 hover:bg-yellow-300"
 const buttonPurple = " bg-purple-600 border-purple-800 hover:bg-purple-500"
 const buttonOrange = " bg-orange-600 border-orange-800 hover:bg-orange-500"
-function Button({children, className, color, icon, ...rest}:props){
+function Button({children, className, color, icon, disabled=false, ...rest}:props){
+    const {loading} = useStoreLoading(useShallow((state=>({
+        loading: state.loading,
+    }))))
     let style = styleBase
     if(color === COLORS.BLUE) style+= buttonBlue
     if(color === COLORS.RED) style+= buttonRed
@@ -36,6 +42,7 @@ function Button({children, className, color, icon, ...rest}:props){
     return(
         <button
             className={style}
+            disabled={disabled || loading}
             {...rest}
         >
             {children}

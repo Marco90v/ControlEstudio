@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
+import useStoreLoading from "../../zustanStore/loading";
+import { useShallow } from "zustand/react/shallow";
 interface props{
     type: "text" | "number" | "email" | "date" | "password" | "file",
     id: string,
@@ -13,11 +15,15 @@ interface props{
 
 const styleBase = "focus:outline-none px-2 py-1 bg-white border border-solid border-gray-200 rounded focus:border-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed"
 
-function Input({className, otherAtributes, ...rest}:props){
+function Input({className, otherAtributes, disabled, ...rest}:props){
+    const {loading} = useStoreLoading(useShallow((state=>({
+        loading: state.loading,
+    }))))
     if(rest.type !== "password"){
         return(
             <input
                 className={`${styleBase} ${className}`}
+                disabled={loading || disabled}
                 {...rest}
                 {...otherAtributes}
             />
@@ -26,7 +32,7 @@ function Input({className, otherAtributes, ...rest}:props){
         // Cambia de iciono y de tipo de input para mostrar o ocultar la contraseña
         const [show, setShow] = useState(false)
         const changeShow = () => {
-            if(!rest.disabled){
+            if(!disabled){
                 setShow((e)=>!e)
             }
         }
@@ -36,6 +42,7 @@ function Input({className, otherAtributes, ...rest}:props){
                     className={`${styleBase} ${className}`}
                     {...rest}
                     type={show ? "text" : "password"}
+                    disabled={loading || disabled}
                     {...otherAtributes}
                 />
                 {

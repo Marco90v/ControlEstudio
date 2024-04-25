@@ -12,14 +12,14 @@ type profession = {
     names:string
 }
 type ClassesPensum = {
-    id: number | null | undefined,
-    IdClasses: number | null  | undefined,
-    Name_Classes: string | null   | undefined
+    id: number,
+    IdClasses: number,
+    Name_Classes: string
 }
 type pensum = {
-    IdSemesters: number | null | undefined,
-    Name_Semesters: string | null | undefined,
-    Classes: classes[]| null | undefined
+    IdSemesters: number,
+    Name_Semesters: string,
+    Classes: classes[]
 }
 type semesters = {
     id:number,

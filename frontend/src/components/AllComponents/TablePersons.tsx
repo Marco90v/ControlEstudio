@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Popup, TableComponent, DeletePopUp } from "../";
-import { useLazyQuery, useMutation } from "@apollo/client/react/hooks";
 import useStorePersons from "../../zustanStore/persons";
-import { DELETE_PERSON, GET_PERSON_BY_ROLE } from "../../ultil/const";
+import { TABLE_NAME } from "../../ultil/const";
+import { useShallow } from "zustand/react/shallow";
+import useStoreSupabase from "../../zustanStore/supabase";
+import useStoreLoading from "../../zustanStore/loading";
+import useStoreRoles from "../../zustanStore/roles";
+import useStoreModal from "../../zustanStore/modal";
+import { useSupabase } from "../../hooks/useSupabase";
+import { supaService } from "../../supabase/supaService";
 
 type Person = {
     email: string,
@@ -18,87 +24,106 @@ type Person = {
 }
 
 interface props{
-    role: number,
+    type:string,
     deleteChildren:  React.MutableRefObject<any>,
     preCarga?:Person[],
     scores?:boolean,
 }
+const columnsHeaders=["Nombres", "Apellidos", "Correo", "Telefono" ]
 
-function TablePersons({role, deleteChildren, preCarga=[], scores=false}:props){
-    
-    const { selectPerson } = useStorePersons((state)=>state)
-    const [getPersonByRole, { loading:loadingGetPersonByrole, data:dataGetPersonByRole, refetch:refetchPersonByRole } ]= useLazyQuery(GET_PERSON_BY_ROLE);
-    const [deletePersonByID, { loading:loadingDeletePersonByID }] = useMutation(DELETE_PERSON)
-    const [modal,setModal] = useState({type:"", value:false, data:{id:0,names:""}});
-    const loading = loadingGetPersonByrole || loadingDeletePersonByID
+function TablePersons({type, deleteChildren, preCarga=[], scores=false}:props){
 
-    const columnsHeaders=["Nombres", "Apellidos", "Correo", "Telefono" ]
-    
+    const { supabase } = useStoreSupabase(useShallow(state=>({
+        supabase:state.supabase
+    })))
+    const {getAll, removeSingle} = supaService(supabase)
 
-    const data = (preCarga.length>0) ? preCarga : 
-                    (dataGetPersonByRole && dataGetPersonByRole?.getPersonByRole) ? 
-                    dataGetPersonByRole.getPersonByRole : 
-                    []
+    const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
+        handlerError: state.handlerError,
+        handlerLoading: state.handlerLoading
+    }))))
+
+    const {handlerChange, dataModal, typeModal} = useStoreModal(useShallow((state=>({
+        handlerChange: state.handlerChange,
+        dataModal: state.data,
+        typeModal: state.type,
+        value: state.value
+    }))))
+
+    const {roles} = useStoreRoles(
+        useShallow((state=>({
+            roles: state.roles,
+        })))
+    )
+
+    const {persons,selectPerson, setPersons, removePerson} = useStorePersons(
+        useShallow((state=>({
+            persons: state.data.persons,
+            selectPerson: state.selectPerson,
+            setPersons: state.setPersons,
+            removePerson: state.removePerson
+        })))
+    )
+
+    const {getSupabase:getPR, deleteSupabase} = useSupabase(TABLE_NAME.PERSONS,handlerLoading, handlerError)
+
+    const data = (preCarga.length>0) ? preCarga : persons    
 
     useEffect(() => {
-        role > 0 && getPersonByRole({
-            variables:{
-                role
+        if(roles.length > 0){
+            const rol = roles.find(r=>r.names===type)?.id || 0
+            if((persons.length > 0 && persons[0].role !== rol )|| persons.length <= 0){
+                const eqObj = {eq:"role", eqData:rol}
+                getPR(getAll, setPersons, eqObj)
             }
-        });
-    return () => {
-    }
-    }, [role]);
+        }
+        return () => {}
+    }, [roles]);
 
     const edit = (data:any) => {
-        if(dataGetPersonByRole?.getPersonByRole){
-            const {__typename, ...rest} = data
-            selectPerson({...rest, idPerson:rest.id, name:rest.names})
-
+        if(persons){
+            selectPerson({...data, idPerson:data.id, name:data.names})
         }else{
             selectPerson({...preCarga[0]})
         }
-
     }
     const deletePerson = (idx:number) => {
-        deletePersonByID({
-            variables:{
-                deletePersonId:idx
-            }
-        })
-        deleteChildren?.current?.deleteChildren(idx)
-        refetchPersonByRole()
+        const eqObj={
+            eq:"id",
+            eqData:idx
+        }
+        deleteSupabase(removeSingle, eqObj, removePerson)
     }
 
-    const aceptCallback = () => {
-        switch (modal.type) {
+    const deleteTeacher = (idx:number) => {
+        deleteChildren?.current?.deleteChildren(idx)
+        deletePerson(idx)
+    }
+
+    const aceptCallback = (type:string) => {
+        switch (type) {
             case "delete":
-                deletePerson(modal.data.id);
+                deleteTeacher(dataModal.id);
                 break;
         }
-        setModal((datos:any)=>{
-            return{
-                ...datos,
-                type:"", value:false,  data:{id:0,names:""}
-            }
-        });
+        handlerChange({type:"",value:false, data:{id:0,names:""}})
     }
 
     const cancelCallBack = () => {
-        setModal({type:"", value:false,  data:{id:0,names:""}});
+        handlerChange({type:"",value:false, data:{id:0,names:""}})
     }
-
-    const cuerpoPopup:any = {
-        "delete": <DeletePopUp value={modal.data.names} textIni={"¿Desea eliminar a:"} textFin={"?"} />,
-        "scoresDelete": <p className="text-center">Esta acción esta prohibida en este modulo</p>
-    };
 
     const remove = (data:any) => {
         if(scores){
-            setModal({type:"scoresDelete",value:true, data});
+            handlerChange({type:"scoresDelete",value:true, data:{id:0,names:""}})
         }else{
-            setModal({type:"delete",value:true, data});
+            handlerChange({type:"delete",value:true, data:{id:data.id,names:data.names}})
         }
+    }
+
+    const bodyModal = (type:string, value:string, data:any, valueModal:boolean) => {
+        if(type === "delete") return <DeletePopUp value={dataModal.names} textIni={"¿Desea eliminar a:"} textFin={"?"} />
+        if(type === "scoresDelete") return <p className="text-center">Esta acción esta prohibida en este modulo.</p>
     }
 
     return(
@@ -106,20 +131,12 @@ function TablePersons({role, deleteChildren, preCarga=[], scores=false}:props){
             <TableComponent
                 edit={edit}
                 remove={remove}
-                loading={[loadingGetPersonByrole || loadingDeletePersonByID]}
                 data={data}
                 columnsHeaders={columnsHeaders}
             />
             {
-                modal.value && (
-                    <Popup
-                        key={'TablePersons'}
-                        cancelCallBack={cancelCallBack}
-                        aceptCallback={aceptCallback}
-                    >
-                        {cuerpoPopup[modal.type]}
-                    </Popup>
-                )
+                (typeModal === "delete" || typeModal === "scoresDelete") && 
+                <Popup key={'TablePersons'} cancelCallBack={cancelCallBack} aceptCallback={aceptCallback} bodyModal={bodyModal} />
             }
         </>
     );

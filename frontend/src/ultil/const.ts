@@ -10,6 +10,20 @@ interface Roles_Protection {
     record:number[],
 }
 
+export const TABLE_NAME = {
+    PERSONS: "persons",
+    CLASSES: "classes",
+    PROFESSION: "profession",
+    PENSUM: "pensum",
+    SEMESTERS: "semesters",
+    ROLES: "roles",
+    TEACHERS: "teachers",
+    STUDENTS: "students",
+    SHIFTS: "shifts",
+    SECTIONS: "sections",
+    SCORES: "scores"
+}
+
 export const COLORS = {
     yellow500: "bg-yellow-500",
     red600: "bg-red-600",
