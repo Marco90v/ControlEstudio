@@ -38,7 +38,7 @@ const modalInitial: modalInitial = {
 function DataPensum(){
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
 
     const {handlerChange, dataModal, type, value} = useStoreModal(useShallow((state=>({
@@ -48,7 +48,7 @@ function DataPensum(){
         value: state.value
     }))))
 
-    const {getAll, insertSingle, removeSingle, getPensumByID} = supaService(supabase)
+    const {getAll, insertSingle, removeSingle, getPensumByID} = supaService(supabase())
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,

@@ -37,7 +37,6 @@ const useStoreShifts = create<State & Action>()(
             }),
             {
                 name:"Shifts",
-                storage: createJSONStorage(() => sessionStorage)
             }
         )
     )

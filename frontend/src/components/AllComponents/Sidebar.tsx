@@ -22,7 +22,7 @@ const obj = {
 function Sidebar(){
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase: state.supabase,
+        supabase: state.getSupabase,
     })))
 
     const { visibleSideBar:visibleSide, toggleStatus:toggleSideBar } = useStoreSideBar(useShallow(state=>({
@@ -44,7 +44,7 @@ function Sidebar(){
     const logout = async () => {
         deleteProfile()
         deleteToken()
-        await supabase.auth.signOut()
+        await supabase().auth.signOut()
         localStorage.clear()
     }
 

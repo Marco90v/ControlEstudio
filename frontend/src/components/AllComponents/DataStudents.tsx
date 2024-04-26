@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { supaService } from "../../supabase/supaService";
 import useStoreLoading from "../../zustanStore/loading";
 import { useSupabase } from "../../hooks/useSupabase";
+import useStorePersons from "../../zustanStore/persons";
 
 interface role {
     id: number | null | undefined,
@@ -27,9 +28,9 @@ const initialDataPerson:person = {
 
 function DataStudents(){
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
-    const {getAll, insertSingle, removeSingle, getPensumByID} = supaService(supabase)
+    const {getAll} = supaService(supabase())
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,
@@ -43,6 +44,9 @@ function DataStudents(){
             clearRoles: state.clearRoles
         })))
     )
+    const { clearPerson } = useStorePersons(useShallow(state=>({
+        clearPerson: state.clearPerson
+    })))
 
     const {getSupabase:getR} = useSupabase(TABLE_NAME.ROLES,handlerLoading, handlerError)
 
@@ -52,7 +56,9 @@ function DataStudents(){
 
     useEffect(() => {
         roles.length <= 0 && getR(getAll, setRoles)
-        return () => {}
+        return () => {
+            clearPerson()
+        }
       }, [])
 
     const changeRole = (e:any) => {

@@ -8,13 +8,14 @@ import useStoreRoles from "../../zustanStore/roles";
 import useStoreProfile from "../../zustanStore/profile";
 import useStoreSupabase from "../../zustanStore/supabase";
 import useStoreLoading from "../../zustanStore/loading";
+import useStoreScores from "../../zustanStore/scores";
 
 function DataScores(){
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
-    const { getAll } = supaService(supabase)
+    const { getAll } = supaService(supabase())
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,
@@ -31,10 +32,15 @@ function DataScores(){
         roles: state.roles,
         setRoles: state.setRoles,
     }))))
+    const { clearScore } = useStoreScores(useShallow(state=>({
+        clearScore: state.clearScore
+    })))
 
     useEffect(() => {
         roles.length <= 0 && getRole(getAll, setRoles)
-        return () => {}
+        return () => {
+            clearScore()
+        }
     }, [roles])
     
 

@@ -253,7 +253,6 @@ export function useSupabase(table:string, setLodingGlobal?:setLodingGlobal, setE
             const {data, error} = await supaCall(eqObj2.IdProfession, eqObj2.IdSemesters)
             if(error) handlerError(error.message)
             if(data && data.length > 0) {
-                console.log(data)
                 if(globalState){
                     globalState(data)
                 }else{

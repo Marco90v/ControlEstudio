@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { fieldNotEmptied } from "../../ultil";
 import { Popup, Select, Button, Input } from "../";
-// import { useMutation } from "@apollo/client/react/hooks";
 import useStorePersons from "../../zustanStore/persons";
-import { ADD_PERSON, ROLES, TABLE_NAME, UPDATE_PERSON } from "../../ultil/const";
+import { ROLES, TABLE_NAME } from "../../ultil/const";
 import useStoreRoles from "../../zustanStore/roles";
 import { useShallow } from "zustand/react/shallow";
 import useStoreLoading from "../../zustanStore/loading";
@@ -32,9 +31,9 @@ const selectSex = [
 
 function PersonsForms({children, saveChildren, changeRole, type, style}:props){
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
-    const {insertSingle, updateSingle} = supaService(supabase)
+    const {insertSingle, updateSingle} = supaService(supabase())
 
     const {handlerChange, typeModal} = useStoreModal(useShallow((state=>({
         handlerChange: state.handlerChange,

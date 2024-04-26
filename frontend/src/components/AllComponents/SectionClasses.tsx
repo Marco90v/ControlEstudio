@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-// import { useQuery } from "@apollo/client/react/hooks";
-// import { GET_CLASSES, GET_PROFESSIONS, GET_SECTIONS, GET_SEMESTERS, GET_SHIFTS, TABLE_NAME } from "../../ultil/const";
 import { TABLE_NAME } from "../../ultil/const";
 import { useSupabase } from "../../hooks/useSupabase";
 import { supaService } from "../../supabase/supaService";
@@ -33,7 +31,7 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
     const { IdProfession, IdSemesters, IdClasses, IdShifts, IdSections } = teacher;
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
 
     const {loading} = useStoreLoading(useShallow((state=>({
@@ -71,7 +69,7 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
         })))
     )
 
-    const {getAll} = supaService(supabase)
+    const {getAll} = supaService(supabase())
 
     const {getSupabase:getShifts} = useSupabase(TABLE_NAME.SHIFTS)
     const {getSupabase:getSections} = useSupabase(TABLE_NAME.SECTIONS)

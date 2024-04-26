@@ -23,7 +23,7 @@ const initialDataTeacher:teacher = {
 const Teacher = forwardRef( (_, ref) => {
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
@@ -50,7 +50,7 @@ const Teacher = forwardRef( (_, ref) => {
         })))
     )
 
-    const {getAll, insertSingle, removeSingle, removeMultiple, updateMultiple } = supaService(supabase)
+    const {getAll, insertSingle, removeSingle, removeMultiple, updateMultiple } = supaService(supabase())
     const {getSupabase:getTP, insertSupabase, updateMultipleSupabase, deleteSupabase} = useSupabase(TABLE_NAME.TEACHERS,handlerLoading, handlerError)
 
     useEffect(() => {

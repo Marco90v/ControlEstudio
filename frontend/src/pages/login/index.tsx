@@ -2,6 +2,7 @@ import { useState } from "react";
 import useStoreToken from "../../zustanStore/token";
 import { Button, Input } from "../../components";
 import useStoreSupabase from "../../zustanStore/supabase";
+import { useShallow } from "zustand/react/shallow";
 
 const dataUser = {
     // user:'LeonadoCuellar',
@@ -11,8 +12,12 @@ const dataUser = {
 
 function Login(){
     const [dataForm, setData] = useState(dataUser);
-    const setToken = useStoreToken((state) => state.setToken)
-    const supabase = useStoreSupabase(state=>state.supabase)
+    const {supabase} = useStoreSupabase(useShallow((state=>({
+        supabase: state.supabase
+    }))))
+    const {setToken} = useStoreToken(useShallow((state=>({
+        setToken: state.setToken
+    }))))
     
     const changeData = (element:any) => {
         const id = element.target.id;

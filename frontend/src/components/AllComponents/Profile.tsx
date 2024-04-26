@@ -3,17 +3,23 @@ import useStoreProfile from "../../zustanStore/profile";
 import Input from "./Input";
 import { TABLE_NAME } from "../../ultil/const";
 import useStoreSupabase from "../../zustanStore/supabase";
+import { useShallow } from "zustand/react/shallow";
 
 const disabled = true
 
 function Profile(){
-    const {profile, setProfile} = useStoreProfile((state)=>state)
-    const supabase = useStoreSupabase(state=>state.supabase)
+    const {profile, setProfile} = useStoreProfile(useShallow(((state)=>({
+        profile: state.profile,
+        setProfile: state.setProfile,
+    }))))
+    const { getSupabase } = useStoreSupabase(useShallow((state=>({
+        getSupabase: state.getSupabase
+    }))))
 
     useEffect(() => {
-        supabase.auth.getUser().then(({data:{user}})=>{
+        profile.id === 0 && getSupabase().auth.getUser().then(({data:{user}})=>{
             if(user && user.id && profile.userUID !== user.id){
-                supabase.from(TABLE_NAME.PERSONS).select('*, roles!inner(names)').eq('userUID', user.id)
+                getSupabase().from(TABLE_NAME.PERSONS).select('*, roles!inner(names)').eq('userUID', user.id)
                 .then( ({data}) => {
                     if(data && data.length > 0){
                         const { roles, ...rest } = data[0]

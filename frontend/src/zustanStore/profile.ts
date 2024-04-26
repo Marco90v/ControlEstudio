@@ -48,7 +48,7 @@ const useStoreProfile = create<State & Action>()(
       }),
       {
         name:"Profile",
-        storage: createJSONStorage(() => sessionStorage)
+        // storage: createJSONStorage(() => sessionStorage)
       }
     )
   )

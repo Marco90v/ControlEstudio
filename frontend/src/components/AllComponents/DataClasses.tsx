@@ -14,9 +14,9 @@ import { TABLE_NAME } from "../../ultil/const";
 function DataClasses() {
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
-    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase)
+    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase())
 
     const {handlerChange} = useStoreModal(useShallow((state=>({
         handlerChange: state.handlerChange,

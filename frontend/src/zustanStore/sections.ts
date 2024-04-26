@@ -37,7 +37,6 @@ const useStoreSections = create<State & Action>()(
             }),
             {
             name:"Sections",
-            storage: createJSONStorage(() => sessionStorage)
             }
         )
     )

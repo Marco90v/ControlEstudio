@@ -21,11 +21,11 @@ import useStoreModal from "../../zustanStore/modal";
 function Record () {
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
     const {getAll, updateMultiple, insertSingle,
         getClassesByProfessionAndSemesters:getClaByProAndSem,
-        getTeachersByProfessionAndSemesters: getTeaByProAndSem} = supaService(supabase)
+        getTeachersByProfessionAndSemesters: getTeaByProAndSem} = supaService(supabase())
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,

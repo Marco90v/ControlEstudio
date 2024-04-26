@@ -8,13 +8,14 @@ import { useSupabase } from "../../hooks/useSupabase";
 import { supaService } from "../../supabase/supaService";
 import { DeletePopUp, Input, InputForm, Popup, TableComponent } from "../";
 import { TABLE_NAME } from "../../ultil/const";
+import useStorePersons from "../../zustanStore/persons";
 
 function DataProfession(){
     
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.supabase
+        supabase:state.getSupabase
     })))
-    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase)
+    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase())
 
     const {handlerChange} = useStoreModal(useShallow((state=>({
         handlerChange: state.handlerChange,
@@ -34,12 +35,17 @@ function DataProfession(){
             deleteProfession: state.deleteProfession,
         })))
     )
+    const { clearPerson } = useStorePersons(useShallow(state=>({
+        clearPerson: state.clearPerson
+    })))
 
     const {getSupabase, insertSupabase, updateSupabase, deleteSupabase} = useSupabase(TABLE_NAME.PROFESSION,handlerLoading, handlerError)
 
     useEffect(() => {
         if(professions.length===0) getSupabase(getAll, setProfessions)
-        return () => {}
+        return () => {
+            clearPerson()
+        }
     }, [])
 
     const add = (names:{names:string}) => {
