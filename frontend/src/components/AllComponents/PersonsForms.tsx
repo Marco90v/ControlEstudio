@@ -31,9 +31,9 @@ const selectSex = [
 
 function PersonsForms({children, saveChildren, changeRole, type, style}:props){
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.getSupabase
+        supabase:state.supabase
     })))
-    const {insertSingle, updateSingle} = supaService(supabase())
+    const {insertSingle, updateSingle} = supaService(supabase)
 
     const {handlerChange, typeModal} = useStoreModal(useShallow((state=>({
         handlerChange: state.handlerChange,

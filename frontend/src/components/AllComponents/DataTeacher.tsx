@@ -10,9 +10,9 @@ import { supaService } from "../../supabase/supaService";
 
 function DataTeacher(){
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.getSupabase
+        supabase:state.supabase
     })))
-    const {getAll} = supaService(supabase())
+    const {getAll} = supaService(supabase)
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,

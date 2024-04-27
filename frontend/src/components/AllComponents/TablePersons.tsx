@@ -34,9 +34,9 @@ const columnsHeaders=["Nombres", "Apellidos", "Correo", "Telefono" ]
 function TablePersons({type, deleteChildren, preCarga=[], scores=false}:props){
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.getSupabase
+        supabase:state.supabase
     })))
-    const {getAll, removeSingle} = supaService(supabase())
+    const {getAll, removeSingle} = supaService(supabase)
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,

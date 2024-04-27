@@ -14,9 +14,9 @@ import { useSupabase } from "../../hooks/useSupabase";
 
 const ProfessionSemester = forwardRef( (_, ref) => {
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.getSupabase
+        supabase:state.supabase
     })))
-    const {getAll, insertSingle, updateSingle, removeSingle} = supaService(supabase())
+    const {getAll, insertSingle, updateSingle, removeSingle} = supaService(supabase)
 
     const {handlerLoading, handlerError} = useStoreLoading(useShallow((state=>({
         handlerError: state.handlerError,

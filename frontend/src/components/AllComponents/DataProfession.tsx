@@ -13,9 +13,9 @@ import useStorePersons from "../../zustanStore/persons";
 function DataProfession(){
     
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.getSupabase
+        supabase:state.supabase
     })))
-    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase())
+    const {getAll, insertSingle, removeSingle, updateSingle} = supaService(supabase)
 
     const {handlerChange} = useStoreModal(useShallow((state=>({
         handlerChange: state.handlerChange,

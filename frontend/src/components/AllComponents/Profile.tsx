@@ -12,14 +12,14 @@ function Profile(){
         profile: state.profile,
         setProfile: state.setProfile,
     }))))
-    const { getSupabase } = useStoreSupabase(useShallow((state=>({
-        getSupabase: state.getSupabase
+    const { supabase } = useStoreSupabase(useShallow((state=>({
+        supabase: state.supabase
     }))))
 
     useEffect(() => {
-        profile.id === 0 && getSupabase().auth.getUser().then(({data:{user}})=>{
+        profile.id === 0 && supabase.auth.getUser().then(({data:{user}})=>{
             if(user && user.id && profile.userUID !== user.id){
-                getSupabase().from(TABLE_NAME.PERSONS).select('*, roles!inner(names)').eq('userUID', user.id)
+                supabase.from(TABLE_NAME.PERSONS).select('*, roles!inner(names)').eq('userUID', user.id)
                 .then( ({data}) => {
                     if(data && data.length > 0){
                         const { roles, ...rest } = data[0]

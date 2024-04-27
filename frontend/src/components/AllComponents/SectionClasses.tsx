@@ -31,7 +31,7 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
     const { IdProfession, IdSemesters, IdClasses, IdShifts, IdSections } = teacher;
 
     const { supabase } = useStoreSupabase(useShallow(state=>({
-        supabase:state.getSupabase
+        supabase:state.supabase
     })))
 
     const {loading} = useStoreLoading(useShallow((state=>({
@@ -69,7 +69,7 @@ const SectionClasses =  ({ idx, teacher, changeSelect, deleteItem, disabled}:pro
         })))
     )
 
-    const {getAll} = supaService(supabase())
+    const {getAll} = supaService(supabase)
 
     const {getSupabase:getShifts} = useSupabase(TABLE_NAME.SHIFTS)
     const {getSupabase:getSections} = useSupabase(TABLE_NAME.SECTIONS)

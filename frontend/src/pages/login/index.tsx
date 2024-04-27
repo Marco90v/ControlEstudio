@@ -3,6 +3,7 @@ import useStoreToken from "../../zustanStore/token";
 import { Button, Input } from "../../components";
 import useStoreSupabase from "../../zustanStore/supabase";
 import { useShallow } from "zustand/react/shallow";
+import { createClient } from "@supabase/supabase-js";
 
 const dataUser = {
     // user:'LeonadoCuellar',
@@ -10,10 +11,18 @@ const dataUser = {
     pass:'1234'
 }
 
+// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+// const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
+// const db = import.meta.env.VITE_DB_NAME
+
+// const temp = localStorage.getItem("token")
+// const token =  temp ? JSON.parse(temp) : ""
+
 function Login(){
     const [dataForm, setData] = useState(dataUser);
-    const {supabase} = useStoreSupabase(useShallow((state=>({
-        supabase: state.supabase
+    const { supabase } = useStoreSupabase(useShallow((state=>({
+        supabase: state.supabase,
+        setSupabase: state.setSupabase
     }))))
     const {setToken} = useStoreToken(useShallow((state=>({
         setToken: state.setToken
@@ -27,10 +36,22 @@ function Login(){
 
     const submit = async (e:any) => {
         e.preventDefault();
+        // const supabase = createClient(supabaseUrl, supabaseKey, {
+        //     db: {
+        //       schema:db
+        //     },
+        //     global:{
+        //       headers:{
+        //         Authorization:`Bearer ${token}`
+        //       }
+        //     }
+        // })
         supabase.auth.signInWithPassword({email:dataForm.email, password:dataForm.pass})
         .then(({data})=>{
             const token = data.session?.access_token
-            if(token) setToken(token)
+            if(token){
+                setToken(token)
+            }
         })
     }  
 

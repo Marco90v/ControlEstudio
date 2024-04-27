@@ -22,12 +22,12 @@ export function supaService(supabase:SupabaseClient<any, any, any>){
         const {data, error} = await supabase.from(table).insert(d).select(select)
         return {data, error}
     }
-    
+
     async function updateSingle(table:string, d:any, eqObj:eqObj){
         const {data, error} = await supabase.from(table).update(d).eq(eqObj.eq, eqObj.eqData).select()
         return {data, error}
     }
-    
+
     async function removeSingle(table:string, eqObj:eqObj){
         const {status, error} = await supabase.from(table).delete().eq(eqObj.eq, eqObj.eqData)
         return {status, error, eqObj}
