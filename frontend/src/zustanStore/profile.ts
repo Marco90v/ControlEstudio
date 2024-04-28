@@ -44,7 +44,7 @@ const useStoreProfile = create<State & Action>()(
         setProfile: (profile:Profile) => set((state) => {
           return { ...state, profile:{...profile}}
         }),
-        deleteProfile: () => ({profile:{...initialState}}),
+        deleteProfile: () => set(state=>({...state,profile:{...initialState}})),
       }),
       {
         name:"Profile",

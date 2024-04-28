@@ -3,7 +3,7 @@ import useStoreToken from "../../zustanStore/token";
 import { Button, Input } from "../../components";
 import useStoreSupabase from "../../zustanStore/supabase";
 import { useShallow } from "zustand/react/shallow";
-import { createClient } from "@supabase/supabase-js";
+import { BiChevronRight } from "react-icons/bi";
 
 const dataUser = {
     // user:'LeonadoCuellar',
@@ -11,14 +11,39 @@ const dataUser = {
     pass:'1234'
 }
 
-// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-// const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
-// const db = import.meta.env.VITE_DB_NAME
+const users = [
+    {email:'LeonadoCuellar@email.com', pass:'1234', type:'admin'},
+    {email:'AlmaFranco@email.com', pass:'1234', type:'admin'},
+    {email:'RafaCozar@email.com', pass:'1234', type:'profesor'},
+    {email:'OdalysMadrigal@email.com', pass:'1234', type:'profesor'},
+    {email:'AngelNavas@email.com', pass:'1234', type:'estudiante'},
+    {email:'TatianaEcheverria@email.com', pass:'1234', type:'estudiante'},
+]
 
-// const temp = localStorage.getItem("token")
-// const token =  temp ? JSON.parse(temp) : ""
+function Dropdown({user}:{user:{email:string, pass:string, type:string}}) {
+    const [show, setShow] = useState(false)
+    const handlerShow = () => {
+        setShow(e=>!e)
+    }
+    return (
+        <li className={`bg-gray-100 p-2 mb-2 border rounded-md text-gray-700 overflow-hidden transition-all duration-300 ${show ? "h-[5.5rem]" : "h-9"}`} >
+            <label className="block">
+                <span className="text-gray-800 font-semibold inline">Tipo de Usuario:</span> {user.type}
+                <BiChevronRight className={`bg-white size-5 rounded-md float-right cursor-pointer transition-all duration-300 ${show ? "rotate-90" : "rotate-0"}`} onClick={handlerShow} />
+            </label>
+            <label className="block">
+                <span className="text-gray-800 font-semibold">Email: </span>{user.email}
+            </label>
+            <label className="block">
+                <span className="text-gray-800 font-semibold">Contraseña:</span> {user.pass}
+            </label>
+        </li>
+    )
+}
 
 function Login(){
+    const [show, setShow] = useState(false)
+    
     const [dataForm, setData] = useState(dataUser);
     const { supabase } = useStoreSupabase(useShallow((state=>({
         supabase: state.supabase,
@@ -36,16 +61,6 @@ function Login(){
 
     const submit = async (e:any) => {
         e.preventDefault();
-        // const supabase = createClient(supabaseUrl, supabaseKey, {
-        //     db: {
-        //       schema:db
-        //     },
-        //     global:{
-        //       headers:{
-        //         Authorization:`Bearer ${token}`
-        //       }
-        //     }
-        // })
         supabase.auth.signInWithPassword({email:dataForm.email, password:dataForm.pass})
         .then(({data})=>{
             const token = data.session?.access_token
@@ -53,7 +68,11 @@ function Login(){
                 setToken(token)
             }
         })
-    }  
+    }
+    
+    const handlerShow = () => {
+        setShow(e=>!e)
+    }
 
     return(
         <main className="min-h-screen flex flex-col gap-y-20 justify-center items-center">
@@ -74,6 +93,15 @@ function Login(){
                     Ingresar
                 </Button>
             </form>
+            <ul className={`bg-gray-50 p-4 border rounded-md mb-4 overflow-hidden transition-all duration-300 ${show ? "max-h-[50rem]" : "max-h-[3rem]"}`}>
+                <span className="block text-gray-800 font-semibold mb-2">
+                    Usuarios
+                    <BiChevronRight className={`bg-green-600 size-5 rounded-md float-right cursor-pointer transition-all duration-300 ${show ? "rotate-90" : "rotate-0"}`} onClick={handlerShow} />
+                </span>
+                {
+                    users.map( (u,i) => <Dropdown key={i} user={u} /> )
+                }
+            </ul>
         </main>
     );
 }
