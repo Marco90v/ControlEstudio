@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { PersonsForms, TablePersons, Teacher } from "../";
 import useStoreRoles from "../../zustanStore/roles";
 import { ROLES, TABLE_NAME } from "../../ultil/const";
 import { useShallow } from "zustand/react/shallow";
@@ -7,6 +6,9 @@ import useStoreSupabase from "../../zustanStore/supabase";
 import useStoreLoading from "../../zustanStore/loading";
 import { useSupabase } from "../../hooks/useSupabase";
 import { supaService } from "../../supabase/supaService";
+import PersonsForms from "./PersonsForms";
+import TablePersons from "./TablePersons";
+import Teacher from "./Teacher";
 
 function DataTeacher(){
     const { supabase } = useStoreSupabase(useShallow(state=>({

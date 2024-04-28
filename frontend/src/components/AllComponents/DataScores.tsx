@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { TablePersons, Record } from "../";
 import { ROLES, TABLE_NAME } from "../../ultil/const";
 import { supaService } from "../../supabase/supaService";
 import { useSupabase } from "../../hooks/useSupabase";
@@ -9,6 +8,8 @@ import useStoreProfile from "../../zustanStore/profile";
 import useStoreSupabase from "../../zustanStore/supabase";
 import useStoreLoading from "../../zustanStore/loading";
 import useStoreScores from "../../zustanStore/scores";
+import Record from "./Record";
+import TablePersons from "./TablePersons";
 
 function DataScores(){
 

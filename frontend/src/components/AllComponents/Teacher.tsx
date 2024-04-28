@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { fieldNotEmptied } from "../../ultil";
 import {TABLE_NAME} from "../../ultil/const";
-import { Button, SectionClasses } from "../";
 import { supaService } from "../../supabase/supaService";
 import { useSupabase } from "../../hooks/useSupabase";
 import useStoreSupabase from "../../zustanStore/supabase";
@@ -9,6 +8,8 @@ import useStorePersons from "../../zustanStore/persons";
 import useStoreTeacherClasses from "../../zustanStore/teacherClasse";
 import { useShallow } from "zustand/react/shallow";
 import useStoreLoading from "../../zustanStore/loading";
+import SectionClasses from "./SectionClasses";
+import Button from "./Button";
 
 const initialDataTeacher:teacher = {
     id:0,

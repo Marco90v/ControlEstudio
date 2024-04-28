@@ -10,7 +10,8 @@ import useStoreSections from "../../zustanStore/sections";
 import useStoreSemesters from "../../zustanStore/semesters";
 import useStoreClasses from "../../zustanStore/classes";
 import useStoreLoading from "../../zustanStore/loading";
-import { Button, Select } from "../"
+import Select from "./Select";
+import Button from "./Button";
 
 type ids = {
     IdProfession:number,

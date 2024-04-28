@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import useStoreProfile from "../../zustanStore/profile";
-import Input from "./Input";
 import { TABLE_NAME } from "../../ultil/const";
 import useStoreSupabase from "../../zustanStore/supabase";
 import { useShallow } from "zustand/react/shallow";
+import Input from "./Input";
 
 const disabled = true
 

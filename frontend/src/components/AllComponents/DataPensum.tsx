@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Popup, Select, BlockSemester, DeletePopUp, Button } from "../";
 import { supaService } from "../../supabase/supaService";
 import useStorePensum from "../../zustanStore/pensum";
 import useStoreProfessions from "../../zustanStore/profession";
@@ -11,6 +10,11 @@ import useStoreSupabase from "../../zustanStore/supabase";
 import useStoreModal from "../../zustanStore/modal";
 import { useSupabase } from "../../hooks/useSupabase";
 import { TABLE_NAME, identifySelect } from "../../ultil/const";
+import Select from "./Select";
+import DeletePopUp from "./DeletePopUp";
+import BlockSemester from "./BlockSemester";
+import Button from "./Button";
+import Popup from "./Popup";
 
 type data = {
     id: number,

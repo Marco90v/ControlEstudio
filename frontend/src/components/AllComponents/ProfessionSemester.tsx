@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { fieldNotEmptied } from "../../ultil";
-import { Select } from ".."
 import { TABLE_NAME, identifySelect } from "../../ultil/const";
 import { useShallow } from "zustand/react/shallow";
 import useStorePersons from "../../zustanStore/persons";
@@ -11,6 +10,7 @@ import useStoreSemesters from "../../zustanStore/semesters";
 import useStoreSupabase from "../../zustanStore/supabase";
 import { supaService } from "../../supabase/supaService";
 import { useSupabase } from "../../hooks/useSupabase";
+import Select from "./Select";
 
 const ProfessionSemester = forwardRef( (_, ref) => {
     const { supabase } = useStoreSupabase(useShallow(state=>({

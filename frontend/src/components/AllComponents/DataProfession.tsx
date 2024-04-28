@@ -6,9 +6,13 @@ import useStoreModal from "../../zustanStore/modal";
 import useStoreSupabase from "../../zustanStore/supabase";
 import { useSupabase } from "../../hooks/useSupabase";
 import { supaService } from "../../supabase/supaService";
-import { DeletePopUp, Input, InputForm, Popup, TableComponent } from "../";
 import { TABLE_NAME } from "../../ultil/const";
 import useStorePersons from "../../zustanStore/persons";
+import Input from "./Input";
+import DeletePopUp from "./DeletePopUp";
+import InputForm from "./InputForm";
+import TableComponent from "./TableComponent";
+import Popup from "./Popup";
 
 function DataProfession(){
     

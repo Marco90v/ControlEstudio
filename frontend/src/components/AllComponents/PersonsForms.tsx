@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { fieldNotEmptied } from "../../ultil";
-import { Popup, Select, Button, Input } from "../";
 import useStorePersons from "../../zustanStore/persons";
 import { ROLES, TABLE_NAME } from "../../ultil/const";
 import useStoreRoles from "../../zustanStore/roles";
@@ -10,6 +9,10 @@ import useStoreSupabase from "../../zustanStore/supabase";
 import useStoreModal from "../../zustanStore/modal";
 import { useSupabase } from "../../hooks/useSupabase";
 import { supaService } from "../../supabase/supaService";
+import Input from "./Input";
+import Select from "./Select";
+import Button from "./Button";
+import Popup from "./Popup";
 
 type Role = {
     id: number | null | undefined,

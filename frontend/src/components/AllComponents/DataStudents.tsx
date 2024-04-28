@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { PersonsForms, TablePersons, ProfessionSemester } from "../";
 import useStoreRoles from "../../zustanStore/roles";
 import { ROLES, TABLE_NAME } from "../../ultil/const";
 import useStoreSupabase from "../../zustanStore/supabase";
@@ -8,6 +7,9 @@ import { supaService } from "../../supabase/supaService";
 import useStoreLoading from "../../zustanStore/loading";
 import { useSupabase } from "../../hooks/useSupabase";
 import useStorePersons from "../../zustanStore/persons";
+import PersonsForms from "./PersonsForms";
+import ProfessionSemester from "./ProfessionSemester";
+import TablePersons from "./TablePersons";
 
 interface role {
     id: number | null | undefined,

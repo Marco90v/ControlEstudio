@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
-import { ApolloError } from "@apollo/client";
+import useStoreLoading from "../../zustanStore/loading";
+import { useShallow } from "zustand/react/shallow";
 import { COLORS } from "../../ultil/const";
 import Input from "./Input";
 import Button from "./Button";
-import useStoreLoading from "../../zustanStore/loading";
-import { useShallow } from "zustand/react/shallow";
 
 type props = {
     addCallBack: Function,
     title:string,
-    // loading:boolean[],
-    // error?: (ApolloError | undefined)[]
-    // error?: ({message:string} | null)[]
 }
 
 const initialStatus = {

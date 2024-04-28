@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Popup, TableComponent, DeletePopUp } from "../";
 import useStorePersons from "../../zustanStore/persons";
 import { TABLE_NAME } from "../../ultil/const";
 import { useShallow } from "zustand/react/shallow";
@@ -9,6 +8,9 @@ import useStoreRoles from "../../zustanStore/roles";
 import useStoreModal from "../../zustanStore/modal";
 import { useSupabase } from "../../hooks/useSupabase";
 import { supaService } from "../../supabase/supaService";
+import DeletePopUp from "./DeletePopUp";
+import TableComponent from "./TableComponent";
+import Popup from "./Popup";
 
 type Person = {
     email: string,
