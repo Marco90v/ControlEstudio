@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-// import { filter__typename } from '../ultil'
 
 type ClasseFormatPensum = {
     id: number,
@@ -8,20 +7,7 @@ type ClasseFormatPensum = {
     Name_Classes: string,
 }
 
-// type PensumPrimitive = {
-//     id: number,
-//     classes: {
-//         IdClasses: number,
-//         Name_Classes: string
-//     },
-//     semesters: {
-//         IdSemesters: number,
-//         Name_Semesters: string
-//     }
-// }
-
 type Pensum = {
-    // id:number,
     IdSemesters: number,
     Name_Semesters: string,
     Classes: ClasseFormatPensum[],
@@ -53,7 +39,6 @@ const useStorePensum = create<State & Action>()(
                     }
                 }),
                 addClassePensum: (pensum:any) => set((state) => {
-                    console.log(pensum)
                     if(state.pensum.find(e=>e.IdSemesters === pensum.IdSemesters) ){
                         const newData = state.pensum.map(e=>{
                             if(e.IdSemesters === pensum.IdSemesters){

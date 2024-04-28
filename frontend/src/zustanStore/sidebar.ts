@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type State = {
   visibleSideBar: boolean
@@ -21,7 +21,6 @@ const useStoreSideBar = create<State & Action>()(
       }),
       {
         name:"Visible Side Bar",
-        storage: createJSONStorage(() => localStorage)
       }
     )
   )

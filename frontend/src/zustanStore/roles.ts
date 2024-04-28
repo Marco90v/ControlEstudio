@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type Role = {
     id: number,
@@ -36,8 +36,7 @@ const useStoreRoles = create<State & Action>()(
                 })
             }),
             {
-            name:"Roles",
-            // storage: createJSONStorage(() => sessionStorage)
+                name:"Roles",
             }
         )
     )

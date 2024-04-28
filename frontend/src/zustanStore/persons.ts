@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type Person = {
     email: string,
@@ -130,8 +130,7 @@ const useStorePersons = create<State & Action>()(
                 })
             }),
             {
-            name:"Persons",
-            // storage: createJSONStorage(() => sessionStorage)
+                name:"Persons",
             }
         )
     )

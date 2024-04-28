@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 import { createClient, SupabaseClient } from "@supabase/supabase-js"
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -23,13 +23,13 @@ type Action = {
 const useStoreSupabase = create<State & Action>()(
   devtools(
     (set)=>({
-        supabase,
-        setSupabase: (supabase:SupabaseClient<any, any, any>) => set(state => {
-            return {
-                ...state,
-                supabase
-            }
-        }),
+      supabase,
+      setSupabase: (supabase:SupabaseClient<any, any, any>) => set(state => {
+        return {
+          ...state,
+          supabase
+        }
+      }),
     }),
     {
       name:"supabase",

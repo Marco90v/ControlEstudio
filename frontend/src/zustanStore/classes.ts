@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type Classe = {
     id:number | null | undefined,
@@ -51,7 +51,6 @@ const useStoreClasses = create<State & Action>()(
       }),
       {
         name:"Classes",
-        // storage: createJSONStorage(() => sessionStorage)
       }
     )
   )

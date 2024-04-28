@@ -30,7 +30,9 @@ const useStoreToken = create<State & Action>()(devtools(
           }
         })
       }),
-      {name:"Token"}
+      {
+        name:"Token"
+      }
     )
   )
 ))

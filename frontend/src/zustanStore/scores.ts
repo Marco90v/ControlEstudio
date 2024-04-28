@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type ClassesByProfessionAndSemester = {
     id:number,
@@ -38,12 +38,6 @@ type Action = {
   setScores: (scores:Score[]) => void,
   changeScores: (key:string, value:number, IdClasses:number) => void,
   clearScore: () => void,
-}
-
-const initialState:State = {
-    classes:[],
-    teachers:[],
-    scores:[],
 }
 
 const useStoreScores = create<State & Action>()(
@@ -101,8 +95,7 @@ const useStoreScores = create<State & Action>()(
                 })
             }),
             {
-            name:"useStoreScores",
-            // storage: createJSONStorage(() => sessionStorage)
+                name:"useStoreScores",
             }
         )
     )

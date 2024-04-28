@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type Section = {
     id: number,
@@ -36,7 +36,7 @@ const useStoreSections = create<State & Action>()(
                 }),
             }),
             {
-            name:"Sections",
+                name:"Sections",
             }
         )
     )

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 type ProfessionSemester = {
     id:number,
@@ -55,8 +55,7 @@ const useStoreStudentProfessionSemester = create<State & Action>()(
                 })
             }),
             {
-            name:"useStoreStudentProfessionSemester",
-            // storage: createJSONStorage(() => sessionStorage)
+                name:"useStoreStudentProfessionSemester",
             }
         )
     )
