@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { Navigate } from 'react-router';
+// import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,13 +8,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { GraduationCap, Loader2 } from 'lucide-react';
 
+const user = {
+    role: 'Admin',
+    name: 'Admin',
+    email: 'admin@admin.com',
+    image: 'https://i.pravatar.cc/300?img=1',
+    firstName: 'Admin',
+    lastName: 'Admin',
+    profilePicture: 'https://i.pravatar.cc/300?img=1',
+  };
+
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login, user, isLoading } = useAuth();
+  // const { login, user, isLoading } = useAuth();
+  
+  const isLoading = false;
 
-  if (user) {
+  // const login = (email: string, password: string) => {
+  //   console.log('login', email, password);
+  // };
+  const login = async (email: string, password: string) => {
+    console.log('login', email, password);
+    return true;
+  };
+
+  if (!user) {
     return <Navigate to="/dashboard" replace />;
   }
 

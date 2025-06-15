@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { 
   BookOpen,
   Users,
@@ -12,7 +12,7 @@ import {
   Home
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
+// import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
 const menuItems = [
@@ -60,10 +60,20 @@ const menuItems = [
   }
 ];
 
+const user = {
+  role: 'Admin',
+  name: 'Admin',
+  email: 'admin@admin.com',
+  image: 'https://i.pravatar.cc/300?img=1',
+  firstName: 'Admin',
+  lastName: 'Admin',
+  profilePicture: 'https://i.pravatar.cc/300?img=1',
+};
+
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const availableMenuItems = menuItems.filter(item => 
     user && item.roles.includes(user.role)

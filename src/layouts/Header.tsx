@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+// import { useAuth } from '@/contexts/AuthContext';
+// import { useTheme } from '@/contexts/ThemeContext';
 import { LogOut, Sun, Moon, Monitor } from 'lucide-react';
 import {
   DropdownMenu,
@@ -9,9 +9,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+const user = {
+  role: 'Admin',
+  name: 'Admin',
+  email: 'admin@admin.com',
+  image: 'https://i.pravatar.cc/300?img=1',
+  firstName: 'Admin',
+  lastName: 'Admin',
+  profilePicture: 'https://i.pravatar.cc/300?img=1',
+};
+
+
 export function Header() {
-  const { user, logout } = useAuth();
-  const { theme, setTheme } = useTheme();
+  // const { user, logout } = useAuth();
+  // const { theme, setTheme } = useTheme();
 
   const themeIcon = {
     light: Sun,
@@ -19,7 +30,17 @@ export function Header() {
     system: Monitor
   };
 
+  const theme = "light";
+
   const ThemeIcon = themeIcon[theme];
+
+  const setTheme = (theme: string) => {
+    console.log(theme);
+  };
+
+  const logout = () => {
+    console.log('logout');
+  };
 
   return (
     <header className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

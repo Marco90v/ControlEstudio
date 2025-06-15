@@ -1,20 +1,37 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { Layout } from './components/layout/Layout';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
+import { Layout } from './layouts/Layout';
 import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
-import { Classes } from './pages/Classes';
-import { Professions } from './pages/Professions';
-import { Pensum } from './pages/Pensum';
-import { Professors } from './pages/Professors';
-import { Students } from './pages/Students';
-import { Grades } from './pages/Grades';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from './components/ui/sonner';
+// import { AuthProvider, useAuth } from './contexts/AuthContext';
+// import { ThemeProvider } from './contexts/ThemeContext';
+// import { Layout } from './components/layout/Layout';
+// import { Login } from './pages/Login';
+// import { Dashboard } from './pages/Dashboard';
+// import { Classes } from './pages/Classes';
+// import { Professions } from './pages/Professions';
+// import { Pensum } from './pages/Pensum';
+// import { Professors } from './pages/Professors';
+// import { Students } from './pages/Students';
+// import { Grades } from './pages/Grades';
+// import { Toaster } from '@/components/ui/sonner';
+
+const user = {
+  role: 'Admin',
+  name: 'Admin',
+  email: 'admin@admin.com',
+  image: 'https://i.pravatar.cc/300?img=1',
+  firstName: 'Admin',
+  lastName: 'Admin',
+  profilePicture: 'https://i.pravatar.cc/300?img=1',
+};
+
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, isLoading } = useAuth();
+  // const { user, isLoading } = useAuth();
+
+  const isLoading = false;
   
+  // if (isLoading) {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -31,7 +48,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AppRoutes() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   return (
     <Routes>
@@ -43,18 +60,18 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <Routes>
-                <Route path="/dashboard" element={<Dashboard />} />
+                {/* <Route path="/dashboard" element={<Dashboard />} /> */}
                 {user?.role === 'Admin' && (
                   <>
-                    <Route path="/classes" element={<Classes />} />
-                    <Route path="/professions" element={<Professions />} />
-                    <Route path="/pensum" element={<Pensum />} />
-                    <Route path="/professors" element={<Professors />} />
-                    <Route path="/students" element={<Students />} />
+                    {/* <Route path="/classes" element={<Classes />} /> */}
+                    {/* <Route path="/professions" element={<Professions />} /> */}
+                    {/* <Route path="/pensum" element={<Pensum />} /> */}
+                    {/* <Route path="/professors" element={<Professors />} /> */}
+                    {/* <Route path="/students" element={<Students />} /> */}
                   </>
                 )}
-                <Route path="/grades" element={<Grades />} />
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                {/* <Route path="/grades" element={<Grades />} /> */}
+                {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
               </Routes>
             </Layout>
           </ProtectedRoute>
@@ -66,16 +83,22 @@ function AppRoutes() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-background font-sans antialiased">
-            <AppRoutes />
-            <Toaster />
-          </div>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+    // <ThemeProvider>
+    //   <AuthProvider>
+    //     <Router>
+    //       <div className="min-h-screen bg-background font-sans antialiased">
+    //         <AppRoutes />
+    //         <Toaster />
+    //       </div>
+    //     </Router>
+    //   </AuthProvider>
+    // </ThemeProvider>
+    <Router>
+      <div className="min-h-screen bg-background font-sans antialiased">
+        <AppRoutes />
+        <Toaster />
+      </div>
+    </Router>
   );
 }
 
