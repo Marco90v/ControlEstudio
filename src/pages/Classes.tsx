@@ -2,15 +2,37 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+// import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Edit, Trash2, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+// import { Textarea } from '@/components/ui/textarea';
 import { mockClasses } from '@/data/mockData';
 import type { Class } from '@/types';
+import { useForm } from 'react-hook-form';
+import { classSchema } from '@/features/schema';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from '@/components/ui/form';
+import InputForm from '@/components/common/InputForm';
+import TextareaForm from '@/components/common/TextareaForm';
+
+const initinalValues: Class = {
+  id: '',
+  name: '',
+  code: '',
+  credits: 0,
+  description: ''
+};
 
 export function Classes() {
+
+  const formClass = useForm<Class>({  
+    resolver: zodResolver(classSchema),
+    defaultValues: initinalValues,
+  });
+
+  // console.log(formClass.formState.errors);
+
   const [classes, setClasses] = useState<Class[]>(mockClasses);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -18,7 +40,7 @@ export function Classes() {
   const [formData, setFormData] = useState({
     name: '',
     code: '',
-    credits: 0,
+    credits: '0',
     description: ''
   });
 
@@ -27,30 +49,46 @@ export function Classes() {
     cls.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
     
-    if (editingClass) {
-      setClasses(classes.map(cls => 
-        cls.id === editingClass.id 
-          ? { ...editingClass, ...formData }
-          : cls
-      ));
-    } else {
-      const newClass: Class = {
-        id: (classes.length + 1).toString(),
-        ...formData
-      };
-      setClasses([...classes, newClass]);
-    }
+  //   if (editingClass) {
+  //     setClasses(classes.map(cls => 
+  //       cls.id === editingClass.id 
+  //         ? { ...editingClass, ...formData }
+  //         : cls
+  //     ));
+  //   } else {
+  //     const newClass: Class = {
+  //       id: (classes.length + 1).toString(),
+  //       ...formData
+  //     };
+  //     setClasses([...classes, newClass]);
+  //   }
     
-    resetForm();
-  };
+  //   resetForm();
+  // };
+
+  const onSubmit = async (data: Class) => {
+    console.log(data);
+
+  }
 
   const resetForm = () => {
-    setFormData({ name: '', code: '', credits: 0, description: '' });
-    setEditingClass(null);
+    // setFormData({ name: '', code: '', credits: 0, description: '' });
+    // setEditingClass(null);
+    // setIsDialogOpen(false);
+    formClass.reset();
+    formClass.setValue("id", crypto.randomUUID());
+    // formClass.setValue("name", "asdadasdasd");
+    // formClass.setValue("code", "aasdadsasd");
+    // formClass.setValue("credits", 2);
+    // formClass.setValue("description", "asdasdadadasdas");
+  };
+
+  const closeDialog = () => {
     setIsDialogOpen(false);
+    setEditingClass(null);
   };
 
   const handleEdit = (cls: Class) => {
@@ -89,57 +127,25 @@ export function Classes() {
                 {editingClass ? 'Edit Class' : 'Add New Class'}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="name">Class Name</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
+            <Form {...formClass}>
+              <form onSubmit={formClass.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <InputForm name='name' label='Class Name' />
+                  <InputForm name='code' label='Class Code' />
                 </div>
-                <div>
-                  <Label htmlFor="code">Class Code</Label>
-                  <Input
-                    id="code"
-                    value={formData.code}
-                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                    required
-                  />
+                <InputForm name='credits' label='Credits' type='number' min={1} max={10} />
+                <TextareaForm name='description' label='Description (Optional)' rows={3} />
+
+                <div className="flex justify-end space-x-2">
+                  <Button type="button" variant="outline" onClick={closeDialog}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    {editingClass ? 'Update' : 'Create'}
+                  </Button>
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="credits">Credits</Label>
-                <Input
-                  id="credits"
-                  type="number"
-                  min="1"
-                  max="6"
-                  value={formData.credits}
-                  onChange={(e) => setFormData({ ...formData, credits: parseInt(e.target.value) })}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingClass ? 'Update' : 'Create'}
-                </Button>
-              </div>
-            </form>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>

@@ -1,3 +1,9 @@
+import type { z } from "zod";
+import type { classSchema } from "@/features/schema";
+
+export type Class = z.infer<typeof classSchema>;
+
+
 export interface User {
   id: string;
   firstName: string;
@@ -11,13 +17,13 @@ export interface User {
   currentSemester?: number;
 }
 
-export interface Class {
-  id: string;
-  name: string;
-  code: string;
-  credits: number;
-  description?: string;
-}
+// export interface Class {
+//   id: string;
+//   name: string;
+//   code: string;
+//   credits: number;
+//   description?: string;
+// }
 
 export interface Profession {
   id: string;
