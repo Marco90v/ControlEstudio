@@ -7,4 +7,8 @@ export const classSchema = z.object({
   // credits: z.number().min(1).max(10),
   credits:  z.coerce.number().min(1, 'Must be at least 1 credits.').max(10, 'Must have a maximum of 10 credits'),
   description: z.string().optional()
-})
+});
+
+export const filterClassSchema = z.object({
+  search: z.string().optional(),
+});

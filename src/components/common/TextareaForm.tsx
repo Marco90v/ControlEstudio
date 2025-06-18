@@ -24,6 +24,9 @@ const TextareaForm = (props: Props) => {
               rows={rows}
             />
           </FormControl>
+          {!formClass.formState.errors[name] && (
+            <div className="h-5"></div>
+          )}
           <FormMessage />
         </FormItem>
       )}

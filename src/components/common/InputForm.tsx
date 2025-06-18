@@ -31,6 +31,9 @@ const InputForm = (props: Props) => {
           {/* <FormDescription>
             This is your public display name.
           </FormDescription> */}
+          {!formClass.formState.errors[name] && (
+            <div className="h-5"></div>
+          )}
           <FormMessage />
         </FormItem>
       )}
