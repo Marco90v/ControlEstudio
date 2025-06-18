@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { classSchema } from "@/features/schema";
+import type { classSchema } from "@/features/classes/schema";
 import type { filterClassSchema } from "@/features/classes/schema";
 
 export type Class = z.infer<typeof classSchema>;

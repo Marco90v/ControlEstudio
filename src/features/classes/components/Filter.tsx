@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { filterClassSchema } from "@/features/schema";
+import { filterClassSchema } from "@/features/classes/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FilterClass } from "@/types";
 import { useEffect } from "react";
