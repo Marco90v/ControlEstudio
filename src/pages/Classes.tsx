@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { mockClasses } from '@/data/mockData';
 import type { Class } from '@/types';
@@ -60,14 +60,14 @@ export function Classes() {
   //   setEditingClass(null);
   // };
 
-  const handleEdit = (cls: Class) => {
+  const handleEdit = useCallback((cls: Class) => {
     setEditingClass(cls);
     setIsDialogOpen(true);
-  };
+  }, []);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = useCallback((id: string) => {
     setClasses(classes.filter(cls => cls.id !== id));
-  };
+  },[classes]);
 
   return (
     <div className="space-y-6">

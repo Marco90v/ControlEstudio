@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Class } from "@/types";
 import { Edit, Trash2 } from "lucide-react";
+import { memo } from "react";
 
 interface Porps {
   cls: Class;
@@ -10,7 +11,8 @@ interface Porps {
   handleDelete: (id: string) => void;
 }
 
-const CardClass = ({cls, handleEdit, handleDelete}: Porps) => {
+const CardClass = memo(({cls, handleEdit, handleDelete}: Porps) => {
+  console.log(cls);
   return (
     <Card key={cls.id} className="hover:shadow-md transition-shadow">
       <CardHeader>
@@ -54,5 +56,6 @@ const CardClass = ({cls, handleEdit, handleDelete}: Porps) => {
       </CardContent>
     </Card>
   );
-};
+});
+
 export default CardClass;

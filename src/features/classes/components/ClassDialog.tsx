@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form } from "@/components/ui/form"
 import { classSchema } from "@/features/classes/schema"
-import type { Class } from "@/types"
+import type { Class, KeysClass } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useEffect } from "react"
@@ -34,20 +34,22 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
 
   useEffect(() => {
     if(editingClass) {
-      formClass.setValue("id", editingClass.id);
-      formClass.setValue("name", editingClass.name);
-      formClass.setValue("code", editingClass.code);
-      formClass.setValue("credits", editingClass.credits);
-      formClass.setValue("description", editingClass.description);
-    }else{
-      formClass.setValue("id", crypto.randomUUID());
+      Object.keys(editingClass).forEach((key) => {
+        formClass.setValue(key as KeysClass, editingClass[key as KeysClass]);
+      });
     }
-  
-    return () => {}
   }, [editingClass, formClass]);
 
-  const onSubmit = async (data: Class) => {
+  const onSubmit = (data: Class) => {
     console.log(data);
+  }
+
+  const handlerSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingClass) {
+      formClass.setValue("id", crypto.randomUUID());
+    }
+    formClass.handleSubmit(onSubmit)();
   }
 
   const closeDialog = () => {
@@ -75,7 +77,7 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
           </DialogTitle>
         </DialogHeader>
         <Form {...formClass}>
-          <form onSubmit={formClass.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handlerSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <InputForm name='name' label='Class Name' />
               <InputForm name='code' label='Class Code' />
@@ -87,7 +89,7 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
               <Button type="button" variant="outline" onClick={closeDialog}>
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" className="cursor-pointer">
                 {editingClass ? 'Update' : 'Create'}
               </Button>
             </div>
