@@ -3,6 +3,7 @@ import type { z } from "zod";
 import type { filterClassSchema } from "@/features/classes/schema";
 import type { classSchema } from "@/features/classes/schema";
 import type { professionSchema } from "@/features/professions/schema";
+import type { pensumSchema } from "@/features/classes/pensum/schema";
 
 export type Class = z.infer<typeof classSchema>;
 export type KeysClass = keyof typeof classSchema.shape;
@@ -10,6 +11,9 @@ export type FilterClass = z.infer<typeof filterClassSchema>;
 
 export type Profession = z.infer<typeof professionSchema>;
 export type KeysProfession = keyof typeof professionSchema.shape;
+
+export type PensumEntry = z.infer<typeof pensumSchema>;
+export type KeysPensumEntry = keyof typeof pensumSchema.shape;
 
 
 export interface User {
@@ -41,13 +45,13 @@ export interface User {
 //   description?: string;
 // }
 
-export interface PensumEntry {
-  id: string;
-  professionId: string;
-  classId: string;
-  semester: number;
-  isElective: boolean;
-}
+// export interface PensumEntry {
+//   id: string;
+//   professionId: string;
+//   classId: string;
+//   semester: number;
+//   isElective: boolean;
+// }
 
 export interface ProfessorAssignment {
   id: string;

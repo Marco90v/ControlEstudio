@@ -4,22 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, BookOpen, Trash2 } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { BookOpen, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
 import type { PensumEntry } from '@/types';
+import PensumDialog from '@/features/classes/pensum/components/PensumDialog';
 
 export function Pensum() {
   const [pensum, setPensum] = useState<PensumEntry[]>(mockPensum);
   const [selectedProfession, setSelectedProfession] = useState<string>('1');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    classId: '',
-    semester: 1,
-    isElective: false
-  });
+  // const [formData, setFormData] = useState({
+  //   classId: '',
+  //   semester: 1,
+  //   isElective: false
+  // });
 
   const selectedProfessionData = mockProfessions.find(p => p.id === selectedProfession);
   const professionPensum = pensum.filter(p => p.professionId === selectedProfession);
@@ -37,23 +36,23 @@ export function Pensum() {
     };
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
     
-    const newPensumEntry: PensumEntry = {
-      id: (pensum.length + 1).toString(),
-      professionId: selectedProfession,
-      ...formData
-    };
+  //   const newPensumEntry: PensumEntry = {
+  //     id: (pensum.length + 1).toString(),
+  //     professionId: selectedProfession,
+  //     ...formData
+  //   };
     
-    setPensum([...pensum, newPensumEntry]);
-    resetForm();
-  };
+  //   setPensum([...pensum, newPensumEntry]);
+  //   resetForm();
+  // };
 
-  const resetForm = () => {
-    setFormData({ classId: '', semester: 1, isElective: false });
-    setIsDialogOpen(false);
-  };
+  // const resetForm = () => {
+  //   setFormData({ classId: '', semester: 1, isElective: false });
+  //   setIsDialogOpen(false);
+  // };
 
   const handleDelete = (id: string) => {
     setPensum(pensum.filter(p => p.id !== id));
@@ -68,9 +67,9 @@ export function Pensum() {
       }, 0);
   };
 
-  const availableClasses = mockClasses.filter(cls => 
-    !professionPensum.some(p => p.classId === cls.id)
-  );
+  // const availableClasses = mockClasses.filter(cls => 
+  //   !professionPensum.some(p => p.classId === cls.id)
+  // );
 
   return (
     <div className="space-y-6">
@@ -80,73 +79,7 @@ export function Pensum() {
           <p className="text-muted-foreground">Manage semester-based class assignments for each profession</p>
         </div>
         
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => resetForm()}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Class to Curriculum
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Class to Curriculum</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="class">Class</Label>
-                <Select
-                  value={formData.classId}
-                  onValueChange={(value) => setFormData({ ...formData, classId: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a class" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableClasses.map((cls) => (
-                      <SelectItem key={cls.id} value={cls.id}>
-                        {cls.code} - {cls.name} ({cls.credits} credits)
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="semester">Semester</Label>
-                <Select
-                  value={formData.semester.toString()}
-                  onValueChange={(value) => setFormData({ ...formData, semester: parseInt(value) })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: selectedProfessionData?.totalSemesters || 8 }, (_, i) => (
-                      <SelectItem key={i + 1} value={(i + 1).toString()}>
-                        Semester {i + 1}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="isElective"
-                  checked={formData.isElective}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isElective: !!checked })}
-                />
-                <Label htmlFor="isElective">Elective Course</Label>
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={!formData.classId}>
-                  Add to Curriculum
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <PensumDialog selectedProfession={selectedProfession} isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
       </div>
 
       {/* Profession Selector */}
