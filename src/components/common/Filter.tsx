@@ -9,13 +9,14 @@ import { useEffect } from "react";
 
 interface Props {
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>
+  placeholder: string
 }
 
 const initinalValues: FilterClass = {
   search: '',
 };
 
-const Filter = ({setSearchTerm}: Props) => {
+const Filter = ({setSearchTerm, placeholder=''}: Props) => {
   const {register, watch} = useForm<FilterClass>({
     resolver: zodResolver(filterClassSchema),
     defaultValues: initinalValues,
@@ -36,7 +37,7 @@ const Filter = ({setSearchTerm}: Props) => {
         <div className="relative">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search classes by name or code..."
+            placeholder={placeholder}
             className="pl-10"
             {...register('search')}
           />

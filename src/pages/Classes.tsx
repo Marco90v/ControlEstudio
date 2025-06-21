@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { mockClasses } from '@/data/mockData';
 import type { Class } from '@/types';
 import ClassDialog from '@/features/classes/components/ClassDialog';
-import Filter from '@/features/classes/components/Filter';
+import Filter from '@/components/common/Filter';
 import CardClass from '@/features/classes/components/CardClass';
 
 export function Classes() {
@@ -80,7 +80,7 @@ export function Classes() {
       </div>
 
       {/* Search */}
-      <Filter setSearchTerm={setSearchTerm} />
+      <Filter setSearchTerm={setSearchTerm} placeholder='Search classes by name or code...' />
 
       {/* Classes Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

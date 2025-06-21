@@ -12,7 +12,6 @@ interface Porps {
 }
 
 const CardClass = memo(({cls, handleEdit, handleDelete}: Porps) => {
-  console.log(cls);
   return (
     <Card key={cls.id} className="hover:shadow-md transition-shadow">
       <CardHeader>
