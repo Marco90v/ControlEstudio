@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Trash2 } from 'lucide-react';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { BookOpen } from 'lucide-react';
 import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
 import type { PensumEntry } from '@/types';
 import PensumDialog from '@/features/classes/pensum/components/PensumDialog';
@@ -12,6 +12,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { pensumSchema } from '@/features/classes/pensum/schema';
 import { Form } from '@/components/ui/form';
 import ProfessionSelector from '@/features/classes/pensum/components/ProfessionSelector';
+import TabsSemeter from '@/features/classes/pensum/components/TabsSemeter';
+import CardClassBySemester from '@/features/classes/pensum/components/CardClassBySemester';
 
 const initinalValues: PensumEntry = {
   id: '',
@@ -28,18 +30,22 @@ export function Pensum() {
     defaultValues: initinalValues,
   });
 
+  const professionId = formPensum.watch('professionId');
+
 
   const [pensum, setPensum] = useState<PensumEntry[]>(mockPensum);
-  const [selectedProfession, setSelectedProfession] = useState<string>('1');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const [selectedProfession, setSelectedProfession] = useState<string>('1');
   // const [formData, setFormData] = useState({
   //   classId: '',
   //   semester: 1,
   //   isElective: false
   // });
 
-  const selectedProfessionData = mockProfessions.find(p => p.id === selectedProfession);
-  const professionPensum = pensum.filter(p => p.professionId === selectedProfession);
+  // const selectedProfessionData = mockProfessions.find(p => p.id === selectedProfession);
+  // const professionPensum = pensum.filter(p => p.professionId === selectedProfession);
+  const selectedProfessionData = mockProfessions.find(p => p.id === professionId);
+  const professionPensum = pensum.filter(p => p.professionId === professionId);
 
   // Group classes by semester
   const semesterData = Array.from({ length: selectedProfessionData?.totalSemesters || 8 }, (_, i) => {
@@ -72,9 +78,9 @@ export function Pensum() {
   //   setIsDialogOpen(false);
   // };
 
-  const handleDelete = (id: string) => {
-    setPensum(pensum.filter(p => p.id !== id));
-  };
+  // const handleDelete = (id: string) => {
+  //   setPensum(pensum.filter(p => p.id !== id));
+  // };
 
   const getTotalCredits = (semester: number) => {
     return professionPensum
@@ -109,13 +115,7 @@ export function Pensum() {
 
       {/* Curriculum Tabs */}
       <Tabs defaultValue="1" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
-          {semesterData.map((sem) => (
-            <TabsTrigger key={sem.semester} value={sem.semester.toString()}>
-              Sem {sem.semester}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <TabsSemeter semesterData={semesterData} />
 
         {semesterData.map((sem) => (
           <TabsContent key={sem.semester} value={sem.semester.toString()}>
@@ -132,47 +132,7 @@ export function Pensum() {
                 {sem.classes.length > 0 ? (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {sem.classes.map((entry) => (
-                      <Card key={entry.id} className="border-l-4 border-l-primary">
-                        <CardHeader className="pb-3">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <BookOpen className="h-4 w-4 text-primary" />
-                                <span className="font-medium">{entry.class.name}</span>
-                              </div>
-                              <Badge variant="secondary" className="mt-1">
-                                {entry.class.code}
-                              </Badge>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleDelete(entry.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">Credits:</span>
-                              <span className="font-medium">{entry.class.credits}</span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">Type:</span>
-                              <Badge variant={entry.isElective ? "outline" : "default"} className="text-xs">
-                                {entry.isElective ? 'Elective' : 'Required'}
-                              </Badge>
-                            </div>
-                            {entry.class.description && (
-                              <p className="text-xs text-muted-foreground mt-2">
-                                {entry.class.description}
-                              </p>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <CardClassBySemester key={entry.id} entry={entry} />
                     ))}
                   </div>
                 ) : (
