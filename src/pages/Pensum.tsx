@@ -1,16 +1,34 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Trash2 } from 'lucide-react';
-import { Label } from '@/components/ui/label';
 import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
 import type { PensumEntry } from '@/types';
 import PensumDialog from '@/features/classes/pensum/components/PensumDialog';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { pensumSchema } from '@/features/classes/pensum/schema';
+import { Form } from '@/components/ui/form';
+import ProfessionSelector from '@/features/classes/pensum/components/ProfessionSelector';
+
+const initinalValues: PensumEntry = {
+  id: '',
+  professionId: '1',
+  classId: '',
+  semester: 0,
+  isElective: false
+};
 
 export function Pensum() {
+
+  const formPensum = useForm<PensumEntry>({
+    resolver: zodResolver(pensumSchema),
+    defaultValues: initinalValues,
+  });
+
+
   const [pensum, setPensum] = useState<PensumEntry[]>(mockPensum);
   const [selectedProfession, setSelectedProfession] = useState<string>('1');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -79,29 +97,15 @@ export function Pensum() {
           <p className="text-muted-foreground">Manage semester-based class assignments for each profession</p>
         </div>
         
-        <PensumDialog selectedProfession={selectedProfession} isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+        <Form {...formPensum}>
+          <PensumDialog isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+        </Form>
       </div>
 
       {/* Profession Selector */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-4">
-            <Label>Select Profession:</Label>
-            <Select value={selectedProfession} onValueChange={setSelectedProfession}>
-              <SelectTrigger className="w-64">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {mockProfessions.map((profession) => (
-                  <SelectItem key={profession.id} value={profession.id}>
-                    {profession.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
+      <Form {...formPensum}>
+        <ProfessionSelector />
+      </Form>
 
       {/* Curriculum Tabs */}
       <Tabs defaultValue="1" className="w-full">

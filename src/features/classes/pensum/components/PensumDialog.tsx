@@ -1,53 +1,56 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import type { PensumEntry } from "@/types";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import type { PensumEntry } from "@/types";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react"
-import { useForm } from "react-hook-form";
-import { pensumSchema } from "@/features/classes/pensum/schema";
+import { useFormContext, type FieldValues } from "react-hook-form";
+// import { pensumSchema } from "@/features/classes/pensum/schema";
 import SelectForm from "@/components/common/SelectForm";
-import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Form } from "@/components/ui/form";
+// import { Form } from "@/components/ui/form";
 import BodySelectClass from "./BodySelectClass";
 import BodySelectProfession from "./BodySelectProfession";
+import Check from "@/components/common/Check";
 
 interface Props {
-  selectedProfession: string
   isDialogOpen: boolean
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const initinalValues: PensumEntry = {
-  id: '',
-  professionId: '',
-  classId: '',
-  semester: undefined,
-  isElective: false
-};
+// const initinalValues: PensumEntry = {
+//   id: '',
+//   professionId: '',
+//   classId: '',
+//   semester: 0,
+//   isElective: false
+// };
 
-const PensumDialog = ({selectedProfession, isDialogOpen, setIsDialogOpen}:Props) => {  
+const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {  
+
+  const formPensum = useFormContext();
   
-  const formPensum = useForm<PensumEntry>({
-    resolver: zodResolver(pensumSchema),
-    defaultValues: initinalValues,
-  });
+  
+  // const formPensum = useForm<PensumEntry>({
+  //   resolver: zodResolver(pensumSchema),
+  //   defaultValues: initinalValues,
+  // });
 
-  const [formData, setFormData] = useState({
-    classId: '',
-    semester: 1,
-    isElective: false
-  });
+  const professionId = formPensum.watch("professionId");
+  // console.log(professionId);
 
-  const onSubmit = (data: PensumEntry) => {
+  // const [formData, setFormData] = useState({
+  //   classId: '',
+  //   semester: 1,
+  //   isElective: false
+  // });
+
+  const onSubmit = (data:FieldValues) => {
     console.log(data);
   }
 
   const handlerSave = (e: React.FormEvent) => {
     e.preventDefault();
     formPensum.setValue("id", crypto.randomUUID());
-    formPensum.setValue("professionId", selectedProfession);
+    // formPensum.setValue("professionId", selectedProfession);
     formPensum.handleSubmit(onSubmit)();
   }
 
@@ -73,33 +76,25 @@ const PensumDialog = ({selectedProfession, isDialogOpen, setIsDialogOpen}:Props)
         <DialogHeader>
           <DialogTitle>Add Class to Curriculum</DialogTitle>
         </DialogHeader>
-        <Form {...formPensum}>
+        {/* <Form {...formPensum}> */}
           <form onSubmit={handlerSave} className="space-y-4">
             <SelectForm name='classId' label='Class' placeholder="Select a class">
-              <BodySelectClass selectedProfession={selectedProfession} />
+              <BodySelectClass selectedProfession={professionId} />
             </SelectForm>
             <SelectForm name='semester' label='Semester' placeholder="Select a semester">
-              <BodySelectProfession selectedProfession={selectedProfession} />
+              <BodySelectProfession selectedProfession={professionId} />
             </SelectForm>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="isElective"
-                checked={formData.isElective}
-                onCheckedChange={(checked) => setFormData({ ...formData, isElective: !!checked })}
-              />
-              <Label htmlFor="isElective">Elective Course</Label>
-            </div>
+            <Check name="isElective" label="Elective Course" />
             <div className="flex justify-end space-x-2">
               <Button type="button" variant="outline" onClick={closeDialog}>
                 Cancel
               </Button>
-              {/* <Button type="submit" disabled={!formData.classId}> */}
               <Button type="submit">
                 Add to Curriculum
               </Button>
             </div>
           </form>
-        </Form>
+        {/* </Form> */}
       </DialogContent>
     </Dialog>
   )
