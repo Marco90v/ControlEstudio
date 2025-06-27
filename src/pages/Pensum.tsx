@@ -6,14 +6,14 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { BookOpen } from 'lucide-react';
 import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
 import type { PensumEntry } from '@/types';
-import PensumDialog from '@/features/classes/pensum/components/PensumDialog';
+import PensumDialog from '@/features/pensum/components/PensumDialog';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { pensumSchema } from '@/features/classes/pensum/schema';
+import { pensumSchema } from '@/features/pensum/schema';
 import { Form } from '@/components/ui/form';
-import ProfessionSelector from '@/features/classes/pensum/components/ProfessionSelector';
-import TabsSemeter from '@/features/classes/pensum/components/TabsSemeter';
-import CardClassBySemester from '@/features/classes/pensum/components/CardClassBySemester';
+import ProfessionSelector from '@/features/pensum/components/ProfessionSelector';
+import TabsSemeter from '@/features/pensum/components/TabsSemeter';
+import CardClassBySemester from '@/features/pensum/components/CardClassBySemester';
 
 const initinalValues: PensumEntry = {
   id: '',

@@ -3,7 +3,7 @@ import type { z } from "zod";
 import type { filterClassSchema } from "@/features/classes/schema";
 import type { classSchema } from "@/features/classes/schema";
 import type { professionSchema } from "@/features/professions/schema";
-import type { pensumSchema } from "@/features/classes/pensum/schema";
+import type { pensumSchema } from "@/features/pensum/schema";
 
 export type Class = z.infer<typeof classSchema>;
 export type KeysClass = keyof typeof classSchema.shape;
