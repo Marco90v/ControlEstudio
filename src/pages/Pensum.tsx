@@ -119,7 +119,7 @@ export function Pensum() {
 
         {semesterData.map((sem) => (
           <TabsContent key={sem.semester} value={sem.semester.toString()}>
-            <Card>
+            <Card className='mt-6'>
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>Semester {sem.semester}</CardTitle>
