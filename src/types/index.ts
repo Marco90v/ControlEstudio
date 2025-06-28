@@ -4,6 +4,7 @@ import type { filterClassSchema } from "@/features/classes/schema";
 import type { classSchema } from "@/features/classes/schema";
 import type { professionSchema } from "@/features/professions/schema";
 import type { pensumSchema } from "@/features/pensum/schema";
+import type { assignmentSchema } from "@/features/professors/schema";
 
 export type Class = z.infer<typeof classSchema>;
 export type KeysClass = keyof typeof classSchema.shape;
@@ -14,6 +15,8 @@ export type KeysProfession = keyof typeof professionSchema.shape;
 
 export type PensumEntry = z.infer<typeof pensumSchema>;
 export type KeysPensumEntry = keyof typeof pensumSchema.shape;
+
+export type ProfessorAssignment = z.infer<typeof assignmentSchema>;
 
 
 export interface User {
@@ -53,15 +56,15 @@ export interface User {
 //   isElective: boolean;
 // }
 
-export interface ProfessorAssignment {
-  id: string;
-  professorId: string;
-  professionId: string;
-  classId: string;
-  semester: number;
-  shift: 'Morning' | 'Afternoon' | 'Night';
-  section: 'A' | 'B' | 'C';
-}
+// export interface ProfessorAssignment {
+//   id: string;
+//   professorId: string;
+//   professionId: string;
+//   classId: string;
+//   semester: number;
+//   shift: 'Morning' | 'Afternoon' | 'Night';
+//   section: 'A' | 'B' | 'C';
+// }
 
 export interface Grade {
   id: string;

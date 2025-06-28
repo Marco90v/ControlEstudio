@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mockProfessors, mockProfessions, mockClasses, mockProfessorAssignments } from '@/data/mockData';
 import type { User, ProfessorAssignment } from '@/types';
+import DialogAssignment from '@/features/professors/components/DialogAssignment';
 
 export function Professors() {
   const [professors, setProfessors] = useState<User[]>(mockProfessors);
@@ -134,7 +135,7 @@ export function Professors() {
         </div>
         
         <div className="flex space-x-2">
-          <Dialog open={isAssignmentDialogOpen} onOpenChange={setIsAssignmentDialogOpen}>
+          {/* <Dialog open={isAssignmentDialogOpen} onOpenChange={setIsAssignmentDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" onClick={() => resetAssignmentForm()}>
                 <Settings className="h-4 w-4 mr-2" />
@@ -266,7 +267,8 @@ export function Professors() {
                 </div>
               </form>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
+          <DialogAssignment isAssignmentDialogOpen={isAssignmentDialogOpen} setIsAssignmentDialogOpen={setIsAssignmentDialogOpen} />
 
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
