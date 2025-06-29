@@ -5,7 +5,7 @@ import { useFormContext } from "react-hook-form";
 type Props = {
   name: string;
   label: string;
-  type?: 'text' | 'number' | 'url';
+  type?: 'text' | 'number' | 'url' | 'email';
   min?: number;
   max?: number;
   disabled?: boolean;
