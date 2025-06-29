@@ -5,13 +5,15 @@ import { useFormContext } from "react-hook-form";
 type Props = {
   name: string;
   label: string;
-  type?: 'text' | 'number';
+  type?: 'text' | 'number' | 'url';
   min?: number;
   max?: number;
+  disabled?: boolean;
+  placeholder?: string;
 };
 
 const InputForm = (props: Props) => {
-  const { name, label, type='text', min, max } = props;
+  const { name, label, type='text', min, max, ...other } = props;
   const formClass = useFormContext();
   return (
     <FormField
@@ -26,6 +28,7 @@ const InputForm = (props: Props) => {
               type={type}
               min={min}
               max={max}
+              {...other}
             />
           </FormControl>
           {/* <FormDescription>

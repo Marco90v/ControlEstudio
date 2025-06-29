@@ -4,7 +4,7 @@ import type { filterClassSchema } from "@/features/classes/schema";
 import type { classSchema } from "@/features/classes/schema";
 import type { professionSchema } from "@/features/professions/schema";
 import type { pensumSchema } from "@/features/pensum/schema";
-import type { assignmentSchema } from "@/features/professors/schema";
+import type { assignmentSchema, professorSchema } from "@/features/professors/schema";
 
 export type Class = z.infer<typeof classSchema>;
 export type KeysClass = keyof typeof classSchema.shape;
@@ -17,6 +17,10 @@ export type PensumEntry = z.infer<typeof pensumSchema>;
 export type KeysPensumEntry = keyof typeof pensumSchema.shape;
 
 export type ProfessorAssignment = z.infer<typeof assignmentSchema>;
+export type Professor = z.infer<typeof professorSchema>;
+export type KeysProfessor = keyof typeof professorSchema.shape;
+
+
 
 
 export interface User {
