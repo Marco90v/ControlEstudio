@@ -6,6 +6,7 @@ import type { professionSchema } from "@/features/professions/schema";
 import type { pensumSchema } from "@/features/pensum/schema";
 import type { assignmentSchema, professorSchema } from "@/features/professors/schema";
 import type { studentSchema } from "@/features/students/schema";
+import type { gradeSchema } from "@/features/grades/schema";
 
 export type Class = z.infer<typeof classSchema>;
 export type KeysClass = keyof typeof classSchema.shape;
@@ -23,6 +24,9 @@ export type KeysProfessor = keyof typeof professorSchema.shape;
 
 export type Student = z.infer<typeof studentSchema>;
 export type KeysStudent = keyof typeof studentSchema.shape;
+
+export type Grade = z.infer<typeof gradeSchema>;
+
 
 
 
@@ -75,14 +79,14 @@ export interface User {
 //   section: 'A' | 'B' | 'C';
 // }
 
-export interface Grade {
-  id: string;
-  studentId: string;
-  classId: string;
-  semester: number;
-  grade?: number;
-  status: 'Pending' | 'Passed' | 'Failed';
-}
+// export interface Grade {
+//   id: string;
+//   studentId: string;
+//   classId: string;
+//   semester: number;
+//   grade?: number;
+//   status: 'Pending' | 'Passed' | 'Failed';
+// }
 
 export interface StudentEnrollment {
   id: string;
