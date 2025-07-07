@@ -1,24 +1,37 @@
-import { getAllGrades } from "@/services/supabase";
+import { fetchTable } from "@/services/supabase";
 import useGrades from "@/store/useGrades";
+import type { Grade } from "@/types";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 export function useLoadGrades() {
-  console.log("useLoadGrades");
-  const { grades, setGrades } = useGrades(
+  const { grades, setGrades, setLoading, setError } = useGrades(
     useShallow((state) => ({
       grades: state.grades,
       setGrades: state.setGrades,
+      setLoading: state.setLoading,
+      setError: state.setError,
     }))
   );
 
   useEffect(() => {
-    if (grades.length === 0) {
-      console.log("useEffect");
-      getAllGrades().then((data) => {
-        if (data) setGrades(data);
-      });
-    }
+    if (grades.length > 0) return;
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+      const { data, error } = await fetchTable<Grade>("grades");
+
+      if (error) {
+        console.error(error);
+        setError(error);
+      } else if (data) {
+        setGrades(data);
+      }
+
+      setLoading(false);
+    };
+
+    load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

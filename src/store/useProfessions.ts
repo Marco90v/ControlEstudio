@@ -4,10 +4,14 @@ import { create } from "zustand"
 import type { Profession } from "@/types"
 
 type State = {
-  professions: Profession[]
+  professions: Profession[],
+  loading: boolean
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setProfessions: (professions: Profession[]) => void
   addProfession: (profession: Profession) => void
   updateProfession: (profession: Profession) => void
@@ -19,6 +23,14 @@ const useProfessions = create<State & Action>()(devtools(
     persist(
       (set)=>({
         professions: [],
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setProfessions: (professions:Profession[]) => set((state) => {
           return { ...state, professions: professions }
         }),

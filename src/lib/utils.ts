@@ -1,4 +1,4 @@
-import type { Login, Profession, ProfessorAssignment, Profile, Student } from "@/types";
+import type { Grade, Login, PensumEntry, Profession, ProfessorAssignment, Profile, Student } from "@/types";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -121,4 +121,57 @@ export const getNameProfession = (professions: Profession[], professionId: strin
   if(professions.length === 0) return 'N/A';
   if(professionId === undefined) return 'N/A';
   return professions.filter(profession => profession.id === professionId)[0]?.names || 'N/A';
+};
+
+export const search = <T>(data: T[], searchTerm: string, keys:(keyof T)[]):T[] => {
+  if (!searchTerm) return data;
+  const lowerSearch = searchTerm.toLowerCase();
+  if (searchTerm) {
+    return data.filter(item =>
+      keys.some(key => {
+        const value = item[key];
+        return (
+          typeof value === 'string' &&
+          value.toLowerCase().includes(lowerSearch)
+        );
+      })
+    );
+  }
+  return data;
+};
+
+// Get student grades for current user
+export const getStudentGrades = (studentId: string | undefined, students: Student[], professions: Profession[], pensums: PensumEntry[], grades: Grade[]) => {
+  if(!studentId) return [];
+  const student = students.find(s => s.id === studentId);
+  if (!student) return [];
+
+  const studentProfession = professions.find(p => p.id === student.professionId);
+  if (!studentProfession) return [];
+
+  // Get all classes for current semester
+  const currentSemester = student.currentSemester || 1;
+  const semesterClasses = pensums
+    .filter(p => p.IdProfession === student.professionId && p.IdSemester <= Number(currentSemester))
+    .map(p => {
+      const grade = grades.find(g => g.studentId === studentId && g.classId === p.IdClasse);
+      return {
+        id: grade?.id || crypto.randomUUID(),
+        studentId: studentId,
+        classId: p.IdClasse,
+        semester: p.IdSemester,
+        grade: grade?.grade || undefined,
+        status: grade?.status || 'Pending',
+      };
+    });
+  return semesterClasses;
+};
+
+export const getGPA = (studentId: string | undefined, grades: Grade[]) => {
+  if(!studentId) return 0;
+  const studentGrades = grades.filter(g => g.studentId === studentId && g.grade !== undefined);
+  if (studentGrades.length === 0) return 0;
+  
+  const totalGrades = studentGrades.reduce((sum, g) => sum + (g.grade || 0), 0);
+  return Math.round((totalGrades / studentGrades.length) * 100) / 100;
 };

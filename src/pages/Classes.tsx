@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import type { Class } from '@/types';
 import ClassDialog from '@/features/classes/components/ClassDialog';
 import Filter from '@/components/common/Filter';
@@ -7,12 +6,16 @@ import CardClass from '@/features/classes/components/CardClass';
 import useClasses from '@/store/useClasses';
 import { useShallow } from 'zustand/react/shallow';
 import { getAllClasses } from '@/services/supabase';
+import NoData from '@/features/classes/components/NoData';
+import { search } from '@/lib/utils';
 
 export function Classes() {
 
-  const {classes, setClasses} = useClasses(useShallow((state=>({
+  const {classes, setClasses, loading, error} = useClasses(useShallow((state=>({
     classes: state.classes,
     setClasses: state.setClasses,
+    loading: state.loading,
+    error: state.error,
   }))));
 
   useEffect(() => {
@@ -30,15 +33,19 @@ export function Classes() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingClass, setEditingClass] = useState<Class | null>(null);
 
-  const filteredClasses = classes.filter(cls =>
-    cls.names.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cls.code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const filteredClasses = search(classes, searchTerm, ['names', 'code']);
+  
   const handleEdit = useCallback((cls: Class) => {
     setEditingClass(cls);
     setIsDialogOpen(true);
   }, []);
+
+  if(error){
+    return <div>Error: {error}</div>;
+  };
+  if(loading){
+    return <div>Loading...</div>;
+  };
 
   return (
     <div className="space-y-6">
@@ -60,15 +67,7 @@ export function Classes() {
         ))}
       </div>
 
-      {filteredClasses.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">
-              {searchTerm ? 'No classes found matching your search.' : 'No classes available.'}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      <NoData data={filteredClasses} searchTerm={searchTerm} textTrue='No classes found matching your search.' textFalse='No classes available.' />
     </div>
   );
 }

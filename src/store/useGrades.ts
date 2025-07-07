@@ -5,9 +5,13 @@ import type { Grade } from "@/types"
 
 type State = {
   grades: Grade[]
+  loading: boolean
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setGrades: (grades: Grade[]) => void
   addGrade: (grade: Grade) => void
   updateGrade: (grade: Grade) => void
@@ -19,6 +23,14 @@ const useGrades = create<State & Action>()(devtools(
     persist(
       (set)=>({
         grades: [],
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setGrades: (grades:Grade[]) => set((state) => {
           return { ...state, grades: grades }
         }),

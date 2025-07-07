@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import type { Profession } from '@/types';
 import ProfessionDialog from '@/features/professions/components/ProfessionDialog';
 import CardProfession from '@/features/professions/components/CardProfession';
@@ -7,6 +6,8 @@ import Filter from '@/components/common/Filter';
 import useProfessions from '@/store/useProfessions';
 import { useShallow } from 'zustand/react/shallow';
 import { useLoadProfessions } from '@/hooks/useLoadProfessions';
+import NoData from '@/features/classes/components/NoData';
+import { search } from '@/lib/utils';
 
 export function Professions() {
 
@@ -20,11 +21,8 @@ export function Professions() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProfession, setEditingProfession] = useState<Profession | null>(null);
 
-  const filteredProfessions = professions.filter(prof =>
-    prof.names.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    prof.code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const filteredProfessions = search(professions, searchTerm, ['names', 'code']);
+  
   const handleEdit = useCallback( (prof: Profession) => {
     setEditingProfession(prof);
     setIsDialogOpen(true);
@@ -51,15 +49,8 @@ export function Professions() {
         ))}
       </div>
 
-      {filteredProfessions.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">
-              {searchTerm ? 'No professions found matching your search.' : 'No professions available.'}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      <NoData data={filteredProfessions} searchTerm={searchTerm} textTrue='No professions found matching your search.' textFalse='No professions available.' />
+      
     </div>
   );
 }

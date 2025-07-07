@@ -4,10 +4,14 @@ import { create } from "zustand"
 import type { Student } from "@/types"
 
 type State = {
-  students: Student[]
+  students: Student[],
+  loading: boolean
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setStudents: (students: Student[]) => void
   addStudent: (student: Student) => void
   updateStudent: (student: Student) => void
@@ -19,6 +23,14 @@ const useStudents = create<State & Action>()(devtools(
     persist(
       (set)=>({
         students: [],
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setStudents: (students:Student[]) => set((state) => {
           return { ...state, students: students }
         }),

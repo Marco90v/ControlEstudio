@@ -5,9 +5,13 @@ import type { Class } from "@/types"
 
 type State = {
   classes: Class[]
+  loading: boolean
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setClasses: (classes: Class[]) => void
   addClass: (classData: Class) => void
   updateClass: (classData: Class) => void
@@ -19,6 +23,14 @@ const useClasses = create<State & Action>()(devtools(
     persist(
       (set)=>({
         classes: [],
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setClasses: (classes:Class[]) => set((state) => {
           return { ...state, classes: classes }
         }),

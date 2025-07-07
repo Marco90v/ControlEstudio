@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import CardGPA from '@/features/grades/components/CardGPA';
 import CardSemester from '@/features/grades/components/CardSemester';
 import Filter from '@/components/common/Filter';
 import CardAdmin from '@/features/grades/components/CardAdmin';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';
-import { getRoles } from '@/lib/utils';
+import { getGPA, getRoles, getStudentGrades, search } from '@/lib/utils';
 import useProfessions from '@/store/useProfessions';
 import useStudents from '@/store/useStudents';
 import usePensum from '@/store/usePensum';
@@ -18,6 +17,7 @@ import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 import { useLoadPensums } from '@/hooks/useLoadPensums';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
 import { useLoadAssignments } from '@/hooks/useLoadAssignments';
+import NoData from '@/features/classes/components/NoData';
 
 export function Grades() {
 
@@ -68,52 +68,12 @@ export function Grades() {
 
   const availableStudents = getAvailableStudents();
   
-  const filteredStudents = availableStudents.filter(student =>
-    student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Get student grades for current user
-  const getStudentGrades = (studentId: string | undefined) => {
-    if(!studentId) return [];
-    const student = students.find(s => s.id === studentId);
-    if (!student) return [];
-
-    const studentProfession = professions.find(p => p.id === student.professionId);
-    if (!studentProfession) return [];
-
-    // Get all classes for current semester
-    const currentSemester = student.currentSemester || 1;
-    const semesterClasses = pensums
-      .filter(p => p.IdProfession === student.professionId && p.IdSemester <= Number(currentSemester))
-      .map(p => {
-        const grade = grades.find(g => g.studentId === studentId && g.classId === p.IdClasse);
-        return {
-          id: grade?.id || crypto.randomUUID(),
-          studentId: studentId,
-          classId: p.IdClasse,
-          semester: p.IdSemester,
-          grade: grade?.grade || undefined,
-          status: grade?.status || 'Pending',
-        };
-      });
-    return semesterClasses;
-  };
-
-  const getGPA = (studentId: string | undefined) => {
-    if(!studentId) return 0;
-    const studentGrades = grades.filter(g => g.studentId === studentId && g.grade !== undefined);
-    if (studentGrades.length === 0) return 0;
-    
-    const totalGrades = studentGrades.reduce((sum, g) => sum + (g.grade || 0), 0);
-    return Math.round((totalGrades / studentGrades.length) * 100) / 100;
-  };
+  const filteredStudents = search(availableStudents, searchTerm, ['firstName', 'lastName', 'email']);
 
   // Student view - only show their own grades
   if (getRoles(profile?.role) === 'Student') {
-    const studentGrades = getStudentGrades(profile?.userUID.toString());
-    const gpa = getGPA(profile?.userUID.toString());
+    const studentGrades = getStudentGrades(profile?.userUID.toString(), students, professions, pensums, grades);
+    const gpa = getGPA(profile?.userUID.toString(), grades);
     
     return (
       <div className="space-y-6">
@@ -151,8 +111,8 @@ export function Grades() {
       {/* Students List */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredStudents.map((student) => {
-          const gpa = getGPA(student.id);
-          const studentGrades = getStudentGrades(student.id);
+          const gpa = getGPA(student.id, grades);
+          const studentGrades = getStudentGrades(student.id, students, professions, pensums, grades);
           const passedClasses = studentGrades.filter(g => g.status === 'Passed').length;
           const pendingClasses = studentGrades.filter(g => g.status === 'Pending').length;
 
@@ -171,15 +131,7 @@ export function Grades() {
         })}
       </div>
 
-      {filteredStudents.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">
-              {searchTerm ? 'No students found matching your search.' : 'No students available for grade management.'}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      <NoData data={filteredStudents} searchTerm={searchTerm} textTrue='No students found matching your search.' textFalse='No students available for grade management.' />      
     </div>
   );
 }

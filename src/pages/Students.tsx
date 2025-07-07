@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import type { Student } from '@/types';
 import DialogStudent from '@/features/students/components/DialogStudent';
 import Filter from '@/components/common/Filter';
@@ -7,6 +6,8 @@ import CardStudent from '@/features/students/components/CardStudent';
 import { useLoadStudents } from '@/hooks/useLoadStudents';
 import useStudents from '@/store/useStudents';
 import { useShallow } from 'zustand/react/shallow';
+import NoData from '@/features/classes/components/NoData';
+import { search } from '@/lib/utils';
 
 export function Students() {
 
@@ -22,12 +23,8 @@ export function Students() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   
-  const filteredStudents:Student[] = students.filter(student =>
-    student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const filteredStudents = search(students, searchTerm, ['firstName', 'lastName', 'email']);
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -54,15 +51,8 @@ export function Students() {
         ))}
       </div>
 
-      {filteredStudents.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">
-              {searchTerm ? 'No students found matching your search.' : 'No students enrolled yet.'}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      <NoData data={filteredStudents} searchTerm={searchTerm} textTrue='No students found matching your search.' textFalse='No students enrolled yet.' />
+      
     </div>
   );
 }

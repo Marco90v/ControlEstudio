@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getAllStudents, getStudentById } from "@/services/supabase";
+import { fetchTable, getStudentById } from "@/services/supabase";
 import { useShallow } from "zustand/react/shallow";
 import useStudents from "@/store/useStudents";
 import useAuth from "@/store/AuthStore";
@@ -7,11 +7,12 @@ import { getRoles } from "@/lib/utils";
 import type { Student } from "@/types";
 
 export function useLoadStudents() {
-  console.log("useLoadStudents");
-  const { students, setStudents } = useStudents(
+  const { students, setStudents, setLoading, setError } = useStudents(
     useShallow((state) => ({
       students: state.students,
       setStudents: state.setStudents,
+      setLoading: state.setLoading,
+      setError: state.setError,
     }))
   );
   const {profile} = useAuth(useShallow((state)=>({
@@ -19,19 +20,33 @@ export function useLoadStudents() {
   })));
 
   useEffect(() => {
-    if (students.length === 0) {
-      console.log("useEffect");
-      if(getRoles(profile?.role) === 'Admin'){
-        getAllStudents().then((data) => {
+    if (students.length > 0) return;
+    if (!profile?.role) return;
+
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        if (getRoles(profile.role) === "Admin") {
+          const { data, error } = await fetchTable<Student>("students");
+          if (error) return setError(error);
           if (data) setStudents(data);
-        });
-      }else{
-        if(profile?.userUID === undefined) return;
-        getStudentById(profile?.userUID).then((data) => {
-          if (data) setStudents(data as Student[]); 
-        });
+        } else {
+          if (!profile.userUID) return;
+          const { data, error } = await getStudentById(profile.userUID);
+          if (error) return setError(error);
+          if (data) setStudents(Array.isArray(data) ? data : [data]);
+        }
+      } catch (error) {
+        console.error(error);
+        setError("Error loading students");
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+
+    load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 }

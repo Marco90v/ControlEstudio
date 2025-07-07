@@ -4,10 +4,14 @@ import { create } from "zustand"
 import type { PensumEntry } from "@/types"
 
 type State = {
-  pensums: PensumEntry[]
+  pensums: PensumEntry[],
+  loading: boolean
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setPensums: (pensum: PensumEntry[]) => void
   addPensum: (pensum: PensumEntry) => void
   updatePensum: (pensum: PensumEntry) => void
@@ -19,6 +23,14 @@ const usePensum = create<State & Action>()(devtools(
     persist(
       (set)=>({
         pensums: [],
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setPensums: (pensums:PensumEntry[]) => set((state) => {
           return { ...state, pensums: pensums }
         }),

@@ -4,10 +4,14 @@ import { create } from "zustand"
 import type { ProfessorAssignment } from "@/types"
 
 type State = {
-  professorAssignments: ProfessorAssignment[]
+  professorAssignments: ProfessorAssignment[],
+  loading: boolean
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setProfessorAssignments: (ProfessorAssignments: ProfessorAssignment[]) => void
   addProfessorAssignment: (ProfessorAssignment: ProfessorAssignment) => void
   updateProfessorAssignment: (ProfessorAssignment: ProfessorAssignment) => void
@@ -20,6 +24,14 @@ const useProfessorAssignment = create<State & Action>()(devtools(
     persist(
       (set)=>({
         professorAssignments: [],
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setProfessorAssignments: (professorAssignments:ProfessorAssignment[]) => set((state) => {
           return {
             ...state,

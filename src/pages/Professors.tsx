@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Professor } from '@/types';
 import DialogAssignment from '@/features/professors/components/DialogAssignment';
@@ -12,6 +11,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { useLoadProfessors } from '@/hooks/useLoadProfessors';
 import { useLoadAssignments } from '@/hooks/useLoadAssignments';
 import useProfessorAssignment from '@/store/useProfessorAssignment';
+import NoData from '@/features/classes/components/NoData';
+import { search } from '@/lib/utils';
 
 export function Professors() {
 
@@ -31,12 +32,8 @@ export function Professors() {
   const [isAssignmentDialogOpen, setIsAssignmentDialogOpen] = useState(false);
   const [editingProfessor, setEditingProfessor] = useState<Professor | null>(null);
 
-  const filteredProfessors = professors.filter(prof =>
-    prof.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    prof.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    prof.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const filteredProfessors = search(professors, searchTerm, ['firstName', 'lastName', 'email']);
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -89,13 +86,8 @@ export function Professors() {
             })}
           </div>
 
-          {professorAssignments.length === 0 && (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground">No teaching assignments yet.</p>
-              </CardContent>
-            </Card>
-          )}
+          <NoData data={professorAssignments} searchTerm={searchTerm} textTrue='No teaching assignments yet.' textFalse='No teaching assignments yet.' />
+          
         </TabsContent>
       </Tabs>
     </div>

@@ -1,6 +1,11 @@
 import type { Class, Grade, PensumEntry, Profession, Professor, ProfessorAssignment, Student } from '@/types';
 import { createClient, type Session } from '@supabase/supabase-js'
 
+interface SupabaseResult<T> {
+  data: T | null;
+  error: string | null;
+}
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
 const db = import.meta.env.VITE_DB_NAME
@@ -55,6 +60,14 @@ export const getPerson = async (id: string) => {
     return data;
   }
 };
+
+/** GET ALL ENTRIES FROM A TABLE */
+export async function fetchTable<T>(tableName: string): Promise<SupabaseResult<T[]>> {
+  const { data, error } = await supabase.from(tableName).select("*");
+
+  if (error) return { data: null, error: error.message };
+  return { data: data ?? [], error: null };
+}
 
 /** CLASSES */
 
@@ -280,14 +293,29 @@ export const getAllStudents = async () => {
   }
 };
 
-export const getStudentById = async (id: string) => {
-  const { data, error } = await supabase.from('students').select().eq('id', id);
-  if(error){
-    return null;
-  }else{
-    return data;
+// export const getStudentById = async (id: string) => {
+//   const { data, error } = await supabase.from('students').select().eq('id', id);
+//   if(error){
+//     return null;
+//   }else{
+//     return data;
+//   }
+// };
+
+export async function getStudentById(id: string): Promise<SupabaseResult<Student>> {
+  const { data, error } = await supabase
+    .from("students")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(`Supabase error (getStudentById: ${id}):`, error.message);
+    return { data: null, error: error.message };
   }
-};
+
+  return { data: data ?? null, error: null };
+}
 
 export const addStudentSupabase = async (studentData: Student) => {
   const { error } = await supabase.from('students').insert(studentData);
