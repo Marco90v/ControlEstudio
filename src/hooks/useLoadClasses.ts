@@ -1,4 +1,3 @@
-// hooks/useLoadProfessions.ts
 import { useEffect } from "react";
 import { getAllClasses } from "@/services/supabase";
 import useClasses from "@/store/useClasses";

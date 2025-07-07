@@ -20,7 +20,6 @@ interface Props {
   setEditingClass: React.Dispatch<React.SetStateAction<Class | null>>
 }
 
-
 const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingClass}:Props) => {
 
   const {addClass, updateClass} = useClasses(useShallow((state=>({

@@ -1,10 +1,3 @@
-// id: string;
-// studentId: string;
-// classId: string;
-// semester: number;
-// grade?: number;
-// status: 'Pending' | 'Passed' | 'Failed';
-
 import { z } from "zod"
 
 export const gradeSchema = z.object({

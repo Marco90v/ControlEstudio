@@ -12,7 +12,6 @@ import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   professor: Professor;
-  // professorAssignments: ProfessorAssignment[];
   setEditingProfessor: React.Dispatch<React.SetStateAction<Professor | null>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -29,38 +28,22 @@ const CardProfessor = ({professor:prof, setEditingProfessor, setIsDialogOpen }: 
 
   const handleEdit = (prof: Professor) => {
     setEditingProfessor(prof);
-    // setProfessorFormData({
-    //   firstName: prof.firstName,
-    //   lastName: prof.lastName,
-    //   email: prof.email,
-    //   contactNumber: prof.contactNumber,
-    //   gender: prof.gender,
-    //   profilePicture: prof.profilePicture || ''
-    // });
     setIsDialogOpen(true);
   };
 
   const handleDelete = (id: string) => {
-    // console.log('handleDelete', id);
-    // setProfessors(professors.filter(prof => prof.id !== id));
-    // setAssignments(assignments.filter(assign => assign.professorId !== id));
-
     deleteProfessorSupabase(id).then(res => {
       if(res){
         deleteProfessor(id);
       }
     });
     deleteProfessorAssignmentSupabase(id).then(res => {
-      // console.log('deleteProfessorAssignmentSupabase', res);
       if(res){
         deleteProfessorAssignment(id);
       }
     });
   };
 
-  // const getProfessorAssignments = (professorId: string) => {
-  //   return assignments.filter(assign => assign.professorId === professorId);
-  // };
   return (
    <Card key={prof.id} className="hover:shadow-md transition-shadow">
     <CardHeader>
@@ -113,7 +96,6 @@ const CardProfessor = ({professor:prof, setEditingProfessor, setIsDialogOpen }: 
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Assignments:</span>
             <Badge variant="outline">
-              {/* {professorAssignments.length} classes */}
               {getTotalClassesByProfessor(professorAssignments)} classes
             </Badge>
           </div>

@@ -1,6 +1,6 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
 import { useFormContext } from "react-hook-form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 type Props = {
   name: string;
@@ -31,9 +31,6 @@ const InputForm = (props: Props) => {
               {...other}
             />
           </FormControl>
-          {/* <FormDescription>
-            This is your public display name.
-          </FormDescription> */}
           {!formClass.formState.errors[name] && (
             <div className="h-5"></div>
           )}

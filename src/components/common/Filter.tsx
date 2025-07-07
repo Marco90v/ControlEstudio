@@ -30,7 +30,6 @@ const Filter = ({setSearchTerm, placeholder=''}: Props) => {
     return () => {}
   }, [search, setSearchTerm])
   
-
   return (
     <Card>
       <CardContent className="pt-6">

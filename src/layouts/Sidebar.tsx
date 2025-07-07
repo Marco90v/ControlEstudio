@@ -1,18 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { 
-  BookOpen,
-  Users,
-  GraduationCap,
-  UserCheck,
-  FileText,
-  ClipboardList,
-  Menu,
-  X,
-  Home
-} from 'lucide-react';
+import { BookOpen, Users, GraduationCap, UserCheck, FileText, ClipboardList, Menu, X, Home } from 'lucide-react';
 import { cn, getRoles } from '@/lib/utils';
-// import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -63,16 +52,6 @@ const menuItems = [
   }
 ];
 
-// const user = {
-//   role: 'Admin',
-//   name: 'Admin',
-//   email: 'admin@admin.com',
-//   image: 'https://i.pravatar.cc/300?img=1',
-//   firstName: 'Admin',
-//   lastName: 'Admin',
-//   profilePicture: 'https://i.pravatar.cc/300?img=1',
-// };
-
 export function Sidebar() {
 
   const {profile} = useAuth(useShallow((state=>({
@@ -81,7 +60,6 @@ export function Sidebar() {
 
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  // const { user } = useAuth();
 
   const availableMenuItems = menuItems.filter(item => 
     profile && item.roles.includes(getRoles(profile.role))

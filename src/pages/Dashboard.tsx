@@ -40,7 +40,6 @@ export function Dashboard() {
       const user = data?.user
       if (!user) return
       
-      // console.log("fetchProfile", personData, user.id);
       const personData = await getPerson(user.id)
       if (Array.isArray(personData) && personData.length > 0) {
         const { roles, ...rest } = personData[0]
@@ -168,7 +167,6 @@ export function Dashboard() {
                     <div>
                       <span className="text-muted-foreground">Profession:</span>
                       <div className="font-medium">
-                        {/* {mockProfessions.find(p => p.id === user.professionId)?.name || 'N/A'} */}
                         {getNameProfession(professions, students[0]?.professionId)}
                       </div>
                     </div>

@@ -44,15 +44,11 @@ const CardAssignament = ({assignment}:Props) => {
   }, [assignment.professorId, professors]);
 
   const handleDelete = (id: string) => {
-    // console.log('handleDelete', id);
     deleteAssignmentSupabase(id).then(res => {
       if(res){
         deleteAssignment(id);
       }
     });
-    // setAssignments(assignments.filter(a => a.id !== assignment.id))
-    // setProfessors(professors.filter(prof => prof.id !== id));
-    // setAssignments(assignments.filter(assign => assign.professorId !== id));
   };
 
   return (
@@ -88,7 +84,6 @@ const CardAssignament = ({assignment}:Props) => {
                 variant="ghost"
                 size="icon"
                 className="cursor-pointer hover:bg-red-500/10"
-                // onClick={() => setAssignments(assignments.filter(a => a.id !== assignment.id))}
                 onClick={()=>handleDelete(assignment.id)}
               >
                 <Trash2 className="h-4 w-4" />

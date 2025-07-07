@@ -26,7 +26,6 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
   }))));
 
   const handleDelete = (id: string) => {
-    // console.log('handleDelete', id);
     if(protectedStudentsDemo(id)){
       deleteStudentSupabase(id).then(res => {
         if(res){
@@ -36,29 +35,15 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
     }else{
       console.log("This student is part of the demo, cannot be removed");
     }
-    // setStudents(students.filter(student => student.id !== id));
-    // setProfessors(professors.filter(prof => prof.id !== id));
-    // setAssignments(assignments.filter(assign => assign.professorId !== id));
   };
 
   const handleEdit = (student: Student) => {
     setEditingStudent(student);
-    // setFormData({
-    //   firstName: student.firstName,
-    //   lastName: student.lastName,
-    //   email: student.email,
-    //   contactNumber: student.contactNumber,
-    //   gender: student.gender,
-    //   professionId: student.professionId || '',
-    //   currentSemester: student.currentSemester || 1,
-    //   profilePicture: student.profilePicture || ''
-    // });
     setIsDialogOpen(true);
   };
 
   const getProfessionName = (professionId?: string) => {
     if (!professionId) return 'Not assigned';
-    // const profession = mockProfessions.find(p => p.id === professionId);
     const profession = professions.find(p => p.id === professionId);
     return profession?.names || 'Unknown';
   };

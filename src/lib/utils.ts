@@ -1,4 +1,4 @@
-import type { Profession, ProfessorAssignment, Profile, Student } from "@/types";
+import type { Login, Profession, ProfessorAssignment, Profile, Student } from "@/types";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -32,7 +32,14 @@ export type NewPensum = {
   }[];
 };
 
-
+export const demoCredentials:Login[] = [
+  {email:'LeonadoCuellar@email.com', password:'1234', role:'Admin'},
+  {email:'AlmaFranco@email.com', password:'1234', role:'Admin'},
+  {email:'RafaCozar@email.com', password:'1234', role:'Professor'},
+  {email:'OdalysMadrigal@email.com', password:'1234', role:'Professor'},
+  {email:'AngelNavas@email.com', password:'1234', role:'Student'},
+  {email:'TatianaEcheverria@email.com', password:'1234', role:'Student'},
+];
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -90,7 +97,6 @@ export function transformPensum(data: pensums[]):NewPensum | undefined {
 
 export const getTotalCredits = (cls: semesterType[]) => {
   return cls.reduce((total, subject) => total + (subject.credits ?? 0), 0);
-  // return 0;
 };
 
 export const getTotalClassesByProfessor = (ProfessorAssignment: ProfessorAssignment[]) => {
@@ -107,7 +113,6 @@ export const protectedStudentsDemo = (id: string) => {
 };
 
 export const getCurrentSemester = (students: Student[], profile: Profile | null) => {
-  // console.log(students, profile);
   return students.filter(student => student.id === profile?.userUID)?.[0]?.currentSemester || null;
 };
 

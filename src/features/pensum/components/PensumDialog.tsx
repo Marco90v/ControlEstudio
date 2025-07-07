@@ -1,14 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-// import type { PensumEntry } from "@/types";
-// import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react"
 import { useFormContext, type FieldValues } from "react-hook-form";
-// import { pensumSchema } from "@/features/classes/pensum/schema";
 import SelectForm from "@/components/common/SelectForm";
-// import { Form } from "@/components/ui/form";
-import BodySelectClass from "./BodySelectClass";
-import BodySelectProfession from "./BodySelectProfession";
+import BodySelectClass from "@/features/pensum/components/BodySelectClass";
+import BodySelectProfession from "@/features/pensum/components/BodySelectProfession";
 import Check from "@/components/common/Check";
 import { addPensumSupabase } from "@/services/supabase";
 import usePensum from "@/store/usePensum";
@@ -20,14 +16,6 @@ interface Props {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-// const initinalValues: PensumEntry = {
-//   id: '',
-//   professionId: '',
-//   classId: '',
-//   semester: 0,
-//   isElective: false
-// };
-
 const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {  
 
   const {addPensum} = usePensum(useShallow((state=>({
@@ -35,24 +23,8 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
   }))));
 
   const formPensum = useFormContext();
-  
-  
-  // const formPensum = useForm<PensumEntry>({
-  //   resolver: zodResolver(pensumSchema),
-  //   defaultValues: initinalValues,
-  // });
-
-  // const professionId = formPensum.watch("professionId");
-  // console.log(professionId);
-
-  // const [formData, setFormData] = useState({
-  //   classId: '',
-  //   semester: 1,
-  //   isElective: false
-  // });
 
   const onSubmit = (data:FieldValues) => {
-    // console.log(data);
     addPensumSupabase(data as PensumEntry).then((res)=>{
       if(res){
         addPensum(data as PensumEntry);
@@ -75,18 +47,10 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
   };
 
   const onOpenChange = () => {
-    // formPensum.reset();
-    // setEditingClass(null);
-    // id: string;
-    // IdProfession: string;
-    // IdClasse: string;
-    // IdSemester: number;
-    // isElective: boolean;
     formPensum.setValue("id", undefined);
     formPensum.setValue("isElective", undefined);
     formPensum.setValue("IdClasse", undefined);
     formPensum.setValue("IdSemester", undefined);
-    // formPensum.setValue("professionId", professionId);
     setIsDialogOpen((val) => !val);
   }
 
@@ -102,7 +66,6 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
         <DialogHeader>
           <DialogTitle>Add Class to Curriculum</DialogTitle>
         </DialogHeader>
-        {/* <Form {...formPensum}> */}
           <form onSubmit={handlerSave} className="space-y-4">
             <SelectForm name='IdClasse' label='Class' placeholder="Select a class">
               <BodySelectClass />
@@ -120,7 +83,6 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
               </Button>
             </div>
           </form>
-        {/* </Form> */}
       </DialogContent>
     </Dialog>
   )

@@ -1,13 +1,9 @@
 import type { Class, Grade, PensumEntry, Profession, Professor, ProfessorAssignment, Student } from '@/types';
 import { createClient, type Session } from '@supabase/supabase-js'
-// import type { Session } from 'react-router';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
 const db = import.meta.env.VITE_DB_NAME
-
-// const token = localStorage.getItem("token") || '';
-// const supabaseAccessToken = token !== '' ? JSON.parse(token) : '';
 
 // Create a single supabase client for interacting with your database
 export const supabase = createClient(supabaseUrl, supabaseKey,{
@@ -15,24 +11,12 @@ export const supabase = createClient(supabaseUrl, supabaseKey,{
   db: { schema:db }
 });
 
-// supabase.auth.onAuthStateChange();
-
 export const getSession = async (setSession:(session:Session)=>void) => {
   const { data } = await supabase.auth.getSession();
   if(data && data.session){
     setSession(data.session);
   }
 };
-
-// export const onAuthStateChange = async (setSession:(session:Session)=>void):Promise<Subscription> => {
-//   const { data: { subscription } } = await supabase.auth.onAuthStateChange((_event, session) => {
-//     if(session){
-//       setSession(session);
-//     }
-//   });
-//   return subscription;
-// };
-
 
 export const signIn = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -55,9 +39,6 @@ export const signOut = async () => {
 };
 
 export const getUser = async () => {
-  // if(token === null){
-  //   return null;
-  // }
   const { data, error } = await supabase.auth.getUser();
   if(error){
     return null;
@@ -67,7 +48,6 @@ export const getUser = async () => {
 };
 
 export const getPerson = async (id: string) => {
-  // supabase.from(TABLE_NAME.PERSONS).select('*, roles!inner(names)').eq('userUID', user.id)
   const { data, error } = await supabase.from('persons').select('*, roles!inner(names)').eq('userUID', id);
   if(error){
     return null;
@@ -79,7 +59,6 @@ export const getPerson = async (id: string) => {
 /** CLASSES */
 
 export const getAllClasses = async () => {
-  // const { data, error } = await supabase.from('classes').select('*, professions!inner(name)').eq('id', id);
   const { data, error } = await supabase.from('classes').select();
   if(error){
     return null;
@@ -119,7 +98,6 @@ export const deleteClassSupabase = async (id: string) => {
 /** PROFESSIONS */
 
 export const getAllProfessions = async () => {
-  // const { data, error } = await supabase.from('professions').select('*, classes!inner(name)').eq('id', id);
   const { data, error } = await supabase.from('professions').select();
   if(error){
     return null;
@@ -168,7 +146,6 @@ export const deleteProfessionSupabase = async (id: string) => {
 /** PENSUM */
 
 export const getAllPensum = async () => {
-  // const { data, error } = await supabase.from('pensum').select('*, professions!inner(name)').eq('id', id);
   const { data, error } = await supabase.from('pensum').select();
   if(error){
     return null;
@@ -208,7 +185,6 @@ export const deletePensumSupabase = async (id: string) => {
 /** PROFESSORS */
 
 export const getAllProfessors = async () => {
-  // const { data, error } = await supabase.from('professors').select('*, roles!inner(names)').eq('id', id);
   const { data, error } = await supabase.from('professors').select();
   if(error){
     return null;
@@ -216,15 +192,6 @@ export const getAllProfessors = async () => {
     return data;
   }
 };
-
-// export const getProfessorById = async (id: string) => {
-//   const { data, error } = await supabase.from('professors').select('*, roles!inner(names)').eq('id', id);
-//   if(error){
-//     return null;
-//   }else{
-//     return data;
-//   }
-// };
 
 export const addProfessorSupabase = async (professorData: Professor) => {
   const { error } = await supabase.from('professors').insert(professorData);
@@ -257,7 +224,6 @@ export const deleteProfessorSupabase = async (id: string) => {
 /** ASSIGNMENTS */
 
 export const getAllAssignments = async () => {
-  // const { data, error } = await supabase.from('assignments').select('*, professors!inner(name)').eq('id', id);
   const { data, error } = await supabase.from('assignments').select();
   if(error){
     return null;
@@ -306,7 +272,6 @@ export const deleteProfessorAssignmentSupabase = async (id: string) => {
 /** STUDENTS **/
 
 export const getAllStudents = async () => {
-  // const { data, error } = await supabase.from('students').select('*, roles!inner(names)').eq('id', id);
   const { data, error } = await supabase.from('students').select();
   if(error){
     return null;
@@ -355,7 +320,6 @@ export const deleteStudentSupabase = async (id: string) => {
 /** GRADES **/
 
 export const getAllGrades = async () => {
-  // const { data, error } = await supabase.from('grades').select('*, professions!inner(name)').eq('id', id);
   const { data, error } = await supabase.from('grades').select();
   if(error){
     return null;

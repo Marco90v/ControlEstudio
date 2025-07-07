@@ -25,14 +25,13 @@ const CardClassBySemester = ({entry}:Props) => {
   }))));
 
   const handleDelete = (id: string) => {
-  // console.log(id);
     deletePensumSupabase(id).then((res)=>{
-      // console.log(res);
       if(res){
         deletePensum(id);
       }
     });
   };
+  
   return (
     <Card key={entry.id} className="border-l-4 border-l-primary">
       <CardHeader className="pb-3">

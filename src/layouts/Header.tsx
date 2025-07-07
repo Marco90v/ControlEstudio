@@ -1,11 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { LogOut, Sun, Moon, Monitor } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { signOut } from '@/services/supabase';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';

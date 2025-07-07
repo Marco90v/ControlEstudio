@@ -21,10 +21,16 @@ const useProfessorAssignment = create<State & Action>()(devtools(
       (set)=>({
         professorAssignments: [],
         setProfessorAssignments: (professorAssignments:ProfessorAssignment[]) => set((state) => {
-          return { ...state, professorAssignments: professorAssignments }
+          return {
+            ...state,
+            professorAssignments: professorAssignments
+          }
         }),
         addProfessorAssignment: (professorAssignment:ProfessorAssignment) => set((state) => {
-          return { ...state, professorAssignments: [...state.professorAssignments, professorAssignment] }
+          return {
+            ...state,
+            professorAssignments: [...state.professorAssignments, professorAssignment]
+          }
         }),
         updateProfessorAssignment: (professorAssignment:ProfessorAssignment) => set((state) => {
           return {
@@ -36,10 +42,16 @@ const useProfessorAssignment = create<State & Action>()(devtools(
             )}
         }),
         deleteProfessorAssignment: (id:string) => set((state) => {
-          return { ...state, professorAssignments: state.professorAssignments.filter(p => p.professorId !== id) }
+          return {
+            ...state,
+            professorAssignments: state.professorAssignments.filter(p => p.professorId !== id)
+          }
         }),
         deleteAssignment: (id:string) => set((state) => {
-          return { ...state, professorAssignments: state.professorAssignments.filter(p => p.id !== id) }
+          return {
+            ...state,
+            professorAssignments: state.professorAssignments.filter(p => p.id !== id)
+          }
         })
       }),
       {

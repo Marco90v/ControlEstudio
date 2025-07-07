@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { BookOpen } from 'lucide-react';
-// import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
 import type { PensumEntry } from '@/types';
 import PensumDialog from '@/features/pensum/components/PensumDialog';
 import { useForm } from 'react-hook-form';
@@ -21,14 +19,6 @@ import { useLoadClasses } from '@/hooks/useLoadClasses';
 import { getTotalCredits, transformPensum } from '@/lib/utils';
 import { useLoadPensums } from '@/hooks/useLoadPensums';
 
-// const initinalValues: PensumEntry = {
-//   id: '',
-//   professionId: '1',
-//   classId: '',
-//   semester: 0,
-//   isElective: false
-// };
-
 export function Pensum() {
 
   const {pensums} = usePensum(useShallow((state=>({
@@ -44,39 +34,11 @@ export function Pensum() {
 
   const formPensum = useForm<PensumEntry>({
     resolver: zodResolver(pensumSchema),
-    // defaultValues: initinalValues,
   });
 
   const IdProfession = formPensum.watch('IdProfession');
-  // console.log(IdProfession);
 
-
-  // const [pensum, setPensum] = useState<PensumEntry[]>(mockPensum);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // const [selectedProfession, setSelectedProfession] = useState<string>('1');
-  // const [formData, setFormData] = useState({
-  //   classId: '',
-  //   semester: 1,
-  //   isElective: false
-  // });
-
-  // const selectedProfessionData = mockProfessions.find(p => p.id === selectedProfession);
-  // const professionPensum = pensum.filter(p => p.professionId === selectedProfession);
-  // const selectedProfessionData = mockProfessions.find(p => p.id === IdProfession);
-  // const professionPensum = pensums.filter(p => p.IdProfession === IdProfession);
-
-  // Group classes by semester
-  // const semesterData = Array.from({ length: selectedProfessionData?.totalSemesters || 8 }, (_, i) => {
-  //   const semester = i + 1;
-  //   const semesterClasses = professionPensum.filter(p => p.IdSemester === semester);
-  //   return {
-  //     semester,
-  //     classes: semesterClasses.map(p => ({
-  //       ...p,
-  //       class: mockClasses.find(c => c.id === p.IdClasse)!
-  //     }))
-  //   };
-  // });
 
   const pensum = pensums.filter(p => p.IdProfession === IdProfession).map(c=>{
     return {
@@ -87,54 +49,8 @@ export function Pensum() {
       description: classes.find(cls => cls.id === c.IdClasse)?.description,
     }
   });
-  // console.log(temp);
+
   const NewPensum = transformPensum(pensum);
-  // console.log(temp2);
-
-  // const rest = Object.groupBy(temp, 'IdSemester');
-  // console.log(temp);
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-    
-  //   const newPensumEntry: PensumEntry = {
-  //     id: (pensum.length + 1).toString(),
-  //     professionId: selectedProfession,
-  //     ...formData
-  //   };
-    
-  //   setPensum([...pensum, newPensumEntry]);
-  //   resetForm();
-  // };
-
-  // const resetForm = () => {
-  //   setFormData({ classId: '', semester: 1, isElective: false });
-  //   setIsDialogOpen(false);
-  // };
-
-  // const handleDelete = (id: string) => {
-  //   setPensum(pensum.filter(p => p.id !== id));
-  // };
-
-  // const getTotalCredits = (sem: any) => {
-  //   // console.log(sem);
-  //   const total = sem.classes.reduce((total, p) => {
-  //     const cls = mockClasses.find(c => c.id === p.IdClasse);
-  //     return total + (cls?.credits || 0);
-  //   }, 0);
-  //   return total;
-  //   // return professionPensum
-  //   //   .filter(p => p.semester === semester)
-  //   //   .reduce((total, p) => {
-  //   //     const cls = mockClasses.find(c => c.id === p.classId);
-  //   //     return total + (cls?.credits || 0);
-  //   //   }, 0);
-  //   // return 0;
-  // };
-
-  // const availableClasses = mockClasses.filter(cls => 
-  //   !professionPensum.some(p => p.classId === cls.id)
-  // );
 
   return (
     <div className="space-y-6">

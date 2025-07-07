@@ -1,12 +1,11 @@
+import { useFormContext } from "react-hook-form"
 import { FormField } from "@/components/ui/form"
 import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useFormContext } from "react-hook-form"
 import { Select, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Props {
   name: string
   label: string
-  // available: Class[]
   placeholder?: string
   children: React.ReactNode
 }
@@ -34,9 +33,6 @@ const SelectForm = (props: Props) => {
               </SelectContent>
             </Select>
           </FormControl>
-          {/* <FormDescription>
-            This is your public display name.
-          </FormDescription> */}
           {!formPensum.formState.errors[name] && (
             <div className="h-5"></div>
           )}

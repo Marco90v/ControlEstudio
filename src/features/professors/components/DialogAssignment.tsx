@@ -7,11 +7,11 @@ import type { ProfessorAssignment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Settings } from "lucide-react";
 import { useForm, type FieldValues } from "react-hook-form";
-import { assignmentSchema } from "../schema";
-import SelectSemesters from "../../../components/common/SelectSemesters";
-import SelectClasses from "./SelectClasses";
-import SelectProfessions from "../../../components/common/SelectProfessions";
-import SelectProfessors from "./SelectProfessors";
+import { assignmentSchema } from "@/features/professors/schema";
+import SelectSemesters from "@/components/common/SelectSemesters";
+import SelectClasses from "@/features/professors/components/SelectClasses";
+import SelectProfessions from "@/components/common/SelectProfessions";
+import SelectProfessors from "@/features/professors/components/SelectProfessors";
 import { addAssignmentSupabase } from "@/services/supabase";
 import useProfessorAssignment from "@/store/useProfessorAssignment";
 import { useShallow } from "zustand/react/shallow";
@@ -21,18 +21,6 @@ interface Props {
   setIsAssignmentDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// const professors = mockProfessors;
-
-// const initinalValues: ProfessorAssignment = {
-//   id: '',
-//   professorId: undefined,
-//   professionId: undefined,
-//   classId: undefined,
-//   semester: undefined,
-//   shift: 'Morning',
-//   section: 'A'
-// };
-
 const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Props) => {
 
   const {addProfessorAssignment} = useProfessorAssignment(useShallow((state=>({
@@ -41,18 +29,13 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
 
   const formAssignmentProfessor = useForm<ProfessorAssignment>({
     resolver: zodResolver(assignmentSchema),
-    // defaultValues: initinalValues,
   });
 
-  // console.log(formAssignmentProfessor.getValues("professionId"))
-
   const resetAssignmentForm = () => {
-    // console.log('resetAssignmentForm');
     setIsAssignmentDialogOpen((val) => !val);
   };
 
   const onSubmit = (data: FieldValues) => {
-    // console.log('onSubmited', data);
     addAssignmentSupabase(data as ProfessorAssignment).then((res)=>{
       if(res){
         addProfessorAssignment(data as ProfessorAssignment);
@@ -63,11 +46,8 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log('handleSave', formAssignmentProfessor);
     formAssignmentProfessor.setValue("id", crypto.randomUUID());
     formAssignmentProfessor.handleSubmit(onSubmit)();
-    // console.log('handleAssignmentSubmit', data);
-    // e.preventDefault();
   };
 
   const closeDialog = () => {
@@ -135,7 +115,6 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
               <Button type="button" variant="outline" onClick={resetAssignmentForm}>
                 Cancel
               </Button>
-              {/* <Button type="submit" disabled={!selectedProfessor || !assignmentFormData.professionId || !assignmentFormData.classId}> */}
               <Button type="submit" disabled={false}>
                 Assign
               </Button>

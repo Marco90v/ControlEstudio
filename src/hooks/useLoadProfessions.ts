@@ -2,8 +2,6 @@
 import { getAllProfessions } from "@/services/supabase";
 import useProfessions from "@/store/useProfessions";
 import { useEffect } from "react";
-// import { getAllProfessions } from "../api/professions";
-// import { useProfessions } from "../store/useProfessions";
 import { useShallow } from "zustand/react/shallow";
 
 export function useLoadProfessions() {

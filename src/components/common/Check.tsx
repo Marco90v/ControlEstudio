@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
   name: string;
@@ -17,12 +17,6 @@ const Check = (props: Props) => {
       render={({ field }) => (
         <FormItem className="flex items-center space-x-2">
           <FormControl>
-            {/* <Input
-              {...field}
-              type={type}
-              min={min}
-              max={max}
-              /> */}
             <Checkbox
               id="isElective"
               checked={field.value}

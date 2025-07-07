@@ -29,7 +29,6 @@ const Avatar = ({ profile, size="small" }: Props) => {
       />
     ) : (
       <div className={`rounded-full bg-primary text-primary-foreground flex items-center justify-center ${size === "small" ? small : big}`}>
-        {/* {profile.names} */}
         <img
           src={profileImg}
           alt={`${profile?.names} ${profile?.lastNames}`}

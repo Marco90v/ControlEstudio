@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { useForm, type FieldValues } from "react-hook-form";
-import { studentSchema } from "../schema";
+import { studentSchema } from "@/features/students/schema";
 import type { KeysStudent, Student } from "@/types";
 import { Form } from "@/components/ui/form";
 import InputForm from "@/components/common/InputForm";
@@ -32,7 +32,6 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
 
   const formStudent = useForm<Student>({
     resolver: zodResolver(studentSchema),
-    // defaultValues: initinalValues,
   });
 
   useEffect(() => {
@@ -44,7 +43,6 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
   }, [editingStudent, formStudent]);
 
   const onSubmit = (data: FieldValues) => {
-    // console.log(data);
     if(!editingStudent) {
       addStudentSupabase(data as Student).then((res) => {
         if (res) addStudent(data as Student);

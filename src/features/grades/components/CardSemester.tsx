@@ -5,19 +5,6 @@ import useClasses from "@/store/useClasses";
 import type { Grade } from "@/types";
 import { useShallow } from "zustand/react/shallow";
 
-// interface StudentGrades {
-//   class: {
-//       code: string;
-//       id: string;
-//       names: string;
-//       credits: number;
-//       description?: string | undefined;
-//   };
-//   grade: number | undefined;
-//   status: "Passed" | "Pending" | "Failed";
-//   semester: number;
-// }
-
 interface Props{
   semester:number,
   studentGrades:Grade[]
@@ -28,10 +15,6 @@ const CardSemester = ({semester, studentGrades}:Props) => {
   const {classes} = useClasses(useShallow((state=>({
     classes: state.classes,
   }))));
-
-  // const {classes} = useClasses(useShallow((state=>({
-  //   classes: state.classes,
-  // }))));
 
   const getClasseName = (classId: string) => {
     const classData = classes.find(c => c.id === classId);
@@ -61,10 +44,8 @@ const CardSemester = ({semester, studentGrades}:Props) => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-start">
                     <div>
-                      {/* <div className="font-medium">{gradeData.class.names}</div> */}
                       <div className="font-medium">{getClasseName(gradeData.classId)}</div>
                       <Badge variant="secondary" className="text-xs">
-                        {/* {gradeData.class.code} */}
                         {getClasseCode(gradeData.classId)}
                       </Badge>
                     </div>
@@ -85,7 +66,6 @@ const CardSemester = ({semester, studentGrades}:Props) => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Credits:</span>
-                    {/* <span>{gradeData.class.credits}</span> */}
                     <span>{getClasseCredits(gradeData.classId)}</span>
                   </div>
                   {gradeData.grade !== undefined && (

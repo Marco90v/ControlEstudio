@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react"
 import { useForm, type FieldValues } from "react-hook-form";
-import { professorSchema } from "../schema";
+import { professorSchema } from "@/features/professors/schema";
 import type { KeysProfessor, Professor } from "@/types";
 import SelectForm from "@/components/common/SelectForm";
 import { SelectItem } from "@/components/ui/select";
@@ -21,18 +21,6 @@ interface Props {
   editingProfessor: Professor | null;
 }
 
-// const initinalValues: User = {
-//   id: '',
-//   firstName: '',
-//   lastName: '',
-//   email: '',
-//   contactNumber: '',
-//   gender: 'Male' as 'Male' | 'Female' | 'Other',
-//   profilePicture: ''
-// };
-
-// const professorFormData = initinalValues;
-
 const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEditingProfessor}:Props) => {
 
   const {addProfessor} = useProfessors(useShallow((state=>({
@@ -41,18 +29,10 @@ const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEd
 
   const formProfessor = useForm<Professor>({
     resolver: zodResolver(professorSchema),
-    // defaultValues: initinalValues,
   });
 
   useEffect(() => {
     if (editingProfessor) {
-      // formProfessor.setValue("id", editingProfessor.id);
-      // formProfessor.setValue("firstName", editingProfessor.firstName);
-      // formProfessor.setValue("lastName", editingProfessor.lastName);
-      // formProfessor.setValue("email", editingProfessor.email);
-      // formProfessor.setValue("contactNumber", editingProfessor.contactNumber);
-      // formProfessor.setValue("gender", editingProfessor.gender);
-      // formProfessor.setValue("profilePicture", editingProfessor.profilePicture);
       Object.keys(editingProfessor).forEach((key) => {
         formProfessor.setValue(key as KeysProfessor, editingProfessor[key as KeysProfessor]);
       });
@@ -60,7 +40,6 @@ const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEd
   }, [editingProfessor, formProfessor]);
 
   const onSubmit = (data: FieldValues) => {
-    // console.log(data);
     addProfessorSupabase(data as Professor).then((res)=>{
       if(res){
         addProfessor(data as Professor);

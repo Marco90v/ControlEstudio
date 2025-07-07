@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { gradeSchema } from "../schema";
-// import DialogGrade from "./DialogGrade";
+import { gradeSchema } from "@/features/grades/schema";
 import type { Grade, Student } from "@/types";
 import { getRoles } from "@/lib/utils";
 import useClasses from "@/store/useClasses";
@@ -167,10 +166,8 @@ const CardAdmin = ({ student, studentGrades, profile, passedClasses, pendingClas
                             <CardContent className="pt-4">
                               <div className="flex items-center justify-between">
                                 <div className="space-y-1">
-                                  {/* <div className="font-medium">{field.class.name}</div> */}
                                   <div className="font-medium">{getClassName(field.classId)}</div>
                                   <Badge variant="secondary" className="text-xs">
-                                    {/* {field.class.code} - {field.class.credits} credits */}
                                     {getClassCode(field.classId)} - {getClassCredits(field.classId)} credits
                                   </Badge>
                                 </div>

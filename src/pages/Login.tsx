@@ -1,11 +1,6 @@
-// import { useState } from 'react';
 import { Navigate } from 'react-router';
-// import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-// import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Alert, AlertDescription } from '@/components/ui/alert';
 import { GraduationCap, Loader2 } from 'lucide-react';
 import { useForm, type FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,22 +11,7 @@ import InputForm from '@/components/common/InputForm';
 import { signIn } from '@/services/supabase';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from "zustand/react/shallow";
-
-// const user = {
-//   role: 'Admin',
-//   name: 'Admin',
-//   email: 'admin@admin.com',
-//   image: 'https://i.pravatar.cc/300?img=1',
-//   firstName: 'Admin',
-//   lastName: 'Admin',
-//   profilePicture: 'https://i.pravatar.cc/300?img=1',
-// };
-
-// interface Credentials {
-//   email: string;
-//   password: string;
-//   role: string;
-// }
+import { demoCredentials } from '@/lib/utils';
 
 export function Login() {
 
@@ -42,31 +22,15 @@ export function Login() {
 
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
-    // defaultValues: initinalValues,
   });
-
-
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [error, setError] = useState('');
-  // const { login, user, isLoading } = useAuth();
   
   const isLoading = false;
-
-  // const login = (email: string, password: string) => {
-  //   console.log('login', email, password);
-  // };
-  // const login = async (email: string, password: string) => {
-  //   console.log('login', email, password);
-  //   return true;
-  // };
 
   if (token) {
     return <Navigate to="/dashboard" replace />;
   }
 
   const onSubmit = (data: FieldValues) => {
-    // console.log(data);
     signIn(data.email, data.password).then((data)=>{
       if(data){
         setToken(data.session.access_token);
@@ -76,24 +40,8 @@ export function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log(form.getValues());
     form.handleSubmit(onSubmit)();
-    // setError('');
-
-    // const success = await login(email, password);
-    // if (!success) {
-    //   // setError('Invalid email or password. Try: admin@university.edu / password123');
-    // }
   };
-
-  const demoCredentials:Login[] = [
-    {email:'LeonadoCuellar@email.com', password:'1234', role:'Admin'},
-    {email:'AlmaFranco@email.com', password:'1234', role:'Admin'},
-    {email:'RafaCozar@email.com', password:'1234', role:'Professor'},
-    {email:'OdalysMadrigal@email.com', password:'1234', role:'Professor'},
-    {email:'AngelNavas@email.com', password:'1234', role:'Student'},
-    {email:'TatianaEcheverria@email.com', password:'1234', role:'Student'},
-  ];
 
   const setCredentials = (credentials:Login) => {
     form.setValue("email", credentials.email);

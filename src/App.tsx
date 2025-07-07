@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
-// import { AuthProvider, useAuth } from './contexts/AuthContext';
-// import { ThemeProvider } from './contexts/ThemeContext';
 import { Toaster } from '@/components/ui/sonner';
 import { Layout } from '@/layouts/Layout';
 import { Login } from '@/pages/Login';
@@ -12,20 +10,10 @@ import { Pensum } from '@/pages/Pensum';
 import { Professors } from '@/pages/Professors';
 import { Students } from '@/pages/Students';
 import { Grades } from '@/pages/Grades';
-import useAuth from './store/AuthStore';
+import useAuth from '@/store/AuthStore';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { getSession, supabase } from './services/supabase';
-
-// const user = {
-//   role: 'Admin',
-//   name: 'Admin',
-//   email: 'admin@admin.com',
-//   image: 'https://i.pravatar.cc/300?img=1',
-//   firstName: 'Admin',
-//   lastName: 'Admin',
-//   profilePicture: 'https://i.pravatar.cc/300?img=1',
-// };
+import { getSession, supabase } from '@/services/supabase';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
@@ -47,12 +35,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     }
   }, [setSession]);
   
-  // const { user, isLoading } = useAuth();
-  // console.log(token);
-
   const isLoading = false;
   
-  // if (isLoading) {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -70,7 +54,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppRoutes() {
   const { profile } = useAuth();
-  // console.log(profile);
 
   return (
     <Routes>

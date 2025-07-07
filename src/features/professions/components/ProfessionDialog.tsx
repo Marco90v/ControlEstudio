@@ -7,7 +7,7 @@ import TextareaForm from "@/components/common/TextareaForm";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { professionSchema } from "../schema";
+import { professionSchema } from "@/features/professions/schema";
 import { useEffect } from "react";
 import { addProfessionSupabase, updateProfessionSupabase } from "@/services/supabase";
 import useProfessions from "@/store/useProfessions";
@@ -20,14 +20,6 @@ interface Props {
   setEditingProfession: React.Dispatch<React.SetStateAction<Profession | null>>;
 }
 
-// const initinalValues: Profession = {
-//   id: '',
-//   name: '',
-//   code: '',
-//   totalSemesters: 10,
-//   description: ''
-// };
-
 const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, setEditingProfession}:Props) => {
 
   const {addProfession, updateProfession} = useProfessions(useShallow((state=>({
@@ -37,7 +29,6 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
 
   const formProfession = useForm<Profession>({
     resolver: zodResolver(professionSchema),
-    // defaultValues: initinalValues,
   });
 
   useEffect(() => {
@@ -49,7 +40,6 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
   }, [editingProfession, formProfession]);
   
   const onSubmit = (data: Profession) => {
-    // console.log(data);
     if(editingProfession){
       updateProfessionSupabase(data).then((res)=>{
         if(res){
@@ -69,8 +59,6 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log(formProfession.getValues());
-    // console.log(formProfession.formState.errors);
     if (!editingProfession) {
       formProfession.setValue("id", crypto.randomUUID());
     }

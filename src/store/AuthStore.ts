@@ -1,3 +1,4 @@
+import type { Profile } from '@/types'
 import type { Session } from '@supabase/supabase-js'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
@@ -23,7 +24,7 @@ type Action = {
   setToken: (token: string) => void,
   setSession: (session: Session) => void,
   deleteToken: () => void
-  setProfile: (profile: any) => void
+  setProfile: (profile: Profile) => void
   close: () => void
 }
 
@@ -39,7 +40,6 @@ const useAuth = create<State & Action>()(devtools(
         profile: null,
         session: null,
         setSession: (session:Session) => set((state) => {
-          // setLocalStorage(session.access_token)
           return { ...state, session: session }
         }),
         setToken: (token:string) => set((state) => {
@@ -52,7 +52,7 @@ const useAuth = create<State & Action>()(devtools(
             ...state, token:null
           }
         }),
-        setProfile: (profile:any) => set((state) => {
+        setProfile: (profile:Profile) => set((state) => {
           return { ...state, profile: profile }
         }),
         close: () => set((state) => {

@@ -11,7 +11,6 @@ import { useShallow } from "zustand/react/shallow"
 interface Props {
   prof: Profession
   handleEdit: (prof: Profession) => void
-  // handleDelete: (id: string) => void
 }
 
 const cardProfession = memo (({prof, handleEdit}:Props) => {
