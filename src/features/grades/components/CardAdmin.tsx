@@ -24,21 +24,6 @@ const formSchema = z.object({
 });
 
 type FormType = z.infer<typeof formSchema>;
-
-// type StudentGrades = z.infer<typeof gradeSchema>;
-
-// interface studentGrades {
-//     class: {
-//         code: string;
-//         id: string;
-//         names: string;
-//         credits: number;
-//         description?: string | undefined;
-//     };
-//     grade: number | undefined;
-//     status: "Passed" | "Pending" | "Failed";
-//     semester: number;
-// }
 interface Profile {
     id: number;
     names: string;
@@ -115,6 +100,8 @@ const CardAdmin = ({ student, studentGrades, profile, passedClasses, pendingClas
     e.preventDefault();
     form.handleSubmit(onSubmit)();
   };
+
+  if(studentGrades.length === 0)return null;
 
   return (
     <Card key={student.id} className="hover:shadow-md transition-shadow cursor-pointer">

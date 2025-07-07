@@ -29,7 +29,18 @@ export type KeysStudent = keyof typeof studentSchema.shape;
 export type Grade = z.infer<typeof gradeSchema>;
 export type Login = z.infer<typeof loginSchema>;
 
-
+export interface Profile{
+  id: number;
+  names: string;
+  lastNames: string;
+  sex: string;
+  email: string;
+  phone: number;
+  photo: string;
+  role: number;
+  nameRole: string;
+  userUID: string;
+}
 
 
 

@@ -54,10 +54,10 @@ export const signOut = async () => {
   return true;
 };
 
-export const getUser = async (token: string|null) => {
-  if(token === null){
-    return null;
-  }
+export const getUser = async () => {
+  // if(token === null){
+  //   return null;
+  // }
   const { data, error } = await supabase.auth.getUser();
   if(error){
     return null;
@@ -121,6 +121,15 @@ export const deleteClassSupabase = async (id: string) => {
 export const getAllProfessions = async () => {
   // const { data, error } = await supabase.from('professions').select('*, classes!inner(name)').eq('id', id);
   const { data, error } = await supabase.from('professions').select();
+  if(error){
+    return null;
+  }else{
+    return data;
+  }
+};
+
+export const getProfessionById = async (id: string) => {
+  const { data, error } = await supabase.from('professions').select().eq('id', id);
   if(error){
     return null;
   }else{
@@ -208,6 +217,15 @@ export const getAllProfessors = async () => {
   }
 };
 
+// export const getProfessorById = async (id: string) => {
+//   const { data, error } = await supabase.from('professors').select('*, roles!inner(names)').eq('id', id);
+//   if(error){
+//     return null;
+//   }else{
+//     return data;
+//   }
+// };
+
 export const addProfessorSupabase = async (professorData: Professor) => {
   const { error } = await supabase.from('professors').insert(professorData);
   if(error){
@@ -290,6 +308,15 @@ export const deleteProfessorAssignmentSupabase = async (id: string) => {
 export const getAllStudents = async () => {
   // const { data, error } = await supabase.from('students').select('*, roles!inner(names)').eq('id', id);
   const { data, error } = await supabase.from('students').select();
+  if(error){
+    return null;
+  }else{
+    return data;
+  }
+};
+
+export const getStudentById = async (id: string) => {
+  const { data, error } = await supabase.from('students').select().eq('id', id);
   if(error){
     return null;
   }else{

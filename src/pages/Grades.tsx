@@ -112,6 +112,7 @@ export function Grades() {
 
   // Get student grades for current user
   const getStudentGrades = (studentId: string | undefined) => {
+    // console.log(studentId, students);
     if(!studentId) return [];
     // const student = mockStudents.find(s => s.id === studentId);
     const student = students.find(s => s.id === studentId);
@@ -130,6 +131,7 @@ export function Grades() {
       .map(p => {
         // const classData = classes.find(c => c.id === p.IdClasse);
         const grade = grades.find(g => g.studentId === studentId && g.classId === p.IdClasse);
+        // console.log(grades);
         return {
           id: grade?.id || crypto.randomUUID(),
           studentId: studentId,
@@ -143,7 +145,7 @@ export function Grades() {
           // semester: p.IdSemester
         };
       });
-
+    // console.log(semesterClasses);
     return semesterClasses;
   };
 
@@ -183,8 +185,8 @@ export function Grades() {
   // Student view - only show their own grades
   if (getRoles(profile?.role) === 'Student') {
   // if (true) {
-    const studentGrades = getStudentGrades(profile?.id.toString());
-    const gpa = getGPA(profile?.id.toString());
+    const studentGrades = getStudentGrades(profile?.userUID.toString());
+    const gpa = getGPA(profile?.userUID.toString());
     
     return (
       <div className="space-y-6">
@@ -227,6 +229,7 @@ export function Grades() {
           const passedClasses = studentGrades.filter(g => g.status === 'Passed').length;
           const pendingClasses = studentGrades.filter(g => g.status === 'Pending').length;
 
+          if(studentGrades.length === 0) return null;
           return (
             <CardAdmin
               key={student.id}

@@ -1,6 +1,4 @@
 import { Button } from '@/components/ui/button';
-// import { useAuth } from '@/contexts/AuthContext';
-// import { useTheme } from '@/contexts/ThemeContext';
 import { LogOut, Sun, Moon, Monitor } from 'lucide-react';
 import {
   DropdownMenu,
@@ -12,24 +10,9 @@ import { signOut } from '@/services/supabase';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';
 import { getRoles } from '@/lib/utils';
-import profileImg from '@/assets/images/profile.png';
-
-
-// const user = {
-//   role: 'Admin',
-//   name: 'Admin',
-//   email: 'admin@admin.com',
-//   image: 'https://i.pravatar.cc/300?img=1',
-//   firstName: 'Admin',
-//   lastName: 'Admin',
-//   profilePicture: 'https://i.pravatar.cc/300?img=1',
-// };
-
+import Avatar from '@/components/common/Avatar';
 
 export function Header() {
-  // const { user, logout } = useAuth();
-  // const { theme, setTheme } = useTheme();
-
   const {close, profile} = useAuth(useShallow((state=>({
     close: state.close,
     profile: state.profile
@@ -103,22 +86,7 @@ export function Header() {
                 </p>
               </div>
               
-              {profile?.photo ? (
-                <img
-                  src={profile?.photo}
-                  alt={`${profile.names} ${profile.lastNames}`}
-                  className="h-8 w-8 rounded-full object-cover"
-                />
-              ) : (
-                <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
-                  {/* {profile.names} */}
-                  <img
-                    src={profileImg}
-                    alt={`${profile.names} ${profile.lastNames}`}
-                    className="h-8 w-8 rounded-full object-cover"
-                  />
-                </div>
-              )}
+              <Avatar profile={profile} size="small" />
 
               <Button 
                 variant="ghost" 

@@ -21,6 +21,7 @@ interface Props {
 }
 
 const CardGPA = ({studentGrades, gpa}:Props) => {
+  // console.log(studentGrades, gpa);
 
   // const handleEdit = (student: UserType) => {
   //   setEditingStudent(student);

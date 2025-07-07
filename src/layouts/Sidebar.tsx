@@ -16,6 +16,7 @@ import { cn, getRoles } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';
+import Avatar from '@/components/common/Avatar';
 
 const menuItems = [
   { 
@@ -150,7 +151,7 @@ export function Sidebar() {
             <div className="border-t border-border p-4">
               <div className="flex items-center space-x-3">
                 <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
-                  {profile.names}
+                  <Avatar profile={profile} size="small" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">

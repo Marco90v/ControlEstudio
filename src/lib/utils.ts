@@ -1,4 +1,4 @@
-import type { ProfessorAssignment } from "@/types";
+import type { Profession, ProfessorAssignment, Profile, Student } from "@/types";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -95,4 +95,25 @@ export const getTotalCredits = (cls: semesterType[]) => {
 
 export const getTotalClassesByProfessor = (ProfessorAssignment: ProfessorAssignment[]) => {
   return ProfessorAssignment.length;
+};
+
+export const protectedStudentsDemo = (id: string) => {
+  const UUIDStudentsDemo = [
+    "1d96e513-b127-48e2-a520-dd9e69fe25fe",
+    "52437e39-f35d-4801-831e-a398b1887fb5",
+  ]
+  console.log(UUIDStudentsDemo,id);
+  return UUIDStudentsDemo.includes(id) ? false : true
+};
+
+export const getCurrentSemester = (students: Student[], profile: Profile | null) => {
+  // console.log(students, profile);
+  return students.filter(student => student.id === profile?.userUID)?.[0]?.currentSemester || null;
+};
+
+export const getNameProfession = (professions: Profession[], professionId: string) => {
+  if(professions === undefined) return 'N/A';
+  if(professions.length === 0) return 'N/A';
+  if(professionId === undefined) return 'N/A';
+  return professions.filter(profession => profession.id === professionId)[0]?.names || 'N/A';
 };

@@ -1,28 +1,16 @@
-// import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {  Mail,  Phone,  BookOpen, Users, ClipboardList, User as U } from 'lucide-react';
-// import { mockClasses, mockStudents, mockProfessors, mockProfessions } from '@/data/mockData';
 import useAuth from '@/store/AuthStore';
 import { getPerson, getUser } from '@/services/supabase';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import profileImg from '@/assets/images/profile.png';
-import { getRoles } from '@/lib/utils';
-
-// const user = {
-//   role: 'Admin',
-//   name: 'Admin',
-//   email: 'admin@admin.com',
-//   image: 'https://i.pravatar.cc/300?img=1',
-//   firstName: 'Admin',
-//   lastName: 'Admin',
-//   profilePicture: 'https://i.pravatar.cc/300?img=1',
-//   currentSemester: 1,
-//   professionId: 1,
-//   gender: 'Male',
-//   contactNumber: '+1-555-0101',
-// };
+import { getCurrentSemester, getNameProfession, getRoles } from '@/lib/utils';
+import Avatar from '@/components/common/Avatar';
+import { useLoadStudents } from '@/hooks/useLoadStudents';
+import useStudents from '@/store/useStudents';
+import useProfessions from '@/store/useProfessions';
+import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 
 export function Dashboard() {
   const { token, profile, setProfile } = useAuth(useShallow((state)=>({
@@ -30,6 +18,16 @@ export function Dashboard() {
     profile: state.profile,
     setProfile: state.setProfile
   })));
+
+  const { students } = useStudents(useShallow((state)=>({
+    students: state.students,
+  })));
+   const { professions } = useProfessions(useShallow((state)=>({
+    professions: state.professions,
+  })));
+
+  useLoadStudents();
+  useLoadProfessions();
   
   // if (!profile) return null;
   
@@ -38,7 +36,7 @@ export function Dashboard() {
     if (profile) return
     
     try {
-      const data = await getUser(token)
+      const data = await getUser()
       const user = data?.user
       if (!user) return
       
@@ -125,22 +123,7 @@ export function Dashboard() {
           <div className="flex items-start space-x-6">
             {/* Profile Picture */}
             <div className="flex-shrink-0">
-              {profile?.photo ? (
-                <img
-                  src={profile?.photo}
-                  alt={`${profile?.names} ${profile?.lastNames}`} 
-                  className="w-24 h-24 rounded-full object-cover border-4 border-border"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold border-4 border-border">
-                  {/* {profile?.names}{profile?.lastNames}  */}
-                  <img
-                    src={profileImg}
-                    alt={`${profile?.names} ${profile?.lastNames}`} 
-                    className="w-24 h-24 rounded-full object-cover border-4 border-border"
-                  />
-                </div>
-              )}
+              <Avatar profile={profile} size="big" />
             </div>
 
             {/* User Details */}
@@ -174,21 +157,22 @@ export function Dashboard() {
                     <div className="font-medium">{profile?.sex}</div>
                   </div>
                   
-                  {/* {user.role === 'Student' && user.currentSemester && (
+                  {getRoles(profile?.role) === 'Student' && getCurrentSemester(students, profile) && (
                     <div>
                       <span className="text-muted-foreground">Current Semester:</span>
-                      <div className="font-medium">{user.currentSemester}</div>
+                      <div className="font-medium">{getCurrentSemester(students, profile)}</div>
                     </div>
-                  )} */}
+                  )}
                   
-                  {/* {user.professionId && (
+                  {(getRoles(profile?.role) === 'Student' && students) && (
                     <div>
                       <span className="text-muted-foreground">Profession:</span>
                       <div className="font-medium">
-                        {mockProfessions.find(p => p.id === user.professionId)?.name || 'N/A'}
+                        {/* {mockProfessions.find(p => p.id === user.professionId)?.name || 'N/A'} */}
+                        {getNameProfession(professions, students[0]?.professionId)}
                       </div>
                     </div>
-                  )} */}
+                  )}
                 </div>
               </div>
             </div>
@@ -203,7 +187,7 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {profile?.role === 1 && ( 
+            {getRoles(profile?.role) === "Admin" && (  
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <BookOpen className="h-8 w-8 text-primary mb-2" />

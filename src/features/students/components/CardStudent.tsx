@@ -2,11 +2,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { protectedStudentsDemo } from "@/lib/utils";
 import { deleteStudentSupabase } from "@/services/supabase";
-// import { mockProfessions } from "@/data/mockData";
 import useProfessions from "@/store/useProfessions";
 import useStudents from "@/store/useStudents";
-// import useStudents from "@/store/useStudents";
 import type { Student } from "@/types";
 import { Edit, GraduationCap, Trash2, User } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
@@ -28,11 +27,15 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
 
   const handleDelete = (id: string) => {
     // console.log('handleDelete', id);
-    deleteStudentSupabase(id).then(res => {
-      if(res){
-        deleteStudent(id);
-      }
-    });
+    if(protectedStudentsDemo(id)){
+      deleteStudentSupabase(id).then(res => {
+        if(res){
+          deleteStudent(id);
+        }
+      });
+    }else{
+      console.log("This student is part of the demo, cannot be removed");
+    }
     // setStudents(students.filter(student => student.id !== id));
     // setProfessors(professors.filter(prof => prof.id !== id));
     // setAssignments(assignments.filter(assign => assign.professorId !== id));
