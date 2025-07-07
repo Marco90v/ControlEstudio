@@ -1,17 +1,22 @@
 import { SelectItem } from "@/components/ui/select"
-import { mockProfessions } from "@/data/mockData";
+import useProfessions from "@/store/useProfessions";
+import { useFormContext } from "react-hook-form";
+import { useShallow } from "zustand/react/shallow";
 
-interface Props {
-  selectedProfession: string
-}
 
-const BodySelectProfession = ({selectedProfession}:Props) => {
+const BodySelectProfession = () => {
 
-  const selectedProfessionData = mockProfessions.find(p => p.id === selectedProfession);
-  
+  const { professions } = useProfessions(useShallow((state=>({  
+    professions: state.professions,
+  }))));
+
+  const formPensum = useFormContext();
+  const IdProfession = formPensum.watch("IdProfession");
+  const semesters = professions.find(p => p.id === IdProfession)?.totalSemesters || 0;
+    
   return (
     <>
-      {Array.from({ length: selectedProfessionData?.totalSemesters || 8 }, (_, i) => (
+      {Array.from({ length: semesters }, (_, i) => (
         <SelectItem key={i + 1} value={(i + 1).toString()}>
           Semester {i + 1}
         </SelectItem>

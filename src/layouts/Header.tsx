@@ -8,21 +8,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { signOut } from '@/services/supabase';
+import useAuth from '@/store/AuthStore';
+import { useShallow } from 'zustand/react/shallow';
+import { getRoles } from '@/lib/utils';
+import profileImg from '@/assets/images/profile.png';
 
-const user = {
-  role: 'Admin',
-  name: 'Admin',
-  email: 'admin@admin.com',
-  image: 'https://i.pravatar.cc/300?img=1',
-  firstName: 'Admin',
-  lastName: 'Admin',
-  profilePicture: 'https://i.pravatar.cc/300?img=1',
-};
+
+// const user = {
+//   role: 'Admin',
+//   name: 'Admin',
+//   email: 'admin@admin.com',
+//   image: 'https://i.pravatar.cc/300?img=1',
+//   firstName: 'Admin',
+//   lastName: 'Admin',
+//   profilePicture: 'https://i.pravatar.cc/300?img=1',
+// };
 
 
 export function Header() {
   // const { user, logout } = useAuth();
   // const { theme, setTheme } = useTheme();
+
+  const {close, profile} = useAuth(useShallow((state=>({
+    close: state.close,
+    profile: state.profile
+  }))));
 
   const themeIcon = {
     light: Sun,
@@ -39,7 +50,11 @@ export function Header() {
   };
 
   const logout = () => {
-    console.log('logout');
+    signOut().then((data)=>{
+      if(data){
+        close();
+      }
+    });
   };
 
   return (
@@ -77,26 +92,31 @@ export function Header() {
           </DropdownMenu>
 
           {/* User Menu */}
-          {user && (
+          {profile && (
             <div className="flex items-center space-x-3">
               <div className="hidden sm:block text-right">
                 <p className="text-sm font-medium text-foreground">
-                  {user.firstName} {user.lastName}
+                  {profile.names} {profile.lastNames}
                 </p>
                 <p className="text-xs text-muted-foreground capitalize">
-                  {user.role}
+                  {getRoles(profile.role)}
                 </p>
               </div>
               
-              {user.profilePicture ? (
+              {profile?.photo ? (
                 <img
-                  src={user.profilePicture}
-                  alt={`${user.firstName} ${user.lastName}`}
+                  src={profile?.photo}
+                  alt={`${profile.names} ${profile.lastNames}`}
                   className="h-8 w-8 rounded-full object-cover"
                 />
               ) : (
                 <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
-                  {user.firstName[0]}
+                  {/* {profile.names} */}
+                  <img
+                    src={profileImg}
+                    alt={`${profile.names} ${profile.lastNames}`}
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
                 </div>
               )}
 

@@ -1,71 +1,98 @@
 // import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  Calendar,
-  BookOpen,
-  Users,
-  GraduationCap,
-  ClipboardList
-} from 'lucide-react';
-import { mockClasses, mockStudents, mockProfessors, mockProfessions } from '@/data/mockData';
+import {  Mail,  Phone,  BookOpen, Users, ClipboardList, User as U } from 'lucide-react';
+// import { mockClasses, mockStudents, mockProfessors, mockProfessions } from '@/data/mockData';
+import useAuth from '@/store/AuthStore';
+import { getPerson, getUser } from '@/services/supabase';
+import { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+import profileImg from '@/assets/images/profile.png';
+import { getRoles } from '@/lib/utils';
 
-const user = {
-  role: 'Admin',
-  name: 'Admin',
-  email: 'admin@admin.com',
-  image: 'https://i.pravatar.cc/300?img=1',
-  firstName: 'Admin',
-  lastName: 'Admin',
-  profilePicture: 'https://i.pravatar.cc/300?img=1',
-  currentSemester: 1,
-  professionId: 1,
-  gender: 'Male',
-  contactNumber: '+1-555-0101',
-};
+// const user = {
+//   role: 'Admin',
+//   name: 'Admin',
+//   email: 'admin@admin.com',
+//   image: 'https://i.pravatar.cc/300?img=1',
+//   firstName: 'Admin',
+//   lastName: 'Admin',
+//   profilePicture: 'https://i.pravatar.cc/300?img=1',
+//   currentSemester: 1,
+//   professionId: 1,
+//   gender: 'Male',
+//   contactNumber: '+1-555-0101',
+// };
 
 export function Dashboard() {
-  // const { user } = useAuth();
-
-  if (!user) return null;
-
-  const getStats = () => {
-    if (user.role === 'Admin') {
-      return [
-        { title: 'Total Classes', value: mockClasses.length, icon: BookOpen, color: 'bg-blue-500' },
-        { title: 'Total Students', value: mockStudents.length, icon: Users, color: 'bg-green-500' },
-        { title: 'Total Professors', value: mockProfessors.length, icon: GraduationCap, color: 'bg-purple-500' },
-        { title: 'Total Professions', value: mockProfessions.length, icon: ClipboardList, color: 'bg-orange-500' }
-      ];
-    } else if (user.role === 'Professor') {
-      return [
-        { title: 'My Classes', value: 2, icon: BookOpen, color: 'bg-blue-500' },
-        { title: 'Students Assigned', value: 15, icon: Users, color: 'bg-green-500' }
-      ];
-    } else {
-      return [
-        { title: 'Current Semester', value: user.currentSemester || 1, icon: Calendar, color: 'bg-blue-500' },
-        { title: 'Completed Classes', value: 8, icon: BookOpen, color: 'bg-green-500' }
-      ];
+  const { token, profile, setProfile } = useAuth(useShallow((state)=>({
+    token: state.token,
+    profile: state.profile,
+    setProfile: state.setProfile
+  })));
+  
+  // if (!profile) return null;
+  
+  useEffect(() => {
+  const fetchProfile = async () => {
+    if (profile) return
+    
+    try {
+      const data = await getUser(token)
+      const user = data?.user
+      if (!user) return
+      
+      // console.log("fetchProfile", personData, user.id);
+      const personData = await getPerson(user.id)
+      if (Array.isArray(personData) && personData.length > 0) {
+        const { roles, ...rest } = personData[0]
+        const newData = { ...rest, nameRole: roles?.names }
+        setProfile(newData)
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error)
     }
-  };
+  }
 
-  const stats = getStats();
+  fetchProfile()
+}, [profile, setProfile, token])
+  
+  
+
+  // const getStats = () => {
+  //   if (profile?.role === 1) {
+  //     return [
+  //       { title: 'Total Classes', value: mockClasses.length, icon: BookOpen, color: 'bg-blue-500' },
+  //       { title: 'Total Students', value: mockStudents.length, icon: Users, color: 'bg-green-500' },
+  //       { title: 'Total Professors', value: mockProfessors.length, icon: GraduationCap, color: 'bg-purple-500' },
+  //       { title: 'Total Professions', value: mockProfessions.length, icon: ClipboardList, color: 'bg-orange-500' }
+  //     ];
+  //   } else if (profile?.role === 2) {
+  //     return [
+  //       { title: 'My Classes', value: 2, icon: BookOpen, color: 'bg-blue-500' },
+  //       { title: 'Students Assigned', value: 15, icon: Users, color: 'bg-green-500' }
+  //     ];
+  //   } else {
+  //     return [
+  //       { title: 'Current Semester', value: profile?.currentSemester || 1, icon: Calendar, color: 'bg-blue-500' },
+  //       { title: 'Completed Classes', value: 8, icon: BookOpen, color: 'bg-green-500' }
+  //     ];
+  //   }
+  // };
+
+  // const stats = getStats();
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back, {user.firstName}! Here's an overview of your academic information.
+          Welcome back, {profile?.names}! Here's an overview of your academic information.
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
@@ -84,13 +111,13 @@ export function Dashboard() {
             </Card>
           );
         })}
-      </div>
+      </div> */}
 
       {/* User Profile Card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <User className="h-5 w-5" />
+            <U className="h-5 w-5" />
             <span>Profile Information</span>
           </CardTitle>
         </CardHeader>
@@ -98,15 +125,20 @@ export function Dashboard() {
           <div className="flex items-start space-x-6">
             {/* Profile Picture */}
             <div className="flex-shrink-0">
-              {user.profilePicture ? (
+              {profile?.photo ? (
                 <img
-                  src={user.profilePicture}
-                  alt={`${user.firstName} ${user.lastName}`}
+                  src={profile?.photo}
+                  alt={`${profile?.names} ${profile?.lastNames}`} 
                   className="w-24 h-24 rounded-full object-cover border-4 border-border"
                 />
               ) : (
                 <div className="w-24 h-24 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold border-4 border-border">
-                  {user.firstName[0]}{user.lastName[0]}
+                  {/* {profile?.names}{profile?.lastNames}  */}
+                  <img
+                    src={profileImg}
+                    alt={`${profile?.names} ${profile?.lastNames}`} 
+                    className="w-24 h-24 rounded-full object-cover border-4 border-border"
+                  />
                 </div>
               )}
             </div>
@@ -116,21 +148,21 @@ export function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold text-foreground">
-                    {user.firstName} {user.lastName}
+                    {profile?.names} {profile?.lastNames}
                   </h3>
                   <Badge variant="secondary" className="w-fit">
-                    {user.role}
+                    {getRoles(profile?.role)}
                   </Badge>
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Mail className="h-4 w-4" />
-                    <span>{user.email}</span>
+                    <span>{profile?.email}</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Phone className="h-4 w-4" />
-                    <span>{user.contactNumber}</span>
+                    <span>{profile?.phone}</span>
                   </div>
                 </div>
               </div>
@@ -139,24 +171,24 @@ export function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                   <div>
                     <span className="text-muted-foreground">Gender:</span>
-                    <div className="font-medium">{user.gender}</div>
+                    <div className="font-medium">{profile?.sex}</div>
                   </div>
                   
-                  {user.role === 'Student' && user.currentSemester && (
+                  {/* {user.role === 'Student' && user.currentSemester && (
                     <div>
                       <span className="text-muted-foreground">Current Semester:</span>
                       <div className="font-medium">{user.currentSemester}</div>
                     </div>
-                  )}
+                  )} */}
                   
-                  {user.professionId && (
+                  {/* {user.professionId && (
                     <div>
                       <span className="text-muted-foreground">Profession:</span>
                       <div className="font-medium">
                         {mockProfessions.find(p => p.id === user.professionId)?.name || 'N/A'}
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -171,7 +203,7 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {user.role === 'Admin' && (
+            {profile?.role === 1 && ( 
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <BookOpen className="h-8 w-8 text-primary mb-2" />
@@ -191,7 +223,7 @@ export function Dashboard() {
               </>
             )}
             
-            {user.role === 'Professor' && (
+            {profile?.role === 2 && (
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <ClipboardList className="h-8 w-8 text-primary mb-2" />
@@ -206,7 +238,7 @@ export function Dashboard() {
               </>
             )}
             
-            {user.role === 'Student' && (
+            {profile?.role === 3 && (
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <ClipboardList className="h-8 w-8 text-primary mb-2" />

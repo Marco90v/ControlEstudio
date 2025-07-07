@@ -1,33 +1,53 @@
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useProfessions from "@/store/useProfessions";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
-  semesterData: {
-    semester: number;
-    classes: {
-        class: {
-            code: string;
-            id: string;
-            name: string;
-            credits: number;
-            description?: string | undefined;
-        };
-        semester: number;
-        id: string;
-        professionId: string;
-        classId: string;
-        isElective: boolean;
-    }[];
-  }[];
+  // semesterData: {
+  //   semester: number;
+  //   classes: {
+  //       class: {
+  //           code: string;
+  //           id: string;
+  //           name: string;
+  //           credits: number;
+  //           description?: string | undefined;
+  //       };
+  //       semester: number;
+  //       id: string;
+  //       professionId: string;
+  //       classId: string;
+  //       isElective: boolean;
+  //   }[];
+  // }[];
+  IdProfession: string;
 }
 
-const TabsSemeter = ({semesterData}: Props) => {
+const TabsSemeter = ({IdProfession}: Props) => {
+
+  const { professions } = useProfessions(useShallow((state=>({ 
+    professions: state.professions,
+  }))));
+
+  const semesters = professions.find(p => p.id === IdProfession)?.totalSemesters || 0;
+  // console.log(IdProfession);
+
   return (
     <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
-      {semesterData.map((sem) => (
+      {/* {semesterData.map((sem) => (
         <TabsTrigger key={sem.semester} value={sem.semester.toString()}>
           Sem {sem.semester}
         </TabsTrigger>
-      ))}
+      ))} */}
+      {
+        Array.from({ length: semesters }, (_, i) => {
+          return (
+            <TabsTrigger key={i} value={(1+i).toString()}>
+              Sem {i + 1}
+            </TabsTrigger>
+          );
+        })
+      }
     </TabsList>
   );
 };

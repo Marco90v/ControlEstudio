@@ -1,21 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Grade } from "@/types";
 import { Award } from "lucide-react";
 
-interface StudentGrades {
-  class: {
-      code: string;
-      id: string;
-      name: string;
-      credits: number;
-      description?: string | undefined;
-  };
-  grade: number | undefined;
-  status: "Passed" | "Pending" | "Failed";
-  semester: number;
-}
+// interface StudentGrades {
+//   class: {
+//       code: string;
+//       id: string;
+//       names: string;
+//       credits: number;
+//       description?: string | undefined;
+//   };
+//   grade: number | undefined;
+//   status: "Passed" | "Pending" | "Failed";
+//   semester: number;
+// }
 
 interface Props {
-  studentGrades: StudentGrades[];
+  studentGrades: Grade[];
   gpa: number;
 }
 

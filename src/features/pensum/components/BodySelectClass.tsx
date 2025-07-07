@@ -1,25 +1,21 @@
 import { SelectItem } from "@/components/ui/select"
-import { mockClasses, mockPensum } from "@/data/mockData";
+import { useLoadClasses } from "@/hooks/useLoadClasses";
+import useClasses from "@/store/useClasses";
+import { useShallow } from "zustand/react/shallow";
 
-interface Props {
-  selectedProfession: string
-}
+const BodySelectClass = () => {
 
-const BodySelectClass = ({selectedProfession}:Props) => {
+  const {classes} = useClasses(useShallow((state=>({
+    classes: state.classes,
+  }))));
 
-  // const [selectedProfession, setSelectedProfession] = useState<string>('1');
-
-  const professionPensum = mockPensum.filter(p => p.professionId === selectedProfession);
-
-  const availableClasses = mockClasses.filter(cls => 
-    !professionPensum.some(p => p.classId === cls.id)
-  );
+  useLoadClasses();
 
   return (
     <>
-      {availableClasses.map((cls) => (
+      {classes.map((cls) => (
         <SelectItem key={cls.id} value={cls.id}>
-          {cls.code} - {cls.name} ({cls.credits} credits)
+          {cls.code} - {cls.names} ({cls.credits} credits)
         </SelectItem>
       ))}
     </>

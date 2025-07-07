@@ -3,19 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { SelectItem } from "@/components/ui/select";
-import { mockClasses, mockProfessions, mockProfessors } from "@/data/mockData";
 import type { ProfessorAssignment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Settings } from "lucide-react";
 import { useForm, type FieldValues } from "react-hook-form";
 import { assignmentSchema } from "../schema";
+import SelectSemesters from "../../../components/common/SelectSemesters";
+import SelectClasses from "./SelectClasses";
+import SelectProfessions from "../../../components/common/SelectProfessions";
+import SelectProfessors from "./SelectProfessors";
+import { addAssignmentSupabase } from "@/services/supabase";
+import useProfessorAssignment from "@/store/useProfessorAssignment";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   isAssignmentDialogOpen: boolean;
   setIsAssignmentDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const professors = mockProfessors;
+// const professors = mockProfessors;
 
 // const initinalValues: ProfessorAssignment = {
 //   id: '',
@@ -29,10 +35,16 @@ const professors = mockProfessors;
 
 const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Props) => {
 
+  const {addProfessorAssignment} = useProfessorAssignment(useShallow((state=>({
+    addProfessorAssignment: state.addProfessorAssignment,
+  }))));
+
   const formAssignmentProfessor = useForm<ProfessorAssignment>({
     resolver: zodResolver(assignmentSchema),
     // defaultValues: initinalValues,
   });
+
+  // console.log(formAssignmentProfessor.getValues("professionId"))
 
   const resetAssignmentForm = () => {
     // console.log('resetAssignmentForm');
@@ -40,7 +52,13 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
   };
 
   const onSubmit = (data: FieldValues) => {
-    console.log('onSubmited', data);
+    // console.log('onSubmited', data);
+    addAssignmentSupabase(data as ProfessorAssignment).then((res)=>{
+      if(res){
+        addProfessorAssignment(data as ProfessorAssignment);
+        closeDialog();
+      }
+    });
   }
 
   const handleSave = (e: React.FormEvent) => {
@@ -52,8 +70,17 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
     // e.preventDefault();
   };
 
+  const closeDialog = () => {
+    onOpenChange();
+  };
+
+  const onOpenChange = () => {
+    formAssignmentProfessor.reset();
+    setIsAssignmentDialogOpen((val) => !val);
+  }
+
   return (
-    <Dialog open={isAssignmentDialogOpen} onOpenChange={setIsAssignmentDialogOpen}>
+    <Dialog open={isAssignmentDialogOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <Settings className="h-4 w-4 mr-2" />
@@ -68,41 +95,25 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
           <form onSubmit={handleSave} className="space-y-4">
             <div>
               <SelectForm name="professorId" label="Professor" placeholder="Select professor" >
-                {professors.map((prof) => (
-                  <SelectItem key={prof.id} value={prof.id}>
-                    {prof.firstName} {prof.lastName}
-                  </SelectItem>
-                ))}
+                <SelectProfessors />
               </SelectForm>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <SelectForm name="professionId" label="Profession" placeholder="Select profession" >
-                  {mockProfessions.map((prof) => (
-                    <SelectItem key={prof.id} value={prof.id}>
-                      {prof.name}
-                    </SelectItem>
-                  ))}
+                  <SelectProfessions />
                 </SelectForm>
               </div>
               <div>
                 <SelectForm name="classId" label="Class" placeholder="Select class" >
-                  {mockClasses.map((cls) => (
-                    <SelectItem key={cls.id} value={cls.id}>
-                      {cls.code} - {cls.name}
-                    </SelectItem>
-                  ))}
+                  <SelectClasses />
                 </SelectForm>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <SelectForm name="semester" label="Semester" placeholder="Select semester" >
-                  {Array.from({ length: 8 }, (_, i) => (
-                    <SelectItem key={i + 1} value={(i + 1).toString()}>
-                      Semester {i + 1}
-                    </SelectItem>
-                  ))}
+                  <SelectSemesters />
                 </SelectForm>
               </div>
               <div>

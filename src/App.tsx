@@ -12,19 +12,43 @@ import { Pensum } from '@/pages/Pensum';
 import { Professors } from '@/pages/Professors';
 import { Students } from '@/pages/Students';
 import { Grades } from '@/pages/Grades';
+import useAuth from './store/AuthStore';
+import { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+import { getSession, supabase } from './services/supabase';
 
-const user = {
-  role: 'Admin',
-  name: 'Admin',
-  email: 'admin@admin.com',
-  image: 'https://i.pravatar.cc/300?img=1',
-  firstName: 'Admin',
-  lastName: 'Admin',
-  profilePicture: 'https://i.pravatar.cc/300?img=1',
-};
+// const user = {
+//   role: 'Admin',
+//   name: 'Admin',
+//   email: 'admin@admin.com',
+//   image: 'https://i.pravatar.cc/300?img=1',
+//   firstName: 'Admin',
+//   lastName: 'Admin',
+//   profilePicture: 'https://i.pravatar.cc/300?img=1',
+// };
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
+
+  const {setSession, token} = useAuth(useShallow((state=>({
+    setSession: state.setSession,
+    token: state.token
+  }))));
+
+  useEffect(() => {
+    getSession(setSession)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if(session){
+        setSession(session);
+      }
+    });
+  
+    return () => {
+      subscription.unsubscribe();
+    }
+  }, [setSession]);
+  
   // const { user, isLoading } = useAuth();
+  // console.log(token);
 
   const isLoading = false;
   
@@ -37,7 +61,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
   
-  if (!user) {
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
   
@@ -45,7 +69,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AppRoutes() {
-  // const { user } = useAuth();
+  const { profile } = useAuth();
+  // console.log(profile);
 
   return (
     <Routes>
@@ -58,7 +83,7 @@ function AppRoutes() {
             <Layout>
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
-                {user?.role === 'Admin' && (
+                {profile?.role === 1 && (
                   <>
                     <Route path="/classes" element={<Classes />} />
                     <Route path="/professions" element={<Professions />} />

@@ -10,6 +10,10 @@ import SelectForm from "@/components/common/SelectForm";
 import BodySelectClass from "./BodySelectClass";
 import BodySelectProfession from "./BodySelectProfession";
 import Check from "@/components/common/Check";
+import { addPensumSupabase } from "@/services/supabase";
+import usePensum from "@/store/usePensum";
+import { useShallow } from "zustand/react/shallow";
+import type { PensumEntry } from "@/types";
 
 interface Props {
   isDialogOpen: boolean
@@ -26,6 +30,10 @@ interface Props {
 
 const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {  
 
+  const {addPensum} = usePensum(useShallow((state=>({
+    addPensum: state.addPensum,
+  }))));
+
   const formPensum = useFormContext();
   
   
@@ -34,7 +42,7 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
   //   defaultValues: initinalValues,
   // });
 
-  const professionId = formPensum.watch("professionId");
+  // const professionId = formPensum.watch("professionId");
   // console.log(professionId);
 
   // const [formData, setFormData] = useState({
@@ -44,13 +52,21 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
   // });
 
   const onSubmit = (data:FieldValues) => {
-    console.log(data);
+    // console.log(data);
+    addPensumSupabase(data as PensumEntry).then((res)=>{
+      if(res){
+        addPensum(data as PensumEntry);
+        closeDialog();
+      }
+    });
   }
 
   const handlerSave = (e: React.FormEvent) => {
     e.preventDefault();
     formPensum.setValue("id", crypto.randomUUID());
-    // formPensum.setValue("professionId", selectedProfession);
+    if(formPensum.getValues("isElective") === undefined){
+      formPensum.setValue("isElective", false);
+    }
     formPensum.handleSubmit(onSubmit)();
   }
 
@@ -59,8 +75,18 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
   };
 
   const onOpenChange = () => {
-    formPensum.reset();
+    // formPensum.reset();
     // setEditingClass(null);
+    // id: string;
+    // IdProfession: string;
+    // IdClasse: string;
+    // IdSemester: number;
+    // isElective: boolean;
+    formPensum.setValue("id", undefined);
+    formPensum.setValue("isElective", undefined);
+    formPensum.setValue("IdClasse", undefined);
+    formPensum.setValue("IdSemester", undefined);
+    // formPensum.setValue("professionId", professionId);
     setIsDialogOpen((val) => !val);
   }
 
@@ -78,11 +104,11 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
         </DialogHeader>
         {/* <Form {...formPensum}> */}
           <form onSubmit={handlerSave} className="space-y-4">
-            <SelectForm name='classId' label='Class' placeholder="Select a class">
-              <BodySelectClass selectedProfession={professionId} />
+            <SelectForm name='IdClasse' label='Class' placeholder="Select a class">
+              <BodySelectClass />
             </SelectForm>
-            <SelectForm name='semester' label='Semester' placeholder="Select a semester">
-              <BodySelectProfession selectedProfession={professionId} />
+            <SelectForm name='IdSemester' label='Semester' placeholder="Select a semester">
+              <BodySelectProfession />
             </SelectForm>
             <Check name="isElective" label="Elective Course" />
             <div className="flex justify-end space-x-2">

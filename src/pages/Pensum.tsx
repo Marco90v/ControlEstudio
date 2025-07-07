@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { BookOpen } from 'lucide-react';
-import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
+// import { mockPensum, mockProfessions, mockClasses } from '@/data/mockData';
 import type { PensumEntry } from '@/types';
 import PensumDialog from '@/features/pensum/components/PensumDialog';
 import { useForm } from 'react-hook-form';
@@ -14,26 +14,44 @@ import { Form } from '@/components/ui/form';
 import ProfessionSelector from '@/features/pensum/components/ProfessionSelector';
 import TabsSemeter from '@/features/pensum/components/TabsSemeter';
 import CardClassBySemester from '@/features/pensum/components/CardClassBySemester';
+import usePensum from '@/store/usePensum';
+import { useShallow } from 'zustand/react/shallow';
+import useClasses from '@/store/useClasses';
+import { useLoadClasses } from '@/hooks/useLoadClasses';
+import { getTotalCredits, transformPensum } from '@/lib/utils';
+import { useLoadPensums } from '@/hooks/useLoadPensums';
 
-const initinalValues: PensumEntry = {
-  id: '',
-  professionId: '1',
-  classId: '',
-  semester: 0,
-  isElective: false
-};
+// const initinalValues: PensumEntry = {
+//   id: '',
+//   professionId: '1',
+//   classId: '',
+//   semester: 0,
+//   isElective: false
+// };
 
 export function Pensum() {
 
+  const {pensums} = usePensum(useShallow((state=>({
+    pensums: state.pensums,
+    setPensums: state.setPensums,
+  }))));
+  const {classes} = useClasses(useShallow((state=>({ 
+    classes: state.classes,
+  }))));
+
+  useLoadClasses();
+  useLoadPensums();
+
   const formPensum = useForm<PensumEntry>({
     resolver: zodResolver(pensumSchema),
-    defaultValues: initinalValues,
+    // defaultValues: initinalValues,
   });
 
-  const professionId = formPensum.watch('professionId');
+  const IdProfession = formPensum.watch('IdProfession');
+  // console.log(IdProfession);
 
 
-  const [pensum, setPensum] = useState<PensumEntry[]>(mockPensum);
+  // const [pensum, setPensum] = useState<PensumEntry[]>(mockPensum);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   // const [selectedProfession, setSelectedProfession] = useState<string>('1');
   // const [formData, setFormData] = useState({
@@ -44,21 +62,37 @@ export function Pensum() {
 
   // const selectedProfessionData = mockProfessions.find(p => p.id === selectedProfession);
   // const professionPensum = pensum.filter(p => p.professionId === selectedProfession);
-  const selectedProfessionData = mockProfessions.find(p => p.id === professionId);
-  const professionPensum = pensum.filter(p => p.professionId === professionId);
+  // const selectedProfessionData = mockProfessions.find(p => p.id === IdProfession);
+  // const professionPensum = pensums.filter(p => p.IdProfession === IdProfession);
 
   // Group classes by semester
-  const semesterData = Array.from({ length: selectedProfessionData?.totalSemesters || 8 }, (_, i) => {
-    const semester = i + 1;
-    const semesterClasses = professionPensum.filter(p => p.semester === semester);
+  // const semesterData = Array.from({ length: selectedProfessionData?.totalSemesters || 8 }, (_, i) => {
+  //   const semester = i + 1;
+  //   const semesterClasses = professionPensum.filter(p => p.IdSemester === semester);
+  //   return {
+  //     semester,
+  //     classes: semesterClasses.map(p => ({
+  //       ...p,
+  //       class: mockClasses.find(c => c.id === p.IdClasse)!
+  //     }))
+  //   };
+  // });
+
+  const pensum = pensums.filter(p => p.IdProfession === IdProfession).map(c=>{
     return {
-      semester,
-      classes: semesterClasses.map(p => ({
-        ...p,
-        class: mockClasses.find(c => c.id === p.classId)!
-      }))
-    };
+      ...c,
+      nameClasse: classes.find(cls => cls.id === c.IdClasse)?.names,
+      code: classes.find(cls => cls.id === c.IdClasse)?.code,
+      credits: classes.find(cls => cls.id === c.IdClasse)?.credits,
+      description: classes.find(cls => cls.id === c.IdClasse)?.description,
+    }
   });
+  // console.log(temp);
+  const NewPensum = transformPensum(pensum);
+  // console.log(temp2);
+
+  // const rest = Object.groupBy(temp, 'IdSemester');
+  // console.log(temp);
 
   // const handleSubmit = (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -82,14 +116,21 @@ export function Pensum() {
   //   setPensum(pensum.filter(p => p.id !== id));
   // };
 
-  const getTotalCredits = (semester: number) => {
-    return professionPensum
-      .filter(p => p.semester === semester)
-      .reduce((total, p) => {
-        const cls = mockClasses.find(c => c.id === p.classId);
-        return total + (cls?.credits || 0);
-      }, 0);
-  };
+  // const getTotalCredits = (sem: any) => {
+  //   // console.log(sem);
+  //   const total = sem.classes.reduce((total, p) => {
+  //     const cls = mockClasses.find(c => c.id === p.IdClasse);
+  //     return total + (cls?.credits || 0);
+  //   }, 0);
+  //   return total;
+  //   // return professionPensum
+  //   //   .filter(p => p.semester === semester)
+  //   //   .reduce((total, p) => {
+  //   //     const cls = mockClasses.find(c => c.id === p.classId);
+  //   //     return total + (cls?.credits || 0);
+  //   //   }, 0);
+  //   // return 0;
+  // };
 
   // const availableClasses = mockClasses.filter(cls => 
   //   !professionPensum.some(p => p.classId === cls.id)
@@ -115,16 +156,16 @@ export function Pensum() {
 
       {/* Curriculum Tabs */}
       <Tabs defaultValue="1" className="w-full">
-        <TabsSemeter semesterData={semesterData} />
+        <TabsSemeter IdProfession={IdProfession} />
 
-        {semesterData.map((sem) => (
-          <TabsContent key={sem.semester} value={sem.semester.toString()}>
+        {NewPensum && NewPensum.semester.map((sem) => (
+          <TabsContent key={sem.IdSemester} value={sem.IdSemester.toString()}>
             <Card className='mt-6'>
               <CardHeader>
                 <div className="flex justify-between items-center">
-                  <CardTitle>Semester {sem.semester}</CardTitle>
+                  <CardTitle>Semester {sem.IdSemester}</CardTitle>
                   <Badge variant="outline">
-                    {getTotalCredits(sem.semester)} Total Credits
+                    {getTotalCredits(sem.classes)} Total Credits
                   </Badge>
                 </div>
               </CardHeader>
@@ -132,7 +173,7 @@ export function Pensum() {
                 {sem.classes.length > 0 ? (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {sem.classes.map((entry) => (
-                      <CardClassBySemester key={entry.id} entry={entry} />
+                      <CardClassBySemester key={entry.IdClasse} entry={entry} />
                     ))}
                   </div>
                 ) : (

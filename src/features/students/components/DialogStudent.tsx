@@ -9,17 +9,26 @@ import { Form } from "@/components/ui/form";
 import InputForm from "@/components/common/InputForm";
 import SelectForm from "@/components/common/SelectForm";
 import { SelectItem } from "@/components/ui/select";
-import { mockProfessions } from "@/data/mockData";
 import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
+import SelectProfessions from "@/components/common/SelectProfessions";
+import SelectSemesters from "@/components/common/SelectSemesters";
+import { addStudentSupabase, updateStudentSupabase } from "@/services/supabase";
+import useStudents from "@/store/useStudents";
 
 interface Props {
   isDialogOpen: boolean;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  editingStudent: UserType | null;
-  setEditingStudent: React.Dispatch<React.SetStateAction<UserType | null>>;
+  editingStudent: Student | null;
+  setEditingStudent: React.Dispatch<React.SetStateAction<Student | null>>;
 }
 
 const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditingStudent}:Props) => {
+
+  const {addStudent, updateStudent} = useStudents(useShallow((state=>({
+    addStudent: state.addStudent,
+    updateStudent: state.updateStudent,
+  }))));
 
   const formStudent = useForm<Student>({
     resolver: zodResolver(studentSchema),
@@ -28,16 +37,6 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
 
   useEffect(() => {
     if (editingStudent) {
-      // formStudent.setValue("id", editingStudent.id);
-      // formStudent.setValue("firstName", editingStudent.firstName);
-      // formStudent.setValue("lastName", editingStudent.lastName);
-      // formStudent.setValue("email", editingStudent.email);
-      // formStudent.setValue("contactNumber", editingStudent.contactNumber);
-      // formStudent.setValue("gender", editingStudent.gender);
-      // formStudent.setValue("professionId", editingStudent.professionId);
-      // formStudent.setValue("currentSemester", editingStudent.currentSemester);
-      // formStudent.setValue("profilePicture", editingStudent.profilePicture);
-      console.log(editingStudent);
       Object.keys(editingStudent).forEach((key) => {
         formStudent.setValue(key as KeysStudent, editingStudent[key as KeysStudent]);
       });
@@ -45,7 +44,18 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
   }, [editingStudent, formStudent]);
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
+    // console.log(data);
+    if(!editingStudent) {
+      addStudentSupabase(data as Student).then((res) => {
+        if (res) addStudent(data as Student);
+        closeDialog();
+      });
+    } else {
+      updateStudentSupabase(data as Student).then((res) => {
+        if (res) updateStudent(data as Student);
+        closeDialog();
+      });
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,67 +64,24 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
       formStudent.setValue("id", crypto.randomUUID());
     }
     formStudent.setValue("role", "Student");
+    formStudent.setValue("profilePicture", undefined);
     formStudent.handleSubmit(onSubmit)();
-    
-    // if (editingStudent) {
-    //   setStudents(students.map(student => 
-    //     student.id === editingStudent.id 
-    //       ? { ...editingStudent, ...formData, role: 'Student' as const }
-    //       : student
-    //   ));
-    // } else {
-    //   const newStudent: UserType = {
-    //     id: (students.length + 10).toString(),
-    //     ...formData,
-    //     role: 'Student'
-    //   };
-    //   setStudents([...students, newStudent]);
-    // }
-    
-    // resetForm();
   };
 
   const resetForm = () => {
     formStudent.reset();
     setEditingStudent(null);
     setIsDialogOpen(false);
-    // setFormData({
-    //   firstName: '',
-    //   lastName: '',
-    //   email: '',
-    //   contactNumber: '',
-    //   gender: 'Male',
-    //   professionId: '',
-    //   currentSemester: 1,
-    //   profilePicture: ''
-    // });
-    // setEditingStudent(null);
-    // setIsDialogOpen(false);
   };
 
-  const handleEdit = (student: UserType) => {
-    // setEditingStudent(student);
-    // setFormData({
-    //   firstName: student.firstName,
-    //   lastName: student.lastName,
-    //   email: student.email,
-    //   contactNumber: student.contactNumber,
-    //   gender: student.gender,
-    //   professionId: student.professionId || '',
-    //   currentSemester: student.currentSemester || 1,
-    //   profilePicture: student.profilePicture || ''
-    // });
-    // setIsDialogOpen(true);
+  const closeDialog = () => {
+    onOpenChange();
   };
 
-  const handleDelete = (id: string) => {
-    // setStudents(students.filter(student => student.id !== id));
-  };
-
-  const getProfessionName = (professionId?: string) => {
-    // if (!professionId) return 'Not assigned';
-    // const profession = mockProfessions.find(p => p.id === professionId);
-    // return profession?.name || 'Unknown';
+  const onOpenChange = () => {
+    formStudent.reset();
+    setEditingStudent(null);
+    setIsDialogOpen(false);
   };
 
   return (
@@ -162,20 +129,12 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <SelectForm name='professionId' label='Profession' placeholder="Select Profession">
-                  {mockProfessions.map((profession) => (
-                    <SelectItem key={profession.id} value={profession.id}>
-                      {profession.name}
-                    </SelectItem>
-                  ))}
+                  <SelectProfessions />
                 </SelectForm>
               </div>
               <div>
                 <SelectForm name='currentSemester' label='Current Semester' placeholder="Select Current Semester">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <SelectItem key={i + 1} value={(i + 1).toString()}>
-                      Semester {i + 1}
-                    </SelectItem>
-                  ))}
+                  <SelectSemesters />
                 </SelectForm>
               </div>
             </div>

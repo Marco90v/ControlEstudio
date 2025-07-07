@@ -2,9 +2,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockProfessions } from "@/data/mockData";
+import { deleteStudentSupabase } from "@/services/supabase";
+// import { mockProfessions } from "@/data/mockData";
+import useProfessions from "@/store/useProfessions";
+import useStudents from "@/store/useStudents";
+// import useStudents from "@/store/useStudents";
 import type { Student } from "@/types";
 import { Edit, GraduationCap, Trash2, User } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   student: Student;
@@ -14,8 +19,20 @@ interface Props {
 
 const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
 
+  const {professions} = useProfessions(useShallow((state=>({
+    professions: state.professions,
+  }))));
+  const {deleteStudent} = useStudents(useShallow((state=>({
+    deleteStudent: state.deleteStudent,
+  }))));
+
   const handleDelete = (id: string) => {
-    console.log('handleDelete', id);
+    // console.log('handleDelete', id);
+    deleteStudentSupabase(id).then(res => {
+      if(res){
+        deleteStudent(id);
+      }
+    });
     // setStudents(students.filter(student => student.id !== id));
     // setProfessors(professors.filter(prof => prof.id !== id));
     // setAssignments(assignments.filter(assign => assign.professorId !== id));
@@ -38,8 +55,9 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
 
   const getProfessionName = (professionId?: string) => {
     if (!professionId) return 'Not assigned';
-    const profession = mockProfessions.find(p => p.id === professionId);
-    return profession?.name || 'Unknown';
+    // const profession = mockProfessions.find(p => p.id === professionId);
+    const profession = professions.find(p => p.id === professionId);
+    return profession?.names || 'Unknown';
   };
 
   return (
@@ -67,6 +85,7 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
           <Button
             variant="ghost"
             size="icon"
+            className="cursor-pointer hover:bg-blue-500/10"
             onClick={() => handleEdit(student)}
           >
             <Edit className="h-4 w-4" />
@@ -74,6 +93,7 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
           <Button
             variant="ghost"
             size="icon"
+            className="cursor-pointer hover:bg-red-500/10"
             onClick={() => handleDelete(student.id)}
           >
             <Trash2 className="h-4 w-4" />

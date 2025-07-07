@@ -11,9 +11,11 @@ import {
   X,
   Home
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, getRoles } from '@/lib/utils';
 // import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import useAuth from '@/store/AuthStore';
+import { useShallow } from 'zustand/react/shallow';
 
 const menuItems = [
   { 
@@ -60,23 +62,28 @@ const menuItems = [
   }
 ];
 
-const user = {
-  role: 'Admin',
-  name: 'Admin',
-  email: 'admin@admin.com',
-  image: 'https://i.pravatar.cc/300?img=1',
-  firstName: 'Admin',
-  lastName: 'Admin',
-  profilePicture: 'https://i.pravatar.cc/300?img=1',
-};
+// const user = {
+//   role: 'Admin',
+//   name: 'Admin',
+//   email: 'admin@admin.com',
+//   image: 'https://i.pravatar.cc/300?img=1',
+//   firstName: 'Admin',
+//   lastName: 'Admin',
+//   profilePicture: 'https://i.pravatar.cc/300?img=1',
+// };
 
 export function Sidebar() {
+
+  const {profile} = useAuth(useShallow((state=>({
+    profile: state.profile
+  }))));
+
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   // const { user } = useAuth();
 
   const availableMenuItems = menuItems.filter(item => 
-    user && item.roles.includes(user.role)
+    profile && item.roles.includes(getRoles(profile.role))
   );
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -139,18 +146,18 @@ export function Sidebar() {
           </nav>
 
           {/* User info */}
-          {user && (
+          {profile && (
             <div className="border-t border-border p-4">
               <div className="flex items-center space-x-3">
                 <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
-                  {user.firstName[0]}
+                  {profile.names}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {user.firstName} {user.lastName}
+                    {profile.names} {profile.lastNames}
                   </p>
                   <p className="text-xs text-muted-foreground capitalize">
-                    {user.role.toLowerCase()}
+                    {getRoles(profile.role)}
                   </p>
                 </div>
               </div>

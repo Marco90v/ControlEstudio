@@ -4,11 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form } from "@/components/ui/form"
 import { classSchema } from "@/features/classes/schema"
+import { addClassSupabase, updateClassSupabase } from "@/services/supabase"
+import useClasses from "@/store/useClasses"
 import type { Class, KeysClass } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useShallow } from "zustand/react/shallow"
 
 interface Props {
   editingClass: Class | null
@@ -17,19 +20,16 @@ interface Props {
   setEditingClass: React.Dispatch<React.SetStateAction<Class | null>>
 }
 
-const initinalValues: Class = {
-  id: '',
-  name: '',
-  code: '',
-  credits: 0,
-  description: ''
-};
 
 const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingClass}:Props) => {
 
+  const {addClass, updateClass} = useClasses(useShallow((state=>({
+    addClass: state.addClass,
+    updateClass: state.updateClass,
+  }))));
+
   const formClass = useForm<Class>({
     resolver: zodResolver(classSchema),
-    defaultValues: initinalValues,
   });
 
   useEffect(() => {
@@ -41,7 +41,21 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
   }, [editingClass, formClass]);
 
   const onSubmit = (data: Class) => {
-    console.log(data);
+    if(editingClass){
+      updateClassSupabase(data).then((res)=>{
+        if(res){
+          updateClass(data);
+          closeDialog();
+        }
+      });
+    }else{
+      addClassSupabase(data).then((res)=>{
+        if(res){
+          addClass(data);
+          closeDialog();
+        }
+      });
+    }
   }
 
   const handlerSave = (e: React.FormEvent) => {
@@ -79,11 +93,11 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
         <Form {...formClass}>
           <form onSubmit={handlerSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <InputForm name='name' label='Class Name' />
-              <InputForm name='code' label='Class Code' />
+              <InputForm name='names' label='Class Name' placeholder="Enter class name" />
+              <InputForm name='code' label='Class Code' placeholder="Enter class code" />
             </div>
-            <InputForm name='credits' label='Credits' type='number' min={1} max={10} />
-            <TextareaForm name='description' label='Description (Optional)' rows={3} />
+            <InputForm name='credits' label='Credits' type='number' min={1} max={10} placeholder="Enter class credits" />
+            <TextareaForm name='description' label='Description (Optional)' rows={3} placeholder="Enter class description" />
 
             <div className="flex justify-end space-x-2">
               <Button type="button" variant="outline" onClick={closeDialog}>

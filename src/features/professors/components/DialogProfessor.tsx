@@ -10,6 +10,9 @@ import type { KeysProfessor, Professor } from "@/types";
 import SelectForm from "@/components/common/SelectForm";
 import { SelectItem } from "@/components/ui/select";
 import { useEffect } from "react";
+import { addProfessorSupabase } from "@/services/supabase";
+import useProfessors from "@/store/useProfessors";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   isDialogOpen: boolean;
@@ -32,6 +35,10 @@ interface Props {
 
 const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEditingProfessor}:Props) => {
 
+  const {addProfessor} = useProfessors(useShallow((state=>({
+    addProfessor: state.addProfessor,
+  }))));
+
   const formProfessor = useForm<Professor>({
     resolver: zodResolver(professorSchema),
     // defaultValues: initinalValues,
@@ -53,7 +60,13 @@ const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEd
   }, [editingProfessor, formProfessor]);
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
+    // console.log(data);
+    addProfessorSupabase(data as Professor).then((res)=>{
+      if(res){
+        addProfessor(data as Professor);
+        closeDialog();
+      }
+    });
   }
 
   const handleProfessorSubmit = (e: React.FormEvent) => {
@@ -69,6 +82,10 @@ const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEd
     setIsDialogOpen(val=>!val)
   };
 
+  const closeDialog = () => {
+    onOpenChange();
+  };
+
   const onOpenChange = () => {
     formProfessor.reset();
     setEditingProfessor(null);
@@ -76,7 +93,7 @@ const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEd
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button>
           <Plus className="h-4 w-4 mr-2" />

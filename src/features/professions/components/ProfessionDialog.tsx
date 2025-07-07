@@ -9,6 +9,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { professionSchema } from "../schema";
 import { useEffect } from "react";
+import { addProfessionSupabase, updateProfessionSupabase } from "@/services/supabase";
+import useProfessions from "@/store/useProfessions";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   editingProfession: Profession | null;
@@ -17,19 +20,24 @@ interface Props {
   setEditingProfession: React.Dispatch<React.SetStateAction<Profession | null>>;
 }
 
-const initinalValues: Profession = {
-  id: '',
-  name: '',
-  code: '',
-  totalSemesters: 10,
-  description: ''
-};
+// const initinalValues: Profession = {
+//   id: '',
+//   name: '',
+//   code: '',
+//   totalSemesters: 10,
+//   description: ''
+// };
 
 const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, setEditingProfession}:Props) => {
 
+  const {addProfession, updateProfession} = useProfessions(useShallow((state=>({
+    addProfession: state.addProfession,
+    updateProfession: state.updateProfession,
+  }))));
+
   const formProfession = useForm<Profession>({
     resolver: zodResolver(professionSchema),
-    defaultValues: initinalValues,
+    // defaultValues: initinalValues,
   });
 
   useEffect(() => {
@@ -41,11 +49,28 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
   }, [editingProfession, formProfession]);
   
   const onSubmit = (data: Profession) => {
-    console.log(data);
+    // console.log(data);
+    if(editingProfession){
+      updateProfessionSupabase(data).then((res)=>{
+        if(res){
+          updateProfession(data);
+          closeDialog();
+        }
+      });
+    }else{
+      addProfessionSupabase(data).then((res)=>{
+        if(res){
+          addProfession(data);
+          closeDialog();
+        }
+      });
+    }
   }
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    // console.log(formProfession.getValues());
+    // console.log(formProfession.formState.errors);
     if (!editingProfession) {
       formProfession.setValue("id", crypto.randomUUID());
     }
@@ -79,7 +104,7 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
         <Form {...formProfession}>
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <InputForm name='name' label='Class Name' />
+              <InputForm name='names' label='Class Name' />
               <InputForm name='code' label='Code' />
             </div>
             <InputForm name='totalSemesters' label='Total Semesters' min={6} max={16} type='number' />

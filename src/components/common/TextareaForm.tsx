@@ -5,11 +5,12 @@ import { Textarea } from "../ui/textarea";
 type Props = {
   name: string;
   label: string;
+  placeholder?: string;
   rows?: number;
 };
 
 const TextareaForm = (props: Props) => {
-  const { name, label, rows=0 } = props;
+  const { name, label, placeholder="", rows=0 } = props;
   const formClass = useFormContext();
   return (
     <FormField
@@ -22,6 +23,7 @@ const TextareaForm = (props: Props) => {
             <Textarea
               {...field}
               rows={rows}
+              placeholder={placeholder}
             />
           </FormControl>
           {!formClass.formState.errors[name] && (

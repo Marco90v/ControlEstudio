@@ -2,17 +2,31 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Professor, ProfessorAssignment } from "@/types";
+import { getTotalClassesByProfessor } from "@/lib/utils";
+import { deleteProfessorAssignmentSupabase, deleteProfessorSupabase } from "@/services/supabase";
+import useProfessorAssignment from "@/store/useProfessorAssignment";
+import useProfessors from "@/store/useProfessors";
+import type { Professor } from "@/types";
 import { Edit, Trash2, UserCheck } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   professor: Professor;
-  professorAssignments: ProfessorAssignment[];
+  // professorAssignments: ProfessorAssignment[];
   setEditingProfessor: React.Dispatch<React.SetStateAction<Professor | null>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CardProfessor = ({professor:prof, professorAssignments,  setEditingProfessor, setIsDialogOpen }: Props) => {
+const CardProfessor = ({professor:prof, setEditingProfessor, setIsDialogOpen }: Props) => {
+
+  const {professorAssignments, deleteProfessorAssignment} = useProfessorAssignment(useShallow((state) => ({
+    professorAssignments: state.professorAssignments,
+    deleteProfessorAssignment: state.deleteProfessorAssignment,
+  })));
+  const {deleteProfessor} = useProfessors(useShallow((state) => ({
+    deleteProfessor: state.deleteProfessor,
+  })));
+
   const handleEdit = (prof: Professor) => {
     setEditingProfessor(prof);
     // setProfessorFormData({
@@ -27,9 +41,21 @@ const CardProfessor = ({professor:prof, professorAssignments,  setEditingProfess
   };
 
   const handleDelete = (id: string) => {
-    console.log('handleDelete', id);
+    // console.log('handleDelete', id);
     // setProfessors(professors.filter(prof => prof.id !== id));
     // setAssignments(assignments.filter(assign => assign.professorId !== id));
+
+    deleteProfessorSupabase(id).then(res => {
+      if(res){
+        deleteProfessor(id);
+      }
+    });
+    deleteProfessorAssignmentSupabase(id).then(res => {
+      // console.log('deleteProfessorAssignmentSupabase', res);
+      if(res){
+        deleteProfessorAssignment(id);
+      }
+    });
   };
 
   // const getProfessorAssignments = (professorId: string) => {
@@ -60,6 +86,7 @@ const CardProfessor = ({professor:prof, professorAssignments,  setEditingProfess
           <Button
             variant="ghost"
             size="icon"
+            className="cursor-pointer hover:bg-blue-500/10"
             onClick={() => handleEdit(prof)}
           >
             <Edit className="h-4 w-4" />
@@ -67,6 +94,7 @@ const CardProfessor = ({professor:prof, professorAssignments,  setEditingProfess
           <Button
             variant="ghost"
             size="icon"
+            className="cursor-pointer hover:bg-red-500/10"
             onClick={() => handleDelete(prof.id)}
           >
             <Trash2 className="h-4 w-4" />
@@ -85,7 +113,8 @@ const CardProfessor = ({professor:prof, professorAssignments,  setEditingProfess
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Assignments:</span>
             <Badge variant="outline">
-              {professorAssignments.length} classes
+              {/* {professorAssignments.length} classes */}
+              {getTotalClassesByProfessor(professorAssignments)} classes
             </Badge>
           </div>
         </div>

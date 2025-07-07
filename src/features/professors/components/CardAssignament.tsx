@@ -1,21 +1,55 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Class, Profession, Professor, ProfessorAssignment } from "@/types";
+import { deleteAssignmentSupabase } from "@/services/supabase";
+import useClasses from "@/store/useClasses";
+import useProfessions from "@/store/useProfessions";
+import useProfessorAssignment from "@/store/useProfessorAssignment";
+import useProfessors from "@/store/useProfessors";
+import type { ProfessorAssignment } from "@/types";
 import { Trash2 } from "lucide-react";
+import { useCallback } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   assignment: ProfessorAssignment;
-  professor: Professor | undefined;
-  profession: Profession | undefined;
-  classData: Class | undefined;
-  setAssignments: React.Dispatch<React.SetStateAction<ProfessorAssignment[]>>;
 }
 
-const CardAssignament = ({assignment, professor, profession, classData, setAssignments}:Props) => {
+const CardAssignament = ({assignment}:Props) => {
+
+  const {classes} = useClasses(useShallow((state) => ({
+    classes: state.classes,
+  })));
+  const {professions} = useProfessions(useShallow((state) => ({
+    professions: state.professions,
+  })));
+  const {professors} = useProfessors(useShallow((state) => ({
+    professors: state.professors,
+  })));
+  const {deleteAssignment} = useProfessorAssignment(useShallow((state) => ({
+    deleteAssignment: state.deleteAssignment,
+  })));
+
+
+  const cls = useCallback(() => {
+    return classes.find(c => c.id === assignment.classId);
+  }, [assignment.classId, classes]);
+
+  const pfss = useCallback(() => {
+    return professions.find(p => p.id === assignment.professionId);
+  }, [assignment.professionId, professions]);
+
+  const pf = useCallback(() => {
+    return professors.find(p => p.id === assignment.professorId);
+  }, [assignment.professorId, professors]);
 
   const handleDelete = (id: string) => {
-    console.log('handleDelete', id);
+    // console.log('handleDelete', id);
+    deleteAssignmentSupabase(id).then(res => {
+      if(res){
+        deleteAssignment(id);
+      }
+    });
     // setAssignments(assignments.filter(a => a.id !== assignment.id))
     // setProfessors(professors.filter(prof => prof.id !== id));
     // setAssignments(assignments.filter(assign => assign.professorId !== id));
@@ -29,20 +63,20 @@ const CardAssignament = ({assignment, professor, profession, classData, setAssig
             <div>
               <div className="text-sm text-muted-foreground">Professor</div>
               <div className="font-medium">
-                {professor?.firstName} {professor?.lastName}
+                {pf()?.firstName} {pf()?.lastName}
               </div>
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Class</div>
               <div className="font-medium">
-                {classData?.code} - {classData?.name}
+                {cls()?.code} - {cls()?.names}
               </div>
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Details</div>
               <div className="space-y-1">
                 <Badge variant="outline" className="text-xs">
-                  {profession?.name}
+                  {pfss()?.names}
                 </Badge>
                 <div className="text-sm">
                   Sem {assignment.semester} | {assignment.shift} | Sec {assignment.section}
@@ -53,6 +87,7 @@ const CardAssignament = ({assignment, professor, profession, classData, setAssig
               <Button
                 variant="ghost"
                 size="icon"
+                className="cursor-pointer hover:bg-red-500/10"
                 // onClick={() => setAssignments(assignments.filter(a => a.id !== assignment.id))}
                 onClick={()=>handleDelete(assignment.id)}
               >

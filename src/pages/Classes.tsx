@@ -1,73 +1,44 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { mockClasses } from '@/data/mockData';
 import type { Class } from '@/types';
 import ClassDialog from '@/features/classes/components/ClassDialog';
 import Filter from '@/components/common/Filter';
 import CardClass from '@/features/classes/components/CardClass';
+import useClasses from '@/store/useClasses';
+import { useShallow } from 'zustand/react/shallow';
+import { getAllClasses } from '@/services/supabase';
 
 export function Classes() {
 
-  const [classes, setClasses] = useState<Class[]>(mockClasses);
+  const {classes, setClasses} = useClasses(useShallow((state=>({
+    classes: state.classes,
+    setClasses: state.setClasses,
+  }))));
+
+  useEffect(() => {
+    if(classes.length === 0){
+      getAllClasses().then((data)=>{
+        if(data){
+          setClasses(data);
+        }
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingClass, setEditingClass] = useState<Class | null>(null);
 
   const filteredClasses = classes.filter(cls =>
-    cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cls.names.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cls.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-    
-  //   if (editingClass) {
-  //     setClasses(classes.map(cls => 
-  //       cls.id === editingClass.id 
-  //         ? { ...editingClass, ...formData }
-  //         : cls
-  //     ));
-  //   } else {
-  //     const newClass: Class = {
-  //       id: (classes.length + 1).toString(),
-  //       ...formData
-  //     };
-  //     setClasses([...classes, newClass]);
-  //   }
-    
-  //   resetForm();
-  // };
-
-  // const onSubmit = async (data: Class) => {
-  //   console.log(data);
-
-  // }
-
-  // const resetForm = () => {
-  //   // setFormData({ name: '', code: '', credits: 0, description: '' });
-  //   // setEditingClass(null);
-  //   // setIsDialogOpen(false);
-  //   formClass.reset();
-  //   formClass.setValue("id", crypto.randomUUID());
-  //   // formClass.setValue("name", "asdadasdasd");
-  //   // formClass.setValue("code", "aasdadsasd");
-  //   // formClass.setValue("credits", 2);
-  //   // formClass.setValue("description", "asdasdadadasdas");
-  // };
-
-  // const closeDialog = () => {
-  //   setIsDialogOpen(false);
-  //   setEditingClass(null);
-  // };
 
   const handleEdit = useCallback((cls: Class) => {
     setEditingClass(cls);
     setIsDialogOpen(true);
   }, []);
-
-  const handleDelete = useCallback((id: string) => {
-    setClasses(classes.filter(cls => cls.id !== id));
-  },[classes]);
 
   return (
     <div className="space-y-6">
@@ -85,7 +56,7 @@ export function Classes() {
       {/* Classes Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredClasses.map((cls) => (
-          <CardClass key={cls.id} cls={cls} handleEdit={handleEdit} handleDelete={handleDelete} />
+          <CardClass key={cls.id} cls={cls} handleEdit={handleEdit} />
         ))}
       </div>
 

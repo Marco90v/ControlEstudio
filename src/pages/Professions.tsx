@@ -1,13 +1,34 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { mockProfessions } from '@/data/mockData';
+// import { mockProfessions } from '@/data/mockData';
 import type { Profession } from '@/types';
 import ProfessionDialog from '@/features/professions/components/ProfessionDialog';
 import CardProfession from '@/features/professions/components/CardProfession';
 import Filter from '@/components/common/Filter';
+import useProfessions from '@/store/useProfessions';
+import { useShallow } from 'zustand/react/shallow';
+// import { getAllProfessions } from '@/services/supabase';
+import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 
 export function Professions() {
-  const [professions, setProfessions] = useState<Profession[]>(mockProfessions);
+
+  const {professions} = useProfessions(useShallow((state=>({
+    professions: state.professions,
+  }))));
+
+  // useEffect(() => {
+  //   if(professions.length === 0){
+  //     getAllProfessions().then((data)=>{
+  //       if(data){
+  //         setProfessions(data);
+  //       }
+  //     });
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+   useLoadProfessions();
+
+  // const [professions, setProfessions] = useState<Profession[]>(mockProfessions);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProfession, setEditingProfession] = useState<Profession | null>(null);
@@ -19,7 +40,7 @@ export function Professions() {
   // });
 
   const filteredProfessions = professions.filter(prof =>
-    prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    prof.names.toLowerCase().includes(searchTerm.toLowerCase()) ||
     prof.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -60,9 +81,6 @@ export function Professions() {
     setIsDialogOpen(true);
   }, []);
 
-  const handleDelete = useCallback( (id: string) => {
-    setProfessions(professions.filter(prof => prof.id !== id));
-  }, [professions]);
 
   return (
     <div className="space-y-6">
@@ -80,7 +98,7 @@ export function Professions() {
       {/* Professions Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredProfessions.map((prof) => (
-          <CardProfession key={prof.id} prof={prof} handleEdit={handleEdit} handleDelete={handleDelete} />
+          <CardProfession key={prof.id} prof={prof} handleEdit={handleEdit} />
         ))}
       </div>
 

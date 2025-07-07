@@ -1,18 +1,33 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { deleteProfessionSupabase } from "@/services/supabase"
+import useProfessions from "@/store/useProfessions"
 import type { Profession } from "@/types"
 import { Edit, GraduationCap, Trash2 } from "lucide-react"
 import { memo } from "react"
+import { useShallow } from "zustand/react/shallow"
 
 interface Props {
   prof: Profession
   handleEdit: (prof: Profession) => void
-  handleDelete: (id: string) => void
+  // handleDelete: (id: string) => void
 }
 
-const cardProfession = memo (({prof, handleEdit, handleDelete}:Props) => {
-  console.log(prof);
+const cardProfession = memo (({prof, handleEdit}:Props) => {
+
+  const {deleteProfession} = useProfessions(useShallow((state=>({
+    deleteProfession: state.deleteProfession
+  }))));
+
+  const handleDelete = (id: string) => {
+    deleteProfessionSupabase(id).then((res)=>{
+      if(res){
+        deleteProfession(id);
+      }
+    });
+  };
+
   return (
     <Card key={prof.id} className="hover:shadow-md transition-shadow">
       <CardHeader>
@@ -22,7 +37,7 @@ const cardProfession = memo (({prof, handleEdit, handleDelete}:Props) => {
               <GraduationCap className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">{prof.name}</CardTitle>
+              <CardTitle className="text-lg">{prof.names}</CardTitle>
               <Badge variant="secondary" className="mt-1">
                 {prof.code}
               </Badge>
@@ -32,6 +47,7 @@ const cardProfession = memo (({prof, handleEdit, handleDelete}:Props) => {
             <Button
               variant="ghost"
               size="icon"
+              className="cursor-pointer hover:bg-blue-500/10"
               onClick={() => handleEdit(prof)}
             >
               <Edit className="h-4 w-4" />
@@ -39,6 +55,7 @@ const cardProfession = memo (({prof, handleEdit, handleDelete}:Props) => {
             <Button
               variant="ghost"
               size="icon"
+              className="cursor-pointer hover:bg-red-500/10"
               onClick={() => handleDelete(prof.id)}
             >
               <Trash2 className="h-4 w-4" />
