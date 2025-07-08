@@ -102,6 +102,7 @@ export function Header() {
                 size="icon"
                 onClick={logout}
                 title="Logout"
+                className='cursor-pointer hover:bg-red-800/50'
               >
                 <LogOut className="h-5 w-5" />
               </Button>
