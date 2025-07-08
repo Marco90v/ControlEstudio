@@ -1,4 +1,4 @@
-import type { Grade, Login, PensumEntry, Profession, Professor, ProfessorAssignment, Profile, Student } from "@/types";
+import type { Class, Grade, Login, PensumEntry, Profession, Professor, ProfessorAssignment, Profile, Student } from "@/types";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ADMIN, NA, PENDING, PROFESSOR, STUDENT, USER } from "@/lib/const";
@@ -60,21 +60,27 @@ export function getRoles(role: number | null  | undefined) {
   }
 }
 
-export function transformPensum(data: pensums[]):NewPensum | undefined {
-  if (data.length === 0) {
-    // throw new Error("Input data cannot be empty");
+export function getNewPensum(data: PensumEntry[], classes: Class[], IdP:string):NewPensum | undefined {
+  const pensum:pensums[] = data.filter(p => p.IdProfession === IdP).map(c=>{
+    return {
+      ...c,
+      nameClasse: classes.find(cls => cls.id === c.IdClasse)?.names,
+      code: classes.find(cls => cls.id === c.IdClasse)?.code,
+      credits: classes.find(cls => cls.id === c.IdClasse)?.credits,
+      description: classes.find(cls => cls.id === c.IdClasse)?.description,
+    }
+  });
+  if (pensum.length === 0) {
     return undefined;
   }
 
-  const { IdProfession } = data[0];
-
+  const { IdProfession } = pensum[0];
   const semestersMap = new Map<number, semesterType[]>();
 
-  for (const item of data) {
+  for (const item of pensum) {
     if (!semestersMap.has(item.IdSemester)) {
       semestersMap.set(item.IdSemester, []);
     }
-
     semestersMap.get(item.IdSemester)!.push({
       id: item.id,
       IdClasse: item.IdClasse,

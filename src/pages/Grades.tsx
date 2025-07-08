@@ -20,32 +20,23 @@ import { useLoadAssignments } from '@/hooks/useLoadAssignments';
 import NoData from '@/features/classes/components/NoData';
 import { ADMIN, PASSED, PENDING, STUDENT } from '@/lib/const';
 import Spinner from '@/components/common/Spinner';
+import Error from '@/components/common/Error';
+import { usePageStatus } from '@/hooks/usePageStatus';
 
 function Grades() {
+  const auth = useAuth(useShallow(s => ({ profile: s.profile, loading: s.loading, error: s.error })));
+  const professions = useProfessions(useShallow(s => ({ professions: s.professions, loading: s.loading, error: s.error })));
+  const students = useStudents(useShallow(s => ({ students: s.students, loading: s.loading, error: s.error })));
+  const pensums = usePensum(useShallow(s => ({ pensums: s.pensums, loading: s.loading, error: s.error })));
+  const grades = useGrades(useShallow(s => ({ grades: s.grades, loading: s.loading, error: s.error })));
+  const professorAssignments = useProfessorAssignment(useShallow(s => ({ professorAssignments: s.professorAssignments, loading: s.loading, error: s.error })));
 
-  const {profile} = useAuth(useShallow((state=>({
-    profile: state.profile,
-  }))));
-  const {professions, loadingProfessions} = useProfessions(useShallow((state=>({
-    professions: state.professions,
-    loadingProfessions: state.loading,
-  }))));
-  const {students, loadingStudents} = useStudents(useShallow((state=>({
-    students: state.students,
-    loadingStudents: state.loading,
-  }))));
-  const {pensums, loadingPensums} = usePensum(useShallow((state=>({
-    pensums: state.pensums,
-    loadingPensums: state.loading,
-  }))));
-  const {grades, loadingGrades} = useGrades(useShallow((state=>({
-    grades: state.grades,
-    loadingGrades: state.loading,
-  }))));
-  const {professorAssignments, loadingProfessorAssignments} = useProfessorAssignment(useShallow((state=>({
-    professorAssignments: state.professorAssignments,
-    loadingProfessorAssignments: state.loading,
-  }))));
+  const states = [auth, professions, students, pensums, grades, professorAssignments];
+  const { isLoading, firstError } = usePageStatus(states);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const availableStudents = getAvailableStudents(students.students, auth.profile, professorAssignments.professorAssignments, grades.grades);
+  const filteredStudents = search(availableStudents, searchTerm, ['firstName', 'lastName', 'email']);
 
   useLoadProfessions();
   useLoadStudents();
@@ -54,16 +45,10 @@ function Grades() {
   useLoadGrades();
   useLoadAssignments();
 
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const availableStudents = getAvailableStudents(students, profile, professorAssignments, grades);
-  
-  const filteredStudents = search(availableStudents, searchTerm, ['firstName', 'lastName', 'email']);
-
   // Student view - only show their own grades
-  if (getRoles(profile?.role) === STUDENT) {
-    const studentGrades = getStudentGrades(profile?.userUID.toString(), students, professions, pensums, grades);
-    const gpa = getGPA(profile?.userUID.toString(), grades);
+  if (getRoles(auth.profile?.role) === STUDENT) {
+    const studentGrades = getStudentGrades(auth.profile?.userUID.toString(), students.students, professions.professions, pensums.pensums, grades.grades);
+    const gpa = getGPA(auth.profile?.userUID.toString(), grades.grades);
     
     return (
       <div className="space-y-6">
@@ -85,9 +70,8 @@ function Grades() {
     );
   }
 
-  if(loadingStudents || loadingProfessions || loadingPensums || loadingGrades || loadingProfessorAssignments){
-    return <Spinner />;
-  }
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
 
   // Admin and Professor view
   return (
@@ -95,7 +79,7 @@ function Grades() {
       <div>
         <h1 className="text-3xl font-bold text-foreground">Grades Management</h1>
         <p className="text-muted-foreground">
-          {getRoles(profile?.role) === ADMIN ? 'Manage and monitor student grades' : 'Enter grades for your assigned students'}
+          {getRoles(auth.profile?.role) === ADMIN ? 'Manage and monitor student grades' : 'Enter grades for your assigned students'}
         </p>
       </div>
 
@@ -105,8 +89,8 @@ function Grades() {
       {/* Students List */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredStudents.map((student) => {
-          const gpa = getGPA(student.id, grades);
-          const studentGrades = getStudentGrades(student.id, students, professions, pensums, grades);
+          const gpa = getGPA(student.id, grades.grades);
+          const studentGrades = getStudentGrades(student.id, students.students, professions.professions, pensums.pensums, grades.grades);
           const passedClasses = studentGrades.filter(g => g.status === PASSED).length;
           const pendingClasses = studentGrades.filter(g => g.status === PENDING).length;
 
@@ -116,7 +100,7 @@ function Grades() {
               key={student.id}
               student={student}
               studentGrades={studentGrades}
-              profile={profile}
+              profile={auth.profile}
               passedClasses={passedClasses}
               pendingClasses={pendingClasses}
               gpa={gpa}

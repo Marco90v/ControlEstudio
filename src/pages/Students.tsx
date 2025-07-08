@@ -9,27 +9,22 @@ import { useShallow } from 'zustand/react/shallow';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
 import Spinner from '@/components/common/Spinner';
+import { usePageStatus } from '@/hooks/usePageStatus';
+import Error from '@/components/common/Error';
 
 function Students() {
-
-  const { students, loadingStudents } = useStudents(
-      useShallow((state) => ({
-        students: state.students,
-        loadingStudents: state.loading,
-      }))
-    );
-
-  useLoadStudents();
-  
+  const students = useStudents(useShallow((s) => ({ students: s.students, loading: s.loading, error: s.error })));
+  const states = [students];
+  const { isLoading, firstError } = usePageStatus(states);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  
-  const filteredStudents = search(students, searchTerm, ['firstName', 'lastName', 'email']);
+  const filteredStudents = search(students.students, searchTerm, ['firstName', 'lastName', 'email']);
 
-  if(loadingStudents){
-    return <Spinner />;
-  }
+  useLoadStudents();  
+
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
   
   return (
     <div className="space-y-6">

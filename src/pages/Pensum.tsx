@@ -16,21 +16,18 @@ import usePensum from '@/store/usePensum';
 import { useShallow } from 'zustand/react/shallow';
 import useClasses from '@/store/useClasses';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
-import { getTotalCredits, transformPensum } from '@/lib/utils';
+import { getNewPensum, getTotalCredits } from '@/lib/utils';
 import { useLoadPensums } from '@/hooks/useLoadPensums';
 import Spinner from '@/components/common/Spinner';
+import { usePageStatus } from '@/hooks/usePageStatus';
+import Error from '@/components/common/Error';
 
 function Pensum() {
-
-  const {pensums, loadingPensums} = usePensum(useShallow((state=>({
-    pensums: state.pensums,
-    setPensums: state.setPensums,
-    loadingPensums: state.loading,
-  }))));
-  const {classes, loadingClasses} = useClasses(useShallow((state=>({ 
-    classes: state.classes,
-    loadingClasses: state.loading,
-  }))));
+  const pensums = usePensum(useShallow((s=>({ pensums: s.pensums, loading: s.loading, error: s.error }))));
+  const classes = useClasses(useShallow((s=>({ classes: s.classes, loading: s.loading, error: s.error }))));
+  const states = [classes, pensums];
+  const { isLoading, firstError } = usePageStatus(states);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useLoadClasses();
   useLoadPensums();
@@ -38,26 +35,11 @@ function Pensum() {
   const formPensum = useForm<PensumEntry>({
     resolver: zodResolver(pensumSchema),
   });
-
   const IdProfession = formPensum.watch('IdProfession');
+  const NewPensum = getNewPensum(pensums.pensums, classes.classes, IdProfession);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const pensum = pensums.filter(p => p.IdProfession === IdProfession).map(c=>{
-    return {
-      ...c,
-      nameClasse: classes.find(cls => cls.id === c.IdClasse)?.names,
-      code: classes.find(cls => cls.id === c.IdClasse)?.code,
-      credits: classes.find(cls => cls.id === c.IdClasse)?.credits,
-      description: classes.find(cls => cls.id === c.IdClasse)?.description,
-    }
-  });
-
-  const NewPensum = transformPensum(pensum);
-
-  if(loadingPensums || loadingClasses){
-    return <Spinner />;
-  }
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
 
   return (
     <div className="space-y-6">

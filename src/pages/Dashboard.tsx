@@ -2,77 +2,30 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {  Mail,  Phone,  BookOpen, Users, ClipboardList, User as U } from 'lucide-react';
 import useAuth from '@/store/AuthStore';
-import { getPerson, getUser } from '@/services/supabase';
-import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { alert, getCurrentSemester, getNameProfession, getRoles } from '@/lib/utils';
+import { getCurrentSemester, getNameProfession, getRoles } from '@/lib/utils';
 import Avatar from '@/components/common/Avatar';
 import { useLoadStudents } from '@/hooks/useLoadStudents';
 import useStudents from '@/store/useStudents';
 import useProfessions from '@/store/useProfessions';
 import { useLoadProfessions } from '@/hooks/useLoadProfessions';
-import { STUDENT } from '@/lib/const';
+import { ADMIN, PROFESSOR, STUDENT } from '@/lib/const';
 import Spinner from '@/components/common/Spinner';
+import Error from '@/components/common/Error';
+import { usePageStatus } from '@/hooks/usePageStatus';
+import { useLoadProfile } from '@/hooks/useLoadProfile';
 
 function Dashboard() {
-  const { token, profile, setProfile, loading, error, setError, setLoading } = useAuth(useShallow((state)=>({
-    token: state.token,
-    profile: state.profile,
-    setProfile: state.setProfile,
-    loading: state.loading,
-    error: state.error,
-    setError: state.setError,
-    setLoading: state.setLoading
-  })));
+  const auth = useAuth(useShallow((s)=>({ token: s.token, profile: s.profile, loading: s.loading, error: s.error })));
+  const students = useStudents(useShallow((s)=>({ students: s.students, loading: s.loading, error: s.error })));
+  const professions = useProfessions(useShallow((s)=>({ professions: s.professions, loading: s.loading, error: s.error })));
+  const states = [auth, students, professions];  
+  const { isLoading, firstError } = usePageStatus(states);
 
-  const { students } = useStudents(useShallow((state)=>({
-    students: state.students,
-  })));
-   const { professions } = useProfessions(useShallow((state)=>({
-    professions: state.professions,
-  })));
-
+  useLoadProfile();
   useLoadStudents();
   useLoadProfessions();
   
-  // if (!profile) return null;
-  
-  useEffect(() => {
-  const fetchProfile = async () => {
-    if (profile) return
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const data = await getUser()
-      const user = data?.user
-      if (!user) {
-        setLoading(false);
-        setError("Error loading profile");
-        return
-      }
-      
-      const personData = await getPerson(user.id)
-      if (Array.isArray(personData) && personData.length > 0) {
-        const { roles, ...rest } = personData[0]
-        const newData = { ...rest, nameRole: roles?.names }
-        setProfile(newData)
-        setLoading(false);
-        setError(null);
-      }
-    } catch (error) {
-      console.error("Error loading profile:", error)
-      setLoading(false);
-      setError("Error loading profile");
-      alert("Profile","Error loading profile");
-    }
-  }
-
-  fetchProfile()
-}, [profile, setError, setLoading, setProfile, token])
-  
-  
-
   // const getStats = () => {
   //   if (profile?.role === 1) {
   //     return [
@@ -96,14 +49,15 @@ function Dashboard() {
 
   // const stats = getStats();
 
-  if(loading) return <Spinner />;
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back, {profile?.names}! Here's an overview of your academic information.
+          Welcome back, {auth.profile?.names}! Here's an overview of your academic information.
         </p>
       </div>
 
@@ -141,7 +95,7 @@ function Dashboard() {
           <div className="flex items-start space-x-6">
             {/* Profile Picture */}
             <div className="flex-shrink-0">
-              <Avatar profile={profile} size="big" />
+              <Avatar profile={auth.profile} size="big" />
             </div>
 
             {/* User Details */}
@@ -149,21 +103,21 @@ function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold text-foreground">
-                    {profile?.names} {profile?.lastNames}
+                    {auth.profile?.names} {auth.profile?.lastNames}
                   </h3>
                   <Badge variant="secondary" className="w-fit">
-                    {getRoles(profile?.role)}
+                    {getRoles(auth.profile?.role)}
                   </Badge>
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Mail className="h-4 w-4" />
-                    <span>{profile?.email}</span>
+                    <span>{auth.profile?.email}</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Phone className="h-4 w-4" />
-                    <span>{profile?.phone}</span>
+                    <span>{auth.profile?.phone}</span>
                   </div>
                 </div>
               </div>
@@ -172,21 +126,21 @@ function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                   <div>
                     <span className="text-muted-foreground">Gender:</span>
-                    <div className="font-medium">{profile?.sex}</div>
+                    <div className="font-medium">{auth.profile?.sex}</div>
                   </div>
                   
-                  {getRoles(profile?.role) === STUDENT && getCurrentSemester(students, profile) && (
+                  {getRoles(auth.profile?.role) === STUDENT && getCurrentSemester(students.students, auth.profile) && (
                     <div>
                       <span className="text-muted-foreground">Current Semester:</span>
-                      <div className="font-medium">{getCurrentSemester(students, profile)}</div>
+                      <div className="font-medium">{getCurrentSemester(students.students, auth.profile)}</div>
                     </div>
                   )}
                   
-                  {(getRoles(profile?.role) === 'Student' && students) && (
+                  {(getRoles(auth.profile?.role) === 'Student' && students.students) && (
                     <div>
                       <span className="text-muted-foreground">Profession:</span>
                       <div className="font-medium">
-                        {getNameProfession(professions, students[0]?.professionId)}
+                        {getNameProfession(professions.professions, students.students[0]?.professionId)}
                       </div>
                     </div>
                   )}
@@ -204,7 +158,7 @@ function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {getRoles(profile?.role) === "Admin" && (  
+            {getRoles(auth.profile?.role) === ADMIN && (  
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <BookOpen className="h-8 w-8 text-primary mb-2" />
@@ -224,7 +178,7 @@ function Dashboard() {
               </>
             )}
             
-            {profile?.role === 2 && (
+            {getRoles(auth.profile?.role) === PROFESSOR && (
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <ClipboardList className="h-8 w-8 text-primary mb-2" />
@@ -239,7 +193,7 @@ function Dashboard() {
               </>
             )}
             
-            {profile?.role === 3 && (
+            {getRoles(auth.profile?.role) === STUDENT && (
               <>
                 <div className="p-4 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
                   <ClipboardList className="h-8 w-8 text-primary mb-2" />

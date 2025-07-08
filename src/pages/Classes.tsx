@@ -9,34 +9,29 @@ import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
 import Spinner from '@/components/common/Spinner';
+import Error from '@/components/common/Error';
+import { usePageStatus } from '@/hooks/usePageStatus';
 
 function Classes() {
 
-  const {classes, loading, error} = useClasses(useShallow((state=>({
-    classes: state.classes,
-    loading: state.loading,
-    error: state.error,
-  }))));
-
-  useLoadClasses();
+  const classes = useClasses(useShallow((s=>({ classes: s.classes, loading: s.loading, error: s.error }))));
+  const states = [classes];  
+  const { isLoading, firstError } = usePageStatus(states);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingClass, setEditingClass] = useState<Class | null>(null);
 
-  const filteredClasses = search(classes, searchTerm, ['names', 'code']);
+  const filteredClasses = search(classes.classes, searchTerm, ['names', 'code']);
+  useLoadClasses();
   
   const handleEdit = useCallback((cls: Class) => {
     setEditingClass(cls);
     setIsDialogOpen(true);
   }, []);
 
-  if(error){
-    return <div>Error: {error}</div>;
-  };
-  if(loading){
-    return <Spinner />;
-  };
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
 
   return (
     <div className="space-y-6">

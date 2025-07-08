@@ -9,30 +9,29 @@ import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
 import Spinner from '@/components/common/Spinner';
+import { usePageStatus } from '@/hooks/usePageStatus';
+import Error from '@/components/common/Error';
 
 function Professions() {
 
-  const {professions, loadingProfessions} = useProfessions(useShallow((state=>({
-    professions: state.professions,
-    loadingProfessions: state.loading,
-  }))));
-
-  useLoadProfessions();
+  const professions = useProfessions(useShallow((s=>({ professions: s.professions, loading: s.loading, error: s.error }))));
+  const states = [professions];
+  const { isLoading, firstError } = usePageStatus(states);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProfession, setEditingProfession] = useState<Profession | null>(null);
+  const filteredProfessions = search(professions.professions, searchTerm, ['names', 'code']);
 
-  const filteredProfessions = search(professions, searchTerm, ['names', 'code']);
+  useLoadProfessions();
   
   const handleEdit = useCallback( (prof: Profession) => {
     setEditingProfession(prof);
     setIsDialogOpen(true);
   }, []);
 
-  if(loadingProfessions){
-    return <Spinner />;
-  }
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
 
   return (
     <div className="space-y-6">

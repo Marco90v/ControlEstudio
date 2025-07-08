@@ -14,32 +14,27 @@ import useProfessorAssignment from '@/store/useProfessorAssignment';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
 import Spinner from '@/components/common/Spinner';
+import Error from '@/components/common/Error';
+import { usePageStatus } from '@/hooks/usePageStatus';
 
 function Professors() {
 
-  const {professors, loadingProfessors} = useProfessors(useShallow((state=>({
-    professors: state.professors,
-    loadingProfessors: state.loading,
-  }))));
-
-  const {professorAssignments, loadingProfessorAssignments} = useProfessorAssignment(useShallow((state=>({
-    professorAssignments: state.professorAssignments,
-    loadingProfessorAssignments: state.loading,
-  }))));
-
-  useLoadProfessors();
-  useLoadAssignments();
+  const professors = useProfessors(useShallow((s=>({ professors: s.professors, loading: s.loading, error: s.error }))));
+  const professorAssignments = useProfessorAssignment(useShallow((s=>({ professorAssignments: s.professorAssignments, loading: s.loading, error: s.error }))));
+  const states = [professors, professorAssignments];
+  const { isLoading, firstError } = usePageStatus(states);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAssignmentDialogOpen, setIsAssignmentDialogOpen] = useState(false);
   const [editingProfessor, setEditingProfessor] = useState<Professor | null>(null);
+  const filteredProfessors = search(professors.professors, searchTerm, ['firstName', 'lastName', 'email']);
 
-  const filteredProfessors = search(professors, searchTerm, ['firstName', 'lastName', 'email']);
+  useLoadProfessors();
+  useLoadAssignments();
 
-  if(loadingProfessors || loadingProfessorAssignments){
-    return <Spinner />;
-  }
+  if (isLoading) return <Spinner />;
+  if (firstError) return <Error error={firstError} />;
   
   return (
     <div className="space-y-6">
@@ -83,7 +78,7 @@ function Professors() {
 
         <TabsContent value="assignments" className="space-y-4">
           <div className="grid gap-4">
-            {professorAssignments.map((assignment) => {              
+            {professorAssignments.professorAssignments.map((assignment) => {              
               return (
                 <CardAssignament
                   key={assignment.id}
@@ -93,7 +88,7 @@ function Professors() {
             })}
           </div>
 
-          <NoData data={professorAssignments} searchTerm={searchTerm} textTrue='No teaching assignments yet.' textFalse='No teaching assignments yet.' />
+          <NoData data={professorAssignments.professorAssignments} searchTerm={searchTerm} textTrue='No teaching assignments yet.' textFalse='No teaching assignments yet.' />
           
         </TabsContent>
       </Tabs>
