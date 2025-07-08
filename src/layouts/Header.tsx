@@ -59,7 +59,7 @@ export function Header() {
     <header className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-full items-center justify-between px-6">
         <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-semibold text-foreground">
+          <h1 className="hidden md:inline text-2xl font-semibold text-foreground">
             Academic Control System
           </h1>
         </div>
