@@ -19,41 +19,39 @@ type Action = {
 }
 
 const useClasses = create<State & Action>()(devtools(
-  devtools(
-    persist(
-      (set)=>({
-        classes: [],
-        loading: false,
-        error: null,
-        setLoading: (loading:boolean) => set((state) => {
-          return { ...state, loading: loading }
-        }),
-        setError: (error:string | null) => set((state) => {
-          return { ...state, error: error }
-        }),
-        setClasses: (classes:Class[]) => set((state) => {
-          return { ...state, classes: classes }
-        }),
-        addClass: (classData:Class) => set((state) => {
-          return { ...state, classes: [...state.classes, classData] }
-        }),
-        updateClass: (classData:Class) => set((state) => {
-          return {
-            ...state,
-            classes: state.classes.map(cls => 
-              cls.id === classData.id 
-                ? { ...classData}
-                : cls
-            )}
-        }),
-        deleteClass: (id:string) => set((state) => {
-          return { ...state, classes: state.classes.filter(cls => cls.id !== id) }
-        })  
+  persist(
+    (set)=>({
+      classes: [],
+      loading: false,
+      error: null,
+      setLoading: (loading:boolean) => set((state) => {
+        return { ...state, loading: loading }
       }),
-      {
-        name:"useClasses"
-      }
-    )
+      setError: (error:string | null) => set((state) => {
+        return { ...state, error: error }
+      }),
+      setClasses: (classes:Class[]) => set((state) => {
+        return { ...state, classes: classes }
+      }),
+      addClass: (classData:Class) => set((state) => {
+        return { ...state, classes: [...state.classes, classData] }
+      }),
+      updateClass: (classData:Class) => set((state) => {
+        return {
+          ...state,
+          classes: state.classes.map(cls => 
+            cls.id === classData.id 
+              ? { ...classData}
+              : cls
+          )}
+      }),
+      deleteClass: (id:string) => set((state) => {
+        return { ...state, classes: state.classes.filter(cls => cls.id !== id) }
+      })  
+    }),
+    {
+      name:"useClasses"
+    }
   )
 ))
 

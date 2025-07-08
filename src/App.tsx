@@ -7,6 +7,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { getSession, supabase } from '@/services/supabase';
 import Spinner from './components/common/Spinner';
+import Theme from '@/layouts/Theme';
 
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Classes = lazy(() => import('@/pages/Classes'));
@@ -90,12 +91,14 @@ function App() {
     //   </AuthProvider>
     // </ThemeProvider>
     <Router>
-      <div className="min-h-screen bg-background font-sans antialiased">
-        <Suspense fallback={<Spinner />}>
-          <AppRoutes />
-        </Suspense>
-        <Toaster />
-      </div>
+      <Theme>
+        <div className="min-h-screen bg-background font-sans antialiased">
+          <Suspense fallback={<Spinner />}>
+            <AppRoutes />
+          </Suspense>
+          <Toaster />
+        </div>
+      </Theme>
     </Router>
   );
 }

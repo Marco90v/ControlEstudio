@@ -13,8 +13,13 @@ import useProfessions from '@/store/useProfessions';
 import useProfessorAssignment from '@/store/useProfessorAssignment';
 import useProfessors from '@/store/useProfessors';
 import useStudents from '@/store/useStudents';
+import useTheme from '@/store/useTheme';
+import type { Theme } from '@/types';
 
 export function Header() {
+  const { sT } = useTheme(useShallow((s)=>({
+    sT: s.setTheme
+  })));
   const {close, profile} = useAuth(useShallow((state=>({
     close: state.close,
     profile: state.profile
@@ -30,8 +35,9 @@ export function Header() {
 
   const ThemeIcon = themeIcon[theme];
 
-  const setTheme = (theme: string) => {
-    console.log(theme);
+  const setTheme = (theme: Theme) => {
+    // console.log(theme);
+    sT(theme);
   };
 
   const logout = () => {

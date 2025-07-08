@@ -41,3 +41,5 @@ export interface Profile{
   nameRole: string;
   userUID: string;
 }
+
+export type Theme = 'light' | 'dark' | 'system';
