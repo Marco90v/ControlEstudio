@@ -1,6 +1,7 @@
 import type { Grade, Login, PensumEntry, Profession, ProfessorAssignment, Profile, Student } from "@/types";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { ADMIN, NA, PENDING, PROFESSOR, STUDENT, USER } from "@/lib/const";
 
 export type pensums = {
     id: string;
@@ -48,13 +49,13 @@ export function cn(...inputs: ClassValue[]) {
 export function getRoles(role: number | null  | undefined) {
   switch (role) {
     case 1:
-      return 'Admin'
+      return ADMIN
     case 2:
-      return 'Professor'
+      return PROFESSOR
     case 3:
-      return 'Student'
+      return STUDENT
     default:
-      return 'User'
+      return USER
   }
 }
 
@@ -108,7 +109,6 @@ export const protectedStudentsDemo = (id: string) => {
     "1d96e513-b127-48e2-a520-dd9e69fe25fe",
     "52437e39-f35d-4801-831e-a398b1887fb5",
   ]
-  console.log(UUIDStudentsDemo,id);
   return UUIDStudentsDemo.includes(id) ? false : true
 };
 
@@ -117,10 +117,10 @@ export const getCurrentSemester = (students: Student[], profile: Profile | null)
 };
 
 export const getNameProfession = (professions: Profession[], professionId: string) => {
-  if(professions === undefined) return 'N/A';
-  if(professions.length === 0) return 'N/A';
-  if(professionId === undefined) return 'N/A';
-  return professions.filter(profession => profession.id === professionId)[0]?.names || 'N/A';
+  if(professions === undefined) return NA;
+  if(professions.length === 0) return NA;
+  if(professionId === undefined) return NA;
+  return professions.filter(profession => profession.id === professionId)[0]?.names || NA;
 };
 
 export const search = <T>(data: T[], searchTerm: string, keys:(keyof T)[]):T[] => {
@@ -161,7 +161,7 @@ export const getStudentGrades = (studentId: string | undefined, students: Studen
         classId: p.IdClasse,
         semester: p.IdSemester,
         grade: grade?.grade || undefined,
-        status: grade?.status || 'Pending',
+        status: grade?.status || PENDING,
       };
     });
   return semesterClasses;
@@ -175,3 +175,20 @@ export const getGPA = (studentId: string | undefined, grades: Grade[]) => {
   const totalGrades = studentGrades.reduce((sum, g) => sum + (g.grade || 0), 0);
   return Math.round((totalGrades / studentGrades.length) * 100) / 100;
 };
+
+ // Filter students based on user role
+  export const getAvailableStudents = (students: Student[], profile: Profile | null, professorAssignments: ProfessorAssignment[], grades: Grade[]) => {
+    if (getRoles(profile?.role) === ADMIN) {
+      return students;
+    } else if (getRoles(profile?.role) === PROFESSOR) {
+      // Professor can only see students from their assigned classes
+      const newProfessorAssignments = professorAssignments.filter(a => a.professorId === profile?.id.toString());
+      const assignedClassIds = newProfessorAssignments.map(a => a.classId);
+      
+      return students.filter(student => {
+        const studentGrades = grades.filter(g => g.studentId === student.id);
+        return studentGrades.some(grade => assignedClassIds.includes(grade.classId));
+      });
+    }
+    return [];
+  };

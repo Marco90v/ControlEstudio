@@ -1,33 +1,23 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { Class } from '@/types';
 import ClassDialog from '@/features/classes/components/ClassDialog';
 import Filter from '@/components/common/Filter';
 import CardClass from '@/features/classes/components/CardClass';
 import useClasses from '@/store/useClasses';
 import { useShallow } from 'zustand/react/shallow';
-import { getAllClasses } from '@/services/supabase';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
+import { useLoadClasses } from '@/hooks/useLoadClasses';
 
 export function Classes() {
 
-  const {classes, setClasses, loading, error} = useClasses(useShallow((state=>({
+  const {classes, loading, error} = useClasses(useShallow((state=>({
     classes: state.classes,
-    setClasses: state.setClasses,
     loading: state.loading,
     error: state.error,
   }))));
 
-  useEffect(() => {
-    if(classes.length === 0){
-      getAllClasses().then((data)=>{
-        if(data){
-          setClasses(data);
-        }
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useLoadClasses();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);

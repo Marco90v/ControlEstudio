@@ -3,6 +3,7 @@ import { fetchTable } from "@/services/supabase";
 import useClasses from "@/store/useClasses";
 import { useShallow } from "zustand/react/shallow";
 import type { Class } from "@/types";
+import { CLASSES } from "@/lib/const";
 
 export function useLoadClasses() {
   const { classes, setClasses, setLoading, setError } = useClasses(
@@ -20,7 +21,7 @@ export function useLoadClasses() {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await fetchTable<Class>("classes");
+      const { data, error } = await fetchTable<Class>(CLASSES);
 
       if (error) {
         console.error(error);

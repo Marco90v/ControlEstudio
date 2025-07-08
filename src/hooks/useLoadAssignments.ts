@@ -1,3 +1,4 @@
+import { ASSIGNMENTS } from "@/lib/const";
 import { fetchTable } from "@/services/supabase";
 import useProfessorAssignment from "@/store/useProfessorAssignment";
 import type { ProfessorAssignment } from "@/types";
@@ -19,7 +20,7 @@ export function useLoadAssignments() {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await fetchTable<ProfessorAssignment>("assignments");
+      const { data, error } = await fetchTable<ProfessorAssignment>(ASSIGNMENTS);
 
       if (error) {
         console.error(error);

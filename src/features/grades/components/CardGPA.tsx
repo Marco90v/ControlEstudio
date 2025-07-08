@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PASSED, PENDING } from "@/lib/const";
 import type { Grade } from "@/types";
 import { Award } from "lucide-react";
 
@@ -25,13 +26,13 @@ const CardGPA = ({studentGrades, gpa}:Props) => {
         </div>
         <div className="text-center">
           <div className="text-3xl font-bold text-green-600">
-            {studentGrades.filter(g => g.status === 'Passed').length}
+            {studentGrades.filter(g => g.status === PASSED).length}
           </div>
           <div className="text-sm text-muted-foreground">Passed Classes</div>
         </div>
         <div className="text-center">
           <div className="text-3xl font-bold text-orange-600">
-            {studentGrades.filter(g => g.status === 'Pending').length}
+            {studentGrades.filter(g => g.status === PENDING).length}
           </div>
           <div className="text-sm text-muted-foreground">Pending Classes</div>
         </div>

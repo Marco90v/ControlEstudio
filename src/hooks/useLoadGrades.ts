@@ -1,3 +1,4 @@
+import { GRADES } from "@/lib/const";
 import { fetchTable } from "@/services/supabase";
 import useGrades from "@/store/useGrades";
 import type { Grade } from "@/types";
@@ -19,7 +20,7 @@ export function useLoadGrades() {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await fetchTable<Grade>("grades");
+      const { data, error } = await fetchTable<Grade>(GRADES);
 
       if (error) {
         console.error(error);

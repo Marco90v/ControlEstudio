@@ -11,31 +11,19 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { gradeSchema } from "@/features/grades/schema";
-import type { Grade, Student } from "@/types";
+import type { Grade, Profile, Student } from "@/types";
 import { getRoles } from "@/lib/utils";
 import useClasses from "@/store/useClasses";
 import { useShallow } from "zustand/react/shallow";
 import { updateAllGradesSupabase } from "@/services/supabase";
 import useGrades from "@/store/useGrades";
+import { DEFAULT, DESTRUCTIVE, FAILED, GRADES, NA, OUTLINE, PASSED } from "@/lib/const";
 
 const formSchema = z.object({
   grades: z.array(gradeSchema)
 });
 
 type FormType = z.infer<typeof formSchema>;
-interface Profile {
-    id: number;
-    names: string;
-    lastNames: string;
-    sex: string;
-    email: string;
-    phone: number;
-    photo: string;
-    role: number;
-    nameRole: string;
-    userUID: string;
-}
-
 interface Props {
   student: Student;
   studentGrades: Grade[];
@@ -64,17 +52,17 @@ const CardAdmin = ({ student, studentGrades, profile, passedClasses, pendingClas
 
   const { fields } = useFieldArray({
     control: form.control,
-    name: "grades"
+    name: GRADES
   });
 
   const getClassName = (classId: string) => {
     const classData = classes.find(c => c.id === classId);
-    return classData?.names || 'N/A';
+    return classData?.names || NA;
   };
 
   const getClassCode = (classId: string) => {
     const classData = classes.find(c => c.id === classId);
-    return classData?.code || 'N/A';
+    return classData?.code || NA;
   };
 
   const getClassCredits = (classId: string) => {
@@ -85,7 +73,7 @@ const CardAdmin = ({ student, studentGrades, profile, passedClasses, pendingClas
   const onSubmit = (data: FormType) => {
     const newData = data.grades.map(g=>{
       if(g.grade === undefined) return g;
-      return g.grade >= 70 ? {...g, status: 'Passed'} : {...g, status: 'Failed'};
+      return g.grade >= 70 ? {...g, status: PASSED} : {...g, status: FAILED};
     })
     updateAllGradesSupabase(newData as Grade[]).then((res)=>{
       if(res){
@@ -192,16 +180,16 @@ const CardAdmin = ({ student, studentGrades, profile, passedClasses, pendingClas
                                     </div>
                                   ) : (
                                     <div className="text-2xl font-bold">
-                                      {field.grade ?? 'N/A'}
+                                      {field.grade ?? NA}
                                     </div>
                                   )}
                                   <Badge
                                     variant={
-                                      field.status === 'Passed'
-                                        ? 'default'
-                                        : field.status === 'Failed'
-                                        ? 'destructive'
-                                        : 'outline'
+                                      field.status === PASSED
+                                        ? DEFAULT
+                                        : field.status === FAILED
+                                        ? DESTRUCTIVE
+                                        : OUTLINE
                                     }
                                   >
                                     {field.status}

@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { DEFAULT, ELECTIVE, OUTLINE, REQUIRED } from "@/lib/const";
 import { deletePensumSupabase } from "@/services/supabase";
 import usePensum from "@/store/usePensum";
 import { BookOpen, Trash2 } from "lucide-react";
@@ -63,8 +64,8 @@ const CardClassBySemester = ({entry}:Props) => {
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Type:</span>
-            <Badge variant={entry.isElective ? "outline" : "default"} className="text-xs">
-              {entry.isElective ? 'Elective' : 'Required'}
+            <Badge variant={entry.isElective ? OUTLINE : DEFAULT} className="text-xs">
+              {entry.isElective ? ELECTIVE : REQUIRED}
             </Badge>
           </div>
           {entry.description && (

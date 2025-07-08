@@ -1,4 +1,5 @@
 // hooks/useLoadProfessions.ts
+import { PROFESSIONS } from "@/lib/const";
 import { fetchTable } from "@/services/supabase";
 import useProfessions from "@/store/useProfessions";
 import type { Profession } from "@/types";
@@ -20,7 +21,7 @@ export function useLoadProfessions() {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await fetchTable<Profession>("professions");
+      const { data, error } = await fetchTable<Profession>(PROFESSIONS);
 
       if (error) {
         console.error(error);

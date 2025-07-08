@@ -5,6 +5,7 @@ import useStudents from "@/store/useStudents";
 import useAuth from "@/store/AuthStore";
 import { getRoles } from "@/lib/utils";
 import type { Student } from "@/types";
+import { ADMIN, STUDENTS } from "@/lib/const";
 
 export function useLoadStudents() {
   const { students, setStudents, setLoading, setError } = useStudents(
@@ -28,8 +29,8 @@ export function useLoadStudents() {
       setError(null);
 
       try {
-        if (getRoles(profile.role) === "Admin") {
-          const { data, error } = await fetchTable<Student>("students");
+        if (getRoles(profile.role) === ADMIN) {
+          const { data, error } = await fetchTable<Student>(STUDENTS);
           if (error) return setError(error);
           if (data) setStudents(data);
         } else {

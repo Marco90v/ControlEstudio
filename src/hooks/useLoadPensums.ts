@@ -4,6 +4,7 @@ import { fetchTable } from "@/services/supabase";
 import { useShallow } from "zustand/react/shallow";
 import usePensum from "@/store/usePensum";
 import type { PensumEntry } from "@/types";
+import { PENSUM } from "@/lib/const";
 
 export function useLoadPensums() {
   const { pensums, setPensums, setLoading, setError } = usePensum(
@@ -20,7 +21,7 @@ export function useLoadPensums() {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await fetchTable<PensumEntry>("pensum");
+      const { data, error } = await fetchTable<PensumEntry>(PENSUM);
 
       if (error) {
         console.error(error);

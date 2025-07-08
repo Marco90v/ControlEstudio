@@ -5,7 +5,7 @@ import Filter from '@/components/common/Filter';
 import CardAdmin from '@/features/grades/components/CardAdmin';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';
-import { getGPA, getRoles, getStudentGrades, search } from '@/lib/utils';
+import { getAvailableStudents, getGPA, getRoles, getStudentGrades, search } from '@/lib/utils';
 import useProfessions from '@/store/useProfessions';
 import useStudents from '@/store/useStudents';
 import usePensum from '@/store/usePensum';
@@ -18,6 +18,7 @@ import { useLoadPensums } from '@/hooks/useLoadPensums';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
 import { useLoadAssignments } from '@/hooks/useLoadAssignments';
 import NoData from '@/features/classes/components/NoData';
+import { PASSED, PENDING, STUDENT } from '@/lib/const';
 
 export function Grades() {
 
@@ -49,29 +50,12 @@ export function Grades() {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filter students based on user role
-  const getAvailableStudents = () => {
-    if (getRoles(profile?.role) === 'Admin') {
-      return students;
-    } else if (getRoles(profile?.role) === 'Professor') {
-      // Professor can only see students from their assigned classes
-      const newProfessorAssignments = professorAssignments.filter(a => a.professorId === profile?.id.toString());
-      const assignedClassIds = newProfessorAssignments.map(a => a.classId);
-      
-      return students.filter(student => {
-        const studentGrades = grades.filter(g => g.studentId === student.id);
-        return studentGrades.some(grade => assignedClassIds.includes(grade.classId));
-      });
-    }
-    return [];
-  };
-
-  const availableStudents = getAvailableStudents();
+  const availableStudents = getAvailableStudents(students, profile, professorAssignments, grades);
   
   const filteredStudents = search(availableStudents, searchTerm, ['firstName', 'lastName', 'email']);
 
   // Student view - only show their own grades
-  if (getRoles(profile?.role) === 'Student') {
+  if (getRoles(profile?.role) === STUDENT) {
     const studentGrades = getStudentGrades(profile?.userUID.toString(), students, professions, pensums, grades);
     const gpa = getGPA(profile?.userUID.toString(), grades);
     
@@ -113,8 +97,8 @@ export function Grades() {
         {filteredStudents.map((student) => {
           const gpa = getGPA(student.id, grades);
           const studentGrades = getStudentGrades(student.id, students, professions, pensums, grades);
-          const passedClasses = studentGrades.filter(g => g.status === 'Passed').length;
-          const pendingClasses = studentGrades.filter(g => g.status === 'Pending').length;
+          const passedClasses = studentGrades.filter(g => g.status === PASSED).length;
+          const pendingClasses = studentGrades.filter(g => g.status === PENDING).length;
 
           if(studentGrades.length === 0) return null;
           return (

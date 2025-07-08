@@ -1,3 +1,4 @@
+import { PROFESSORS } from "@/lib/const";
 import { fetchTable } from "@/services/supabase";
 import useProfessors from "@/store/useProfessors";
 import type { Professor } from "@/types";
@@ -19,7 +20,7 @@ export function useLoadProfessors() {
     const load = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await fetchTable<Professor>("professors");
+      const { data, error } = await fetchTable<Professor>(PROFESSORS);
 
       if (error) {
         console.error(error);

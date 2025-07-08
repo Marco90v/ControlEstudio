@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { NOT_ASSIGNED, UNKNOWN } from "@/lib/const";
 import { protectedStudentsDemo } from "@/lib/utils";
 import { deleteStudentSupabase } from "@/services/supabase";
 import useProfessions from "@/store/useProfessions";
@@ -43,9 +44,9 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
   };
 
   const getProfessionName = (professionId?: string) => {
-    if (!professionId) return 'Not assigned';
+    if (!professionId) return NOT_ASSIGNED;
     const profession = professions.find(p => p.id === professionId);
-    return profession?.names || 'Unknown';
+    return profession?.names || UNKNOWN;
   };
 
   return (

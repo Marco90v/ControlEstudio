@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { DEFAULT, DESTRUCTIVE, FAILED, NA, OUTLINE, PASSED } from "@/lib/const";
 import useClasses from "@/store/useClasses";
 import type { Grade } from "@/types";
 import { useShallow } from "zustand/react/shallow";
@@ -18,12 +19,12 @@ const CardSemester = ({semester, studentGrades}:Props) => {
 
   const getClasseName = (classId: string) => {
     const classData = classes.find(c => c.id === classId);
-    return classData?.names || 'N/A';
+    return classData?.names || NA;
   };
 
   const getClasseCode = (classId: string) => {
     const classData = classes.find(c => c.id === classId);
-    return classData?.code || 'N/A';
+    return classData?.code || NA;
   };
 
   const getClasseCredits = (classId: string) => {
@@ -51,8 +52,8 @@ const CardSemester = ({semester, studentGrades}:Props) => {
                     </div>
                     <Badge
                       variant={
-                        gradeData.status === 'Passed' ? 'default' :
-                        gradeData.status === 'Failed' ? 'destructive' : 'outline'
+                        gradeData.status === PASSED ? DEFAULT :
+                        gradeData.status === FAILED ? DESTRUCTIVE : OUTLINE
                       }
                     >
                       {gradeData.status}
@@ -61,7 +62,7 @@ const CardSemester = ({semester, studentGrades}:Props) => {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Grade:</span>
                     <span className="font-bold text-lg">
-                      {gradeData.grade !== undefined ? gradeData.grade : 'N/A'}
+                      {gradeData.grade !== undefined ? gradeData.grade : NA}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">

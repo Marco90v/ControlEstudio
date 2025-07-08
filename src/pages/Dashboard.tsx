@@ -11,6 +11,7 @@ import { useLoadStudents } from '@/hooks/useLoadStudents';
 import useStudents from '@/store/useStudents';
 import useProfessions from '@/store/useProfessions';
 import { useLoadProfessions } from '@/hooks/useLoadProfessions';
+import { STUDENT } from '@/lib/const';
 
 export function Dashboard() {
   const { token, profile, setProfile } = useAuth(useShallow((state)=>({
@@ -156,7 +157,7 @@ export function Dashboard() {
                     <div className="font-medium">{profile?.sex}</div>
                   </div>
                   
-                  {getRoles(profile?.role) === 'Student' && getCurrentSemester(students, profile) && (
+                  {getRoles(profile?.role) === STUDENT && getCurrentSemester(students, profile) && (
                     <div>
                       <span className="text-muted-foreground">Current Semester:</span>
                       <div className="font-medium">{getCurrentSemester(students, profile)}</div>
