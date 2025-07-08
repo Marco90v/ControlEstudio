@@ -6,6 +6,13 @@ import useAuth from '@/store/AuthStore';
 import { useShallow } from 'zustand/react/shallow';
 import { getRoles } from '@/lib/utils';
 import Avatar from '@/components/common/Avatar';
+import useClasses from '@/store/useClasses';
+import useGrades from '@/store/useGrades';
+import usePensum from '@/store/usePensum';
+import useProfessions from '@/store/useProfessions';
+import useProfessorAssignment from '@/store/useProfessorAssignment';
+import useProfessors from '@/store/useProfessors';
+import useStudents from '@/store/useStudents';
 
 export function Header() {
   const {close, profile} = useAuth(useShallow((state=>({
@@ -31,6 +38,13 @@ export function Header() {
     signOut().then((data)=>{
       if(data){
         close();
+        useClasses.persist.clearStorage();
+        useGrades.persist.clearStorage();
+        usePensum.persist.clearStorage();
+        useProfessions.persist.clearStorage();
+        useProfessorAssignment.persist.clearStorage();
+        useProfessors.persist.clearStorage();
+        useStudents.persist.clearStorage();
       }
     });
   };

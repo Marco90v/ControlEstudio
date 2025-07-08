@@ -58,7 +58,7 @@ const useAuth = create<State & Action>()(devtools(
         close: () => set((state) => {
           localStorage.removeItem("token")
           return {
-            ...state, token: null, profile: null
+            ...state, token: null, profile: null, session: null
           }
         })
       }),
