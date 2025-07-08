@@ -13,7 +13,7 @@ import useProfessions from '@/store/useProfessions';
 import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 import { STUDENT } from '@/lib/const';
 
-export function Dashboard() {
+function Dashboard() {
   const { token, profile, setProfile } = useAuth(useShallow((state)=>({
     token: state.token,
     profile: state.profile,
@@ -241,3 +241,5 @@ export function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;

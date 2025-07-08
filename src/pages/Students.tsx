@@ -8,12 +8,14 @@ import useStudents from '@/store/useStudents';
 import { useShallow } from 'zustand/react/shallow';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
+import Spinner from '@/components/common/Spinner';
 
-export function Students() {
+function Students() {
 
-  const { students } = useStudents(
+  const { students, loadingStudents } = useStudents(
       useShallow((state) => ({
         students: state.students,
+        loadingStudents: state.loading,
       }))
     );
 
@@ -24,6 +26,10 @@ export function Students() {
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   
   const filteredStudents = search(students, searchTerm, ['firstName', 'lastName', 'email']);
+
+  if(loadingStudents){
+    return <Spinner />;
+  }
   
   return (
     <div className="space-y-6">
@@ -56,3 +62,5 @@ export function Students() {
     </div>
   );
 }
+
+export default Students;

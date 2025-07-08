@@ -18,15 +18,18 @@ import useClasses from '@/store/useClasses';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
 import { getTotalCredits, transformPensum } from '@/lib/utils';
 import { useLoadPensums } from '@/hooks/useLoadPensums';
+import Spinner from '@/components/common/Spinner';
 
-export function Pensum() {
+function Pensum() {
 
-  const {pensums} = usePensum(useShallow((state=>({
+  const {pensums, loadingPensums} = usePensum(useShallow((state=>({
     pensums: state.pensums,
     setPensums: state.setPensums,
+    loadingPensums: state.loading,
   }))));
-  const {classes} = useClasses(useShallow((state=>({ 
+  const {classes, loadingClasses} = useClasses(useShallow((state=>({ 
     classes: state.classes,
+    loadingClasses: state.loading,
   }))));
 
   useLoadClasses();
@@ -51,6 +54,10 @@ export function Pensum() {
   });
 
   const NewPensum = transformPensum(pensum);
+
+  if(loadingPensums || loadingClasses){
+    return <Spinner />;
+  }
 
   return (
     <div className="space-y-6">
@@ -106,3 +113,5 @@ export function Pensum() {
     </div>
   );
 }
+
+export default Pensum;

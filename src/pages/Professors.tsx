@@ -13,15 +13,18 @@ import { useLoadAssignments } from '@/hooks/useLoadAssignments';
 import useProfessorAssignment from '@/store/useProfessorAssignment';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
+import Spinner from '@/components/common/Spinner';
 
-export function Professors() {
+function Professors() {
 
-  const {professors} = useProfessors(useShallow((state=>({
+  const {professors, loadingProfessors} = useProfessors(useShallow((state=>({
     professors: state.professors,
+    loadingProfessors: state.loading,
   }))));
 
-  const {professorAssignments} = useProfessorAssignment(useShallow((state=>({
+  const {professorAssignments, loadingProfessorAssignments} = useProfessorAssignment(useShallow((state=>({
     professorAssignments: state.professorAssignments,
+    loadingProfessorAssignments: state.loading,
   }))));
 
   useLoadProfessors();
@@ -33,6 +36,10 @@ export function Professors() {
   const [editingProfessor, setEditingProfessor] = useState<Professor | null>(null);
 
   const filteredProfessors = search(professors, searchTerm, ['firstName', 'lastName', 'email']);
+
+  if(loadingProfessors || loadingProfessorAssignments){
+    return <Spinner />;
+  }
   
   return (
     <div className="space-y-6">
@@ -93,3 +100,5 @@ export function Professors() {
     </div>
   );
 }
+
+export default Professors;

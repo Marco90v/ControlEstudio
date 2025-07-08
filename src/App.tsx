@@ -2,18 +2,19 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
 import { Toaster } from '@/components/ui/sonner';
 import { Layout } from '@/layouts/Layout';
 import { Login } from '@/pages/Login';
-import { Dashboard } from '@/pages/Dashboard';
-import { Classes } from '@/pages/Classes';
-import { Professions } from '@/pages/Professions';
-
-import { Pensum } from '@/pages/Pensum';
-import { Professors } from '@/pages/Professors';
-import { Students } from '@/pages/Students';
-import { Grades } from '@/pages/Grades';
 import useAuth from '@/store/AuthStore';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { getSession, supabase } from '@/services/supabase';
+import Spinner from './components/common/Spinner';
+
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const Classes = lazy(() => import('@/pages/Classes'));
+const Professions = lazy(() => import('@/pages/Professions'));
+const Pensum = lazy(() => import('@/pages/Pensum'));
+const Professors = lazy(() => import('@/pages/Professors'));
+const Students = lazy(() => import('@/pages/Students'));
+const Grades = lazy(() => import('@/pages/Grades'));
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
@@ -34,17 +35,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       subscription.unsubscribe();
     }
   }, [setSession]);
-  
-  const isLoading = false;
-  
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-  
+    
   if (!token) {
     return <Navigate to="/login" replace />;
   }
@@ -100,7 +91,9 @@ function App() {
     // </ThemeProvider>
     <Router>
       <div className="min-h-screen bg-background font-sans antialiased">
-        <AppRoutes />
+        <Suspense fallback={<Spinner />}>
+          <AppRoutes />
+        </Suspense>
         <Toaster />
       </div>
     </Router>

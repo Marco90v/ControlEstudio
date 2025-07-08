@@ -8,8 +8,9 @@ import { useShallow } from 'zustand/react/shallow';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
+import Spinner from '@/components/common/Spinner';
 
-export function Classes() {
+function Classes() {
 
   const {classes, loading, error} = useClasses(useShallow((state=>({
     classes: state.classes,
@@ -34,7 +35,7 @@ export function Classes() {
     return <div>Error: {error}</div>;
   };
   if(loading){
-    return <div>Loading...</div>;
+    return <Spinner />;
   };
 
   return (
@@ -61,3 +62,5 @@ export function Classes() {
     </div>
   );
 }
+
+export default Classes;

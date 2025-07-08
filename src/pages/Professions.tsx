@@ -8,11 +8,13 @@ import { useShallow } from 'zustand/react/shallow';
 import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 import NoData from '@/features/classes/components/NoData';
 import { search } from '@/lib/utils';
+import Spinner from '@/components/common/Spinner';
 
-export function Professions() {
+function Professions() {
 
-  const {professions} = useProfessions(useShallow((state=>({
+  const {professions, loadingProfessions} = useProfessions(useShallow((state=>({
     professions: state.professions,
+    loadingProfessions: state.loading,
   }))));
 
   useLoadProfessions();
@@ -28,6 +30,9 @@ export function Professions() {
     setIsDialogOpen(true);
   }, []);
 
+  if(loadingProfessions){
+    return <Spinner />;
+  }
 
   return (
     <div className="space-y-6">
@@ -54,3 +59,5 @@ export function Professions() {
     </div>
   );
 }
+
+export default Professions;

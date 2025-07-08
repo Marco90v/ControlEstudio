@@ -19,26 +19,32 @@ import { useLoadClasses } from '@/hooks/useLoadClasses';
 import { useLoadAssignments } from '@/hooks/useLoadAssignments';
 import NoData from '@/features/classes/components/NoData';
 import { PASSED, PENDING, STUDENT } from '@/lib/const';
+import Spinner from '@/components/common/Spinner';
 
-export function Grades() {
+function Grades() {
 
   const {profile} = useAuth(useShallow((state=>({
     profile: state.profile,
   }))));
-  const {professions} = useProfessions(useShallow((state=>({
+  const {professions, loadingProfessions} = useProfessions(useShallow((state=>({
     professions: state.professions,
+    loadingProfessions: state.loading,
   }))));
-  const {students} = useStudents(useShallow((state=>({
+  const {students, loadingStudents} = useStudents(useShallow((state=>({
     students: state.students,
+    loadingStudents: state.loading,
   }))));
-  const {pensums} = usePensum(useShallow((state=>({
+  const {pensums, loadingPensums} = usePensum(useShallow((state=>({
     pensums: state.pensums,
+    loadingPensums: state.loading,
   }))));
-  const {grades} = useGrades(useShallow((state=>({
+  const {grades, loadingGrades} = useGrades(useShallow((state=>({
     grades: state.grades,
+    loadingGrades: state.loading,
   }))));
-  const {professorAssignments} = useProfessorAssignment(useShallow((state=>({
+  const {professorAssignments, loadingProfessorAssignments} = useProfessorAssignment(useShallow((state=>({
     professorAssignments: state.professorAssignments,
+    loadingProfessorAssignments: state.loading,
   }))));
 
   useLoadProfessions();
@@ -77,6 +83,10 @@ export function Grades() {
         </div>
       </div>
     );
+  }
+
+  if(loadingStudents || loadingProfessions || loadingPensums || loadingGrades || loadingProfessorAssignments){
+    return <Spinner />;
   }
 
   // Admin and Professor view
@@ -119,3 +129,5 @@ export function Grades() {
     </div>
   );
 }
+
+export default Grades;
