@@ -15,24 +15,19 @@ import { alert, demoCredentials } from '@/lib/utils';
 
 export function Login() {
 
-  const {setToken, token, setLoading, loading, setError, error} = useAuth(useShallow((state=>({
-    setToken: state.setToken,
+  const {setToken, token, setLoading, loading, setError } = useAuth(useShallow((state=>({
     token: state.token,
-    setLoading: state.setLoading,
     loading: state.loading,
+    setToken: state.setToken,
+    setLoading: state.setLoading,
     setError: state.setError,
-    error: state.error
   }))));
 
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
   });
-  
-  // const isLoading = false;
 
-  if (token) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  if (token) return <Navigate to="/dashboard" replace />;
 
   const onSubmit = (data: FieldValues) => {
     setLoading(true);

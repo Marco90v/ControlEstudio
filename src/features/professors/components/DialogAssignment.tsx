@@ -37,14 +37,13 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
   };
 
   const onSubmit = (data: FieldValues) => {
-    // addAssignmentSupabase(data as ProfessorAssignment).then((res)=>{
-    //   if(res){
-    //     addProfessorAssignment(data as ProfessorAssignment);
-    //     alert("Professors","Teaching assignment added successfully");
-    //     closeDialog();
-    //   }
-    // });
-    console.log(data);
+    addAssignmentSupabase(data as ProfessorAssignment).then((res)=>{
+      if(res){
+        addProfessorAssignment(data as ProfessorAssignment);
+        alert("Professors","Teaching assignment added successfully");
+        closeDialog();
+      }
+    });
   }
 
   const handleSave = (e: React.FormEvent) => {
