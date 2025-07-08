@@ -5,19 +5,24 @@ import useAuth from '@/store/AuthStore';
 import { getPerson, getUser } from '@/services/supabase';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { getCurrentSemester, getNameProfession, getRoles } from '@/lib/utils';
+import { alert, getCurrentSemester, getNameProfession, getRoles } from '@/lib/utils';
 import Avatar from '@/components/common/Avatar';
 import { useLoadStudents } from '@/hooks/useLoadStudents';
 import useStudents from '@/store/useStudents';
 import useProfessions from '@/store/useProfessions';
 import { useLoadProfessions } from '@/hooks/useLoadProfessions';
 import { STUDENT } from '@/lib/const';
+import Spinner from '@/components/common/Spinner';
 
 function Dashboard() {
-  const { token, profile, setProfile } = useAuth(useShallow((state)=>({
+  const { token, profile, setProfile, loading, error, setError, setLoading } = useAuth(useShallow((state)=>({
     token: state.token,
     profile: state.profile,
-    setProfile: state.setProfile
+    setProfile: state.setProfile,
+    loading: state.loading,
+    error: state.error,
+    setError: state.setError,
+    setLoading: state.setLoading
   })));
 
   const { students } = useStudents(useShallow((state)=>({
@@ -35,25 +40,36 @@ function Dashboard() {
   useEffect(() => {
   const fetchProfile = async () => {
     if (profile) return
+    setLoading(true);
+    setError(null);
     
     try {
       const data = await getUser()
       const user = data?.user
-      if (!user) return
+      if (!user) {
+        setLoading(false);
+        setError("Error loading profile");
+        return
+      }
       
       const personData = await getPerson(user.id)
       if (Array.isArray(personData) && personData.length > 0) {
         const { roles, ...rest } = personData[0]
         const newData = { ...rest, nameRole: roles?.names }
         setProfile(newData)
+        setLoading(false);
+        setError(null);
       }
     } catch (error) {
       console.error("Error loading profile:", error)
+      setLoading(false);
+      setError("Error loading profile");
+      alert("Profile","Error loading profile");
     }
   }
 
   fetchProfile()
-}, [profile, setProfile, token])
+}, [profile, setError, setLoading, setProfile, token])
   
   
 
@@ -79,6 +95,8 @@ function Dashboard() {
   // };
 
   // const stats = getStats();
+
+  if(loading) return <Spinner />;
 
   return (
     <div className="space-y-6">

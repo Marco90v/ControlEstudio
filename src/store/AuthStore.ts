@@ -17,10 +17,14 @@ type State = {
     role: number,
     nameRole: string,
     userUID: string
-  } | null
+  } | null,
+  loading: boolean,
+  error: string | null
 }
 
 type Action = {
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
   setToken: (token: string) => void,
   setSession: (session: Session) => void,
   deleteToken: () => void
@@ -39,6 +43,14 @@ const useAuth = create<State & Action>()(devtools(
         token: null,
         profile: null,
         session: null,
+        loading: false,
+        error: null,
+        setLoading: (loading:boolean) => set((state) => {
+          return { ...state, loading: loading }
+        }),
+        setError: (error:string | null) => set((state) => {
+          return { ...state, error: error }
+        }),
         setSession: (session:Session) => set((state) => {
           return { ...state, session: session }
         }),

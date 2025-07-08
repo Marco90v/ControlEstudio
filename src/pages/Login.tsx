@@ -11,29 +11,41 @@ import InputForm from '@/components/common/InputForm';
 import { signIn } from '@/services/supabase';
 import useAuth from '@/store/AuthStore';
 import { useShallow } from "zustand/react/shallow";
-import { demoCredentials } from '@/lib/utils';
+import { alert, demoCredentials } from '@/lib/utils';
 
 export function Login() {
 
-  const {setToken, token} = useAuth(useShallow((state=>({
+  const {setToken, token, setLoading, loading, setError, error} = useAuth(useShallow((state=>({
     setToken: state.setToken,
-    token: state.token
+    token: state.token,
+    setLoading: state.setLoading,
+    loading: state.loading,
+    setError: state.setError,
+    error: state.error
   }))));
 
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
   });
   
-  const isLoading = false;
+  // const isLoading = false;
 
   if (token) {
     return <Navigate to="/dashboard" replace />;
   }
 
   const onSubmit = (data: FieldValues) => {
+    setLoading(true);
+    setError(null);
     signIn(data.email, data.password).then((data)=>{
-      if(data){
-        setToken(data.session.access_token);
+      if(data.error){
+        alert("Login","Invalid email or password");
+        setError("Invalid email or password");
+        setLoading(false);
+      }else{
+        setLoading(false);
+        setError(null);
+        if(data.data?.session?.access_token) setToken(data.data?.session?.access_token);
       }
     });
   }
@@ -81,8 +93,8 @@ export function Login() {
                   <InputForm name='password' label='Password' placeholder="Enter your password" type="password" />
                 </div>
 
-                <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
-                  {isLoading ? (
+                <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
+                  {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Signing in...

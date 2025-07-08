@@ -1,5 +1,5 @@
 import type { Class, Grade, PensumEntry, Profession, Professor, ProfessorAssignment, Student } from '@/types';
-import { createClient, type Session } from '@supabase/supabase-js'
+import { createClient, type Session, type User, type WeakPassword } from '@supabase/supabase-js'
 
 interface SupabaseResult<T> {
   data: T | null;
@@ -23,16 +23,36 @@ export const getSession = async (setSession:(session:Session)=>void) => {
   }
 };
 
-export const signIn = async (email: string, password: string) => {
+// export const signIn = async (email: string, password: string) => {
+//   const { data, error } = await supabase.auth.signInWithPassword({
+//     email,
+//     password,
+//   });
+//   if(error){
+//     return null;
+//   }else{
+//     return data;
+//   }
+// };
+
+interface session {
+    user: User | null;
+    session: Session | null;
+    weakPassword?: WeakPassword;
+}
+
+export const signIn = async (email: string, password: string): Promise<SupabaseResult<session>> => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
-  if(error){
-    return null;
-  }else{
-    return data;
+
+  if (error) {
+    console.error("Supabase auth error (signIn):", error.message);
+    return { data: null, error: error.message };
   }
+
+  return { data, error: null };
 };
 
 export const signOut = async () => {
