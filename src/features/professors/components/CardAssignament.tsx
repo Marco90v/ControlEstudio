@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { alert } from "@/lib/utils";
 import { deleteAssignmentSupabase } from "@/services/supabase";
 import useClasses from "@/store/useClasses";
 import useProfessions from "@/store/useProfessions";
@@ -47,6 +48,7 @@ const CardAssignament = ({assignment}:Props) => {
     deleteAssignmentSupabase(id).then(res => {
       if(res){
         deleteAssignment(id);
+        alert("Professors","Teaching assignment deleted successfully");
       }
     });
   };

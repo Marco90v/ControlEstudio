@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { alert, protectedProfessionsDemo } from "@/lib/utils"
 import { deleteProfessionSupabase } from "@/services/supabase"
 import useProfessions from "@/store/useProfessions"
 import type { Profession } from "@/types"
@@ -20,11 +21,17 @@ const cardProfession = memo (({prof, handleEdit}:Props) => {
   }))));
 
   const handleDelete = (id: string) => {
-    deleteProfessionSupabase(id).then((res)=>{
-      if(res){
-        deleteProfession(id);
-      }
-    });
+    if(protectedProfessionsDemo(id)){
+      deleteProfessionSupabase(id).then((res)=>{
+        if(res){
+          deleteProfession(id);
+          alert("Professions","Profession deleted successfully");
+          
+        }
+      });
+    }else{
+      alert("Professions","This profession is part of the demo, cannot be removed");
+    }
   };
 
   return (

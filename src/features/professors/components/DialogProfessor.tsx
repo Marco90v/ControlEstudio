@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { addProfessorSupabase } from "@/services/supabase";
 import useProfessors from "@/store/useProfessors";
 import { useShallow } from "zustand/react/shallow";
+import { alert } from "@/lib/utils";
 
 interface Props {
   isDialogOpen: boolean;
@@ -43,6 +44,7 @@ const DialogProfessor = ({isDialogOpen, setIsDialogOpen, editingProfessor, setEd
     addProfessorSupabase(data as Professor).then((res)=>{
       if(res){
         addProfessor(data as Professor);
+        alert("Professors","Professor added successfully");
         closeDialog();
       }
     });

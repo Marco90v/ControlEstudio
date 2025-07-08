@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTotalClassesByProfessor } from "@/lib/utils";
+import { alert, getTotalClassesByProfessor, protectedProfessorsDemo } from "@/lib/utils";
 import { deleteProfessorAssignmentSupabase, deleteProfessorSupabase } from "@/services/supabase";
 import useProfessorAssignment from "@/store/useProfessorAssignment";
 import useProfessors from "@/store/useProfessors";
@@ -32,16 +32,21 @@ const CardProfessor = ({professor:prof, setEditingProfessor, setIsDialogOpen }: 
   };
 
   const handleDelete = (id: string) => {
-    deleteProfessorSupabase(id).then(res => {
-      if(res){
-        deleteProfessor(id);
-      }
-    });
-    deleteProfessorAssignmentSupabase(id).then(res => {
-      if(res){
-        deleteProfessorAssignment(id);
-      }
-    });
+    if(protectedProfessorsDemo(id)){
+      deleteProfessorSupabase(id).then(res => {
+        if(res){
+          deleteProfessor(id);
+          deleteProfessorAssignmentSupabase(id).then(res => {
+            if(res){
+              deleteProfessorAssignment(id);
+              alert("Professors","Professor deleted successfully");
+            }
+          });
+        }
+      });
+    }else{
+      alert("Professors","This professor is part of the demo, cannot be removed");
+    }
   };
 
   return (
@@ -96,7 +101,7 @@ const CardProfessor = ({professor:prof, setEditingProfessor, setIsDialogOpen }: 
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Assignments:</span>
             <Badge variant="outline">
-              {getTotalClassesByProfessor(professorAssignments)} classes
+              {getTotalClassesByProfessor(professorAssignments, prof)} classes
             </Badge>
           </div>
         </div>

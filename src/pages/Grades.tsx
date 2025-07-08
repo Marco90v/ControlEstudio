@@ -18,7 +18,7 @@ import { useLoadPensums } from '@/hooks/useLoadPensums';
 import { useLoadClasses } from '@/hooks/useLoadClasses';
 import { useLoadAssignments } from '@/hooks/useLoadAssignments';
 import NoData from '@/features/classes/components/NoData';
-import { PASSED, PENDING, STUDENT } from '@/lib/const';
+import { ADMIN, PASSED, PENDING, STUDENT } from '@/lib/const';
 import Spinner from '@/components/common/Spinner';
 
 function Grades() {
@@ -95,7 +95,7 @@ function Grades() {
       <div>
         <h1 className="text-3xl font-bold text-foreground">Grades Management</h1>
         <p className="text-muted-foreground">
-          {getRoles(profile?.role) === 'Admin' ? 'Manage and monitor student grades' : 'Enter grades for your assigned students'}
+          {getRoles(profile?.role) === ADMIN ? 'Manage and monitor student grades' : 'Enter grades for your assigned students'}
         </p>
       </div>
 

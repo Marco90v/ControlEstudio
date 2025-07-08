@@ -1,7 +1,8 @@
-import type { Grade, Login, PensumEntry, Profession, ProfessorAssignment, Profile, Student } from "@/types";
+import type { Grade, Login, PensumEntry, Profession, Professor, ProfessorAssignment, Profile, Student } from "@/types";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ADMIN, NA, PENDING, PROFESSOR, STUDENT, USER } from "@/lib/const";
+import { toast } from "sonner";
 
 export type pensums = {
     id: string;
@@ -100,8 +101,8 @@ export const getTotalCredits = (cls: semesterType[]) => {
   return cls.reduce((total, subject) => total + (subject.credits ?? 0), 0);
 };
 
-export const getTotalClassesByProfessor = (ProfessorAssignment: ProfessorAssignment[]) => {
-  return ProfessorAssignment.length;
+export const getTotalClassesByProfessor = (ProfessorAssignment: ProfessorAssignment[], professor:Professor) => {
+  return ProfessorAssignment.filter(a => a.professorId === professor.id).length || 0;
 };
 
 export const protectedStudentsDemo = (id: string) => {
@@ -110,6 +111,20 @@ export const protectedStudentsDemo = (id: string) => {
     "52437e39-f35d-4801-831e-a398b1887fb5",
   ]
   return UUIDStudentsDemo.includes(id) ? false : true
+};
+
+export const protectedProfessionsDemo = (id: string) => {
+  const idProfessionsDemo = [
+    "23cb51af-1b0e-4bc4-873e-a99c9b6d7ab2",
+  ]
+  return idProfessionsDemo.includes(id) ? false : true
+};
+export const protectedProfessorsDemo = (id: string) => {
+  const idProfesorsDemo = [
+    "8e832043-042e-46c9-8811-ba40cec0b495",
+    "91547631-ac79-4778-941f-4fbaae94048c",
+  ]
+  return idProfesorsDemo.includes(id) ? false : true
 };
 
 export const getCurrentSemester = (students: Student[], profile: Profile | null) => {
@@ -192,3 +207,13 @@ export const getGPA = (studentId: string | undefined, grades: Grade[]) => {
     }
     return [];
   };
+
+  export const alert = (title: string, description: string) => {
+    toast(title, {
+      description: description,
+      action: {
+        label: "Undo",
+        onClick: () => null,
+      },
+    })
+  }

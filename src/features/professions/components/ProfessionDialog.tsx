@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { addProfessionSupabase, updateProfessionSupabase } from "@/services/supabase";
 import useProfessions from "@/store/useProfessions";
 import { useShallow } from "zustand/react/shallow";
+import { alert } from "@/lib/utils";
 
 interface Props {
   editingProfession: Profession | null;
@@ -44,6 +45,7 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
       updateProfessionSupabase(data).then((res)=>{
         if(res){
           updateProfession(data);
+          alert("Professions","Profession updated successfully");
           closeDialog();
         }
       });
@@ -51,6 +53,7 @@ const ProfessionDialog = ({editingProfession, isDialogOpen, setIsDialogOpen, set
       addProfessionSupabase(data).then((res)=>{
         if(res){
           addProfession(data);
+          alert("Professions","Profession created successfully");
           closeDialog();
         }
       });

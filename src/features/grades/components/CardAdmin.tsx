@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { gradeSchema } from "@/features/grades/schema";
 import type { Grade, Profile, Student } from "@/types";
-import { getRoles } from "@/lib/utils";
+import { alert, getRoles } from "@/lib/utils";
 import useClasses from "@/store/useClasses";
 import { useShallow } from "zustand/react/shallow";
 import { updateAllGradesSupabase } from "@/services/supabase";
@@ -78,7 +78,7 @@ const CardAdmin = ({ student, studentGrades, profile, passedClasses, pendingClas
     updateAllGradesSupabase(newData as Grade[]).then((res)=>{
       if(res){
         setGrades(newData as Grade[]);
-        console.log("Grade updated successfully");
+        alert("Grades","Grade updated successfully");
       }
     });
   };

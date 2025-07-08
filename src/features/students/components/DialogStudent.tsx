@@ -15,6 +15,7 @@ import SelectProfessions from "@/components/common/SelectProfessions";
 import SelectSemesters from "@/components/common/SelectSemesters";
 import { addStudentSupabase, updateStudentSupabase } from "@/services/supabase";
 import useStudents from "@/store/useStudents";
+import { alert } from "@/lib/utils";
 
 interface Props {
   isDialogOpen: boolean;
@@ -46,11 +47,13 @@ const DialogStudent = ({isDialogOpen, setIsDialogOpen, editingStudent, setEditin
     if(!editingStudent) {
       addStudentSupabase(data as Student).then((res) => {
         if (res) addStudent(data as Student);
+        alert("Students","Student added successfully");
         closeDialog();
       });
     } else {
       updateStudentSupabase(data as Student).then((res) => {
         if (res) updateStudent(data as Student);
+        alert("Students","Student updated successfully");
         closeDialog();
       });
     }

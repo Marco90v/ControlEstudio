@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { NOT_ASSIGNED, UNKNOWN } from "@/lib/const";
-import { protectedStudentsDemo } from "@/lib/utils";
+import { alert, protectedStudentsDemo } from "@/lib/utils";
 import { deleteStudentSupabase } from "@/services/supabase";
 import useProfessions from "@/store/useProfessions";
 import useStudents from "@/store/useStudents";
@@ -31,10 +31,11 @@ const CardStudent = ({student, setEditingStudent, setIsDialogOpen}:Props) => {
       deleteStudentSupabase(id).then(res => {
         if(res){
           deleteStudent(id);
+          alert("Students","Student deleted successfully");
         }
       });
     }else{
-      console.log("This student is part of the demo, cannot be removed");
+      alert("Students","This student is part of the demo, cannot be removed");
     }
   };
 

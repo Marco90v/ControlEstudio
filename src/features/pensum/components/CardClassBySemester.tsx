@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { DEFAULT, ELECTIVE, OUTLINE, REQUIRED } from "@/lib/const";
+import { alert } from "@/lib/utils";
 import { deletePensumSupabase } from "@/services/supabase";
 import usePensum from "@/store/usePensum";
 import { BookOpen, Trash2 } from "lucide-react";
@@ -29,6 +30,7 @@ const CardClassBySemester = ({entry}:Props) => {
     deletePensumSupabase(id).then((res)=>{
       if(res){
         deletePensum(id);
+        alert("Pensum","Class deleted successfully");
       }
     });
   };

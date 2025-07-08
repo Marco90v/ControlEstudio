@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { alert } from "@/lib/utils";
 import { deleteClassSupabase } from "@/services/supabase";
 import useClasses from "@/store/useClasses";
 import type { Class } from "@/types";
@@ -23,6 +24,7 @@ const CardClass = memo(({cls, handleEdit }: Porps) => {
     deleteClassSupabase(id).then((res)=>{
       if(res){
         deleteClass(id);
+        alert("Classes","Class deleted successfully");
       }
     });
   };

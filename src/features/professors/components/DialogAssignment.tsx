@@ -15,6 +15,7 @@ import SelectProfessors from "@/features/professors/components/SelectProfessors"
 import { addAssignmentSupabase } from "@/services/supabase";
 import useProfessorAssignment from "@/store/useProfessorAssignment";
 import { useShallow } from "zustand/react/shallow";
+import { alert } from "@/lib/utils";
 
 interface Props {
   isAssignmentDialogOpen: boolean;
@@ -36,12 +37,14 @@ const DialogAssignment = ({isAssignmentDialogOpen, setIsAssignmentDialogOpen}:Pr
   };
 
   const onSubmit = (data: FieldValues) => {
-    addAssignmentSupabase(data as ProfessorAssignment).then((res)=>{
-      if(res){
-        addProfessorAssignment(data as ProfessorAssignment);
-        closeDialog();
-      }
-    });
+    // addAssignmentSupabase(data as ProfessorAssignment).then((res)=>{
+    //   if(res){
+    //     addProfessorAssignment(data as ProfessorAssignment);
+    //     alert("Professors","Teaching assignment added successfully");
+    //     closeDialog();
+    //   }
+    // });
+    console.log(data);
   }
 
   const handleSave = (e: React.FormEvent) => {

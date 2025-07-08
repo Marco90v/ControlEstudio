@@ -10,6 +10,7 @@ import { addPensumSupabase } from "@/services/supabase";
 import usePensum from "@/store/usePensum";
 import { useShallow } from "zustand/react/shallow";
 import type { PensumEntry } from "@/types";
+import { alert } from "@/lib/utils";
 
 interface Props {
   isDialogOpen: boolean
@@ -28,6 +29,7 @@ const PensumDialog = ({isDialogOpen, setIsDialogOpen}:Props) => {
     addPensumSupabase(data as PensumEntry).then((res)=>{
       if(res){
         addPensum(data as PensumEntry);
+        alert("Pensum","Pensum added successfully");
         closeDialog();
       }
     });

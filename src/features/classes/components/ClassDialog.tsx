@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form } from "@/components/ui/form"
 import { classSchema } from "@/features/classes/schema"
+import { alert } from "@/lib/utils"
 import { addClassSupabase, updateClassSupabase } from "@/services/supabase"
 import useClasses from "@/store/useClasses"
 import type { Class, KeysClass } from "@/types"
@@ -44,6 +45,7 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
       updateClassSupabase(data).then((res)=>{
         if(res){
           updateClass(data);
+          alert("Classes","Class updated successfully");
           closeDialog();
         }
       });
@@ -51,6 +53,7 @@ const ClassDialog = ({editingClass, isDialogOpen, setIsDialogOpen, setEditingCla
       addClassSupabase(data).then((res)=>{
         if(res){
           addClass(data);
+          alert("Classes","Class created successfully");
           closeDialog();
         }
       });
